@@ -1,0 +1,16 @@
+node_modules
+.next
+out
+coverage
+playwright-report
+test-results
+data/portfolio.server.json
+public/data
+.bkit
+.claude
+phases
+docs
+spec.json
+spec.schema.json
+package-lock.json
+*.md

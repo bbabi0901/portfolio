@@ -1,0 +1,13 @@
+{
+  "project": "ai-portfolio",
+  "phase": "1-content-pipeline",
+  "steps": [
+    { "step": 0, "name": "types-tokenize-embeddings", "status": "pending" },
+    { "step": 1, "name": "chunking", "status": "pending" },
+    { "step": 2, "name": "notion-service", "status": "pending" },
+    { "step": 3, "name": "embeddings-service", "status": "pending" },
+    { "step": 4, "name": "sync-notion", "status": "pending" },
+    { "step": 5, "name": "portfolio-loader-retriever", "status": "pending" },
+    { "step": 6, "name": "generate-suggestions", "status": "pending" }
+  ]
+}

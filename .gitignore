@@ -19,7 +19,22 @@ htmlcov/
 .env.local
 .env.*.local
 
-# bkit runtime (other tooling)
+# build artifacts (서버 전용 / 클라이언트 노출)
+data/portfolio.server.json
+public/data/suggestions.json
+
+# 단, fallback sample은 커밋한다
+!data/portfolio.sample.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Vitest / coverage
+coverage/
+
+# bkit runtime
 .bkit/
 
 # Harness runtime artifacts — execute.py 가 자동 생성하며 git 커밋 대상 아님

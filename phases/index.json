@@ -4,6 +4,14 @@
       "dir": "harness-refinement",
       "status": "completed",
       "completed_at": "2026-05-06T16:30:00+0900"
+    },
+    {
+      "dir": "0-scaffold",
+      "status": "completed"
+    },
+    {
+      "dir": "1-content-pipeline",
+      "status": "pending"
     }
   ]
 }
