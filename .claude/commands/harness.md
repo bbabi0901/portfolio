@@ -147,6 +147,8 @@ execute.py가 자동으로 처리하는 것:
 - 2단계 커밋 — 코드 변경(`feat`)과 메타데이터(`chore`)를 분리 커밋
 - 타임스탬프 — started_at, completed_at, failed_at, blocked_at 자동 기록
 
+진행 상황 일람: `/harness-status`. 환경 진단: `/harness-doctor`.
+
 에러 복구:
 
 - **error 발생 시**: `phases/{task-name}/index.json`에서 해당 step의 `status`를 `"pending"`으로 바꾸고 `error_message`를 삭제한 뒤 재실행한다.
