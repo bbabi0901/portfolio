@@ -41,11 +41,14 @@
       "started_at": "2026-05-06T14:44:15+0900",
       "completed_at": "2026-05-06T14:48:30+0900",
       "summary": "lib/spec-schema.ts (zod 4 schema covering all 14 top-level spec.json keys, ID regex IDs FEAT/Q/TS/ERR/EC), lib/spec-loader.ts (Node-only fs cached loader), scripts/validate-spec.ts (CLI: schema + duplicate ID check + dependency/feature ref integrity + --strict-tests opt-in file existence). package.json: tsx@^4 devDep + check:spec script + prebuild hook. Positive: 29 features/18 questions/70 scenarios/27 errors/50 edge cases validated; negative test exit 1 with path-prefixed messages; tsc/lint/build all green."
+    },
     {
       "step": 5,
       "name": "test-setup",
-      "status": "pending"
-    },
+      "status": "completed",
+      "started_at": "2026-05-06T17:07:54+0900",
+      "completed_at": "2026-05-06T17:14:00+0900",
+      "summary": "Vitest 4 + jsdom + Testing Library + msw 2 + Playwright 1.59 골격 구축. vitest.config.ts(coverage 70% threshold, components/ui 제외), tests/setup.ts(jest-dom, matchMedia/scrollTo/ResizeObserver mock, msw onUnhandledRequest:error), tests/msw/{server,handlers}.ts(빈 핸들러 배열), playwright.config.ts(6 디바이스 프로젝트 + viewport override + testMatch /.*\\.e2e\\.ts$/ + webServer port 3100), specs/spec-schema.spec.ts smoke + tests/e2e/smoke.e2e.ts(home title/lang/dark + /api/health). package.json: test/test:watch/test:coverage/e2e/e2e:ui scripts + 9개 devDeps. Playwright chromium+webkit 브라우저 설치 완료. tsc/lint/build/vitest 모두 통과, e2e MacBook 13 smoke 2/2 pass."
     {
       "step": 6,
       "name": "ci-pipeline",

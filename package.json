@@ -13,7 +13,12 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:spec": "tsx scripts/validate-spec.ts"
+    "check:spec": "tsx scripts/validate-spec.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -31,14 +36,21 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.5",
     "clsx": "^2.1.1",
     "eslint": "^9",
     "eslint-config-next": "^16.2",
     "eslint-config-prettier": "^9",
+    "jsdom": "^29.1.1",
+    "msw": "^2.14.3",
     "postcss": "^8",
     "prettier": "^3",
     "prettier-plugin-tailwindcss": "^0.6",
@@ -46,6 +58,7 @@
     "tailwindcss": "^4.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9",
-    "typescript-eslint": "^8"
+    "typescript-eslint": "^8",
+    "vitest": "^4.1.5"
   }
 }
