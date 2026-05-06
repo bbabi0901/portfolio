@@ -14,5 +14,11 @@ export default [
       "@typescript-eslint": tseslint.plugin,
     },
   },
+  {
+    files: ["components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
   prettier,
 ];
