@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+@theme inline {
+  --color-bg: #0a0a0a;
+  --color-card: #141414;
+  --color-border: #262626;
+  --color-accent: #bef264;
+  --font-sans:
+    system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    line-height: 1.625;
+  }
+}
+
+@keyframes typing-dot {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
