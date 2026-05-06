@@ -15,7 +15,7 @@
       "name": "app-shell",
       "status": "completed",
       "started_at": "2026-05-06T14:34:59+0900",
-      "completed_at": "2026-05-06T14:40:00+0900",
+      "completed_at": "2026-05-06T14:37:19+0900",
       "summary": "RootLayout(lang=ko, class=dark, theme-color #0a0a0a, Pretendard fallback chain), 홈 placeholder, 404 not-found, globals.css에 @theme tokens + typing-dot keyframes 추가; lint/tsc/build 통과"
     },
     {
