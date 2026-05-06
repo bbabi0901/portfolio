@@ -23,7 +23,7 @@
       "name": "shadcn-ui",
       "status": "completed",
       "started_at": "2026-05-06T14:37:19+0900",
-      "completed_at": "2026-05-06T14:41:00+0900",
+      "completed_at": "2026-05-06T14:41:46+0900",
       "summary": "shadcn/ui new-york style 초기화 (components.json, lib/utils.ts) + 13개 컴포넌트(button/input/textarea/select/label/sheet/popover/scroll-area/carousel/form/radio-group/card/sonner) 생성, lucide-react/cva 의존성 추가, ESLint override(components/ui/** react-hooks/set-state-in-effect off); lint/tsc/build 통과"
     },
     {
