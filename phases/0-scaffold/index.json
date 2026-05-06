@@ -37,8 +37,10 @@
     {
       "step": 4,
       "name": "spec-validation",
-      "status": "pending"
-    },
+      "status": "completed",
+      "started_at": "2026-05-06T14:44:15+0900",
+      "completed_at": "2026-05-06T14:48:30+0900",
+      "summary": "lib/spec-schema.ts (zod 4 schema covering all 14 top-level spec.json keys, ID regex IDs FEAT/Q/TS/ERR/EC), lib/spec-loader.ts (Node-only fs cached loader), scripts/validate-spec.ts (CLI: schema + duplicate ID check + dependency/feature ref integrity + --strict-tests opt-in file existence). package.json: tsx@^4 devDep + check:spec script + prebuild hook. Positive: 29 features/18 questions/70 scenarios/27 errors/50 edge cases validated; negative test exit 1 with path-prefixed messages; tsc/lint/build all green."
     {
       "step": 5,
       "name": "test-setup",
