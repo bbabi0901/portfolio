@@ -1,0 +1,64 @@
+{
+  "project": "AI Portfolio (Yoonsoo Kim conversational portfolio)",
+  "phase": "harness-refinement",
+  "steps": [
+    {
+      "step": 0,
+      "name": "harness-rules-update",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "harness.md 6 변경 — PR 게이트 정렬, SDD+TDD 흐름, 에러 복구, multi-task 가이드"
+    },
+    {
+      "step": 1,
+      "name": "executor-safety",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "execute.py 안전성 4종 — dirty-tree guard / timeout 예외 / atomic lock / SIGINT, 25 신규 테스트"
+    },
+    {
+      "step": 2,
+      "name": "executor-ux",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "execute.py CLI 6 플래그 + claude CLI 검사 + verbose 로깅, 21 신규 테스트"
+    },
+    {
+      "step": 3,
+      "name": "executor-observability",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "execute.py 관측성 4종 — attempt outputs / run.log / claude JSON 파싱 / attempts 메트릭, 16 신규 테스트"
+    },
+    {
+      "step": 4,
+      "name": "hooks-rewrite",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "hooks 재구현 — stdin JSON, exit 2, 30+ 차단 패턴, Stop PR 게이트 정렬, SessionStart 추가, 89 매트릭스 테스트"
+    },
+    {
+      "step": 5,
+      "name": "coverage-and-integration",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "누락 영역 보강 25 신규 테스트, requirements-dev/pyproject/README, coverage 93.73% (>=85%)"
+    },
+    {
+      "step": 6,
+      "name": "operations-helpers",
+      "status": "completed",
+      "started_at": "2026-05-06T11:30:00+0900",
+      "completed_at": "2026-05-06T16:30:00+0900",
+      "summary": "/harness-status, /harness-doctor 명령 + harness.md cross-link"
+    }
+  ],
+  "created_at": "2026-05-06T11:00:00+0900",
+  "completed_at": "2026-05-06T16:30:00+0900"
+}

@@ -1,10 +1,20 @@
+# Node
 node_modules/
 .next/
 out/
+dist/
 next-env.d.ts
 tsconfig.tsbuildinfo
 
-# env
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Env / secrets
 .env
 .env.local
 .env.*.local
@@ -24,12 +34,19 @@ playwright/.cache/
 # Vitest / coverage
 coverage/
 
-# OS / editor
+# bkit runtime
+.bkit/
+
+# Harness runtime artifacts — execute.py 가 자동 생성하며 git 커밋 대상 아님
+phases/**/phase*-output.json
+phases/**/step*-output.json
+phases/**/step*-output-attempt*.json
+phases/*/.lock
+phases/*/run.log
+
+# Editor / OS
 .DS_Store
 .vscode/
 .idea/
-
-# phase execution outputs
-phases/**/phase*-output.json
-phases/**/step*-output.json
-
+*.swp
+*.swo
