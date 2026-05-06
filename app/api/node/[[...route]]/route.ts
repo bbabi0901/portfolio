@@ -5,9 +5,7 @@ export const runtime = "nodejs";
 
 const app = new Hono().basePath("/api/node");
 
-app.get("/health", (c) =>
-  c.json({ ok: true, runtime: "node", ts: new Date().toISOString() })
-);
+app.get("/health", (c) => c.json({ ok: true, runtime: "node", ts: new Date().toISOString() }));
 
 app.post("/feedback", (c) => c.json({ error: "not_implemented" }, 501));
 

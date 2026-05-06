@@ -23,8 +23,7 @@ if (typeof window !== "undefined") {
     unobserve = vi.fn();
     disconnect = vi.fn();
   }
-  globalThis.ResizeObserver =
-    MockResizeObserver as unknown as typeof ResizeObserver;
+  globalThis.ResizeObserver = MockResizeObserver as unknown as typeof ResizeObserver;
 }
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));

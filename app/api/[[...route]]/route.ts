@@ -5,15 +5,10 @@ export const runtime = "edge";
 
 const app = new Hono().basePath("/api");
 
-app.get("/health", (c) =>
-  c.json({ ok: true, runtime: "edge", ts: new Date().toISOString() })
-);
+app.get("/health", (c) => c.json({ ok: true, runtime: "edge", ts: new Date().toISOString() }));
 
 app.post("/chat", (c) =>
-  c.json(
-    { error: "not_implemented", message: "Chat route is not yet implemented." },
-    501
-  )
+  c.json({ error: "not_implemented", message: "Chat route is not yet implemented." }, 501),
 );
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));

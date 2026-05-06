@@ -5,10 +5,8 @@
   --color-card: #141414;
   --color-border: #262626;
   --color-accent: #bef264;
-  --font-sans:
-    system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  --font-mono:
-    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @layer base {

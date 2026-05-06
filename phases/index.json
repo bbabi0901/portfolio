@@ -2,7 +2,7 @@
   "phases": [
     {
       "dir": "0-scaffold",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "dir": "1-content-pipeline",

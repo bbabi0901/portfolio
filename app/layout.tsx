@@ -9,8 +9,7 @@ export const metadata: Metadata = {
     default: "김윤수 — AI Portfolio",
     template: "%s | 김윤수",
   },
-  description:
-    "프론트엔드 개발자 김윤수에게 직접 물어보세요. 노션 기록 기반의 대화형 포트폴리오.",
+  description: "프론트엔드 개발자 김윤수에게 직접 물어보세요. 노션 기록 기반의 대화형 포트폴리오.",
   openGraph: {
     type: "website",
     locale: "ko_KR",
@@ -36,16 +35,10 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className="dark">
-      <body className="bg-[#0a0a0a] text-white antialiased min-h-screen font-sans">
-        {children}
-      </body>
+      <body className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">{children}</body>
     </html>
   );
 }

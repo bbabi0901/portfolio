@@ -7,12 +7,12 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <main className="mx-auto max-w-md px-4 md:px-6 lg:px-8 py-24 text-center">
-      <p className="text-sm font-mono text-neutral-500">404</p>
-      <h1 className="mt-3 text-2xl md:text-3xl font-semibold tracking-tight text-white">
+    <main className="mx-auto max-w-md px-4 py-24 text-center md:px-6 lg:px-8">
+      <p className="font-mono text-sm text-neutral-500">404</p>
+      <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white md:text-3xl">
         페이지를 찾을 수 없어요
       </h1>
-      <p className="mt-3 text-sm text-neutral-400 leading-relaxed">
+      <p className="mt-3 text-sm leading-relaxed text-neutral-400">
         요청하신 페이지가 이동되었거나 더 이상 존재하지 않을 수 있어요.
       </p>
       <div className="mt-8">

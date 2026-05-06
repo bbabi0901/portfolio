@@ -18,10 +18,7 @@ export const ServiceSchema = z.object({
 export const GreetingSchema = z.object({
   message: z.string().min(1),
   typingDelayMs: z.number().int().nonnegative(),
-  wordIntervalMs: z.tuple([
-    z.number().int().positive(),
-    z.number().int().positive(),
-  ]),
+  wordIntervalMs: z.tuple([z.number().int().positive(), z.number().int().positive()]),
   rememberDays: z.number().int().nonnegative(),
 });
 
@@ -92,10 +89,7 @@ export const FormSchema = z.object({
     .optional(),
 });
 
-const BreakpointStringMap = z.record(
-  z.string(),
-  z.union([z.string(), z.number()]),
-);
+const BreakpointStringMap = z.record(z.string(), z.union([z.string(), z.number()]));
 
 export const DeviceSchema = z.object({
   name: z.string().min(1),

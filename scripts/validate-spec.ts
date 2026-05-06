@@ -80,9 +80,7 @@ function main(): void {
     }
     tsIds.add(t.id);
     if (!featureIds.has(t.feature)) {
-      console.error(
-        `✗ ${t.id}.feature references unknown feature: ${t.feature}`,
-      );
+      console.error(`✗ ${t.id}.feature references unknown feature: ${t.feature}`);
       process.exit(1);
     }
   }
