@@ -16,7 +16,7 @@ jobs:
       MOCK_LLM: "1"
       MOCK_NOTION: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v4
         with:
@@ -55,7 +55,7 @@ jobs:
       MOCK_LLM: "1"
       MOCK_NOTION: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
