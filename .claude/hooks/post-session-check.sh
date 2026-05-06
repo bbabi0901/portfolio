@@ -6,6 +6,16 @@ set -u
 
 cat >/dev/null   # stdin JSON 무시
 
+# CC stop hook 은 비대화형 셸 → ~/.zshrc 의 nvm init 미적용 → 시스템 default Node(v16) 가 먼저 잡혀 ESLint v9 의 structuredClone 사용에서 ConfigError 발생.
+# .nvmrc 의 Node 버전을 PATH 앞에 강제 주입해 회피.
+if [ -f .nvmrc ]; then
+  REQ_NODE="$(tr -d '[:space:]' < .nvmrc)"
+  CANDIDATE="$HOME/.nvm/versions/node/v${REQ_NODE}/bin"
+  if [ -d "$CANDIDATE" ]; then
+    export PATH="$CANDIDATE:$PATH"
+  fi
+fi
+
 if [ ! -f package.json ]; then
   echo "[stop-hook] skip: no package.json yet"
   exit 0
