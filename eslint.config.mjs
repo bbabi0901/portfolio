@@ -3,7 +3,7 @@ import nextTypescript from "eslint-config-next/typescript";
 import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
 
-export default [
+const config = [
   {
     ignores: [".next", "node_modules", "out", "playwright-report", "coverage", "test-results"],
   },
@@ -22,3 +22,5 @@ export default [
   },
   prettier,
 ];
+
+export default config;
