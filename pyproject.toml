@@ -1,0 +1,18 @@
+[tool.pytest.ini_options]
+testpaths = ["scripts"]
+python_files = "test_*.py"
+
+[tool.coverage.run]
+source = ["scripts"]
+omit = [
+    "scripts/test_*.py",
+]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]
