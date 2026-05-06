@@ -31,7 +31,7 @@
       "name": "hono-mount",
       "status": "completed",
       "started_at": "2026-05-06T14:41:46+0900",
-      "completed_at": "2026-05-06T14:43:30+0900",
+      "completed_at": "2026-05-06T14:44:14+0900",
       "summary": "Hono 4.12 의존성 추가, Edge runtime 라우트(app/api/[[...route]]/route.ts: GET /api/health, POST /api/chat 501)와 Node runtime 라우트(app/api/node/[[...route]]/route.ts: GET /api/node/health, POST /api/node/feedback 501, POST /api/node/contact 501) 분리 마운트; tsc/lint/build 통과, AC curl 6종 모두 정상 응답"
     },
     {
