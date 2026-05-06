@@ -4,6 +4,32 @@ out/
 next-env.d.ts
 tsconfig.tsbuildinfo
 
+# env
+.env
+.env.local
+.env.*.local
+
+# build artifacts (서버 전용 / 클라이언트 노출)
+data/portfolio.server.json
+public/data/suggestions.json
+
+# 단, fallback sample은 커밋한다
+!data/portfolio.sample.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Vitest / coverage
+coverage/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
 # phase execution outputs
 phases/**/phase*-output.json
 phases/**/step*-output.json
+
