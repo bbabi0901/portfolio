@@ -3,6 +3,10 @@
     {
       "dir": "0-scaffold",
       "status": "pending"
+    },
+    {
+      "dir": "1-content-pipeline",
+      "status": "pending"
     }
   ]
 }

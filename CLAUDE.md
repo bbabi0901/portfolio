@@ -42,6 +42,18 @@
 - 노션 콘텐츠 변경 → 다음 빌드시 자동 반영. 수동 동기화는 `npm run sync:notion`.
 - 문서 변경(plan/PRD/Architecture/spec.json)이 코드 변경과 함께 가야 함.
 
+## Git Workflow 규칙 (사용자 명시)
+- CRITICAL: 모든 작업은 worktree에서 진행. main 브랜치는 PR 머지로만 갱신.
+- CRITICAL: 새 task 시작 시 main 기준 명시적 type prefix 슬래시 형식 브랜치 생성:
+  - `feat/{scope}` — 새 기능 (예: `feat/2-chat-backend`)
+  - `chore/{scope}` — 빌드/CI/의존성/설정/계획
+  - `fix/{scope}` — 버그 수정
+  - `hotfix/{scope}` — 프로덕션 긴급 패치
+  - `refactor/{scope}` / `test/{scope}` / `docs/{scope}` — 각각 해당 영역
+- Task 완료 시: `git push -u origin <branch>` → `gh pr create --base main --head <branch>`로 PR 생성 (Conventional Commit 제목, Summary + Test plan 본문).
+- Harness `execute.py`는 기본 `feat-{task}` (하이픈) 브랜치를 만들지만 본 규칙은 슬래시(`feat/{task}`) 형식. task 시작 전 `git checkout -b feat/{task}` 직접 또는 시작 후 `git branch -m` rename.
+- `--no-verify`, `--force` 등 가드 우회는 사용자 명시 승인 시에만.
+
 ## 명령어
 ```
 npm run dev                # 개발 서버 (localhost:3000)
