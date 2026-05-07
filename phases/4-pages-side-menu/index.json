@@ -73,7 +73,10 @@
     {
       "step": 4,
       "name": "routing-cross-cutting",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T17:06:03+0900",
+      "completed_at": "2026-05-07T17:12:00+0900",
+      "summary": "ScrollToTopOnRouteChange (pathname 변경 시 instant scrollTo top) + LayoutClient 통합 + JsonLdPerson (server-rendered Person schema, github sameAs, no telephone/address) + app/sitemap.ts (4 routes, NEXT_PUBLIC_SITE_URL base) + app/robots.ts (allow / disallow /api/, sitemap link) + app/opengraph-image.tsx (Edge runtime, 1200×630, lime-300 dot) + app/page.tsx metadata (대화). 361 tests pass (13 new), check:spec/lint/tsc/build OK, /non-existent 404 / /sitemap.xml 200 / /robots.txt 200 / /opengraph-image image/png 200."
     }
   ],
   "created_at": "2026-05-07T16:27:16+0900"
