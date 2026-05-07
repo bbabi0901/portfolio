@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -38,7 +39,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className="dark">
-      <body className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">{children}</body>
+      <body className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">
+        {children}
+        <Toaster richColors />
+      </body>
     </html>
   );
 }

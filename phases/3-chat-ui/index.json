@@ -73,7 +73,10 @@
     {
       "step": 4,
       "name": "chat-root",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T15:58:12+0900",
+      "completed_at": "2026-05-07T16:14:00+0900",
+      "summary": "ChatRoot.tsx orchestrator (useChat + TextStreamChatTransport, modelId via sendMessage body, localStorage model persistence, sticky-to-bottom, Cmd+K clear, fastForwardSignal greeting), EmptyState/ErrorState/ClearButton + lib/models-availability.ts + app/page.tsx server component + Toaster in layout + 18 unit tests; 269 tests pass."
     }
   ],
   "created_at": "2026-05-07T15:09:57+0900"
