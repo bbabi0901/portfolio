@@ -134,5 +134,13 @@
     "feature": null,
     "phase": null,
     "progress": null
+  },
+  {
+    "sessionId": "152e3663-677a-48f4-96bc-a541dec8d384",
+    "reason": "other",
+    "endedAt": "2026-05-07T06:37:41.786Z",
+    "feature": null,
+    "phase": null,
+    "progress": null
   }
 ]
