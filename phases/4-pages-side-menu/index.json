@@ -7,8 +7,17 @@
       "name": "layout-shell",
       "status": "completed",
       "started_at": "2026-05-07T16:27:16+0900",
-      "completed_at": "2026-05-07T16:35:00+0900",
-      "summary": "Header(햄버거) + SideSheet(focus trap, ESC, route auto-close, 80ms debounce) + SideMenuItem + Footer(privacy popover) + LayoutClient → app/layout.tsx 합성, KST lastUpdated."
+      "completed_at": "2026-05-07T16:35:53+0900",
+      "summary": "Header(햄버거) + SideSheet(focus trap, ESC, route auto-close, 80ms debounce) + SideMenuItem + Footer(privacy popover) + LayoutClient → app/layout.tsx 합성, KST lastUpdated.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.644518750000003,
+          "session_id": "ded68a87-232c-4b63-8535-85c6da4e59e8"
+        }
+      ]
     },
     {
       "step": 1,
