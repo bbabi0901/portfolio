@@ -41,8 +41,17 @@
       "name": "experience-page",
       "status": "completed",
       "started_at": "2026-05-07T16:43:12+0900",
-      "completed_at": "2026-05-07T16:54:00+0900",
-      "summary": "/experience SSG 페이지 + lib/experience-data.ts (회사별 그룹화, 기간 'YYYY.MM — 현재', 스킬 분리) + Timeline/CompanyGroup/ProjectCard/SkillsGrid/CategoryFilter/ExperienceClient (URL ?category= 동기화, 빈 상태). PortfolioChunk 에 optional projectMeta 추가. 327 tests pass, lint/tsc/build OK, /experience + ?category=업무 200."
+      "completed_at": "2026-05-07T16:54:02+0900",
+      "summary": "/experience SSG 페이지 + lib/experience-data.ts (회사별 그룹화, 기간 'YYYY.MM — 현재', 스킬 분리) + Timeline/CompanyGroup/ProjectCard/SkillsGrid/CategoryFilter/ExperienceClient (URL ?category= 동기화, 빈 상태). PortfolioChunk 에 optional projectMeta 추가. 327 tests pass, lint/tsc/build OK, /experience + ?category=업무 200.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 8.207108,
+          "session_id": "72c14c9a-91dc-4e1d-8a8a-b836e360a3f7"
+        }
+      ]
     },
     {
       "step": 3,
