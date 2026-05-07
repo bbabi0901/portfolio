@@ -1,0 +1,35 @@
+{
+  "project": "ai-portfolio",
+  "phase": "6-guards-seo",
+  "steps": [
+    {
+      "step": 0,
+      "name": "rate-limit-core",
+      "status": "completed",
+      "started_at": "2026-05-07T18:57:18+0900",
+      "completed_at": "2026-05-07T19:04:00+0900",
+      "summary": "lib/rate-limit.ts: sliding-window rate limit core (Edge+Node) with Upstash REST primary, in-process LRU fallback (5000 keys), getClientIp/hashIp helpers; 19 specs covering memory/Upstash/headers/SHA-256."
+    },
+    {
+      "step": 1,
+      "name": "rate-limit-routes",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "token-budget",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "seo-meta",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "error-503-page-lhci",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-07T18:57:18+0900"
+}

@@ -31,6 +31,11 @@
     },
     {
       "dir": "5-feedback-contact-api",
+      "status": "completed",
+      "completed_at": "2026-05-07T18:35:00+0900"
+    },
+    {
+      "dir": "6-guards-seo",
       "status": "pending"
     }
   ]
