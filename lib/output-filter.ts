@@ -20,6 +20,9 @@ export const PROMPT_LEAK_PATTERNS: readonly RegExp[] = Object.freeze([
   /\bsystem\s+prompt\b/i,
   /\bsystem\s+role\b/i,
   /you\s+are\s+programmed\s+to/i,
+  /\[SYSTEM\]/i,
+  /\bDAN\b/i,
+  /\bdo\s+anything\s+now\b/i,
 ]);
 
 const PUBLIC_ALLOWLIST: readonly RegExp[] = Object.freeze([

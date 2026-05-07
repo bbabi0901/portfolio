@@ -73,7 +73,10 @@
     {
       "step": 4,
       "name": "injection-defense",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T12:34:23+0900",
+      "completed_at": "2026-05-07T12:40:30+0900",
+      "summary": "specs/injection-defense.spec.ts (INJ-01~05 + non-empty smoke check, 6 tests) integration-tests chat route via app.request with MOCK_LLM=1; output-filter PROMPT_LEAK_PATTERNS extended with [SYSTEM], DAN, Do Anything Now line-redaction patterns; 176 specs pass, lint+tsc clean."
     }
   ],
   "created_at": "2026-05-07T12:06:01+0900"
