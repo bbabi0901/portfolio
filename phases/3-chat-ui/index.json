@@ -41,8 +41,17 @@
       "name": "composer",
       "status": "completed",
       "started_at": "2026-05-07T15:37:42+0900",
-      "completed_at": "2026-05-07T15:43:30+0900",
-      "summary": "Composer.tsx with IME 3중 체크 (compositionStart/End ref + nativeEvent.isComposing + keyCode 229), auto-grow, length counter, safe-area padding + 22 unit tests; 238 tests pass."
+      "completed_at": "2026-05-07T15:44:23+0900",
+      "summary": "Composer.tsx with IME 3중 체크 (compositionStart/End ref + nativeEvent.isComposing + keyCode 229), auto-grow, length counter, safe-area padding + 22 unit tests; 238 tests pass.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 4.779809499999999,
+          "session_id": "025ac0b8-b070-4cf4-9897-0314c1538739"
+        }
+      ]
     },
     {
       "step": 3,
