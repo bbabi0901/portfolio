@@ -24,8 +24,17 @@
       "name": "messages",
       "status": "completed",
       "started_at": "2026-05-07T15:17:10+0900",
-      "completed_at": "2026-05-07T15:36:55+0900",
-      "summary": "types/chat.ts + 6 message components (MessageBubble/List/ActionsBar, FeedbackButtons/Popover, SourceCitation) + 18 unit tests; 216 tests pass."
+      "completed_at": "2026-05-07T15:37:42+0900",
+      "summary": "types/chat.ts + 6 message components (MessageBubble/List/ActionsBar, FeedbackButtons/Popover, SourceCitation) + 18 unit tests; 216 tests pass.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 11.741952500000002,
+          "session_id": "152e3663-677a-48f4-96bc-a541dec8d384"
+        }
+      ]
     },
     {
       "step": 2,
