@@ -73,7 +73,10 @@
     {
       "step": 4,
       "name": "sync-notion",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T10:52:12+0900",
+      "summary": "scripts/sync-notion.ts (build script) — env-driven (NOTION_TOKEN/PROJECTS_DB_ID/PROFILE_PAGE_IDS, OPENAI_API_KEY, MOCK_NOTION/MOCK_LLM/SKIP_NOTION_SYNC) flow: queryDatabase(category=자체프로젝트/업무/외부활동) + status filter (Done/In progress) → getPageRef for profile pages → getPagesContent (concurrency=4, onSkip warn) → chunkPages with categoryResolver(profile→career/personal, project categories→project) → embedBatch → sortChunks(sourcePageId→headingPath) → write data/portfolio.server.json + data/portfolio.sample.json (8 chunks/16d sample). KST `+09:00` generatedAt. package.json sync:notion=tsx --conditions=react-server (server-only bypass), prebuild appends sync:notion. specs/sync-notion.spec.ts 6 tests (skip/mock/sample/determinism/missing token/missing key) + 59 prior = 65 통과. AC: build, mock run, SKIP run, missing token error all 통과.",
+      "completed_at": "2026-05-07T10:57:00+0900"
     },
     {
       "step": 5,
