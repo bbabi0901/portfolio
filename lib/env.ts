@@ -5,6 +5,7 @@ const ServerEnvSchema = z.object({
   ANTHROPIC_API_KEY: z.string().optional(),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(),
   NOTION_TOKEN: z.string().optional(),
+  NOTION_FEEDBACK_DB_ID: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   MAX_TOKENS_PER_DAY: z.coerce.number().int().positive().default(200_000),
   RATE_LIMIT_BYPASS: z.string().optional(),
