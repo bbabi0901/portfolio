@@ -90,7 +90,10 @@
     {
       "step": 5,
       "name": "portfolio-loader-retriever",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T10:58:25+0900",
+      "summary": "lib/portfolio-data.ts (server-only, fs/path) — loadPortfolio (server.json → sample.json fallback, throw on missing), clearPortfolioCache, toClientData (strips chunks/embeddings), 모듈-스코프 cached + JSON.parse + 구조 검증(version/generatedAt/chunks[].id|sourceTitle|tokens|embedding 등). lib/retriever.ts (pure, Edge-호환, no node:*) — retrieve(query, data, opts) → RetrievalSummary { results, mode: 'hybrid'|'keyword-only', empty }: tokenize+heading+tags 매칭으로 keywordScore, queryEmbedding 있으면 cosineSimilarity, mergeScores(0.4/0.6 default), topK=8/maxTokens=6000/minVectorScore=0.3 default, 정렬 후 토큰 컷, 빈 query/빈 chunks/dim mismatch 처리. specs/{portfolio-data,retriever}.spec.ts 16 신규 테스트 + 65 prior = 81 통과. AC: tsc/lint/build/grep 모두 통과.",
+      "completed_at": "2026-05-07T11:02:00+0900"
     },
     {
       "step": 6,
