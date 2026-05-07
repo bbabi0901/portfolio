@@ -58,8 +58,17 @@
       "name": "greeting",
       "status": "completed",
       "started_at": "2026-05-07T15:44:23+0900",
-      "completed_at": "2026-05-07T15:57:30+0900",
-      "summary": "GreetingPlayer.tsx (init→dots→streaming→done state machine, reduced-motion + storage skip, fastForwardSignal) + lib/greeting.ts (localStorage with memory fallback) + 13 unit tests; 251 tests pass."
+      "completed_at": "2026-05-07T15:58:12+0900",
+      "summary": "GreetingPlayer.tsx (init→dots→streaming→done state machine, reduced-motion + storage skip, fastForwardSignal) + lib/greeting.ts (localStorage with memory fallback) + 13 unit tests; 251 tests pass.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.422738000000002,
+          "session_id": "dfc40c52-e0a5-4aac-b339-e1f582dfff49"
+        }
+      ]
     },
     {
       "step": 4,
