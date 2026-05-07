@@ -56,7 +56,10 @@
     {
       "step": 3,
       "name": "contact-form-ui",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T16:54:03+0900",
+      "completed_at": "2026-05-07T17:05:00+0900",
+      "summary": "/contact 페이지 (server + ContactClient) + ContactForm (rhf + zodResolver, 한국어 zod 메시지, honeypot silent + 1.5s 임계 captcha + beforeunload dirty 가드 + autoComplete attr) + DirectContactCard (mailto + GitHub 외부 link rel=noopener noreferrer) + lib/contact-schema.ts. /api/contact 호출 없음 (mock submit, 백엔드는 후속 task). 348 tests pass (21 new), check:spec/lint/tsc/build OK, /contact 200."
     },
     {
       "step": 4,
