@@ -42,7 +42,16 @@
       "status": "completed",
       "started_at": "2026-05-07T10:40:04+0900",
       "summary": "services/notion.ts (server-only) + createNotionService(token, mock, fixtureDir, rateLimitBackoffMs) — queryDatabase/getPageRef/getPageContent/getPagesContent. MOCK 모드 (tests/fixtures/notion/db-projects.json + page-*.md), 실 API 모드 (raw fetch + @notionhq/client v5 + notion-to-md@^3, 한글/영문 속성 키 매핑, 429 backoff 4회, 401/403/404 → null skip). msw 핸들러 3종 (databases query/pages retrieve/blocks children). vitest stub `tests/stubs/server-only.ts` alias. 13 신규 테스트 + 기존 33 = 46개 통과.",
-      "completed_at": "2026-05-07T10:48:00+0900"
+      "completed_at": "2026-05-07T10:48:57+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.075207500000001,
+          "session_id": "46e535bc-930a-4366-a2c7-f81fe467ecb8"
+        }
+      ]
     },
     {
       "step": 3,
