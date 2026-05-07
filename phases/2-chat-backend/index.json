@@ -1,0 +1,35 @@
+{
+  "project": "ai-portfolio",
+  "phase": "2-chat-backend",
+  "steps": [
+    {
+      "step": 0,
+      "name": "env-and-models",
+      "status": "completed",
+      "started_at": "2026-05-07T12:06:01+0900",
+      "completed_at": "2026-05-07T21:11:30+0900",
+      "summary": "lib/env.ts (zod ServerEnv with cache) + lib/models.ts (3-model whitelist, resolveModel/createModel/listAvailableModels with MOCK_LLM mock + missing-key throw); 12 specs/models.spec.ts cases pass."
+    },
+    {
+      "step": 1,
+      "name": "prompts",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "output-filter",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "chat-route",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "injection-defense",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-07T12:06:01+0900"
+}
