@@ -16,7 +16,8 @@
     },
     {
       "dir": "2-chat-backend",
-      "status": "pending"
+      "status": "completed",
+      "completed_at": "2026-05-07T12:41:14+0900"
     }
   ]
 }
