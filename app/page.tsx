@@ -1,10 +1,46 @@
+import fs from "node:fs";
+import path from "node:path";
+
+import { ChatRoot } from "@/components/chat/ChatRoot";
+import { loadSpec } from "@/lib/spec-loader";
+import { listAvailableModelIds } from "@/lib/models-availability";
+import { DEFAULT_MODEL_ID, type ModelId } from "@/lib/models";
+import type { SuggestedQuestionMeta } from "@/types/portfolio";
+
+function loadSuggestions(spec: ReturnType<typeof loadSpec>): SuggestedQuestionMeta[] {
+  try {
+    const filePath = path.join(process.cwd(), "public", "data", "suggestions.json");
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const parsed = JSON.parse(raw) as { suggestedQuestions?: SuggestedQuestionMeta[] };
+    if (Array.isArray(parsed.suggestedQuestions) && parsed.suggestedQuestions.length > 0) {
+      return parsed.suggestedQuestions;
+    }
+  } catch {
+    // fall through to spec
+  }
+  return spec.suggestedQuestions.map((q) => ({
+    id: q.id,
+    category: q.category,
+    text: q.text,
+    expectedSourceTitles: q.expectedSourceTitles,
+  }));
+}
+
 export default function HomePage() {
+  const spec = loadSpec();
+  const availableModels = listAvailableModelIds();
+  const defaultModelId =
+    (spec.models.find((m) => m.default)?.id as ModelId | undefined) ?? DEFAULT_MODEL_ID;
+  const suggestions = loadSuggestions(spec);
+
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:px-8">
-      <h1 className="text-3xl font-semibold tracking-tight text-white md:text-4xl">
-        김윤수 — AI Portfolio
-      </h1>
-      <p className="mt-4 text-sm leading-relaxed text-neutral-400">준비 중입니다.</p>
+    <main className="mx-auto h-[100dvh] max-w-3xl px-4 md:px-6 lg:px-8">
+      <ChatRoot
+        greeting={spec.greeting}
+        suggestions={suggestions}
+        availableModels={availableModels}
+        defaultModelId={defaultModelId}
+      />
     </main>
   );
 }
