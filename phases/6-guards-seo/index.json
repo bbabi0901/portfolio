@@ -7,8 +7,17 @@
       "name": "rate-limit-core",
       "status": "completed",
       "started_at": "2026-05-07T18:57:18+0900",
-      "completed_at": "2026-05-07T19:04:00+0900",
-      "summary": "lib/rate-limit.ts: sliding-window rate limit core (Edge+Node) with Upstash REST primary, in-process LRU fallback (5000 keys), getClientIp/hashIp helpers; 19 specs covering memory/Upstash/headers/SHA-256."
+      "completed_at": "2026-05-07T19:06:12+0900",
+      "summary": "lib/rate-limit.ts: sliding-window rate limit core (Edge+Node) with Upstash REST primary, in-process LRU fallback (5000 keys), getClientIp/hashIp helpers; 19 specs covering memory/Upstash/headers/SHA-256.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 4.517582250000002,
+          "session_id": "f0dfb5dd-104f-4ade-b6b3-fa1f8b1df195"
+        }
+      ]
     },
     {
       "step": 1,
