@@ -26,7 +26,8 @@
     },
     {
       "dir": "4-pages-side-menu",
-      "status": "pending"
+      "status": "completed",
+      "completed_at": "2026-05-07T17:12:45+0900"
     }
   ]
 }
