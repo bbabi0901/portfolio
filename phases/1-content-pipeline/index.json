@@ -2,12 +2,43 @@
   "project": "ai-portfolio",
   "phase": "1-content-pipeline",
   "steps": [
-    { "step": 0, "name": "types-tokenize-embeddings", "status": "pending" },
-    { "step": 1, "name": "chunking", "status": "pending" },
-    { "step": 2, "name": "notion-service", "status": "pending" },
-    { "step": 3, "name": "embeddings-service", "status": "pending" },
-    { "step": 4, "name": "sync-notion", "status": "pending" },
-    { "step": 5, "name": "portfolio-loader-retriever", "status": "pending" },
-    { "step": 6, "name": "generate-suggestions", "status": "pending" }
-  ]
+    {
+      "step": 0,
+      "name": "types-tokenize-embeddings",
+      "status": "completed",
+      "started_at": "2026-05-07T10:25:46+0900",
+      "summary": "types/{portfolio,notion}.ts + lib/{tokenize,embeddings}.ts 4개 utility (tokenize/estimateTokens/extractKeywords + cosineSimilarity/normalize/fixtureEmbedding/mergeScores) + 2 spec 파일 작성, 21개 테스트 통과"
+    },
+    {
+      "step": 1,
+      "name": "chunking",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "notion-service",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "embeddings-service",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "sync-notion",
+      "status": "pending"
+    },
+    {
+      "step": 5,
+      "name": "portfolio-loader-retriever",
+      "status": "pending"
+    },
+    {
+      "step": 6,
+      "name": "generate-suggestions",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-07T10:25:46+0900"
 }
