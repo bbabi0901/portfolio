@@ -56,7 +56,10 @@
     {
       "step": 3,
       "name": "greeting",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T15:44:23+0900",
+      "completed_at": "2026-05-07T15:57:30+0900",
+      "summary": "GreetingPlayer.tsx (init→dots→streaming→done state machine, reduced-motion + storage skip, fastForwardSignal) + lib/greeting.ts (localStorage with memory fallback) + 13 unit tests; 251 tests pass."
     },
     {
       "step": 4,
