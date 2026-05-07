@@ -11,8 +11,8 @@ import {
 
 export const metadata: Metadata = {
   title: "기술 이력",
-  description:
-    "디라티오, 체인아나토미, 반에프에서의 프로젝트 타임라인과 보유 스킬.",
+  description: "김윤수의 회사·프로젝트 타임라인 + 보유 스킬.",
+  alternates: { canonical: "/experience" },
 };
 
 export const dynamic = "force-static";

@@ -4,7 +4,8 @@ import { ContactClient } from "@/components/contact/ContactClient";
 
 export const metadata: Metadata = {
   title: "연락하기",
-  description: "프로젝트 협업 또는 채용 관련 문의를 남겨주세요.",
+  description: "김윤수에게 메시지를 남기거나 메일로 직접 연락하세요.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

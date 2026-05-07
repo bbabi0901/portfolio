@@ -1,9 +1,12 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "김윤수 — AI Portfolio";
+export const alt = "김윤수 — AI Portfolio · 노션 기록 기반 대화형 포트폴리오";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+const FONT_STACK =
+  '"Pretendard Variable", Pretendard, system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
 
 export default function OpenGraphImage() {
   return new ImageResponse(
@@ -19,7 +22,7 @@ export default function OpenGraphImage() {
           justifyContent: "space-between",
           padding: "80px",
           color: "#ffffff",
-          fontFamily: "system-ui, sans-serif",
+          fontFamily: FONT_STACK,
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>

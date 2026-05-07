@@ -7,6 +7,7 @@ import { loadProfileData } from "@/lib/profile-data";
 export const metadata: Metadata = {
   title: "자기소개",
   description: "프론트엔드 개발자 김윤수의 가치관, 성격, 취미.",
+  alternates: { canonical: "/about" },
 };
 
 export const dynamic = "force-static";
