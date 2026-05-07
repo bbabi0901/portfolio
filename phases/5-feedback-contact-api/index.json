@@ -7,7 +7,17 @@
       "name": "notion-feedback-service",
       "status": "completed",
       "started_at": "2026-05-07T17:42:24+0900",
-      "summary": "services/notion-feedback.ts (appendFeedback + chunkRichText + hashUserAgent), types/feedback.ts, NOTION_FEEDBACK_DB_ID env, 28 specs pass — MOCK_NOTION + Notion API mapping (NOTION_SCHEMA.md SSoT) + 429 1회 retry + 401/403/400/500 분기 + token 누설 X."
+      "summary": "services/notion-feedback.ts (appendFeedback + chunkRichText + hashUserAgent), types/feedback.ts, NOTION_FEEDBACK_DB_ID env, 28 specs pass — MOCK_NOTION + Notion API mapping (NOTION_SCHEMA.md SSoT) + 429 1회 retry + 401/403/400/500 분기 + token 누설 X.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 5.0971157499999995,
+          "session_id": "35f81cf8-ae11-4a2f-acc6-3b692d9fde34"
+        }
+      ],
+      "completed_at": "2026-05-07T17:49:51+0900"
     },
     {
       "step": 1,
