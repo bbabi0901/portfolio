@@ -22,7 +22,10 @@
     {
       "step": 1,
       "name": "chunking",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T10:32:27+0900",
+      "summary": "lib/chunking.ts (chunkMarkdown/chunkPages/stableHash) — heading-based markdown 분할, 코드블록 분할 금지, FNV-1a stable id, mergeBelowTokens(prev≥threshold && cur<threshold), maxChunksPerPage 트림 + onWarn, tags via extractKeywords. specs/chunking.spec.ts 12 테스트 통과 (전체 33 통과).",
+      "completed_at": "2026-05-07T10:39:30+0900"
     },
     {
       "step": 2,
