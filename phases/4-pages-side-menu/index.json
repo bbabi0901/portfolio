@@ -58,8 +58,17 @@
       "name": "contact-form-ui",
       "status": "completed",
       "started_at": "2026-05-07T16:54:03+0900",
-      "completed_at": "2026-05-07T17:05:00+0900",
-      "summary": "/contact 페이지 (server + ContactClient) + ContactForm (rhf + zodResolver, 한국어 zod 메시지, honeypot silent + 1.5s 임계 captcha + beforeunload dirty 가드 + autoComplete attr) + DirectContactCard (mailto + GitHub 외부 link rel=noopener noreferrer) + lib/contact-schema.ts. /api/contact 호출 없음 (mock submit, 백엔드는 후속 task). 348 tests pass (21 new), check:spec/lint/tsc/build OK, /contact 200."
+      "completed_at": "2026-05-07T17:06:02+0900",
+      "summary": "/contact 페이지 (server + ContactClient) + ContactForm (rhf + zodResolver, 한국어 zod 메시지, honeypot silent + 1.5s 임계 captcha + beforeunload dirty 가드 + autoComplete attr) + DirectContactCard (mailto + GitHub 외부 link rel=noopener noreferrer) + lib/contact-schema.ts. /api/contact 호출 없음 (mock submit, 백엔드는 후속 task). 348 tests pass (21 new), check:spec/lint/tsc/build OK, /contact 200.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.216056499999999,
+          "session_id": "2b59aef5-c119-41f8-8119-81a624c8d579"
+        }
+      ]
     },
     {
       "step": 4,
