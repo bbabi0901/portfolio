@@ -1,0 +1,93 @@
+{
+  "project": "ai-portfolio",
+  "phase": "4-pages-side-menu",
+  "steps": [
+    {
+      "step": 0,
+      "name": "layout-shell",
+      "status": "completed",
+      "started_at": "2026-05-07T16:27:16+0900",
+      "completed_at": "2026-05-07T16:35:53+0900",
+      "summary": "Header(햄버거) + SideSheet(focus trap, ESC, route auto-close, 80ms debounce) + SideMenuItem + Footer(privacy popover) + LayoutClient → app/layout.tsx 합성, KST lastUpdated.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.644518750000003,
+          "session_id": "ded68a87-232c-4b63-8535-85c6da4e59e8"
+        }
+      ]
+    },
+    {
+      "step": 1,
+      "name": "about-page",
+      "status": "completed",
+      "started_at": "2026-05-07T16:35:54+0900",
+      "completed_at": "2026-05-07T16:43:12+0900",
+      "summary": "/about SSG 페이지 (server component) + AboutHero(SVG initial fallback, 약 X분 읽기) + AboutSection(react-markdown + remark-gfm + 외부 link target=_blank rel=noopener noreferrer) + lib/profile-data.ts(loadProfileData/calculateReadingMinutes, personal 청크 그룹화, career 첫 줄 → intro). 데이터 없음 → placeholder. AC 통과: check:spec / lint / 309 tests / tsc / build / dev curl 200.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 5.112694999999999,
+          "session_id": "64d50166-b141-49a0-89a7-d87ec2d2d494"
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "name": "experience-page",
+      "status": "completed",
+      "started_at": "2026-05-07T16:43:12+0900",
+      "completed_at": "2026-05-07T16:54:02+0900",
+      "summary": "/experience SSG 페이지 + lib/experience-data.ts (회사별 그룹화, 기간 'YYYY.MM — 현재', 스킬 분리) + Timeline/CompanyGroup/ProjectCard/SkillsGrid/CategoryFilter/ExperienceClient (URL ?category= 동기화, 빈 상태). PortfolioChunk 에 optional projectMeta 추가. 327 tests pass, lint/tsc/build OK, /experience + ?category=업무 200.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 8.207108,
+          "session_id": "72c14c9a-91dc-4e1d-8a8a-b836e360a3f7"
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "name": "contact-form-ui",
+      "status": "completed",
+      "started_at": "2026-05-07T16:54:03+0900",
+      "completed_at": "2026-05-07T17:06:02+0900",
+      "summary": "/contact 페이지 (server + ContactClient) + ContactForm (rhf + zodResolver, 한국어 zod 메시지, honeypot silent + 1.5s 임계 captcha + beforeunload dirty 가드 + autoComplete attr) + DirectContactCard (mailto + GitHub 외부 link rel=noopener noreferrer) + lib/contact-schema.ts. /api/contact 호출 없음 (mock submit, 백엔드는 후속 task). 348 tests pass (21 new), check:spec/lint/tsc/build OK, /contact 200.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.216056499999999,
+          "session_id": "2b59aef5-c119-41f8-8119-81a624c8d579"
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "name": "routing-cross-cutting",
+      "status": "completed",
+      "started_at": "2026-05-07T17:06:03+0900",
+      "completed_at": "2026-05-07T17:12:45+0900",
+      "summary": "ScrollToTopOnRouteChange (pathname 변경 시 instant scrollTo top) + LayoutClient 통합 + JsonLdPerson (server-rendered Person schema, github sameAs, no telephone/address) + app/sitemap.ts (4 routes, NEXT_PUBLIC_SITE_URL base) + app/robots.ts (allow / disallow /api/, sitemap link) + app/opengraph-image.tsx (Edge runtime, 1200×630, lime-300 dot) + app/page.tsx metadata (대화). 361 tests pass (13 new), check:spec/lint/tsc/build OK, /non-existent 404 / /sitemap.xml 200 / /robots.txt 200 / /opengraph-image image/png 200.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 6.665634999999997,
+          "session_id": "b5c102ad-6ef6-4e3f-acd8-4e3015eeae60"
+        }
+      ]
+    }
+  ],
+  "created_at": "2026-05-07T16:27:16+0900",
+  "completed_at": "2026-05-07T17:12:45+0900"
+}

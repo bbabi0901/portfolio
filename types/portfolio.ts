@@ -6,6 +6,15 @@ export type ChunkCategory =
   | "subpage"
   | "personal";
 
+export type ProjectNotionCategory = "자체프로젝트" | "업무" | "외부활동";
+
+export interface ProjectMeta {
+  notionCategory?: ProjectNotionCategory;
+  company?: string;
+  role?: string;
+  period?: { start: string; end?: string; ongoing?: boolean };
+}
+
 export interface PortfolioChunk {
   id: string;
   sourcePageId: string;
@@ -17,6 +26,7 @@ export interface PortfolioChunk {
   tokens: number;
   embedding: number[];
   tags?: string[];
+  projectMeta?: ProjectMeta;
 }
 
 export interface SuggestedQuestionMeta {

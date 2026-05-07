@@ -1,11 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { Metadata } from "next";
 
 import { ChatRoot } from "@/components/chat/ChatRoot";
 import { loadSpec } from "@/lib/spec-loader";
 import { listAvailableModelIds } from "@/lib/models-availability";
 import { DEFAULT_MODEL_ID, type ModelId } from "@/lib/models";
 import type { SuggestedQuestionMeta } from "@/types/portfolio";
+
+export const metadata: Metadata = {
+  title: "대화",
+  description: "AI에게 물어보는 김윤수의 커리어와 프로젝트.",
+};
 
 function loadSuggestions(spec: ReturnType<typeof loadSpec>): SuggestedQuestionMeta[] {
   try {
