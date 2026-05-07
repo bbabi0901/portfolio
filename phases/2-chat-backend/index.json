@@ -41,8 +41,17 @@
       "name": "output-filter",
       "status": "completed",
       "started_at": "2026-05-07T12:16:29+0900",
-      "completed_at": "2026-05-07T12:20:30+0900",
-      "summary": "lib/output-filter.ts (filterOutput/extractUrls/isAllowedUrl + frozen PROMPT_LEAK_PATTERNS; markdown+raw URL masking with public allowlist for github.com/YoonsooKim9 and mailto:bbabi0901@gmail.com, query/fragment-insensitive allowedSourceUrls match, line-level prompt-leak redaction for 10 KO/EN signatures); 33 specs/output-filter.spec.ts cases pass."
+      "completed_at": "2026-05-07T12:21:12+0900",
+      "summary": "lib/output-filter.ts (filterOutput/extractUrls/isAllowedUrl + frozen PROMPT_LEAK_PATTERNS; markdown+raw URL masking with public allowlist for github.com/YoonsooKim9 and mailto:bbabi0901@gmail.com, query/fragment-insensitive allowedSourceUrls match, line-level prompt-leak redaction for 10 KO/EN signatures); 33 specs/output-filter.spec.ts cases pass.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 3.5803484999999995,
+          "session_id": "6d7a6245-33ef-4eed-8123-29ef3bb3848b"
+        }
+      ]
     },
     {
       "step": 3,
