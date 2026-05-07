@@ -1,0 +1,34 @@
+{
+  "project": "ai-portfolio",
+  "phase": "3-chat-ui",
+  "steps": [
+    {
+      "step": 0,
+      "name": "atoms",
+      "status": "completed",
+      "started_at": "2026-05-07T15:09:57+0900",
+      "summary": "5 chat atoms (TypingDots, SuggestionBadge/Carousel, ModelSwitcher, JumpToLatestButton) + 22 unit tests; all 198 tests pass."
+    },
+    {
+      "step": 1,
+      "name": "messages",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "composer",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "greeting",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "chat-root",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-07T15:09:57+0900"
+}
