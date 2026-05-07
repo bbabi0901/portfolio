@@ -23,8 +23,12 @@
     "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.75",
+    "@ai-sdk/google": "^3.0.68",
+    "@ai-sdk/openai": "^3.0.62",
     "@hookform/resolvers": "^5.2.2",
     "@notionhq/client": "^5.20.0",
+    "ai": "^6.0.175",
     "class-variance-authority": "^0.7.1",
     "embla-carousel-react": "^8.6.0",
     "hono": "^4.12.18",
