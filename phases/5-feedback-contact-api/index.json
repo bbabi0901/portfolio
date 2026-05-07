@@ -22,7 +22,10 @@
     {
       "step": 1,
       "name": "notion-contact-service",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T17:49:51+0900",
+      "summary": "services/notion-contact.ts (appendContact) + services/resend.ts (notifyContactReceived, escapeHtml) + env: NOTION_CONTACT_DB_ID/RESEND_TO_EMAIL/RESEND_FROM_EMAIL/NEXT_PUBLIC_SITE_URL — 24 specs pass (MOCK 모드, 401/403/400/500 분기, ERR-27 not-configured, HTML escape XSS 차단, token 누설 X). All 413 project tests pass.",
+      "completed_at": "2026-05-07T17:54:27+0900"
     },
     {
       "step": 2,
