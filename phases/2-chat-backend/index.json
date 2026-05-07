@@ -58,8 +58,17 @@
       "name": "chat-route",
       "status": "completed",
       "started_at": "2026-05-07T12:21:12+0900",
-      "completed_at": "2026-05-07T12:33:00+0900",
-      "summary": "app/api/[[...route]]/route.ts /chat (Edge runtime): zod ChatRequestSchema (modelId? + messages 1..50, content 1..4000), retrieve→buildSystemPrompt→streamText→line-buffered filterOutput pipeline, headers X-Retrieval-Mode (hybrid in MOCK_LLM, keyword-only otherwise) + X-Model-Id + X-Model-Substitution; empty-retrieval → NO_RECORD without LLM call, missing-keys → 503; 18 specs/chat-route.spec.ts cases pass, full suite 170 pass, build with SKIP_NOTION_SYNC=1 MOCK_LLM=1 succeeds."
+      "completed_at": "2026-05-07T12:34:22+0900",
+      "summary": "app/api/[[...route]]/route.ts /chat (Edge runtime): zod ChatRequestSchema (modelId? + messages 1..50, content 1..4000), retrieve→buildSystemPrompt→streamText→line-buffered filterOutput pipeline, headers X-Retrieval-Mode (hybrid in MOCK_LLM, keyword-only otherwise) + X-Model-Id + X-Model-Substitution; empty-retrieval → NO_RECORD without LLM call, missing-keys → 503; 18 specs/chat-route.spec.ts cases pass, full suite 170 pass, build with SKIP_NOTION_SYNC=1 MOCK_LLM=1 succeeds.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 8.3239865,
+          "session_id": "fc34aaa8-3241-4ad9-8855-726d57fc93f9"
+        }
+      ]
     },
     {
       "step": 4,
