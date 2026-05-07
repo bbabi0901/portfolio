@@ -25,7 +25,16 @@
       "status": "completed",
       "started_at": "2026-05-07T10:32:27+0900",
       "summary": "lib/chunking.ts (chunkMarkdown/chunkPages/stableHash) — heading-based markdown 분할, 코드블록 분할 금지, FNV-1a stable id, mergeBelowTokens(prev≥threshold && cur<threshold), maxChunksPerPage 트림 + onWarn, tags via extractKeywords. specs/chunking.spec.ts 12 테스트 통과 (전체 33 통과).",
-      "completed_at": "2026-05-07T10:39:30+0900"
+      "completed_at": "2026-05-07T10:40:04+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 5.05539125,
+          "session_id": "34db669b-da6f-4139-9c48-c6d7b379ab92"
+        }
+      ]
     },
     {
       "step": 2,
