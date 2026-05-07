@@ -22,7 +22,10 @@
     {
       "step": 1,
       "name": "prompts",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T12:12:46+0900",
+      "completed_at": "2026-05-07T12:16:30+0900",
+      "summary": "lib/prompts.ts (buildSystemPrompt with KO/EN variants, 5 refusal rules, citation rules, NO_RECORD constants; detectLanguage hangul-presence heuristic; formatCitationsBlock with sourceUrl dedup); 19 specs/prompts.spec.ts cases pass."
     },
     {
       "step": 2,
