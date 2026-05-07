@@ -7,7 +7,17 @@
       "name": "types-tokenize-embeddings",
       "status": "completed",
       "started_at": "2026-05-07T10:25:46+0900",
-      "summary": "types/{portfolio,notion}.ts + lib/{tokenize,embeddings}.ts 4개 utility (tokenize/estimateTokens/extractKeywords + cosineSimilarity/normalize/fixtureEmbedding/mergeScores) + 2 spec 파일 작성, 21개 테스트 통과"
+      "summary": "types/{portfolio,notion}.ts + lib/{tokenize,embeddings}.ts 4개 utility (tokenize/estimateTokens/extractKeywords + cosineSimilarity/normalize/fixtureEmbedding/mergeScores) + 2 spec 파일 작성, 21개 테스트 통과",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 4.76738575,
+          "session_id": "6d7822fa-f60d-470f-9497-479ab78ce755"
+        }
+      ],
+      "completed_at": "2026-05-07T10:32:27+0900"
     },
     {
       "step": 1,
