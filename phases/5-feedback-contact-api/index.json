@@ -1,0 +1,58 @@
+{
+  "project": "ai-portfolio",
+  "phase": "5-feedback-contact-api",
+  "steps": [
+    {
+      "step": 0,
+      "name": "notion-feedback-service",
+      "status": "completed",
+      "started_at": "2026-05-07T17:42:24+0900",
+      "summary": "services/notion-feedback.ts (appendFeedback + chunkRichText + hashUserAgent), types/feedback.ts, NOTION_FEEDBACK_DB_ID env, 28 specs pass — MOCK_NOTION + Notion API mapping (NOTION_SCHEMA.md SSoT) + 429 1회 retry + 401/403/400/500 분기 + token 누설 X.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 5.0971157499999995,
+          "session_id": "35f81cf8-ae11-4a2f-acc6-3b692d9fde34"
+        }
+      ],
+      "completed_at": "2026-05-07T17:49:51+0900"
+    },
+    {
+      "step": 1,
+      "name": "notion-contact-service",
+      "status": "completed",
+      "started_at": "2026-05-07T17:49:51+0900",
+      "summary": "services/notion-contact.ts (appendContact) + services/resend.ts (notifyContactReceived, escapeHtml) + env: NOTION_CONTACT_DB_ID/RESEND_TO_EMAIL/RESEND_FROM_EMAIL/NEXT_PUBLIC_SITE_URL — 24 specs pass (MOCK 모드, 401/403/400/500 분기, ERR-27 not-configured, HTML escape XSS 차단, token 누설 X). All 413 project tests pass.",
+      "completed_at": "2026-05-07T17:55:34+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 3.8580015,
+          "session_id": "f32e9e2d-d91e-4832-b82a-c4029293ab21"
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "name": "feedback-route",
+      "status": "completed",
+      "started_at": "2026-05-07T17:55:35+0900",
+      "completed_at": "2026-05-07T18:01:10+0900",
+      "summary": "POST /api/node/feedback (Hono Node runtime) — zod 검증 (messageId/question≤4000/answer≤8000/reason 화이트리스트/model/retrievalChunkTitles≤20/reasonDetail≤500), UA hash via hashUserAgent, appendFeedback 호출, ERR-09 unknown 한정 1회 retry (1s), auth→503 feedback_unavailable, schema→422 feedback_invalid, unknown→502 feedback_failed. specs/feedback-route.spec.ts 26개 통과, 전체 439 tests pass, lint·tsc·build 클린, NOTION_TOKEN 응답 누설 X."
+    {
+      "step": 3,
+      "name": "contact-route",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "ui-wiring",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-07T17:42:24+0900"
+}

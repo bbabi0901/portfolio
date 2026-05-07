@@ -28,6 +28,10 @@
       "dir": "4-pages-side-menu",
       "status": "completed",
       "completed_at": "2026-05-07T17:12:45+0900"
+    },
+    {
+      "dir": "5-feedback-contact-api",
+      "status": "pending"
     }
   ]
 }
