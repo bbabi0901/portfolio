@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-05-07T01:50:52.316Z",
+  "lastUpdated": "2026-05-07T01:57:08.783Z",
   "activeFeatures": [
     "suspicious-booth-708e0c",
     "[[...route]]",
@@ -64,9 +64,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:09.774Z",
-        "lastUpdated": "2026-05-06T05:46:55.530Z"
+        "lastUpdated": "2026-05-07T01:54:49.775Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/scripts/validate-spec.ts"
+      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/scripts/sync-notion.ts"
     },
     "tests": {
       "phase": "do",
@@ -103,9 +103,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:56.265Z",
-        "lastUpdated": "2026-05-07T01:50:12.680Z"
+        "lastUpdated": "2026-05-07T01:57:08.782Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/embeddings-service.spec.ts"
+      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/sync-notion.spec.ts"
     },
     "e2e": {
       "phase": "do",
@@ -168,7 +168,7 @@
   "session": {
     "startedAt": "2026-05-05T08:26:34.540Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-05-07T01:50:52.316Z"
+    "lastActivity": "2026-05-07T01:57:08.783Z"
   },
   "history": [
     {
@@ -636,6 +636,24 @@
     {
       "timestamp": "2026-05-07T01:50:52.316Z",
       "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T01:54:49.776Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T01:55:20.017Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T01:57:08.783Z",
+      "feature": "specs",
       "phase": "do",
       "action": "updated"
     }
