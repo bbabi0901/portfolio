@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-05-07T01:47:38.990Z",
+  "lastUpdated": "2026-05-07T01:50:52.316Z",
   "activeFeatures": [
     "suspicious-booth-708e0c",
     "[[...route]]",
@@ -90,7 +90,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:37.068Z",
-        "lastUpdated": "2026-05-07T01:46:30.953Z"
+        "lastUpdated": "2026-05-07T01:49:51.056Z"
       },
       "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/tests/msw/handlers.ts"
     },
@@ -103,9 +103,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:56.265Z",
-        "lastUpdated": "2026-05-07T01:46:48.916Z"
+        "lastUpdated": "2026-05-07T01:50:12.680Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/notion-service.spec.ts"
+      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/embeddings-service.spec.ts"
     },
     "e2e": {
       "phase": "do",
@@ -142,7 +142,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:54:24.120Z",
-        "lastUpdated": "2026-05-06T01:54:24.120Z"
+        "lastUpdated": "2026-05-07T01:50:52.316Z"
       },
       "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/services/openai-embeddings.ts"
     },
@@ -168,7 +168,7 @@
   "session": {
     "startedAt": "2026-05-05T08:26:34.540Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-05-07T01:47:38.990Z"
+    "lastActivity": "2026-05-07T01:50:52.316Z"
   },
   "history": [
     {
@@ -618,6 +618,24 @@
     {
       "timestamp": "2026-05-07T01:47:38.990Z",
       "feature": "suspicious-booth-708e0c",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T01:49:51.057Z",
+      "feature": "msw",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T01:50:12.681Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T01:50:52.316Z",
+      "feature": "openai-embeddings.ts",
       "phase": "do",
       "action": "updated"
     }
