@@ -39,8 +39,10 @@
     {
       "step": 2,
       "name": "feedback-route",
-      "status": "pending"
-    },
+      "status": "completed",
+      "started_at": "2026-05-07T17:55:35+0900",
+      "completed_at": "2026-05-07T18:01:10+0900",
+      "summary": "POST /api/node/feedback (Hono Node runtime) — zod 검증 (messageId/question≤4000/answer≤8000/reason 화이트리스트/model/retrievalChunkTitles≤20/reasonDetail≤500), UA hash via hashUserAgent, appendFeedback 호출, ERR-09 unknown 한정 1회 retry (1s), auth→503 feedback_unavailable, schema→422 feedback_invalid, unknown→502 feedback_failed. specs/feedback-route.spec.ts 26개 통과, 전체 439 tests pass, lint·tsc·build 클린, NOTION_TOKEN 응답 누설 X."
     {
       "step": 3,
       "name": "contact-route",
