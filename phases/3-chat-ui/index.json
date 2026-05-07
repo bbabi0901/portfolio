@@ -22,7 +22,10 @@
     {
       "step": 1,
       "name": "messages",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T15:17:10+0900",
+      "completed_at": "2026-05-07T15:36:55+0900",
+      "summary": "types/chat.ts + 6 message components (MessageBubble/List/ActionsBar, FeedbackButtons/Popover, SourceCitation) + 18 unit tests; 216 tests pass."
     },
     {
       "step": 2,
