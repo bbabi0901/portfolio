@@ -1,0 +1,35 @@
+{
+  "project": "ai-portfolio",
+  "phase": "4-pages-side-menu",
+  "steps": [
+    {
+      "step": 0,
+      "name": "layout-shell",
+      "status": "completed",
+      "started_at": "2026-05-07T16:27:16+0900",
+      "completed_at": "2026-05-07T16:35:00+0900",
+      "summary": "Header(햄버거) + SideSheet(focus trap, ESC, route auto-close, 80ms debounce) + SideMenuItem + Footer(privacy popover) + LayoutClient → app/layout.tsx 합성, KST lastUpdated."
+    },
+    {
+      "step": 1,
+      "name": "about-page",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "experience-page",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "contact-form-ui",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "routing-cross-cutting",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-07T16:27:16+0900"
+}

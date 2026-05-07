@@ -23,6 +23,10 @@
       "dir": "3-chat-ui",
       "status": "completed",
       "completed_at": "2026-05-07T16:14:33+0900"
+    },
+    {
+      "dir": "4-pages-side-menu",
+      "status": "pending"
     }
   ]
 }

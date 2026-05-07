@@ -1,6 +1,26 @@
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { LayoutClient } from "@/components/layout/LayoutClient";
+import { loadPortfolio } from "@/lib/portfolio-data";
 import "./globals.css";
+
+const KST_DATE_FORMAT = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Seoul",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+function getLastUpdatedKst(): string | undefined {
+  try {
+    const data = loadPortfolio();
+    const date = new Date(data.generatedAt);
+    if (Number.isNaN(date.getTime())) return undefined;
+    return KST_DATE_FORMAT.format(date);
+  } catch {
+    return undefined;
+  }
+}
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -37,10 +57,18 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const lastUpdated = getLastUpdatedKst();
+  const socials = {
+    github: "https://github.com/YoonsooKim9",
+    email: "mailto:bbabi0901@gmail.com",
+  };
+
   return (
     <html lang="ko" className="dark">
       <body className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">
-        {children}
+        <LayoutClient lastUpdated={lastUpdated} socials={socials}>
+          {children}
+        </LayoutClient>
         <Toaster richColors />
       </body>
     </html>
