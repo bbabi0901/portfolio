@@ -22,7 +22,10 @@
     {
       "step": 1,
       "name": "about-page",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T16:35:54+0900",
+      "completed_at": "2026-05-07T16:42:00+0900",
+      "summary": "/about SSG 페이지 (server component) + AboutHero(SVG initial fallback, 약 X분 읽기) + AboutSection(react-markdown + remark-gfm + 외부 link target=_blank rel=noopener noreferrer) + lib/profile-data.ts(loadProfileData/calculateReadingMinutes, personal 청크 그룹화, career 첫 줄 → intro). 데이터 없음 → placeholder. AC 통과: check:spec / lint / 309 tests / tsc / build / dev curl 200."
     },
     {
       "step": 2,

@@ -1,0 +1,110 @@
+import "server-only";
+
+import { loadPortfolio } from "./portfolio-data";
+
+export interface ProfileSubSection {
+  heading?: string;
+  body: string;
+}
+
+export interface ProfileSection {
+  heading: string;
+  subSections: ProfileSubSection[];
+  reading?: { minutes: number; words: number };
+}
+
+export interface ProfileData {
+  intro: string;
+  sections: ProfileSection[];
+  imageUrl: string | null;
+  totalReadingMinutes: number;
+}
+
+const READING_WORDS_PER_MINUTE = 200;
+const KOREAN_CHARS_PER_WORD = 2;
+
+export function calculateReadingMinutes(body: string): {
+  minutes: number;
+  words: number;
+} {
+  if (!body || !body.trim()) return { minutes: 0, words: 0 };
+
+  const stripped = body.replace(/[#*`>_~\[\]()|]/g, " ");
+
+  const koreanChars = (stripped.match(/[\uAC00-\uD7AF]/g) ?? []).length;
+  const englishWords = (stripped.match(/[A-Za-z][A-Za-z'-]*/g) ?? []).length;
+  const numericWords = (stripped.match(/\b\d+\b/g) ?? []).length;
+
+  const koreanWords = Math.ceil(koreanChars / KOREAN_CHARS_PER_WORD);
+  const totalWords = koreanWords + englishWords + numericWords;
+  if (totalWords === 0) return { minutes: 0, words: 0 };
+
+  const minutes = Math.ceil(totalWords / READING_WORDS_PER_MINUTE);
+  return { minutes, words: totalWords };
+}
+
+export function loadProfileData(): ProfileData | null {
+  let data;
+  try {
+    data = loadPortfolio();
+  } catch {
+    return null;
+  }
+
+  const personalChunks = data.chunks.filter((c) => c.category === "personal");
+  if (personalChunks.length === 0) return null;
+
+  const careerChunks = data.chunks.filter((c) => c.category === "career");
+  const intro = extractIntro(careerChunks, data.profile.oneLiner);
+
+  const grouped = new Map<string, ProfileSection>();
+  for (const chunk of personalChunks) {
+    const headingPath = chunk.headingPath;
+    const heading = headingPath[0] ?? "기타";
+    const subHeading = headingPath.slice(1).join(" → ") || undefined;
+
+    let section = grouped.get(heading);
+    if (!section) {
+      section = { heading, subSections: [] };
+      grouped.set(heading, section);
+    }
+    section.subSections.push({
+      heading: subHeading,
+      body: chunk.text,
+    });
+  }
+
+  const sections = Array.from(grouped.values());
+
+  let totalWords = 0;
+  for (const section of sections) {
+    const text = section.subSections.map((s) => s.body).join(" ");
+    const reading = calculateReadingMinutes(text);
+    section.reading = reading;
+    totalWords += reading.words;
+  }
+
+  const totalReadingMinutes =
+    totalWords === 0 ? 0 : Math.ceil(totalWords / READING_WORDS_PER_MINUTE);
+
+  return {
+    intro,
+    sections,
+    imageUrl: null,
+    totalReadingMinutes,
+  };
+}
+
+function extractIntro(
+  careerChunks: ReturnType<typeof loadPortfolio>["chunks"],
+  fallback: string,
+): string {
+  for (const chunk of careerChunks) {
+    const firstLine = chunk.text
+      .split("\n")
+      .map((l) => l.trim())
+      .find((l) => l.length > 0 && !l.startsWith("#"));
+    if (firstLine) return firstLine;
+  }
+  return fallback;
+}
