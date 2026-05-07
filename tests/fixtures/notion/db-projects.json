@@ -1,0 +1,47 @@
+{
+  "results": [
+    {
+      "id": "fixture-page-1",
+      "url": "https://www.notion.so/fixture-page-1",
+      "public_url": "https://www.notion.so/fixture-page-1",
+      "properties": {
+        "이름": {
+          "type": "title",
+          "title": [{ "plain_text": "Sample Project" }]
+        },
+        "카테고리": {
+          "type": "select",
+          "select": { "name": "업무" }
+        },
+        "상태": {
+          "type": "status",
+          "status": { "name": "Done" }
+        },
+        "기간": {
+          "type": "rich_text",
+          "rich_text": [{ "plain_text": "2025.11–12" }]
+        }
+      }
+    },
+    {
+      "id": "fixture-page-2",
+      "url": "https://www.notion.so/fixture-page-2",
+      "properties": {
+        "Name": {
+          "type": "title",
+          "title": [{ "plain_text": "English Title Project" }]
+        },
+        "Category": {
+          "type": "select",
+          "select": { "name": "외부활동" }
+        },
+        "Status": {
+          "type": "status",
+          "status": { "name": "In progress" }
+        }
+      }
+    }
+  ],
+  "next_cursor": null,
+  "has_more": false
+}
