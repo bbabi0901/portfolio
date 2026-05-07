@@ -75,8 +75,17 @@
       "name": "injection-defense",
       "status": "completed",
       "started_at": "2026-05-07T12:34:23+0900",
-      "completed_at": "2026-05-07T12:40:30+0900",
-      "summary": "specs/injection-defense.spec.ts (INJ-01~05 + non-empty smoke check, 6 tests) integration-tests chat route via app.request with MOCK_LLM=1; output-filter PROMPT_LEAK_PATTERNS extended with [SYSTEM], DAN, Do Anything Now line-redaction patterns; 176 specs pass, lint+tsc clean."
+      "completed_at": "2026-05-07T12:41:13+0900",
+      "summary": "specs/injection-defense.spec.ts (INJ-01~05 + non-empty smoke check, 6 tests) integration-tests chat route via app.request with MOCK_LLM=1; output-filter PROMPT_LEAK_PATTERNS extended with [SYSTEM], DAN, Do Anything Now line-redaction patterns; 176 specs pass, lint+tsc clean.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 4.78613775,
+          "session_id": "2f147cde-7fef-4536-9c1c-a53b0d78d03f"
+        }
+      ]
     }
   ],
   "created_at": "2026-05-07T12:06:01+0900"
