@@ -39,7 +39,10 @@
     {
       "step": 2,
       "name": "experience-page",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T16:43:12+0900",
+      "completed_at": "2026-05-07T16:54:00+0900",
+      "summary": "/experience SSG 페이지 + lib/experience-data.ts (회사별 그룹화, 기간 'YYYY.MM — 현재', 스킬 분리) + Timeline/CompanyGroup/ProjectCard/SkillsGrid/CategoryFilter/ExperienceClient (URL ?category= 동기화, 빈 상태). PortfolioChunk 에 optional projectMeta 추가. 327 tests pass, lint/tsc/build OK, /experience + ?category=업무 200."
     },
     {
       "step": 3,
