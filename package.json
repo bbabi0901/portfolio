@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run check:spec && npm run sync:notion",
+    "prebuild": "npm run check:spec && npm run sync:notion && npm run gen:suggestions",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -15,6 +15,7 @@
     "format:check": "prettier --check .",
     "check:spec": "tsx scripts/validate-spec.ts",
     "sync:notion": "tsx --conditions=react-server scripts/sync-notion.ts",
+    "gen:suggestions": "tsx --conditions=react-server scripts/generate-suggestions.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
