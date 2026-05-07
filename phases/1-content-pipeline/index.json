@@ -59,7 +59,16 @@
       "status": "completed",
       "started_at": "2026-05-07T10:48:57+0900",
       "summary": "services/openai-embeddings.ts (server-only) + createEmbeddingsService(apiKey, mock, baseURL, model, dimensions, maxBatchSize, retryBackoffMs) — embed/embedBatch. MOCK 모드는 lib/embeddings.fixtureEmbedding 재사용, 실 API 모드는 fetch로 POST /v1/embeddings (model=text-embedding-3-small, dimensions=1536). maxBatchSize=96 chunking + 입력 순서 보존. 4xx/5xx 즉시 throw, 429 backoff 4회(250→500→1000→2000ms). msw OpenAI handler 추가 (fixtureEmbedding 사용). 13 신규 테스트 + 기존 46 = 59개 통과.",
-      "completed_at": "2026-05-07T10:52:00+0900"
+      "completed_at": "2026-05-07T10:52:12+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 2.647188,
+          "session_id": "00b9dddc-d082-4f36-a2c2-10eb4c90f757"
+        }
+      ]
     },
     {
       "step": 4,
