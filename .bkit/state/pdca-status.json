@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-05-07T07:40:45.246Z",
+  "lastUpdated": "2026-05-07T07:50:59.105Z",
   "activeFeatures": [
     "suspicious-booth-708e0c",
     "[[...route]]",
@@ -14,7 +14,8 @@
     "openai-embeddings.ts",
     "stubs",
     "layout",
-    "about"
+    "about",
+    "experience"
   ],
   "primaryFeature": "suspicious-booth-708e0c",
   "features": {
@@ -27,9 +28,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:42:15.253Z",
-        "lastUpdated": "2026-05-07T07:40:11.769Z"
+        "lastUpdated": "2026-05-07T07:48:19.371Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/lib/profile-data.ts"
+      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/lib/experience-data.ts"
     },
     "[[...route]]": {
       "phase": "do",
@@ -105,9 +106,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:56.265Z",
-        "lastUpdated": "2026-05-07T07:39:36.785Z"
+        "lastUpdated": "2026-05-07T07:50:59.104Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/components/about-page.spec.tsx"
+      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/components/experience-page.spec.tsx"
     },
     "e2e": {
       "phase": "do",
@@ -186,6 +187,19 @@
         "lastUpdated": "2026-05-07T07:40:45.245Z"
       },
       "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/app/about/page.tsx"
+    },
+    "experience": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-05-07T07:48:36.317Z",
+        "lastUpdated": "2026-05-07T07:49:41.361Z"
+      },
+      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/app/experience/page.tsx"
     }
   },
   "pipeline": {
@@ -196,7 +210,7 @@
   "session": {
     "startedAt": "2026-05-05T08:26:34.540Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-05-07T07:40:45.246Z"
+    "lastActivity": "2026-05-07T07:50:59.105Z"
   },
   "history": [
     {
@@ -1366,6 +1380,84 @@
     {
       "timestamp": "2026-05-07T07:40:45.246Z",
       "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:46:48.868Z",
+      "feature": "suspicious-booth-708e0c",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:47:16.056Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:47:45.372Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:48:19.374Z",
+      "feature": "suspicious-booth-708e0c",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:48:36.318Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:48:43.493Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:48:52.381Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:49:02.934Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:49:13.472Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:49:28.139Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:49:41.361Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:50:43.982Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-05-07T07:50:59.105Z",
+      "feature": "specs",
       "phase": "do",
       "action": "updated"
     }
