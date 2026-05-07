@@ -39,7 +39,10 @@
     {
       "step": 2,
       "name": "output-filter",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T12:16:29+0900",
+      "completed_at": "2026-05-07T12:20:30+0900",
+      "summary": "lib/output-filter.ts (filterOutput/extractUrls/isAllowedUrl + frozen PROMPT_LEAK_PATTERNS; markdown+raw URL masking with public allowlist for github.com/YoonsooKim9 and mailto:bbabi0901@gmail.com, query/fragment-insensitive allowedSourceUrls match, line-level prompt-leak redaction for 10 KO/EN signatures); 33 specs/output-filter.spec.ts cases pass."
     },
     {
       "step": 3,
