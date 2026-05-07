@@ -7,8 +7,17 @@
       "name": "env-and-models",
       "status": "completed",
       "started_at": "2026-05-07T12:06:01+0900",
-      "completed_at": "2026-05-07T21:11:30+0900",
-      "summary": "lib/env.ts (zod ServerEnv with cache) + lib/models.ts (3-model whitelist, resolveModel/createModel/listAvailableModels with MOCK_LLM mock + missing-key throw); 12 specs/models.spec.ts cases pass."
+      "completed_at": "2026-05-07T12:12:45+0900",
+      "summary": "lib/env.ts (zod ServerEnv with cache) + lib/models.ts (3-model whitelist, resolveModel/createModel/listAvailableModels with MOCK_LLM mock + missing-key throw); 12 specs/models.spec.ts cases pass.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 0,
+          "cost_usd": 5.7160772500000006,
+          "session_id": "e3f4c2c3-d8e5-43a4-befb-af20095d1231"
+        }
+      ]
     },
     {
       "step": 1,
