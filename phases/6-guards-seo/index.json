@@ -39,7 +39,10 @@
     {
       "step": 2,
       "name": "token-budget",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T19:13:11+0900",
+      "completed_at": "2026-05-07T19:23:00+0900",
+      "summary": "lib/token-budget.ts: KST-keyed daily token cap with Upstash INCRBY+EXPIRE primary and in-memory fallback (clearTokenBudgetMemory, getKstDayKey, getTodayUsage, addTokenUsage, checkDailyTokenBudget); /api/chat early 503+Retry-After on cap and post-stream addTokenUsage from streamText.usage; MAX_TOKENS_PER_DAY=0 supported; 18 specs covering KST boundaries, memory/Upstash, bypass, integration, no-leak; 487 tests total."
     },
     {
       "step": 3,

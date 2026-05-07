@@ -91,8 +91,8 @@ function lastUserText(prompt: LanguageModelV3CallOptions["prompt"]): string {
 
 const MOCK_FINISH: LanguageModelV3FinishReason = { unified: "stop", raw: "stop" };
 const MOCK_USAGE: LanguageModelV3Usage = {
-  inputTokens: { total: 0, noCache: 0, cacheRead: 0, cacheWrite: 0 },
-  outputTokens: { total: 0, text: 0, reasoning: 0 },
+  inputTokens: { total: 50, noCache: 50, cacheRead: 0, cacheWrite: 0 },
+  outputTokens: { total: 50, text: 50, reasoning: 0 },
 };
 
 function createMockModel(modelId: ModelId): LanguageModelV3 {
