@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import { LayoutClient } from "@/components/layout/LayoutClient";
+import { JsonLdPerson } from "@/components/seo/JsonLdPerson";
 import { loadPortfolio } from "@/lib/portfolio-data";
 import "./globals.css";
 
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </LayoutClient>
         <Toaster richColors />
+        <JsonLdPerson />
       </body>
     </html>
   );

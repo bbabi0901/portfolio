@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { SideSheet } from "./SideSheet";
 import { Footer } from "./Footer";
+import { ScrollToTopOnRouteChange } from "./ScrollToTopOnRouteChange";
 
 export interface LayoutClientProps {
   children: React.ReactNode;
@@ -38,6 +39,7 @@ export function LayoutClient({ children, lastUpdated, socials }: LayoutClientPro
 
   return (
     <>
+      <ScrollToTopOnRouteChange />
       <Header onMenuOpen={handleMenuOpen} menuOpen={open} />
       <SideSheet
         open={open}
