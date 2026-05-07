@@ -22,7 +22,10 @@
     {
       "step": 1,
       "name": "rate-limit-routes",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-05-07T19:06:12+0900",
+      "completed_at": "2026-05-07T19:13:00+0900",
+      "summary": "lib/rate-limit-middleware.ts wired into /api/chat (10/min, 100/day), /api/node/feedback (5/min, 30/day), /api/node/contact (3/min, 10/day) with sha256-hashed IP keys, scope-only 429 bodies, Retry-After+X-RateLimit-Scope headers, fail-open on infra error, and 11 new specs covering deny/isolation/bypass/day-cap; 469 tests total."
     },
     {
       "step": 2,

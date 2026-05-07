@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { handle } from "hono/vercel";
 import { z } from "zod";
 
+import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { appendFeedback, hashUserAgent } from "@/services/notion-feedback";
 
 export const runtime = "nodejs";
@@ -22,7 +23,10 @@ const FEEDBACK_RETRY_DELAY_MS = 1000;
 
 app.get("/health", (c) => c.json({ ok: true, runtime: "node", ts: new Date().toISOString() }));
 
-app.post("/feedback", async (c) => {
+app.post(
+  "/feedback",
+  rateLimitMiddleware({ routeKey: "feedback", perMinute: 5, perDay: 30 }),
+  async (c) => {
   let raw: unknown;
   try {
     raw = await c.req.json();
@@ -60,9 +64,14 @@ app.post("/feedback", async (c) => {
     default:
       return c.json({ error: "feedback_failed" }, 502);
   }
-});
+  },
+);
 
-app.post("/contact", (c) => c.json({ error: "not_implemented" }, 501));
+app.post(
+  "/contact",
+  rateLimitMiddleware({ routeKey: "contact", perMinute: 3, perDay: 10 }),
+  (c) => c.json({ error: "not_implemented" }, 501),
+);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
 app.onError((err, c) => {

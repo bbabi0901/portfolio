@@ -20,6 +20,7 @@ import {
   NO_RECORD_RESPONSE_EN,
   NO_RECORD_RESPONSE_KO,
 } from "@/lib/prompts";
+import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { retrieve } from "@/lib/retriever";
 import type { PortfolioServerData } from "@/types/portfolio";
 
@@ -43,7 +44,10 @@ app.get("/health", (c) =>
   c.json({ ok: true, runtime: "edge", ts: new Date().toISOString() }),
 );
 
-app.post("/chat", async (c) => {
+app.post(
+  "/chat",
+  rateLimitMiddleware({ routeKey: "chat", perMinute: 10, perDay: 100 }),
+  async (c) => {
   let raw: unknown;
   try {
     raw = await c.req.json();
@@ -153,7 +157,8 @@ app.post("/chat", async (c) => {
   });
 
   return new Response(filteredStream, { headers });
-});
+  },
+);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
 app.onError((err, c) => {

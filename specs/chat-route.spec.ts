@@ -6,6 +6,7 @@ import {
   NO_RECORD_RESPONSE_KO,
   NO_RECORD_RESPONSE_EN,
 } from "@/lib/prompts";
+import { clearRateLimitMemory } from "@/lib/rate-limit";
 
 const ENV_KEYS = [
   "MOCK_LLM",
@@ -26,6 +27,7 @@ beforeEach(() => {
   for (const k of ENV_KEYS) original[k] = process.env[k];
   for (const k of ENV_KEYS) delete process.env[k];
   clearEnvCache();
+  clearRateLimitMemory();
 });
 
 afterEach(() => {
