@@ -3,6 +3,7 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests/e2e",
   testMatch: /.*\.e2e\.ts$/,
+  globalSetup: "./tests/e2e/global-setup.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -58,9 +59,12 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run dev -- -p 3100",
+    command: "MOCK_LLM=1 MOCK_NOTION=1 SKIP_NOTION_SYNC=1 RATE_LIMIT_BYPASS=1 npm run dev -- -p 3100",
     url: "http://localhost:3100",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    env: {
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3100",
+    },
   },
 });
