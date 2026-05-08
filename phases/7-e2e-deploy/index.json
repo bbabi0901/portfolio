@@ -1,0 +1,58 @@
+{
+  "project": "ai-portfolio",
+  "phase": "7-e2e-deploy",
+  "steps": [
+    {
+      "step": 0,
+      "name": "e2e-fixtures",
+      "status": "error",
+      "started_at": "2026-05-08T10:12:08+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "9aacc83d-05b4-4eda-8dff-77bc54c7d024"
+        },
+        {
+          "attempt": 2,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "329d8131-cda3-401c-adb5-cb7b543086ee"
+        },
+        {
+          "attempt": 3,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "cc1765ce-a0e2-4876-9956-8aaf911c52fa"
+        }
+      ],
+      "error_message": "[3회 시도 후 실패] Step did not update status",
+      "failed_at": "2026-05-08T10:12:27+0900"
+    },
+    {
+      "step": 1,
+      "name": "e2e-chat",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "e2e-side-menu",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "e2e-pages",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "e2e-cross-cutting-visual-deploy",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-08T10:12:08+0900"
+}
