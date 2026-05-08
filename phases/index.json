@@ -41,7 +41,8 @@
     },
     {
       "dir": "7-e2e-deploy",
-      "status": "pending"
+      "status": "completed",
+      "completed_at": "2026-05-08T11:05:00+0900"
     }
   ]
 }
