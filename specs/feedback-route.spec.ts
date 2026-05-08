@@ -4,6 +4,7 @@ import { http, HttpResponse } from "msw";
 import { app } from "@/app/api/node/[[...route]]/route";
 import { server } from "@/tests/msw/server";
 import { clearEnvCache } from "@/lib/env";
+import { clearRateLimitMemory } from "@/lib/rate-limit";
 
 const ENV_KEYS = [
   "NOTION_TOKEN",
@@ -45,6 +46,7 @@ beforeEach(() => {
   for (const k of ENV_KEYS) original[k] = process.env[k];
   for (const k of ENV_KEYS) delete process.env[k];
   clearEnvCache();
+  clearRateLimitMemory();
 });
 
 afterEach(() => {

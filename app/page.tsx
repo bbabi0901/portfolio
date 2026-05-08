@@ -10,7 +10,8 @@ import type { SuggestedQuestionMeta } from "@/types/portfolio";
 
 export const metadata: Metadata = {
   title: "대화",
-  description: "AI에게 물어보는 김윤수의 커리어와 프로젝트.",
+  description: "김윤수에게 직접 물어보세요. 노션 기록 기반 답변.",
+  alternates: { canonical: "/" },
 };
 
 function loadSuggestions(spec: ReturnType<typeof loadSpec>): SuggestedQuestionMeta[] {

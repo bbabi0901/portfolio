@@ -11,7 +11,7 @@ const ServerEnvSchema = z.object({
   RESEND_TO_EMAIL: z.string().email().optional(),
   RESEND_FROM_EMAIL: z.string().email().optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
-  MAX_TOKENS_PER_DAY: z.coerce.number().int().positive().default(200_000),
+  MAX_TOKENS_PER_DAY: z.coerce.number().int().nonnegative().default(200_000),
   RATE_LIMIT_BYPASS: z.string().optional(),
   MOCK_LLM: z.string().optional(),
   MOCK_NOTION: z.string().optional(),

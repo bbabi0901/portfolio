@@ -31,22 +31,41 @@ export const metadata: Metadata = {
     default: "김윤수 — AI Portfolio",
     template: "%s | 김윤수",
   },
-  description: "프론트엔드 개발자 김윤수에게 직접 물어보세요. 노션 기록 기반의 대화형 포트폴리오.",
+  description:
+    "프론트엔드 개발자 김윤수에게 직접 물어보세요. 노션 기록 기반의 대화형 포트폴리오.",
+  applicationName: "김윤수 AI Portfolio",
+  authors: [{ name: "김윤수", url: "https://github.com/YoonsooKim9" }],
+  creator: "김윤수",
+  keywords: [
+    "프론트엔드",
+    "포트폴리오",
+    "Next.js",
+    "Web3",
+    "Module Federation",
+    "김윤수",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    siteName: "Yoonsoo Kim — AI Portfolio",
+    url: "/",
+    siteName: "김윤수 — AI Portfolio",
     title: "김윤수 — AI Portfolio",
-    description:
-      "프론트엔드 개발자 김윤수에게 직접 물어보세요. 노션 기록 기반의 대화형 포트폴리오.",
+    description: "프론트엔드 개발자 김윤수에게 직접 물어보세요.",
   },
   twitter: {
     card: "summary_large_image",
     title: "김윤수 — AI Portfolio",
-    description:
-      "프론트엔드 개발자 김윤수에게 직접 물어보세요. 노션 기록 기반의 대화형 포트폴리오.",
+    description: "프론트엔드 개발자 김윤수에게 직접 물어보세요.",
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export const viewport: Viewport = {

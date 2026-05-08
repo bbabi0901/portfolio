@@ -20,7 +20,9 @@ import {
   NO_RECORD_RESPONSE_EN,
   NO_RECORD_RESPONSE_KO,
 } from "@/lib/prompts";
+import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { retrieve } from "@/lib/retriever";
+import { addTokenUsage, checkDailyTokenBudget } from "@/lib/token-budget";
 import type { PortfolioServerData } from "@/types/portfolio";
 
 export const runtime = "edge";
@@ -43,7 +45,23 @@ app.get("/health", (c) =>
   c.json({ ok: true, runtime: "edge", ts: new Date().toISOString() }),
 );
 
-app.post("/chat", async (c) => {
+app.post(
+  "/chat",
+  rateLimitMiddleware({ routeKey: "chat", perMinute: 10, perDay: 100 }),
+  async (c) => {
+  const budget = await checkDailyTokenBudget();
+  if (!budget.ok) {
+    const retryAfter = Math.max(
+      1,
+      Math.ceil((budget.resetAt - Date.now()) / 1000),
+    );
+    return c.json(
+      { error: "daily_token_cap" },
+      503,
+      { "Retry-After": String(retryAfter) },
+    );
+  }
+
   let raw: unknown;
   try {
     raw = await c.req.json();
@@ -145,6 +163,21 @@ app.post("/chat", async (c) => {
           });
           controller.enqueue(encoder.encode(filtered.text));
         }
+        try {
+          const usage = await result.usage;
+          const promptTokens =
+            typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
+          const completionTokens =
+            typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
+          if (promptTokens + completionTokens > 0) {
+            await addTokenUsage({ promptTokens, completionTokens });
+          }
+        } catch (e) {
+          console.warn(
+            "[chat] addTokenUsage failed:",
+            e instanceof Error ? e.message : "unknown",
+          );
+        }
         controller.close();
       } catch (err) {
         controller.error(err);
@@ -153,7 +186,8 @@ app.post("/chat", async (c) => {
   });
 
   return new Response(filteredStream, { headers });
-});
+  },
+);
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
 app.onError((err, c) => {
