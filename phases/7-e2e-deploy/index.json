@@ -1,0 +1,66 @@
+{
+  "project": "ai-portfolio",
+  "phase": "7-e2e-deploy",
+  "steps": [
+    {
+      "step": 0,
+      "name": "e2e-fixtures",
+      "status": "completed",
+      "started_at": "2026-05-08T10:12:08+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "9aacc83d-05b4-4eda-8dff-77bc54c7d024"
+        },
+        {
+          "attempt": 2,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "329d8131-cda3-401c-adb5-cb7b543086ee"
+        },
+        {
+          "attempt": 3,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "cc1765ce-a0e2-4876-9956-8aaf911c52fa"
+        }
+      ],
+      "completed_at": "2026-05-08T11:05:00+0900",
+      "summary": "tests/e2e/fixtures/portfolio.ts (6 chunks: intro/personal/project x2/private/skill, 1536-dim deterministic embedding), global-setup.ts (data/portfolio.server.json + public/data/suggestions.json 자동 생성), utils/test-helpers.ts (skipGreeting/sendChatMessage/openSideMenu), playwright.config.ts globalSetup + webServer MOCK env, smoke-fixtures.e2e.ts."
+    },
+    {
+      "step": 1,
+      "name": "e2e-chat",
+      "status": "completed",
+      "completed_at": "2026-05-08T11:05:00+0900",
+      "summary": "tests/e2e/chat.e2e.ts — TS-03 추천 carousel, TS-04 ModelSwitcher 노출, TS-12 헤더 액션, TS-13 IME compositionstart 중 Enter 미전송, TS-14 빈 입력 미전송, TS-05 인젝션 시스템 프롬프트 누출 0 (네트워크 레벨)."
+    },
+    {
+      "step": 2,
+      "name": "e2e-side-menu",
+      "status": "completed",
+      "completed_at": "2026-05-08T11:05:00+0900",
+      "summary": "tests/e2e/side-menu.e2e.ts — TS-23 시트 + 4 메뉴 항목, TS-24 ESC close, TS-26 about/experience/contact 라우트 이동 + auto-close, TS-29 브라우저 back 시 자동 close."
+    },
+    {
+      "step": 3,
+      "name": "e2e-pages",
+      "status": "completed",
+      "completed_at": "2026-05-08T11:05:00+0900",
+      "summary": "tests/e2e/pages.e2e.ts — TS-33 about, TS-38 experience, TS-39 카테고리 URL 동기화 (skip-able), TS-43 contact 폼 + mailto, TS-46 이메일 인라인 에러, TS-49 honeypot silent 200."
+    },
+    {
+      "step": 4,
+      "name": "e2e-cross-cutting-visual-deploy",
+      "status": "completed",
+      "completed_at": "2026-05-08T11:05:00+0900",
+      "summary": "tests/e2e/cross-cutting.e2e.ts (TS-63 JSON-LD Person + sameAs, TS-64 OG image PNG, TS-65 not-found, TS-67 푸터 update, sitemap+robots) + specs/bundle-audit.spec.ts (TS-69 .next 청크 1530+ 숫자 array 0건) + docs/DEPLOY.md (Vercel 배포 가이드 10 섹션)."
+    }
+  ],
+  "created_at": "2026-05-08T10:12:08+0900"
+}
