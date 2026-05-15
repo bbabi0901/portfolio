@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type JSX,
   useRef,
 } from "react";
@@ -272,6 +273,18 @@ export function ChatRoot({
     el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, []);
 
+  // FEAT-030: sm 화면에서 ModelSwitcher 짧은 라벨 사용. useSyncExternalStore
+  // 로 SSR-safe + react-hooks/set-state-in-effect 없이 matchMedia 구독.
+  const isCompact = useSyncExternalStore(
+    (notify) => {
+      const mq = window.matchMedia("(max-width: 767px)");
+      mq.addEventListener("change", notify);
+      return () => mq.removeEventListener("change", notify);
+    },
+    () => window.matchMedia("(max-width: 767px)").matches,
+    () => false,
+  );
+
   return (
     <div
       data-slot="chat-root"
@@ -285,11 +298,6 @@ export function ChatRoot({
           김윤수 — AI Portfolio
         </h1>
         <div className="flex items-center gap-1">
-          <ModelSwitcher
-            value={modelId}
-            onChange={setModelId}
-            available={availableModels}
-          />
           <ClearButton
             open={clearOpen}
             onOpenChange={setClearOpen}
@@ -297,14 +305,6 @@ export function ChatRoot({
           />
         </div>
       </header>
-
-      <div className="border-b border-neutral-900 py-3">
-        <SuggestionCarousel
-          questions={suggestions}
-          visitedIds={visited}
-          onSelect={handleSuggestion}
-        />
-      </div>
 
       <div
         ref={scrollRef}
@@ -339,6 +339,14 @@ export function ChatRoot({
         />
       </div>
 
+      <div data-slot="suggestion-wrapper" className="border-t border-neutral-900 py-3">
+        <SuggestionCarousel
+          questions={suggestions}
+          visitedIds={visited}
+          onSelect={handleSuggestion}
+        />
+      </div>
+
       <Composer
         value={input}
         onChange={setInput}
@@ -347,7 +355,15 @@ export function ChatRoot({
         placeholder={
           noModelsAvailable
             ? "지금은 사용할 수 있는 모델이 없어요"
-            : "메시지를 입력하세요…"
+            : undefined
+        }
+        leftAction={
+          <ModelSwitcher
+            value={modelId}
+            onChange={setModelId}
+            available={availableModels}
+            compact={isCompact}
+          />
         }
       />
     </div>

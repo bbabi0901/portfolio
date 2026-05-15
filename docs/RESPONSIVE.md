@@ -52,12 +52,15 @@
 | max-w | `max-w-[85%]` | `max-w-[75%]` |
 | 패딩 | `px-3 py-2` | `px-4 py-2.5` |
 
-### Composer (textarea)
+### Composer (FEAT-030 prominent box)
 | 항목 | sm | md | lg+ |
 |---|---|---|---|
+| 외곽 박스 | `rounded-3xl border border-neutral-700 bg-neutral-900/40 px-3 py-2` | `px-4 py-3` | 동일 |
 | 최대 행수 | 4 | 5 | 6 |
 | 폰트 | `text-[15px]` (iOS zoom 방지) | `text-sm` | `text-sm` |
 | 안전영역 | `pb-[env(safe-area-inset-bottom)]` | 동일 | 동일 |
+| ModelSwitcher 라벨 | `"4.7"` 짧은 형태 (또는 아이콘 only) | `"Opus 4.7"` 풀 라벨 | 동일 |
+| Send 버튼 | `size-8 rounded-full` | `size-9 rounded-full` | 동일 |
 
 ### Footer
 | 항목 | sm | md+ |

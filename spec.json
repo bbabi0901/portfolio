@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -12,13 +12,37 @@
   "greeting": {
     "message": "안녕하세요! 저는 프론트엔드 개발자 김윤수입니다. 만나서 반가워요 — 제 커리어·프로젝트·기술에 대해 무엇이든 물어봐 주세요. 어떤 게 궁금하신가요?",
     "typingDelayMs": 600,
-    "wordIntervalMs": [30, 50],
+    "wordIntervalMs": [
+      30,
+      50
+    ],
     "rememberDays": 30
   },
   "models": [
-    { "id": "gpt-4o-mini", "provider": "openai", "default": true, "maxOutputTokens": 1024, "temperature": 0.3, "topP": 0.9 },
-    { "id": "claude-3-5-haiku-latest", "provider": "anthropic", "default": false, "maxOutputTokens": 1024, "temperature": 0.3, "topP": 0.9 },
-    { "id": "gemini-2.0-flash-exp", "provider": "google", "default": false, "maxOutputTokens": 1024, "temperature": 0.3, "topP": 0.9 }
+    {
+      "id": "gpt-4o-mini",
+      "provider": "openai",
+      "default": true,
+      "maxOutputTokens": 1024,
+      "temperature": 0.3,
+      "topP": 0.9
+    },
+    {
+      "id": "claude-3-5-haiku-latest",
+      "provider": "anthropic",
+      "default": false,
+      "maxOutputTokens": 1024,
+      "temperature": 0.3,
+      "topP": 0.9
+    },
+    {
+      "id": "gemini-2.0-flash-exp",
+      "provider": "google",
+      "default": false,
+      "maxOutputTokens": 1024,
+      "temperature": 0.3,
+      "topP": 0.9
+    }
   ],
   "rateLimits": {
     "chatPerMinute": 10,
@@ -35,254 +59,1548 @@
     "embeddingDimensions": 1536,
     "topK": 8,
     "maxContextTokens": 6000,
-    "weights": { "keyword": 0.4, "vector": 0.6 },
+    "weights": {
+      "keyword": 0.4,
+      "vector": 0.6
+    },
     "minVectorScore": 0.3,
     "minQueryLengthForEmbedding": 5
   },
   "pages": [
-    { "route": "/", "name": "chat", "type": "client", "title": "김윤수 — AI Portfolio", "description": "AI에게 물어보는 김윤수의 커리어와 프로젝트.", "ogImage": "/opengraph-image" },
-    { "route": "/about", "name": "about", "type": "ssg", "title": "자기소개", "description": "프론트엔드 개발자 김윤수의 가치관, 성격, 취미.", "ogImage": "/opengraph-image" },
-    { "route": "/experience", "name": "experience", "type": "ssg", "title": "기술 이력", "description": "디라티오, 체인아나토미, 반에프에서의 프로젝트 타임라인과 보유 스킬.", "ogImage": "/opengraph-image" },
-    { "route": "/contact", "name": "contact", "type": "client", "title": "연락하기", "description": "프로젝트 협업 또는 채용 관련 문의를 남겨주세요.", "ogImage": "/opengraph-image" },
-    { "route": "/not-found", "name": "not-found", "type": "static", "title": "페이지를 찾을 수 없어요", "description": "요청하신 페이지가 없습니다.", "robots": "noindex, nofollow" }
+    {
+      "route": "/",
+      "name": "chat",
+      "type": "client",
+      "title": "김윤수 — AI Portfolio",
+      "description": "AI에게 물어보는 김윤수의 커리어와 프로젝트.",
+      "ogImage": "/opengraph-image"
+    },
+    {
+      "route": "/about",
+      "name": "about",
+      "type": "ssg",
+      "title": "자기소개",
+      "description": "프론트엔드 개발자 김윤수의 가치관, 성격, 취미.",
+      "ogImage": "/opengraph-image"
+    },
+    {
+      "route": "/experience",
+      "name": "experience",
+      "type": "ssg",
+      "title": "기술 이력",
+      "description": "디라티오, 체인아나토미, 반에프에서의 프로젝트 타임라인과 보유 스킬.",
+      "ogImage": "/opengraph-image"
+    },
+    {
+      "route": "/contact",
+      "name": "contact",
+      "type": "client",
+      "title": "연락하기",
+      "description": "프로젝트 협업 또는 채용 관련 문의를 남겨주세요.",
+      "ogImage": "/opengraph-image"
+    },
+    {
+      "route": "/not-found",
+      "name": "not-found",
+      "type": "static",
+      "title": "페이지를 찾을 수 없어요",
+      "description": "요청하신 페이지가 없습니다.",
+      "robots": "noindex, nofollow"
+    }
   ],
   "forms": [
     {
       "id": "contact",
       "fields": [
-        { "name": "name", "type": "text", "required": true, "minLength": 1, "maxLength": 40, "trim": true, "autocomplete": "given-name" },
-        { "name": "email", "type": "email", "required": true, "autocomplete": "email" },
-        { "name": "message", "type": "textarea", "required": true, "minLength": 10, "maxLength": 2000 },
-        { "name": "website", "type": "honeypot", "required": false, "mustBeEmpty": true }
+        {
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 40,
+          "trim": true,
+          "autocomplete": "given-name"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "required": true,
+          "autocomplete": "email"
+        },
+        {
+          "name": "message",
+          "type": "textarea",
+          "required": true,
+          "minLength": 10,
+          "maxLength": 2000
+        },
+        {
+          "name": "website",
+          "type": "honeypot",
+          "required": false,
+          "mustBeEmpty": true
+        }
       ],
       "minSubmitDelayMs": 1500,
-      "destination": { "primary": "notion", "fallback": ["resend", "mailto"] }
+      "destination": {
+        "primary": "notion",
+        "fallback": [
+          "resend",
+          "mailto"
+        ]
+      }
     }
   ],
   "responsive": {
-    "breakpoints": { "sm": 640, "md": 768, "lg": 1024, "xl": 1280, "2xl": 1536 },
-    "maxW": {
-      "/":           { "sm": "full", "md": "max-w-3xl", "lg": "max-w-3xl" },
-      "/about":      { "sm": "full", "md": "max-w-2xl", "lg": "max-w-2xl" },
-      "/experience": { "sm": "full", "md": "max-w-3xl", "lg": "max-w-4xl" },
-      "/contact":    { "sm": "full", "md": "max-w-2xl", "lg": "max-w-2xl" }
+    "breakpoints": {
+      "sm": 640,
+      "md": 768,
+      "lg": 1024,
+      "xl": 1280,
+      "2xl": 1536
     },
-    "headerHeight": { "sm": 56, "md": 64 },
-    "sideSheetWidth": { "sm": "100vw", "md": "320px" },
-    "carouselSlides": { "sm": 1.2, "md": 2, "lg": 3 },
-    "messageMaxW": { "sm": "85%", "md": "75%" },
-    "fontBase": { "sm": 14, "md": 14.5, "lg": 15 },
+    "maxW": {
+      "/": {
+        "sm": "full",
+        "md": "max-w-3xl",
+        "lg": "max-w-3xl"
+      },
+      "/about": {
+        "sm": "full",
+        "md": "max-w-2xl",
+        "lg": "max-w-2xl"
+      },
+      "/experience": {
+        "sm": "full",
+        "md": "max-w-3xl",
+        "lg": "max-w-4xl"
+      },
+      "/contact": {
+        "sm": "full",
+        "md": "max-w-2xl",
+        "lg": "max-w-2xl"
+      }
+    },
+    "headerHeight": {
+      "sm": 56,
+      "md": 64
+    },
+    "sideSheetWidth": {
+      "sm": "100vw",
+      "md": "320px"
+    },
+    "carouselSlides": {
+      "sm": 1.2,
+      "md": 2,
+      "lg": 3
+    },
+    "messageMaxW": {
+      "sm": "85%",
+      "md": "75%"
+    },
+    "fontBase": {
+      "sm": 14,
+      "md": 14.5,
+      "lg": 15
+    },
     "deviceMatrix": [
-      { "name": "iPhone SE", "width": 375, "height": 667 },
-      { "name": "iPhone 14 Pro", "width": 393, "height": 852 },
-      { "name": "Galaxy S23", "width": 360, "height": 780 },
-      { "name": "iPad Mini", "width": 768, "height": 1024 },
-      { "name": "MacBook 13", "width": 1280, "height": 800 },
-      { "name": "Desktop 4K", "width": 2560, "height": 1440 }
+      {
+        "name": "iPhone SE",
+        "width": 375,
+        "height": 667
+      },
+      {
+        "name": "iPhone 14 Pro",
+        "width": 393,
+        "height": 852
+      },
+      {
+        "name": "Galaxy S23",
+        "width": 360,
+        "height": 780
+      },
+      {
+        "name": "iPad Mini",
+        "width": 768,
+        "height": 1024
+      },
+      {
+        "name": "MacBook 13",
+        "width": 1280,
+        "height": 800
+      },
+      {
+        "name": "Desktop 4K",
+        "width": 2560,
+        "height": 1440
+      }
     ]
   },
   "suggestedQuestions": [
-    { "id": "Q-001", "category": "intro",      "text": "김윤수 어떤 개발자예요?",                    "expectedSourceTitles": ["김윤수 이력서"] },
-    { "id": "Q-002", "category": "intro",      "text": "커리어 어떻게 시작했어요?",                  "expectedSourceTitles": ["김윤수 이력서"] },
-    { "id": "Q-003", "category": "recent",     "text": "최근 1년에 한 일이 뭐예요?",                "expectedSourceTitles": ["Micro-Frontend Architecture 마이그레이션 TF", "밈코인 통합 소셜 플랫폼"] },
-    { "id": "Q-004", "category": "recent",     "text": "가장 도전적이었던 작업은요?",                "expectedSourceTitles": ["Micro-Frontend Architecture 마이그레이션 TF", "Next.js 14 → 15 마이그레이션 & Turbopack 도입"] },
-    { "id": "Q-005", "category": "architecture","text": "Module Federation 어떻게 적용했어요?",     "expectedSourceTitles": ["Micro-Frontend Architecture 마이그레이션 TF"] },
-    { "id": "Q-006", "category": "architecture","text": "Feature-Sliced Design 써본 경험은요?",     "expectedSourceTitles": ["밈코인 통합 소셜 플랫폼"] },
-    { "id": "Q-007", "category": "performance","text": "Next.js Turbopack 도입 후 결과는요?",       "expectedSourceTitles": ["Next.js 14 → 15 마이그레이션 & Turbopack 도입"] },
-    { "id": "Q-008", "category": "performance","text": "리스트 가상화나 메모이제이션 적용 사례 있어요?", "expectedSourceTitles": ["밈코인 통합 소셜 플랫폼"] },
-    { "id": "Q-009", "category": "web3",       "text": "어떤 Web3 프로젝트를 해봤어요?",            "expectedSourceTitles": ["블록체인 토큰 런치패드 플랫폼", "인터체인 NFT 전송 및 마켓플레이스 사이트"] },
-    { "id": "Q-010", "category": "web3",       "text": "스마트 컨트랙트 직접 짜본 적 있어요?",       "expectedSourceTitles": ["블록체인 토큰 런치패드 플랫폼"] },
-    { "id": "Q-011", "category": "realtime",   "text": "DM 시스템은 어떻게 만들었어요?",            "expectedSourceTitles": ["Direct Message 시스템", "낙관적 업데이트 + 메시지 캐시 정합성"] },
-    { "id": "Q-012", "category": "realtime",   "text": "WebSocket이나 Centrifugo 경험 있어요?",     "expectedSourceTitles": ["밈코인 통합 소셜 플랫폼"] },
-    { "id": "Q-013", "category": "pwa",        "text": "PWA Push 어떻게 구현했어요?",               "expectedSourceTitles": ["PWA 적용", "밈코인 통합 소셜 플랫폼"] },
-    { "id": "Q-014", "category": "pwa",        "text": "Flutter WebView 환경에서 작업해본 경험 있어요?", "expectedSourceTitles": ["밈코인 통합 소셜 플랫폼"] },
-    { "id": "Q-015", "category": "quality",    "text": "어떻게 테스트하시나요?",                    "expectedSourceTitles": ["밈코인 소셜 플랫폼 어드민 페이지"] },
-    { "id": "Q-016", "category": "team",       "text": "팀 온보딩이나 길드 활동 한 적 있어요?",     "expectedSourceTitles": ["김윤수 이력서"] },
-    { "id": "Q-017", "category": "stack",      "text": "자주 쓰는 기술 스택은요?",                  "expectedSourceTitles": ["김윤수 이력서"] },
-    { "id": "Q-018", "category": "contact",    "text": "어떻게 연락하면 돼요?",                     "expectedSourceTitles": ["김윤수 이력서"] }
+    {
+      "id": "Q-001",
+      "category": "intro",
+      "text": "김윤수 어떤 개발자예요?",
+      "expectedSourceTitles": [
+        "김윤수 이력서"
+      ]
+    },
+    {
+      "id": "Q-002",
+      "category": "intro",
+      "text": "커리어 어떻게 시작했어요?",
+      "expectedSourceTitles": [
+        "김윤수 이력서"
+      ]
+    },
+    {
+      "id": "Q-003",
+      "category": "recent",
+      "text": "최근 1년에 한 일이 뭐예요?",
+      "expectedSourceTitles": [
+        "Micro-Frontend Architecture 마이그레이션 TF",
+        "밈코인 통합 소셜 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-004",
+      "category": "recent",
+      "text": "가장 도전적이었던 작업은요?",
+      "expectedSourceTitles": [
+        "Micro-Frontend Architecture 마이그레이션 TF",
+        "Next.js 14 → 15 마이그레이션 & Turbopack 도입"
+      ]
+    },
+    {
+      "id": "Q-005",
+      "category": "architecture",
+      "text": "Module Federation 어떻게 적용했어요?",
+      "expectedSourceTitles": [
+        "Micro-Frontend Architecture 마이그레이션 TF"
+      ]
+    },
+    {
+      "id": "Q-006",
+      "category": "architecture",
+      "text": "Feature-Sliced Design 써본 경험은요?",
+      "expectedSourceTitles": [
+        "밈코인 통합 소셜 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-007",
+      "category": "performance",
+      "text": "Next.js Turbopack 도입 후 결과는요?",
+      "expectedSourceTitles": [
+        "Next.js 14 → 15 마이그레이션 & Turbopack 도입"
+      ]
+    },
+    {
+      "id": "Q-008",
+      "category": "performance",
+      "text": "리스트 가상화나 메모이제이션 적용 사례 있어요?",
+      "expectedSourceTitles": [
+        "밈코인 통합 소셜 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-009",
+      "category": "web3",
+      "text": "어떤 Web3 프로젝트를 해봤어요?",
+      "expectedSourceTitles": [
+        "블록체인 토큰 런치패드 플랫폼",
+        "인터체인 NFT 전송 및 마켓플레이스 사이트"
+      ]
+    },
+    {
+      "id": "Q-010",
+      "category": "web3",
+      "text": "스마트 컨트랙트 직접 짜본 적 있어요?",
+      "expectedSourceTitles": [
+        "블록체인 토큰 런치패드 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-011",
+      "category": "realtime",
+      "text": "DM 시스템은 어떻게 만들었어요?",
+      "expectedSourceTitles": [
+        "Direct Message 시스템",
+        "낙관적 업데이트 + 메시지 캐시 정합성"
+      ]
+    },
+    {
+      "id": "Q-012",
+      "category": "realtime",
+      "text": "WebSocket이나 Centrifugo 경험 있어요?",
+      "expectedSourceTitles": [
+        "밈코인 통합 소셜 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-013",
+      "category": "pwa",
+      "text": "PWA Push 어떻게 구현했어요?",
+      "expectedSourceTitles": [
+        "PWA 적용",
+        "밈코인 통합 소셜 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-014",
+      "category": "pwa",
+      "text": "Flutter WebView 환경에서 작업해본 경험 있어요?",
+      "expectedSourceTitles": [
+        "밈코인 통합 소셜 플랫폼"
+      ]
+    },
+    {
+      "id": "Q-015",
+      "category": "quality",
+      "text": "어떻게 테스트하시나요?",
+      "expectedSourceTitles": [
+        "밈코인 소셜 플랫폼 어드민 페이지"
+      ]
+    },
+    {
+      "id": "Q-016",
+      "category": "team",
+      "text": "팀 온보딩이나 길드 활동 한 적 있어요?",
+      "expectedSourceTitles": [
+        "김윤수 이력서"
+      ]
+    },
+    {
+      "id": "Q-017",
+      "category": "stack",
+      "text": "자주 쓰는 기술 스택은요?",
+      "expectedSourceTitles": [
+        "김윤수 이력서"
+      ]
+    },
+    {
+      "id": "Q-018",
+      "category": "contact",
+      "text": "어떻게 연락하면 돼요?",
+      "expectedSourceTitles": [
+        "김윤수 이력서"
+      ]
+    }
   ],
   "errorPolicies": [
-    { "id": "ERR-01", "trigger": "client.offline", "userMessage": "인터넷 연결을 확인해 주세요.", "ui": "toast", "retry": "manual" },
-    { "id": "ERR-02", "trigger": "chat.4xx",       "userMessage": "요청을 처리할 수 없어요.",       "ui": "toast", "highlight": "input" },
-    { "id": "ERR-03", "trigger": "chat.401_403",   "userMessage": "이 모델은 일시적으로 사용 불가능해요. 다른 모델로 시도해 보시겠어요?", "ui": "toast+fallbackButton", "fallback": "default-model", "alert": true },
-    { "id": "ERR-04", "trigger": "chat.429",       "userMessage": "잠시 후 다시 시도해 주세요.",   "ui": "toast+countdown" },
-    { "id": "ERR-05", "trigger": "chat.5xx",       "userMessage": "일시적인 오류가 났어요. 다시 시도해 주세요.", "ui": "toast+retry", "alert": true },
-    { "id": "ERR-06", "trigger": "chat.timeout",   "userMessage": "응답이 늦어 중단했어요.",        "ui": "toast" },
-    { "id": "ERR-07", "trigger": "chat.emptyResponse", "userMessage": "답변을 만들지 못했어요. 다른 질문 부탁드려요." },
-    { "id": "ERR-08", "trigger": "retrieval.emptyResults", "userMessage": "그 부분은 기록되어 있지 않습니다 — 다른 게 궁금하시면 알려주세요.", "ui": "inline-no-llm-call" },
-    { "id": "ERR-09", "trigger": "feedback.notion-fail", "userMessage": "전송 실패, 잠시 후 다시 시도해 주세요.", "fallback": "github-issue|email-mailto", "alert": true },
-    { "id": "ERR-10", "trigger": "spec.invalid",   "userMessage": "사이트 설정 오류. 잠시 후 다시 시도해 주세요.", "behavior": "build-fail" },
-    { "id": "ERR-11", "trigger": "portfolio.missing", "userMessage": "포트폴리오 데이터를 불러오지 못했어요. 잠시 후 새로고침해 주세요.", "alert": true },
-    { "id": "ERR-12", "trigger": "localStorage.fail", "userMessage": null, "behavior": "memory-fallback" },
-    { "id": "ERR-13", "trigger": "model.unknownId", "userMessage": null, "behavior": "downgrade-default", "header": "X-Model-Substitution" },
-    { "id": "ERR-14", "trigger": "embedding.down", "userMessage": null, "behavior": "keyword-only", "header": "X-Retrieval-Mode" },
-    { "id": "ERR-15", "trigger": "sync.partial",   "userMessage": null, "behavior": "keep-last-success" },
-    { "id": "ERR-16", "trigger": "tokens.dailyCap","userMessage": "오늘은 너무 많은 분이 와주셨어요. 내일 다시 만나요!", "ui": "503-page" },
-    { "id": "ERR-17", "trigger": "clipboard.fail", "userMessage": "복사할 수 없는 환경이에요." },
-    { "id": "ERR-18", "trigger": "og.renderFail",  "userMessage": null, "behavior": "static-fallback-png" },
-    { "id": "ERR-19", "trigger": "font.loadFail",  "userMessage": null, "behavior": "system-font-fallback" },
-    { "id": "ERR-20", "trigger": "notion.privatePageOnSync", "userMessage": null, "behavior": "skip-page+log" },
-    { "id": "ERR-21", "trigger": "contact.notion.5xx", "userMessage": "전송 실패. 직접 메일로 보내주세요.", "fallback": "resend|mailto", "alert": true },
-    { "id": "ERR-22", "trigger": "contact.4xx",    "userMessage": "입력 값을 확인해 주세요.",       "ui": "field-inline-errors" },
-    { "id": "ERR-23", "trigger": "contact.429",    "userMessage": "잠시 후 다시 시도해 주세요.",   "ui": "toast+countdown" },
-    { "id": "ERR-24", "trigger": "mdx.buildFail",  "userMessage": null, "behavior": "build-fail" },
-    { "id": "ERR-25", "trigger": "sideSheet.runtimeError", "userMessage": null, "behavior": "fallback-route-home" },
-    { "id": "ERR-26", "trigger": "resend.fail",    "userMessage": null, "behavior": "silent" },
-    { "id": "ERR-27", "trigger": "env.NOTION_CONTACT_DB_ID.missing", "userMessage": "연락 폼이 일시적으로 사용 불가능해요. 직접 메일 주세요.", "ui": "503+mailto", "alert": true }
+    {
+      "id": "ERR-01",
+      "trigger": "client.offline",
+      "userMessage": "인터넷 연결을 확인해 주세요.",
+      "ui": "toast",
+      "retry": "manual"
+    },
+    {
+      "id": "ERR-02",
+      "trigger": "chat.4xx",
+      "userMessage": "요청을 처리할 수 없어요.",
+      "ui": "toast",
+      "highlight": "input"
+    },
+    {
+      "id": "ERR-03",
+      "trigger": "chat.401_403",
+      "userMessage": "이 모델은 일시적으로 사용 불가능해요. 다른 모델로 시도해 보시겠어요?",
+      "ui": "toast+fallbackButton",
+      "fallback": "default-model",
+      "alert": true
+    },
+    {
+      "id": "ERR-04",
+      "trigger": "chat.429",
+      "userMessage": "잠시 후 다시 시도해 주세요.",
+      "ui": "toast+countdown"
+    },
+    {
+      "id": "ERR-05",
+      "trigger": "chat.5xx",
+      "userMessage": "일시적인 오류가 났어요. 다시 시도해 주세요.",
+      "ui": "toast+retry",
+      "alert": true
+    },
+    {
+      "id": "ERR-06",
+      "trigger": "chat.timeout",
+      "userMessage": "응답이 늦어 중단했어요.",
+      "ui": "toast"
+    },
+    {
+      "id": "ERR-07",
+      "trigger": "chat.emptyResponse",
+      "userMessage": "답변을 만들지 못했어요. 다른 질문 부탁드려요."
+    },
+    {
+      "id": "ERR-08",
+      "trigger": "retrieval.emptyResults",
+      "userMessage": "그 부분은 기록되어 있지 않습니다 — 다른 게 궁금하시면 알려주세요.",
+      "ui": "inline-no-llm-call"
+    },
+    {
+      "id": "ERR-09",
+      "trigger": "feedback.notion-fail",
+      "userMessage": "전송 실패, 잠시 후 다시 시도해 주세요.",
+      "fallback": "github-issue|email-mailto",
+      "alert": true
+    },
+    {
+      "id": "ERR-10",
+      "trigger": "spec.invalid",
+      "userMessage": "사이트 설정 오류. 잠시 후 다시 시도해 주세요.",
+      "behavior": "build-fail"
+    },
+    {
+      "id": "ERR-11",
+      "trigger": "portfolio.missing",
+      "userMessage": "포트폴리오 데이터를 불러오지 못했어요. 잠시 후 새로고침해 주세요.",
+      "alert": true
+    },
+    {
+      "id": "ERR-12",
+      "trigger": "localStorage.fail",
+      "userMessage": null,
+      "behavior": "memory-fallback"
+    },
+    {
+      "id": "ERR-13",
+      "trigger": "model.unknownId",
+      "userMessage": null,
+      "behavior": "downgrade-default",
+      "header": "X-Model-Substitution"
+    },
+    {
+      "id": "ERR-14",
+      "trigger": "embedding.down",
+      "userMessage": null,
+      "behavior": "keyword-only",
+      "header": "X-Retrieval-Mode"
+    },
+    {
+      "id": "ERR-15",
+      "trigger": "sync.partial",
+      "userMessage": null,
+      "behavior": "keep-last-success"
+    },
+    {
+      "id": "ERR-16",
+      "trigger": "tokens.dailyCap",
+      "userMessage": "오늘은 너무 많은 분이 와주셨어요. 내일 다시 만나요!",
+      "ui": "503-page"
+    },
+    {
+      "id": "ERR-17",
+      "trigger": "clipboard.fail",
+      "userMessage": "복사할 수 없는 환경이에요."
+    },
+    {
+      "id": "ERR-18",
+      "trigger": "og.renderFail",
+      "userMessage": null,
+      "behavior": "static-fallback-png"
+    },
+    {
+      "id": "ERR-19",
+      "trigger": "font.loadFail",
+      "userMessage": null,
+      "behavior": "system-font-fallback"
+    },
+    {
+      "id": "ERR-20",
+      "trigger": "notion.privatePageOnSync",
+      "userMessage": null,
+      "behavior": "skip-page+log"
+    },
+    {
+      "id": "ERR-21",
+      "trigger": "contact.notion.5xx",
+      "userMessage": "전송 실패. 직접 메일로 보내주세요.",
+      "fallback": "resend|mailto",
+      "alert": true
+    },
+    {
+      "id": "ERR-22",
+      "trigger": "contact.4xx",
+      "userMessage": "입력 값을 확인해 주세요.",
+      "ui": "field-inline-errors"
+    },
+    {
+      "id": "ERR-23",
+      "trigger": "contact.429",
+      "userMessage": "잠시 후 다시 시도해 주세요.",
+      "ui": "toast+countdown"
+    },
+    {
+      "id": "ERR-24",
+      "trigger": "mdx.buildFail",
+      "userMessage": null,
+      "behavior": "build-fail"
+    },
+    {
+      "id": "ERR-25",
+      "trigger": "sideSheet.runtimeError",
+      "userMessage": null,
+      "behavior": "fallback-route-home"
+    },
+    {
+      "id": "ERR-26",
+      "trigger": "resend.fail",
+      "userMessage": null,
+      "behavior": "silent"
+    },
+    {
+      "id": "ERR-27",
+      "trigger": "env.NOTION_CONTACT_DB_ID.missing",
+      "userMessage": "연락 폼이 일시적으로 사용 불가능해요. 직접 메일 주세요.",
+      "ui": "503+mailto",
+      "alert": true
+    }
   ],
   "edgeCasePolicies": [
-    { "id": "EC-01", "scenario": "empty message submit", "behavior": "client.zod.reject + button.disabled" },
-    { "id": "EC-02", "scenario": "message > 500 chars", "behavior": "trim+toast" },
-    { "id": "EC-03", "scenario": "single short word query", "behavior": "keyword-only retrieval" },
-    { "id": "EC-04", "scenario": "english query", "behavior": "english response, korean source links" },
-    { "id": "EC-05", "scenario": "mixed ko/en query", "behavior": "korean response" },
-    { "id": "EC-06", "scenario": "repeat same question", "behavior": "no cache, fresh response" },
-    { "id": "EC-07", "scenario": "long conversation > 50 turns", "behavior": "trim oldest, keep system + last 20" },
-    { "id": "EC-08", "scenario": "viewport rotate", "behavior": "stable layout" },
-    { "id": "EC-09", "scenario": "iOS Safari IME composition", "behavior": "3-way check no-submit" },
-    { "id": "EC-10", "scenario": "prefers-reduced-motion", "behavior": "no animations" },
-    { "id": "EC-11", "scenario": "OS prefers-light", "behavior": "force dark" },
-    { "id": "EC-12", "scenario": "page refresh", "behavior": "stateless, model selection persists" },
-    { "id": "EC-13", "scenario": "image-only chunk", "behavior": "use alt or skip" },
-    { "id": "EC-14", "scenario": "notion permission denied page", "behavior": "skip with warning" },
-    { "id": "EC-15", "scenario": "first token > 5s", "behavior": "show 'preparing' helper" },
-    { "id": "EC-16", "scenario": "submit during streaming", "behavior": "abort + new request" },
-    { "id": "EC-17", "scenario": "carousel boundary", "behavior": "arrow disabled" },
-    { "id": "EC-18", "scenario": "broken markdown response", "behavior": "render as-is" },
-    { "id": "EC-19", "scenario": "mermaid in code block", "behavior": "render as code only" },
-    { "id": "EC-20", "scenario": "duplicate downvote on same message", "behavior": "single submission" },
-    { "id": "EC-21", "scenario": "user action during greeting sim", "behavior": "fast-forward+process" },
-    { "id": "EC-22", "scenario": "refresh with greeted flag", "behavior": "static greeting" },
-    { "id": "EC-23", "scenario": "user scrolled up + new message", "behavior": "no auto-scroll + jump button" },
-    { "id": "EC-24", "scenario": "clipboard permission denied", "behavior": "execCommand fallback + toast" },
-    { "id": "EC-25", "scenario": "source url private", "behavior": "disabled chip" },
-    { "id": "EC-26", "scenario": "IME composing Enter", "behavior": "no submit" },
-    { "id": "EC-27", "scenario": "mobile virtual keyboard", "behavior": "visualViewport adjust" },
-    { "id": "EC-28", "scenario": "OG image build fail", "behavior": "static fallback" },
-    { "id": "EC-29", "scenario": "empty greeting message", "behavior": "skip simulation, focus input" },
-    { "id": "EC-30", "scenario": "context > 50 turns", "behavior": "trim oldest" },
-    { "id": "EC-31", "scenario": "embedding ships to client", "behavior": "build-time enforce server-only" },
-    { "id": "EC-32", "scenario": "side sheet open + ESC", "behavior": "close + restore focus" },
-    { "id": "EC-33", "scenario": "side sheet open + route change", "behavior": "auto close" },
-    { "id": "EC-34", "scenario": "rapid hamburger toggle", "behavior": "80ms debounce settle" },
-    { "id": "EC-35", "scenario": "side sheet first open + Tab", "behavior": "auto focus first item, trap" },
-    { "id": "EC-36", "scenario": "about content empty", "behavior": "placeholder + build success" },
-    { "id": "EC-37", "scenario": "experience filter result 0", "behavior": "empty state" },
-    { "id": "EC-38", "scenario": "honeypot filled", "behavior": "200 + no-save" },
-    { "id": "EC-39", "scenario": "submit < 1.5s", "behavior": "bot suspect" },
-    { "id": "EC-40", "scenario": "leave with unsaved form", "behavior": "beforeunload prompt" },
-    { "id": "EC-41", "scenario": "browser autofill", "behavior": "validate normally" },
-    { "id": "EC-42", "scenario": "korean IME in email field", "behavior": "validation fail inline" },
-    { "id": "EC-43", "scenario": "email with + alias", "behavior": "pass" },
-    { "id": "EC-44", "scenario": "long about content > 10000 chars", "behavior": "show reading time" },
-    { "id": "EC-45", "scenario": "experience direct URL with category", "behavior": "ssr/ssg sync filter" },
-    { "id": "EC-46", "scenario": "mobile rotate while sheet open", "behavior": "recompute width" },
-    { "id": "EC-47", "scenario": "4K viewport", "behavior": "max-w + center" },
-    { "id": "EC-48", "scenario": "320px narrow", "behavior": "wrap allowed" },
-    { "id": "EC-49", "scenario": "route change in-flight chat", "behavior": "abort + clear messages" },
-    { "id": "EC-50", "scenario": "not-found route", "behavior": "404 page + home link" }
+    {
+      "id": "EC-01",
+      "scenario": "empty message submit",
+      "behavior": "client.zod.reject + button.disabled"
+    },
+    {
+      "id": "EC-02",
+      "scenario": "message > 500 chars",
+      "behavior": "trim+toast"
+    },
+    {
+      "id": "EC-03",
+      "scenario": "single short word query",
+      "behavior": "keyword-only retrieval"
+    },
+    {
+      "id": "EC-04",
+      "scenario": "english query",
+      "behavior": "english response, korean source links"
+    },
+    {
+      "id": "EC-05",
+      "scenario": "mixed ko/en query",
+      "behavior": "korean response"
+    },
+    {
+      "id": "EC-06",
+      "scenario": "repeat same question",
+      "behavior": "no cache, fresh response"
+    },
+    {
+      "id": "EC-07",
+      "scenario": "long conversation > 50 turns",
+      "behavior": "trim oldest, keep system + last 20"
+    },
+    {
+      "id": "EC-08",
+      "scenario": "viewport rotate",
+      "behavior": "stable layout"
+    },
+    {
+      "id": "EC-09",
+      "scenario": "iOS Safari IME composition",
+      "behavior": "3-way check no-submit"
+    },
+    {
+      "id": "EC-10",
+      "scenario": "prefers-reduced-motion",
+      "behavior": "no animations"
+    },
+    {
+      "id": "EC-11",
+      "scenario": "OS prefers-light",
+      "behavior": "force dark"
+    },
+    {
+      "id": "EC-12",
+      "scenario": "page refresh",
+      "behavior": "stateless, model selection persists"
+    },
+    {
+      "id": "EC-13",
+      "scenario": "image-only chunk",
+      "behavior": "use alt or skip"
+    },
+    {
+      "id": "EC-14",
+      "scenario": "notion permission denied page",
+      "behavior": "skip with warning"
+    },
+    {
+      "id": "EC-15",
+      "scenario": "first token > 5s",
+      "behavior": "show 'preparing' helper"
+    },
+    {
+      "id": "EC-16",
+      "scenario": "submit during streaming",
+      "behavior": "abort + new request"
+    },
+    {
+      "id": "EC-17",
+      "scenario": "carousel boundary",
+      "behavior": "arrow disabled"
+    },
+    {
+      "id": "EC-18",
+      "scenario": "broken markdown response",
+      "behavior": "render as-is"
+    },
+    {
+      "id": "EC-19",
+      "scenario": "mermaid in code block",
+      "behavior": "render as code only"
+    },
+    {
+      "id": "EC-20",
+      "scenario": "duplicate downvote on same message",
+      "behavior": "single submission"
+    },
+    {
+      "id": "EC-21",
+      "scenario": "user action during greeting sim",
+      "behavior": "fast-forward+process"
+    },
+    {
+      "id": "EC-22",
+      "scenario": "refresh with greeted flag",
+      "behavior": "static greeting"
+    },
+    {
+      "id": "EC-23",
+      "scenario": "user scrolled up + new message",
+      "behavior": "no auto-scroll + jump button"
+    },
+    {
+      "id": "EC-24",
+      "scenario": "clipboard permission denied",
+      "behavior": "execCommand fallback + toast"
+    },
+    {
+      "id": "EC-25",
+      "scenario": "source url private",
+      "behavior": "disabled chip"
+    },
+    {
+      "id": "EC-26",
+      "scenario": "IME composing Enter",
+      "behavior": "no submit"
+    },
+    {
+      "id": "EC-27",
+      "scenario": "mobile virtual keyboard",
+      "behavior": "visualViewport adjust"
+    },
+    {
+      "id": "EC-28",
+      "scenario": "OG image build fail",
+      "behavior": "static fallback"
+    },
+    {
+      "id": "EC-29",
+      "scenario": "empty greeting message",
+      "behavior": "skip simulation, focus input"
+    },
+    {
+      "id": "EC-30",
+      "scenario": "context > 50 turns",
+      "behavior": "trim oldest"
+    },
+    {
+      "id": "EC-31",
+      "scenario": "embedding ships to client",
+      "behavior": "build-time enforce server-only"
+    },
+    {
+      "id": "EC-32",
+      "scenario": "side sheet open + ESC",
+      "behavior": "close + restore focus"
+    },
+    {
+      "id": "EC-33",
+      "scenario": "side sheet open + route change",
+      "behavior": "auto close"
+    },
+    {
+      "id": "EC-34",
+      "scenario": "rapid hamburger toggle",
+      "behavior": "80ms debounce settle"
+    },
+    {
+      "id": "EC-35",
+      "scenario": "side sheet first open + Tab",
+      "behavior": "auto focus first item, trap"
+    },
+    {
+      "id": "EC-36",
+      "scenario": "about content empty",
+      "behavior": "placeholder + build success"
+    },
+    {
+      "id": "EC-37",
+      "scenario": "experience filter result 0",
+      "behavior": "empty state"
+    },
+    {
+      "id": "EC-38",
+      "scenario": "honeypot filled",
+      "behavior": "200 + no-save"
+    },
+    {
+      "id": "EC-39",
+      "scenario": "submit < 1.5s",
+      "behavior": "bot suspect"
+    },
+    {
+      "id": "EC-40",
+      "scenario": "leave with unsaved form",
+      "behavior": "beforeunload prompt"
+    },
+    {
+      "id": "EC-41",
+      "scenario": "browser autofill",
+      "behavior": "validate normally"
+    },
+    {
+      "id": "EC-42",
+      "scenario": "korean IME in email field",
+      "behavior": "validation fail inline"
+    },
+    {
+      "id": "EC-43",
+      "scenario": "email with + alias",
+      "behavior": "pass"
+    },
+    {
+      "id": "EC-44",
+      "scenario": "long about content > 10000 chars",
+      "behavior": "show reading time"
+    },
+    {
+      "id": "EC-45",
+      "scenario": "experience direct URL with category",
+      "behavior": "ssr/ssg sync filter"
+    },
+    {
+      "id": "EC-46",
+      "scenario": "mobile rotate while sheet open",
+      "behavior": "recompute width"
+    },
+    {
+      "id": "EC-47",
+      "scenario": "4K viewport",
+      "behavior": "max-w + center"
+    },
+    {
+      "id": "EC-48",
+      "scenario": "320px narrow",
+      "behavior": "wrap allowed"
+    },
+    {
+      "id": "EC-49",
+      "scenario": "route change in-flight chat",
+      "behavior": "abort + clear messages"
+    },
+    {
+      "id": "EC-50",
+      "scenario": "not-found route",
+      "behavior": "404 page + home link"
+    }
   ],
   "features": [
-    { "id": "FEAT-001", "name": "Multi-model Chat", "status": "planned", "priority": "P0", "tests": ["specs/chat-route.spec.ts", "specs/models.spec.ts"], "dependencies": ["FEAT-006","FEAT-007"] },
-    { "id": "FEAT-002", "name": "SSE Streaming + Typing Indicator", "status": "planned", "priority": "P0", "tests": ["specs/typing-indicator.spec.tsx", "specs/chat-route.spec.ts"] },
-    { "id": "FEAT-003", "name": "Suggestion Carousel", "status": "planned", "priority": "P0", "tests": ["specs/carousel.spec.tsx"] },
-    { "id": "FEAT-004", "name": "Message Feedback", "status": "planned", "priority": "P0", "tests": ["specs/feedback-route.spec.ts", "specs/feedback-button.spec.tsx"] },
-    { "id": "FEAT-005", "name": "Notion Build-time Sync", "status": "planned", "priority": "P0", "tests": ["specs/sync-notion.spec.ts"] },
-    { "id": "FEAT-006", "name": "RAG Hybrid Retrieval", "status": "planned", "priority": "P0", "tests": ["specs/retriever.spec.ts"] },
-    { "id": "FEAT-007", "name": "System Prompt + Injection Defense + Output Postprocess", "status": "planned", "priority": "P0", "tests": ["specs/injection-defense.spec.ts", "specs/prompts.spec.ts", "specs/output-postprocess.spec.ts"] },
-    { "id": "FEAT-008", "name": "Rate Limit + Daily Token Cap", "status": "planned", "priority": "P0", "tests": ["specs/chat-route.spec.ts:rateLimit"] },
-    { "id": "FEAT-009", "name": "Dynamic Suggested Questions", "status": "planned", "priority": "P1", "tests": ["specs/generate-suggestions.spec.ts"] },
-    { "id": "FEAT-010", "name": "Spec-Driven Development (spec.json)", "status": "in_progress", "priority": "P0", "tests": ["specs/spec-schema.spec.ts"] },
-    { "id": "FEAT-011", "name": "TDD Test Infrastructure", "status": "planned", "priority": "P0", "tests": [] },
-    { "id": "FEAT-012", "name": "Monitoring/Observability", "status": "planned", "priority": "P1", "tests": [] },
-    { "id": "FEAT-013", "name": "Accessibility / i18n basics", "status": "planned", "priority": "P0", "tests": ["tests/e2e/cross-cutting.e2e.ts:axe", "tests/e2e/cross-cutting.e2e.ts:keyboardNav"] },
-    { "id": "FEAT-014", "name": "Simulated Greeting", "status": "planned", "priority": "P0", "tests": ["specs/greeting-player.spec.tsx", "tests/e2e/chat.e2e.ts:firstGreeting"] },
-    { "id": "FEAT-015", "name": "Stick-to-bottom + Jump-to-latest", "status": "planned", "priority": "P0", "tests": ["specs/message-list.spec.tsx", "tests/e2e/chat.e2e.ts:stickToBottom"] },
-    { "id": "FEAT-016", "name": "Message Actions (Copy/Regenerate/Try-other/Source)", "status": "planned", "priority": "P1", "tests": ["specs/message-actions.spec.tsx"] },
-    { "id": "FEAT-017", "name": "Clear Conversation + Cmd+K", "status": "planned", "priority": "P1", "tests": ["specs/clear-conversation.spec.tsx"] },
-    { "id": "FEAT-018", "name": "Font / Safe-area / Meta", "status": "planned", "priority": "P0", "tests": ["specs/responsive.spec.tsx"] },
-    { "id": "FEAT-019", "name": "SEO / OG / sitemap / robots / JSON-LD", "status": "planned", "priority": "P0", "tests": ["tests/e2e/cross-cutting.e2e.ts:seo", "tests/e2e/cross-cutting.e2e.ts:og"] },
-    { "id": "FEAT-020", "name": "Footer + last-updated + privacy", "status": "planned", "priority": "P0", "tests": ["specs/footer.spec.tsx"] },
-    { "id": "FEAT-021", "name": "IME / Composer details", "status": "planned", "priority": "P0", "tests": ["specs/composer.spec.tsx"] },
-    { "id": "FEAT-022", "name": "Related Questions Chips (P2)", "status": "planned", "priority": "P2", "tests": ["specs/related-questions.spec.tsx"] },
-    { "id": "FEAT-023", "name": "Hamburger Side Sheet", "status": "planned", "priority": "P0", "tests": ["specs/side-sheet.spec.tsx", "tests/e2e/side-menu.e2e.ts"] },
-    { "id": "FEAT-024", "name": "About Page", "status": "planned", "priority": "P0", "tests": ["tests/e2e/about.e2e.ts", "specs/reading-time.spec.ts"] },
-    { "id": "FEAT-025", "name": "Experience Page", "status": "planned", "priority": "P0", "tests": ["tests/e2e/experience.e2e.ts"] },
-    { "id": "FEAT-026", "name": "Contact Page + Form", "status": "planned", "priority": "P0", "tests": ["specs/contact-form.spec.tsx", "specs/contact-route.spec.ts", "tests/e2e/contact.e2e.ts"] },
-    { "id": "FEAT-027", "name": "Bot Protection", "status": "planned", "priority": "P0", "tests": ["specs/contact-route.spec.ts:honeypot", "specs/contact-route.spec.ts:tooFast"] },
-    { "id": "FEAT-028", "name": "Responsive Design System", "status": "planned", "priority": "P0", "tests": ["specs/responsive.spec.tsx", "tests/visual/breakpoints.spec.ts"] },
-    { "id": "FEAT-029", "name": "Routing / Page Transition UX", "status": "planned", "priority": "P0", "tests": ["tests/e2e/cross-cutting.e2e.ts:roundtrip"] }
+    {
+      "id": "FEAT-001",
+      "name": "Multi-model Chat",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/chat-route.spec.ts",
+        "specs/models.spec.ts"
+      ],
+      "dependencies": [
+        "FEAT-006",
+        "FEAT-007"
+      ]
+    },
+    {
+      "id": "FEAT-002",
+      "name": "SSE Streaming + Typing Indicator",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/typing-indicator.spec.tsx",
+        "specs/chat-route.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-003",
+      "name": "Suggestion Carousel",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/carousel.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-004",
+      "name": "Message Feedback",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/feedback-route.spec.ts",
+        "specs/feedback-button.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-005",
+      "name": "Notion Build-time Sync",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/sync-notion.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-006",
+      "name": "RAG Hybrid Retrieval",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/retriever.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-007",
+      "name": "System Prompt + Injection Defense + Output Postprocess",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/injection-defense.spec.ts",
+        "specs/prompts.spec.ts",
+        "specs/output-postprocess.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-008",
+      "name": "Rate Limit + Daily Token Cap",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/chat-route.spec.ts:rateLimit"
+      ]
+    },
+    {
+      "id": "FEAT-009",
+      "name": "Dynamic Suggested Questions",
+      "status": "planned",
+      "priority": "P1",
+      "tests": [
+        "specs/generate-suggestions.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-010",
+      "name": "Spec-Driven Development (spec.json)",
+      "status": "in_progress",
+      "priority": "P0",
+      "tests": [
+        "specs/spec-schema.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-011",
+      "name": "TDD Test Infrastructure",
+      "status": "planned",
+      "priority": "P0",
+      "tests": []
+    },
+    {
+      "id": "FEAT-012",
+      "name": "Monitoring/Observability",
+      "status": "planned",
+      "priority": "P1",
+      "tests": []
+    },
+    {
+      "id": "FEAT-013",
+      "name": "Accessibility / i18n basics",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "tests/e2e/cross-cutting.e2e.ts:axe",
+        "tests/e2e/cross-cutting.e2e.ts:keyboardNav"
+      ]
+    },
+    {
+      "id": "FEAT-014",
+      "name": "Simulated Greeting",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/greeting-player.spec.tsx",
+        "tests/e2e/chat.e2e.ts:firstGreeting"
+      ]
+    },
+    {
+      "id": "FEAT-015",
+      "name": "Stick-to-bottom + Jump-to-latest",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/message-list.spec.tsx",
+        "tests/e2e/chat.e2e.ts:stickToBottom"
+      ]
+    },
+    {
+      "id": "FEAT-016",
+      "name": "Message Actions (Copy/Regenerate/Try-other/Source)",
+      "status": "planned",
+      "priority": "P1",
+      "tests": [
+        "specs/message-actions.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-017",
+      "name": "Clear Conversation + Cmd+K",
+      "status": "planned",
+      "priority": "P1",
+      "tests": [
+        "specs/clear-conversation.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-018",
+      "name": "Font / Safe-area / Meta",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/responsive.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-019",
+      "name": "SEO / OG / sitemap / robots / JSON-LD",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "tests/e2e/cross-cutting.e2e.ts:seo",
+        "tests/e2e/cross-cutting.e2e.ts:og"
+      ]
+    },
+    {
+      "id": "FEAT-020",
+      "name": "Footer + last-updated + privacy",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/footer.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-021",
+      "name": "IME / Composer details",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/composer.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-022",
+      "name": "Related Questions Chips (P2)",
+      "status": "planned",
+      "priority": "P2",
+      "tests": [
+        "specs/related-questions.spec.tsx"
+      ]
+    },
+    {
+      "id": "FEAT-023",
+      "name": "Hamburger Side Sheet",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/side-sheet.spec.tsx",
+        "tests/e2e/side-menu.e2e.ts"
+      ]
+    },
+    {
+      "id": "FEAT-024",
+      "name": "About Page",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "tests/e2e/about.e2e.ts",
+        "specs/reading-time.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-025",
+      "name": "Experience Page",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "tests/e2e/experience.e2e.ts"
+      ]
+    },
+    {
+      "id": "FEAT-026",
+      "name": "Contact Page + Form",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/contact-form.spec.tsx",
+        "specs/contact-route.spec.ts",
+        "tests/e2e/contact.e2e.ts"
+      ]
+    },
+    {
+      "id": "FEAT-027",
+      "name": "Bot Protection",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/contact-route.spec.ts:honeypot",
+        "specs/contact-route.spec.ts:tooFast"
+      ]
+    },
+    {
+      "id": "FEAT-028",
+      "name": "Responsive Design System",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/responsive.spec.tsx",
+        "tests/visual/breakpoints.spec.ts"
+      ]
+    },
+    {
+      "id": "FEAT-029",
+      "name": "Routing / Page Transition UX",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "tests/e2e/cross-cutting.e2e.ts:roundtrip"
+      ]
+    },
+    {
+      "id": "FEAT-030",
+      "name": "Chat Layout Revamp — ChatGPT/Claude style prominent composer + carousel placement",
+      "status": "planned",
+      "priority": "P0",
+      "tests": [
+        "specs/components/chat-layout.spec.tsx",
+        "specs/components/composer.spec.tsx",
+        "specs/components/model-switcher.test.tsx"
+      ],
+      "dependencies": [
+        "FEAT-001",
+        "FEAT-003",
+        "FEAT-021"
+      ]
+    }
   ],
   "testScenarios": [
-    { "id": "TS-01", "feature": "FEAT-014", "title": "First greeting simulation", "file": "tests/e2e/chat.e2e.ts", "anchor": "firstGreeting" },
-    { "id": "TS-02", "feature": "FEAT-014", "title": "Reduced motion greeting", "file": "tests/e2e/chat.e2e.ts", "anchor": "firstGreetingReducedMotion" },
-    { "id": "TS-03", "feature": "FEAT-003", "title": "Suggested click → response", "file": "tests/e2e/chat.e2e.ts", "anchor": "suggestedClick" },
-    { "id": "TS-04", "feature": "FEAT-001", "title": "Model switching", "file": "tests/e2e/chat.e2e.ts", "anchor": "modelSwitch" },
-    { "id": "TS-05", "feature": "FEAT-007", "title": "Injection 5-fold defense", "file": "specs/injection-defense.spec.ts" },
-    { "id": "TS-06", "feature": "FEAT-006", "title": "Out-of-context question", "file": "specs/retriever.spec.ts" },
-    { "id": "TS-07", "feature": "FEAT-001", "title": "English question", "file": "specs/chat-route.spec.ts" },
-    { "id": "TS-08", "feature": "FEAT-015", "title": "Stick-to-bottom", "file": "tests/e2e/chat.e2e.ts", "anchor": "stickToBottom" },
-    { "id": "TS-09", "feature": "FEAT-001", "title": "Submit while streaming", "file": "specs/chat-route.spec.ts", "anchor": "abortInFlight" },
-    { "id": "TS-10", "feature": "FEAT-016", "title": "Regenerate / try-other", "file": "specs/message-actions.spec.tsx" },
-    { "id": "TS-11", "feature": "FEAT-016", "title": "Copy", "file": "specs/message-actions.spec.tsx", "anchor": "copy" },
-    { "id": "TS-12", "feature": "FEAT-017", "title": "Clear conversation", "file": "specs/clear-conversation.spec.tsx" },
-    { "id": "TS-13", "feature": "FEAT-021", "title": "IME composing Enter", "file": "specs/composer.spec.tsx" },
-    { "id": "TS-14", "feature": "FEAT-021", "title": "Message length validation", "file": "specs/composer.spec.tsx" },
-    { "id": "TS-15", "feature": "FEAT-008", "title": "Chat rate limit 429", "file": "specs/chat-route.spec.ts", "anchor": "rateLimit" },
-    { "id": "TS-16", "feature": "FEAT-008", "title": "Daily token cap", "file": "specs/chat-route.spec.ts", "anchor": "dailyCap" },
-    { "id": "TS-17", "feature": "FEAT-001", "title": "Model auth 401", "file": "specs/chat-route.spec.ts", "anchor": "modelAuth" },
-    { "id": "TS-18", "feature": "FEAT-006", "title": "Embedding down → keyword fallback", "file": "specs/retriever.spec.ts", "anchor": "embeddingDown" },
-    { "id": "TS-19", "feature": "FEAT-004", "title": "Feedback to Notion", "file": "specs/feedback-route.spec.ts" },
-    { "id": "TS-20", "feature": "FEAT-004", "title": "Duplicate feedback", "file": "specs/feedback-button.spec.tsx" },
-    { "id": "TS-21", "feature": "FEAT-002", "title": "First token >5s", "file": "specs/typing-indicator.spec.tsx" },
-    { "id": "TS-22", "feature": "FEAT-002", "title": "SSE disconnect", "file": "specs/chat-route.spec.ts", "anchor": "sseDisconnect" },
-    { "id": "TS-23", "feature": "FEAT-023", "title": "Hamburger open", "file": "specs/side-sheet.spec.tsx", "anchor": "open" },
-    { "id": "TS-24", "feature": "FEAT-023", "title": "ESC close", "file": "specs/side-sheet.spec.tsx", "anchor": "escClose" },
-    { "id": "TS-25", "feature": "FEAT-023", "title": "Overlay click close", "file": "specs/side-sheet.spec.tsx", "anchor": "overlayClose" },
-    { "id": "TS-26", "feature": "FEAT-023", "title": "Menu nav + auto close", "file": "tests/e2e/side-menu.e2e.ts", "anchor": "navigation" },
-    { "id": "TS-27", "feature": "FEAT-023", "title": "Keyboard nav arrows", "file": "specs/side-sheet.spec.tsx", "anchor": "keyboardNav" },
-    { "id": "TS-28", "feature": "FEAT-028", "title": "Mobile fullscreen vs desktop panel", "file": "tests/visual/breakpoints.spec.ts" },
-    { "id": "TS-29", "feature": "FEAT-023", "title": "Auto close on nav", "file": "tests/e2e/side-menu.e2e.ts", "anchor": "autoCloseOnNav" },
-    { "id": "TS-30", "feature": "FEAT-023", "title": "Rotate while open", "file": "tests/e2e/side-menu.e2e.ts", "anchor": "rotate" },
-    { "id": "TS-31", "feature": "FEAT-023", "title": "Rapid toggle debounce", "file": "specs/side-sheet.spec.tsx", "anchor": "debounce" },
-    { "id": "TS-32", "feature": "FEAT-023", "title": "Reduced motion", "file": "specs/side-sheet.spec.tsx", "anchor": "reducedMotion" },
-    { "id": "TS-33", "feature": "FEAT-024", "title": "About direct access", "file": "tests/e2e/about.e2e.ts", "anchor": "directAccess" },
-    { "id": "TS-34", "feature": "FEAT-024", "title": "Empty profile", "file": "tests/e2e/about.e2e.ts", "anchor": "emptyProfile" },
-    { "id": "TS-35", "feature": "FEAT-024", "title": "Reading time", "file": "specs/reading-time.spec.ts" },
-    { "id": "TS-36", "feature": "FEAT-024", "title": "Image fallback", "file": "tests/e2e/about.e2e.ts", "anchor": "imageFallback" },
-    { "id": "TS-37", "feature": "FEAT-028", "title": "About responsive", "file": "tests/visual/breakpoints.spec.ts", "anchor": "about" },
-    { "id": "TS-38", "feature": "FEAT-025", "title": "Experience direct access", "file": "tests/e2e/experience.e2e.ts", "anchor": "directAccess" },
-    { "id": "TS-39", "feature": "FEAT-025", "title": "Category filter", "file": "tests/e2e/experience.e2e.ts", "anchor": "filter" },
-    { "id": "TS-40", "feature": "FEAT-025", "title": "Empty result", "file": "tests/e2e/experience.e2e.ts", "anchor": "empty" },
-    { "id": "TS-41", "feature": "FEAT-025", "title": "External link new tab", "file": "tests/e2e/experience.e2e.ts", "anchor": "externalLink" },
-    { "id": "TS-42", "feature": "FEAT-028", "title": "Experience responsive", "file": "tests/visual/breakpoints.spec.ts", "anchor": "experience" },
-    { "id": "TS-43", "feature": "FEAT-026", "title": "Contact direct access", "file": "tests/e2e/contact.e2e.ts", "anchor": "directAccess" },
-    { "id": "TS-44", "feature": "FEAT-026", "title": "Happy path submit", "file": "tests/e2e/contact.e2e.ts", "anchor": "happyPath" },
-    { "id": "TS-45", "feature": "FEAT-026", "title": "Empty fields", "file": "specs/contact-form.spec.tsx", "anchor": "emptyValidation" },
-    { "id": "TS-46", "feature": "FEAT-026", "title": "Email format", "file": "specs/contact-form.spec.tsx", "anchor": "emailFormat" },
-    { "id": "TS-47", "feature": "FEAT-026", "title": "Name length", "file": "specs/contact-form.spec.tsx", "anchor": "nameLength" },
-    { "id": "TS-48", "feature": "FEAT-026", "title": "Message length", "file": "specs/contact-form.spec.tsx", "anchor": "messageLength" },
-    { "id": "TS-49", "feature": "FEAT-027", "title": "Honeypot", "file": "specs/contact-route.spec.ts", "anchor": "honeypot" },
-    { "id": "TS-50", "feature": "FEAT-027", "title": "Submit too fast", "file": "specs/contact-route.spec.ts", "anchor": "tooFast" },
-    { "id": "TS-51", "feature": "FEAT-027", "title": "Contact rate limit", "file": "specs/contact-route.spec.ts", "anchor": "rateLimit" },
-    { "id": "TS-52", "feature": "FEAT-026", "title": "Notion 5xx fallback", "file": "specs/contact-route.spec.ts", "anchor": "notionDown" },
-    { "id": "TS-53", "feature": "FEAT-026", "title": "Resend optional", "file": "specs/contact-route.spec.ts", "anchor": "resendOptional" },
-    { "id": "TS-54", "feature": "FEAT-026", "title": "Missing DB ID", "file": "specs/contact-route.spec.ts", "anchor": "dbIdMissing" },
-    { "id": "TS-55", "feature": "FEAT-026", "title": "Autocomplete attrs", "file": "specs/contact-form.spec.tsx", "anchor": "autocomplete" },
-    { "id": "TS-56", "feature": "FEAT-026", "title": "beforeunload prompt", "file": "tests/e2e/contact.e2e.ts", "anchor": "beforeUnload" },
-    { "id": "TS-57", "feature": "FEAT-026", "title": "Email + alias", "file": "specs/contact-form.spec.tsx", "anchor": "emailAlias" },
-    { "id": "TS-58", "feature": "FEAT-026", "title": "Name korean+space", "file": "specs/contact-form.spec.tsx", "anchor": "nameKorean" },
-    { "id": "TS-59", "feature": "FEAT-026", "title": "Email korean IME input", "file": "specs/contact-form.spec.tsx", "anchor": "emailKorean" },
-    { "id": "TS-60", "feature": "FEAT-026", "title": "Mobile virtual keyboard", "file": "tests/e2e/contact.e2e.ts", "anchor": "mobileKeyboard" },
-    { "id": "TS-61", "feature": "FEAT-013", "title": "Keyboard-only nav", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "keyboardNav" },
-    { "id": "TS-62", "feature": "FEAT-013", "title": "Color contrast WCAG AA", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "axe" },
-    { "id": "TS-63", "feature": "FEAT-019", "title": "SEO meta + JSON-LD", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "seo" },
-    { "id": "TS-64", "feature": "FEAT-019", "title": "Open Graph image", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "og" },
-    { "id": "TS-65", "feature": "FEAT-029", "title": "404 page", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "notFound" },
-    { "id": "TS-66", "feature": "FEAT-029", "title": "Multi-page roundtrip", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "roundtrip" },
-    { "id": "TS-67", "feature": "FEAT-020", "title": "Footer last-updated", "file": "specs/footer.spec.tsx" },
-    { "id": "TS-68", "feature": "FEAT-013", "title": "Lighthouse 90/95/95/95", "file": "lhci.config.js" },
-    { "id": "TS-69", "feature": "FEAT-013", "title": "Bundle audit", "file": "scripts/audit-bundle.ts" },
-    { "id": "TS-70", "feature": "FEAT-013", "title": "Env fallback", "file": "tests/e2e/cross-cutting.e2e.ts", "anchor": "envFallback" }
+    {
+      "id": "TS-01",
+      "feature": "FEAT-014",
+      "title": "First greeting simulation",
+      "file": "tests/e2e/chat.e2e.ts",
+      "anchor": "firstGreeting"
+    },
+    {
+      "id": "TS-02",
+      "feature": "FEAT-014",
+      "title": "Reduced motion greeting",
+      "file": "tests/e2e/chat.e2e.ts",
+      "anchor": "firstGreetingReducedMotion"
+    },
+    {
+      "id": "TS-03",
+      "feature": "FEAT-003",
+      "title": "Suggested click → response",
+      "file": "tests/e2e/chat.e2e.ts",
+      "anchor": "suggestedClick"
+    },
+    {
+      "id": "TS-04",
+      "feature": "FEAT-001",
+      "title": "Model switching",
+      "file": "tests/e2e/chat.e2e.ts",
+      "anchor": "modelSwitch"
+    },
+    {
+      "id": "TS-05",
+      "feature": "FEAT-007",
+      "title": "Injection 5-fold defense",
+      "file": "specs/injection-defense.spec.ts"
+    },
+    {
+      "id": "TS-06",
+      "feature": "FEAT-006",
+      "title": "Out-of-context question",
+      "file": "specs/retriever.spec.ts"
+    },
+    {
+      "id": "TS-07",
+      "feature": "FEAT-001",
+      "title": "English question",
+      "file": "specs/chat-route.spec.ts"
+    },
+    {
+      "id": "TS-08",
+      "feature": "FEAT-015",
+      "title": "Stick-to-bottom",
+      "file": "tests/e2e/chat.e2e.ts",
+      "anchor": "stickToBottom"
+    },
+    {
+      "id": "TS-09",
+      "feature": "FEAT-001",
+      "title": "Submit while streaming",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "abortInFlight"
+    },
+    {
+      "id": "TS-10",
+      "feature": "FEAT-016",
+      "title": "Regenerate / try-other",
+      "file": "specs/message-actions.spec.tsx"
+    },
+    {
+      "id": "TS-11",
+      "feature": "FEAT-016",
+      "title": "Copy",
+      "file": "specs/message-actions.spec.tsx",
+      "anchor": "copy"
+    },
+    {
+      "id": "TS-12",
+      "feature": "FEAT-017",
+      "title": "Clear conversation",
+      "file": "specs/clear-conversation.spec.tsx"
+    },
+    {
+      "id": "TS-13",
+      "feature": "FEAT-021",
+      "title": "IME composing Enter",
+      "file": "specs/composer.spec.tsx"
+    },
+    {
+      "id": "TS-14",
+      "feature": "FEAT-021",
+      "title": "Message length validation",
+      "file": "specs/composer.spec.tsx"
+    },
+    {
+      "id": "TS-15",
+      "feature": "FEAT-008",
+      "title": "Chat rate limit 429",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "rateLimit"
+    },
+    {
+      "id": "TS-16",
+      "feature": "FEAT-008",
+      "title": "Daily token cap",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "dailyCap"
+    },
+    {
+      "id": "TS-17",
+      "feature": "FEAT-001",
+      "title": "Model auth 401",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "modelAuth"
+    },
+    {
+      "id": "TS-18",
+      "feature": "FEAT-006",
+      "title": "Embedding down → keyword fallback",
+      "file": "specs/retriever.spec.ts",
+      "anchor": "embeddingDown"
+    },
+    {
+      "id": "TS-19",
+      "feature": "FEAT-004",
+      "title": "Feedback to Notion",
+      "file": "specs/feedback-route.spec.ts"
+    },
+    {
+      "id": "TS-20",
+      "feature": "FEAT-004",
+      "title": "Duplicate feedback",
+      "file": "specs/feedback-button.spec.tsx"
+    },
+    {
+      "id": "TS-21",
+      "feature": "FEAT-002",
+      "title": "First token >5s",
+      "file": "specs/typing-indicator.spec.tsx"
+    },
+    {
+      "id": "TS-22",
+      "feature": "FEAT-002",
+      "title": "SSE disconnect",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "sseDisconnect"
+    },
+    {
+      "id": "TS-23",
+      "feature": "FEAT-023",
+      "title": "Hamburger open",
+      "file": "specs/side-sheet.spec.tsx",
+      "anchor": "open"
+    },
+    {
+      "id": "TS-24",
+      "feature": "FEAT-023",
+      "title": "ESC close",
+      "file": "specs/side-sheet.spec.tsx",
+      "anchor": "escClose"
+    },
+    {
+      "id": "TS-25",
+      "feature": "FEAT-023",
+      "title": "Overlay click close",
+      "file": "specs/side-sheet.spec.tsx",
+      "anchor": "overlayClose"
+    },
+    {
+      "id": "TS-26",
+      "feature": "FEAT-023",
+      "title": "Menu nav + auto close",
+      "file": "tests/e2e/side-menu.e2e.ts",
+      "anchor": "navigation"
+    },
+    {
+      "id": "TS-27",
+      "feature": "FEAT-023",
+      "title": "Keyboard nav arrows",
+      "file": "specs/side-sheet.spec.tsx",
+      "anchor": "keyboardNav"
+    },
+    {
+      "id": "TS-28",
+      "feature": "FEAT-028",
+      "title": "Mobile fullscreen vs desktop panel",
+      "file": "tests/visual/breakpoints.spec.ts"
+    },
+    {
+      "id": "TS-29",
+      "feature": "FEAT-023",
+      "title": "Auto close on nav",
+      "file": "tests/e2e/side-menu.e2e.ts",
+      "anchor": "autoCloseOnNav"
+    },
+    {
+      "id": "TS-30",
+      "feature": "FEAT-023",
+      "title": "Rotate while open",
+      "file": "tests/e2e/side-menu.e2e.ts",
+      "anchor": "rotate"
+    },
+    {
+      "id": "TS-31",
+      "feature": "FEAT-023",
+      "title": "Rapid toggle debounce",
+      "file": "specs/side-sheet.spec.tsx",
+      "anchor": "debounce"
+    },
+    {
+      "id": "TS-32",
+      "feature": "FEAT-023",
+      "title": "Reduced motion",
+      "file": "specs/side-sheet.spec.tsx",
+      "anchor": "reducedMotion"
+    },
+    {
+      "id": "TS-33",
+      "feature": "FEAT-024",
+      "title": "About direct access",
+      "file": "tests/e2e/about.e2e.ts",
+      "anchor": "directAccess"
+    },
+    {
+      "id": "TS-34",
+      "feature": "FEAT-024",
+      "title": "Empty profile",
+      "file": "tests/e2e/about.e2e.ts",
+      "anchor": "emptyProfile"
+    },
+    {
+      "id": "TS-35",
+      "feature": "FEAT-024",
+      "title": "Reading time",
+      "file": "specs/reading-time.spec.ts"
+    },
+    {
+      "id": "TS-36",
+      "feature": "FEAT-024",
+      "title": "Image fallback",
+      "file": "tests/e2e/about.e2e.ts",
+      "anchor": "imageFallback"
+    },
+    {
+      "id": "TS-37",
+      "feature": "FEAT-028",
+      "title": "About responsive",
+      "file": "tests/visual/breakpoints.spec.ts",
+      "anchor": "about"
+    },
+    {
+      "id": "TS-38",
+      "feature": "FEAT-025",
+      "title": "Experience direct access",
+      "file": "tests/e2e/experience.e2e.ts",
+      "anchor": "directAccess"
+    },
+    {
+      "id": "TS-39",
+      "feature": "FEAT-025",
+      "title": "Category filter",
+      "file": "tests/e2e/experience.e2e.ts",
+      "anchor": "filter"
+    },
+    {
+      "id": "TS-40",
+      "feature": "FEAT-025",
+      "title": "Empty result",
+      "file": "tests/e2e/experience.e2e.ts",
+      "anchor": "empty"
+    },
+    {
+      "id": "TS-41",
+      "feature": "FEAT-025",
+      "title": "External link new tab",
+      "file": "tests/e2e/experience.e2e.ts",
+      "anchor": "externalLink"
+    },
+    {
+      "id": "TS-42",
+      "feature": "FEAT-028",
+      "title": "Experience responsive",
+      "file": "tests/visual/breakpoints.spec.ts",
+      "anchor": "experience"
+    },
+    {
+      "id": "TS-43",
+      "feature": "FEAT-026",
+      "title": "Contact direct access",
+      "file": "tests/e2e/contact.e2e.ts",
+      "anchor": "directAccess"
+    },
+    {
+      "id": "TS-44",
+      "feature": "FEAT-026",
+      "title": "Happy path submit",
+      "file": "tests/e2e/contact.e2e.ts",
+      "anchor": "happyPath"
+    },
+    {
+      "id": "TS-45",
+      "feature": "FEAT-026",
+      "title": "Empty fields",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "emptyValidation"
+    },
+    {
+      "id": "TS-46",
+      "feature": "FEAT-026",
+      "title": "Email format",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "emailFormat"
+    },
+    {
+      "id": "TS-47",
+      "feature": "FEAT-026",
+      "title": "Name length",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "nameLength"
+    },
+    {
+      "id": "TS-48",
+      "feature": "FEAT-026",
+      "title": "Message length",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "messageLength"
+    },
+    {
+      "id": "TS-49",
+      "feature": "FEAT-027",
+      "title": "Honeypot",
+      "file": "specs/contact-route.spec.ts",
+      "anchor": "honeypot"
+    },
+    {
+      "id": "TS-50",
+      "feature": "FEAT-027",
+      "title": "Submit too fast",
+      "file": "specs/contact-route.spec.ts",
+      "anchor": "tooFast"
+    },
+    {
+      "id": "TS-51",
+      "feature": "FEAT-027",
+      "title": "Contact rate limit",
+      "file": "specs/contact-route.spec.ts",
+      "anchor": "rateLimit"
+    },
+    {
+      "id": "TS-52",
+      "feature": "FEAT-026",
+      "title": "Notion 5xx fallback",
+      "file": "specs/contact-route.spec.ts",
+      "anchor": "notionDown"
+    },
+    {
+      "id": "TS-53",
+      "feature": "FEAT-026",
+      "title": "Resend optional",
+      "file": "specs/contact-route.spec.ts",
+      "anchor": "resendOptional"
+    },
+    {
+      "id": "TS-54",
+      "feature": "FEAT-026",
+      "title": "Missing DB ID",
+      "file": "specs/contact-route.spec.ts",
+      "anchor": "dbIdMissing"
+    },
+    {
+      "id": "TS-55",
+      "feature": "FEAT-026",
+      "title": "Autocomplete attrs",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "autocomplete"
+    },
+    {
+      "id": "TS-56",
+      "feature": "FEAT-026",
+      "title": "beforeunload prompt",
+      "file": "tests/e2e/contact.e2e.ts",
+      "anchor": "beforeUnload"
+    },
+    {
+      "id": "TS-57",
+      "feature": "FEAT-026",
+      "title": "Email + alias",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "emailAlias"
+    },
+    {
+      "id": "TS-58",
+      "feature": "FEAT-026",
+      "title": "Name korean+space",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "nameKorean"
+    },
+    {
+      "id": "TS-59",
+      "feature": "FEAT-026",
+      "title": "Email korean IME input",
+      "file": "specs/contact-form.spec.tsx",
+      "anchor": "emailKorean"
+    },
+    {
+      "id": "TS-60",
+      "feature": "FEAT-026",
+      "title": "Mobile virtual keyboard",
+      "file": "tests/e2e/contact.e2e.ts",
+      "anchor": "mobileKeyboard"
+    },
+    {
+      "id": "TS-61",
+      "feature": "FEAT-013",
+      "title": "Keyboard-only nav",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "keyboardNav"
+    },
+    {
+      "id": "TS-62",
+      "feature": "FEAT-013",
+      "title": "Color contrast WCAG AA",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "axe"
+    },
+    {
+      "id": "TS-63",
+      "feature": "FEAT-019",
+      "title": "SEO meta + JSON-LD",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "seo"
+    },
+    {
+      "id": "TS-64",
+      "feature": "FEAT-019",
+      "title": "Open Graph image",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "og"
+    },
+    {
+      "id": "TS-65",
+      "feature": "FEAT-029",
+      "title": "404 page",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "notFound"
+    },
+    {
+      "id": "TS-66",
+      "feature": "FEAT-029",
+      "title": "Multi-page roundtrip",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "roundtrip"
+    },
+    {
+      "id": "TS-67",
+      "feature": "FEAT-020",
+      "title": "Footer last-updated",
+      "file": "specs/footer.spec.tsx"
+    },
+    {
+      "id": "TS-68",
+      "feature": "FEAT-013",
+      "title": "Lighthouse 90/95/95/95",
+      "file": "lhci.config.js"
+    },
+    {
+      "id": "TS-69",
+      "feature": "FEAT-013",
+      "title": "Bundle audit",
+      "file": "scripts/audit-bundle.ts"
+    },
+    {
+      "id": "TS-70",
+      "feature": "FEAT-013",
+      "title": "Env fallback",
+      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "anchor": "envFallback"
+    },
+    {
+      "id": "TS-71",
+      "feature": "FEAT-030",
+      "title": "ChatRoot children order: MessageList → JumpToLatest → Carousel → Composer",
+      "file": "specs/components/chat-layout.spec.tsx",
+      "anchor": "rootOrder"
+    },
+    {
+      "id": "TS-72",
+      "feature": "FEAT-030",
+      "title": "Composer prominent rounded-3xl box + inline action row",
+      "file": "specs/components/composer.spec.tsx",
+      "anchor": "prominent"
+    },
+    {
+      "id": "TS-73",
+      "feature": "FEAT-030",
+      "title": "ModelSwitcher rendered inline inside Composer (not in Header)",
+      "file": "specs/components/model-switcher.test.tsx",
+      "anchor": "inline"
+    }
   ]
 }

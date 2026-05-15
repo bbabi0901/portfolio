@@ -1,0 +1,59 @@
+{
+  "project": "ai-portfolio",
+  "phase": "8-chat-layout-revamp",
+  "steps": [
+    {
+      "step": 0,
+      "name": "spec-and-docs",
+      "status": "completed",
+      "started_at": "2026-05-15T18:38:50+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "976f5691-1982-474c-bb22-acb2de57936b"
+        },
+        {
+          "attempt": 2,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "a63ee31f-eb9f-4fb3-a80b-e1430b8a3fd9"
+        },
+        {
+          "attempt": 3,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "9a9331c0-d3ef-42eb-adf0-ffea6eaa2ad2"
+        }
+      ],
+      "completed_at": "2026-05-15T18:50:00+0900",
+      "summary": "spec.json FEAT-030 + TS-71/72/73 (paths specs/components/) + version 0.2.0, docs/PAGES.md/UI_GUIDE.md/RESPONSIVE.md FEAT-030 절 추가 — chat 페이지 와이어프레임 갱신, Composer prominent box 토큰, ModelSwitcher 인라인 + compact 라벨 매트릭스."
+    },
+    {
+      "step": 1,
+      "name": "chat-layout-reorder",
+      "status": "completed",
+      "completed_at": "2026-05-15T18:50:00+0900",
+      "summary": "components/chat/ChatRoot.tsx children 순서 재배치: Header → scroll-area(MessageList+Greeting) → JumpToLatest wrapper → suggestion-wrapper(border-t) → Composer. specs/components/chat-layout.spec.tsx (TS-71 + TS-73 integration 3 cases) 신규."
+    },
+    {
+      "step": 2,
+      "name": "composer-redesign",
+      "status": "completed",
+      "completed_at": "2026-05-15T18:50:00+0900",
+      "summary": "components/chat/Composer.tsx 재설계: rounded-3xl border-neutral-700 bg-neutral-900/40 shadow hairline + focus-within border-neutral-500 + textarea 투명 배경 + 액션 row (좌 leftAction slot, 우 counter + size-8/9 rounded-full Send) + forwardRef + 새 leftAction prop + IME 3중 체크 + safe-area 보존. placeholder '메시지를 입력하세요 — 김윤수에게 직접 물어보세요'. specs/components/composer.spec.tsx TS-72 5 케이스 추가."
+    },
+    {
+      "step": 3,
+      "name": "model-switcher-inline",
+      "status": "completed",
+      "completed_at": "2026-05-15T18:50:00+0900",
+      "summary": "components/chat/ModelSwitcher.tsx 인라인 pill 스타일 (rounded-full h-8 bg-transparent border-neutral-700 hover-neutral-500 text-xs text-neutral-300) + compact prop (short labels 'GPT-4o'/'Haiku'/'Gemini') + toShortLabel/toLongLabel helper. ChatRoot 가 useSyncExternalStore 로 matchMedia 구독 (SSR-safe + react-hooks/set-state-in-effect 회피) + Composer.leftAction 으로 주입. Header 의 ModelSwitcher 제거. specs/components/model-switcher.test.tsx TS-73 4 케이스 추가."
+    }
+  ],
+  "created_at": "2026-05-15T18:38:50+0900"
+}
