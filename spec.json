@@ -1094,9 +1094,9 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/chat-layout.spec.tsx",
-        "specs/composer.spec.tsx",
-        "specs/model-switcher.spec.tsx"
+        "specs/components/chat-layout.spec.tsx",
+        "specs/components/composer.spec.tsx",
+        "specs/components/model-switcher.test.tsx"
       ],
       "dependencies": [
         "FEAT-001",
@@ -1585,21 +1585,21 @@
       "id": "TS-71",
       "feature": "FEAT-030",
       "title": "ChatRoot children order: MessageList → JumpToLatest → Carousel → Composer",
-      "file": "specs/chat-layout.spec.tsx",
+      "file": "specs/components/chat-layout.spec.tsx",
       "anchor": "rootOrder"
     },
     {
       "id": "TS-72",
       "feature": "FEAT-030",
       "title": "Composer prominent rounded-3xl box + inline action row",
-      "file": "specs/composer.spec.tsx",
+      "file": "specs/components/composer.spec.tsx",
       "anchor": "prominent"
     },
     {
       "id": "TS-73",
       "feature": "FEAT-030",
       "title": "ModelSwitcher rendered inline inside Composer (not in Header)",
-      "file": "specs/model-switcher.spec.tsx",
+      "file": "specs/components/model-switcher.test.tsx",
       "anchor": "inline"
     }
   ]

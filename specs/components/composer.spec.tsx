@@ -174,10 +174,10 @@ describe("Composer", () => {
       expect(form!.className).toMatch(/safe-area-inset-bottom/);
     });
 
-    it("placeholder 기본값은 '메시지를 입력하세요…'", () => {
+    it("placeholder 기본값은 FEAT-030 의 prominent 문구", () => {
       setup();
       expect(
-        screen.getByPlaceholderText("메시지를 입력하세요…"),
+        screen.getByPlaceholderText(/김윤수에게 직접 물어보세요/),
       ).toBeInTheDocument();
     });
 
@@ -186,6 +186,50 @@ describe("Composer", () => {
       expect(
         screen.getByPlaceholderText("무엇이든 물어보세요"),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe("Composer prominent box (TS-72, FEAT-030)", () => {
+    it("외곽 form 에 rounded-3xl + border-neutral-700 + bg-neutral-900/40", () => {
+      const { container } = setup();
+      const form = container.querySelector('form[data-slot="composer"]');
+      expect(form).not.toBeNull();
+      const cls = form?.className ?? "";
+      expect(cls).toMatch(/rounded-3xl/);
+      expect(cls).toMatch(/border-neutral-700/);
+      expect(cls).toMatch(/bg-neutral-900\/40/);
+    });
+
+    it("focus-within 시 border-neutral-500 + bg-neutral-900/60", () => {
+      const { container } = setup();
+      const cls = container.querySelector("form")?.className ?? "";
+      expect(cls).toMatch(/focus-within:border-neutral-500/);
+      expect(cls).toMatch(/focus-within:bg-neutral-900\/60/);
+    });
+
+    it("Send 버튼: aria-label '메시지 전송' + rounded-full + size-8 md:size-9", () => {
+      const { container } = setup({ value: "hi" });
+      const send = container.querySelector('button[aria-label="메시지 전송"]');
+      expect(send).not.toBeNull();
+      const cls = send?.className ?? "";
+      expect(cls).toMatch(/rounded-full/);
+      expect(cls).toMatch(/size-8/);
+      expect(cls).toMatch(/md:size-9/);
+    });
+
+    it("leftAction children 렌더 (ModelSwitcher slot)", () => {
+      const { getByTestId } = setup({
+        leftAction: <div data-testid="left-slot">model</div>,
+      });
+      expect(getByTestId("left-slot")).toBeInTheDocument();
+    });
+
+    it("액션 row 가 textarea 직하단에 있고 정렬: justify-between gap-2", () => {
+      const { container } = setup();
+      const actions = container.querySelector('[data-slot="composer-actions"]');
+      expect(actions).not.toBeNull();
+      expect(actions?.className).toMatch(/justify-between/);
+      expect(actions?.className).toMatch(/gap-2/);
     });
   });
 });
