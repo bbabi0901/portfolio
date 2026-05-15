@@ -2,9 +2,52 @@
   "project": "ai-portfolio",
   "phase": "8-chat-layout-revamp",
   "steps": [
-    { "step": 0, "name": "spec-and-docs", "status": "pending" },
-    { "step": 1, "name": "chat-layout-reorder", "status": "pending" },
-    { "step": 2, "name": "composer-redesign", "status": "pending" },
-    { "step": 3, "name": "model-switcher-inline", "status": "pending" }
-  ]
+    {
+      "step": 0,
+      "name": "spec-and-docs",
+      "status": "error",
+      "started_at": "2026-05-15T18:38:50+0900",
+      "attempts": [
+        {
+          "attempt": 1,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "976f5691-1982-474c-bb22-acb2de57936b"
+        },
+        {
+          "attempt": 2,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "a63ee31f-eb9f-4fb3-a80b-e1430b8a3fd9"
+        },
+        {
+          "attempt": 3,
+          "elapsed_sec": 0,
+          "exit_code": 1,
+          "cost_usd": 0,
+          "session_id": "9a9331c0-d3ef-42eb-adf0-ffea6eaa2ad2"
+        }
+      ],
+      "error_message": "[3회 시도 후 실패] Step did not update status",
+      "failed_at": "2026-05-15T18:39:09+0900"
+    },
+    {
+      "step": 1,
+      "name": "chat-layout-reorder",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "composer-redesign",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "model-switcher-inline",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-05-15T18:38:50+0900"
 }
