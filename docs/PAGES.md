@@ -34,22 +34,28 @@
 
 ## `/` 채팅 (대화)
 
-### 와이어프레임 (모바일)
+### 와이어프레임 (모바일, FEAT-030 갱신)
 ```
 ┌────────────────────────┐
-│ Header                 │
-├────────────────────────┤
-│ [질문1][질문2][질문3]→  │  Carousel (sticky)
+│ Header  [≡]            │  ModelSwitcher 는 Header 에서 제거
 ├────────────────────────┤
 │                        │
 │   AI: 안녕하세요! ... │
 │   ↑ greeting (sim)     │
 │                        │
-│                        │
+│   [↓ 최신으로]          │  JumpToLatestButton (sticky bottom)
 ├────────────────────────┤
-│ [입력창          ] [↵] │
+│ [질문1][질문2][질문3]→  │  Carousel (Composer 직상단, 넛지)
+├────────────────────────┤
+│ ╭────────────────────╮ │  Composer (rounded-3xl 큰 박스)
+│ │ 메시지를 입력하…    │ │
+│ │                    │ │
+│ │ [Opus 4.7 ▾] [⤴]   │ │  좌하단 ModelSwitcher / 우하단 Send
+│ ╰────────────────────╯ │
 └────────────────────────┘
 ```
+
+**순서 (FEAT-030, TS-71)**: `Header → MessageList(scroll-area, flex-1) → JumpToLatestButton(sticky) → SuggestionCarousel → Composer`.
 
 ### 데이터
 - `public/data/suggestions.json` (RSC fetch → Client에 전달)

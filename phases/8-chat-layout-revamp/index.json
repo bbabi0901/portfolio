@@ -1,0 +1,10 @@
+{
+  "project": "ai-portfolio",
+  "phase": "8-chat-layout-revamp",
+  "steps": [
+    { "step": 0, "name": "spec-and-docs", "status": "pending" },
+    { "step": 1, "name": "chat-layout-reorder", "status": "pending" },
+    { "step": 2, "name": "composer-redesign", "status": "pending" },
+    { "step": 3, "name": "model-switcher-inline", "status": "pending" }
+  ]
+}

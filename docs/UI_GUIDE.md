@@ -74,11 +74,31 @@ rounded-lg bg-neutral-900 border border-neutral-800 px-4 py-3 text-sm text-white
 placeholder:text-neutral-500 focus:outline-none focus:border-neutral-600
 ```
 
-### Textarea (Composer)
+### Composer 외곽 박스 (FEAT-030, ChatGPT/Claude 류 prominent)
 ```
-min-h-[44px] max-h-[160px] resize-none w-full bg-neutral-900 border border-neutral-800
-rounded-lg px-4 py-3 text-sm leading-relaxed
-focus:outline-none focus:border-neutral-600
+form: rounded-3xl border border-neutral-700 bg-neutral-900/40 px-4 py-3
+      shadow-[0_0_0_1px_rgba(255,255,255,0.04)] transition-colors
+      focus-within:border-neutral-500 focus-within:bg-neutral-900/60
+      pb-[env(safe-area-inset-bottom)]
+```
+
+### Composer textarea (FEAT-021 IME, FEAT-030)
+```
+w-full resize-none bg-transparent text-[15px] md:text-sm text-white
+placeholder:text-neutral-500 outline-none
+min-h-[24px] max-h-[160px] leading-relaxed
+```
+
+### Composer 하단 액션 row (FEAT-030)
+```
+flex items-center justify-between gap-2 pt-2
+  좌: ModelSwitcher 인라인 (lib children prop). Button ghost size-sm + lucide ChevronDown.
+  우: Send Button — rounded-full size-9. 우선순위 시각적 단일 primary.
+```
+
+### Suggestion Carousel wrapper (FEAT-003, FEAT-030 위치 변경)
+```
+border-t border-neutral-900 py-3   # 이제 Composer 직상단, 위쪽 경계
 ```
 
 ### 메시지 버블
