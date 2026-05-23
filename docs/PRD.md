@@ -130,8 +130,7 @@
 - **Phase 7**: 배포 + README/CONTENT_GUIDE 사용자 안내
 
 ## 오픈 이슈 (Phase 1 진입 전 확정)
-- 노션 "Q&A 피드백" DB 위치/이름 (제안: `기록v2 / 📝 Q&A 피드백`).
-- 노션 "Contact" DB 위치/이름 (제안: `기록v2 / 📨 Contact`).
+- 노션 Q&A 피드백·Contact DB 최종 위치 → ✅ 확정. `기록 / 프로젝트 / 대화형 포트폴리오` row 하위. 상세는 [`NOTION_STRUCTURE.md`](./NOTION_STRUCTURE.md).
 - LinkedIn URL 등 외부 프로필.
 - 도메인 (yoonsoo.dev / portfolio.yoonsoo.dev).
 - 첫 인사 텍스트 최종 문구.
