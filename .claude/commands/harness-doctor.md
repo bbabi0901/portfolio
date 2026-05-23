@@ -39,3 +39,6 @@ INFO  lock present       phases/harness-refinement/.lock (pid 12345 alive)
 ```
 
 마지막에 FAIL/WARN 개수 요약. 자동 복구 금지 — 사용자가 직접 결정.
+
+---
+Agent profile: see [`docs/agents/harness-doctor.md`](../../docs/agents/harness-doctor.md) for inputs/outputs/tools/guardrails/AC.

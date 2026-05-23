@@ -1,5 +1,12 @@
 # 아키텍처
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, PRD.md, ADR.md, spec.json
+**SSoT keys**: spec.architecture (디렉토리 / 런타임 / 데이터 흐름)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 디렉토리 구조 (확정)
 
 ```

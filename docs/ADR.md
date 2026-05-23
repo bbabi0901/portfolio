@@ -1,4 +1,10 @@
 # Architecture Decision Records
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, ARCHITECTURE.md, PRD.md
+**SSoT keys**: (없음 — 의사결정 로그 자체가 SSoT)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
 
 ## 철학
 MVP 속도 + 외부 의존성 최소 + 운영 부담 0 + 디테일은 spec.json으로 강제. 의사결정은 명시적으로 적고, 트레이드오프를 숨기지 않는다.

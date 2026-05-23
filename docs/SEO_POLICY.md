@@ -1,5 +1,12 @@
 # SEO Policy
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, PRD.md, NOTION_SCHEMA.md, PAGES.md
+**SSoT keys**: (없음 — SEO 정책 자체)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 사이트 정보
 - 사이트명: **Yoonsoo Kim — AI Portfolio**
 - 기본 URL: `https://yoonsoo.dev` (배포 후 확정)

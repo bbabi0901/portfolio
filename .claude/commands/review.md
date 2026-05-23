@@ -26,3 +26,6 @@
 | 빌드 가능 | ✅/❌ | {상세} |
 
 위반 사항이 있으면 수정 방안을 구체적으로 제시하라.
+
+---
+Agent profile: see [`docs/agents/review.md`](../../docs/agents/review.md) for inputs/outputs/tools/guardrails/AC.

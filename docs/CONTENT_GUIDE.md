@@ -1,5 +1,12 @@
 # Content Guide (소유자용)
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, PRD.md, NOTION_SCHEMA.md, AI_CONTRACT.md
+**SSoT keys**: (없음 — 콘텐츠 운영 정책 자체)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 본 문서는 김윤수(소유자)가 노션 콘텐츠를 어떻게 작성/관리하면 사이트 답변 품질이 좋아지는지에 대한 가이드. 사용자가 보는 문서가 아님.
 
 ## 한 줄 요약
