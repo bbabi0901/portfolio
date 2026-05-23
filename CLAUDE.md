@@ -2,6 +2,7 @@
 
 > 채용 담당자/동료 개발자가 자연어로 김윤수의 커리어·프로젝트·기술을 물어보면, 노션 기록 기반으로 답하는 사이트.
 > 본 문서는 코드베이스 작업의 최우선 규칙. 충돌 시 본 문서가 docs/ 보다 우선한다.
+> Agent entry point: [AGENTS.md](AGENTS.md) — table of contents · role 매핑. 깊은 spec 은 `docs/agents/` 에.
 
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript strict
@@ -37,6 +38,17 @@
 ## 개발 프로세스
 - CRITICAL: 새 기능 구현 시 반드시 (1) spec.json `features[]`에 FEAT-XXX 등록 → (2) 실패 테스트 작성 → (3) 통과 구현. (TDD + SDD)
 - CRITICAL: 사용자에게 보이는 변경은 docs/TEST_SCENARIOS.md의 TS-XX와 매핑되어야 함.
+- **CRITICAL (사용자 명시): 사용자/기획자가 새 기능·디자인·UX·규칙·이슈 fix 를 요청할 때마다 그 변경을 적절한 SSoT 파일에 즉시 기록한다.** PR 머지 전 self-check 의무. 기록 매핑:
+  - **기능 / 동작**: `spec.json` features[] (FEAT-XXX) + testScenarios[] (TS-NN, file 경로 매핑) + version bump
+  - **아키텍처 / 기술 결정**: `docs/ADR.md` (ADR-XXX) + 본 `CLAUDE.md` 의 기술 스택 절
+  - **UI/UX 디테일** (색·간격·말풍선·아바타 등): `docs/UI_GUIDE.md` 토큰 절 + `docs/PAGES.md` 와이어프레임
+  - **반응형**: `docs/RESPONSIVE.md` 표
+  - **노션 schema**: `docs/NOTION_SCHEMA.md`
+  - **SEO/OG**: `docs/SEO_POLICY.md`
+  - **에러 / 봇 보호 / edge case**: `spec.json` errorPolicies[] / edgeCasePolicies[]
+  - **작업 분할**: `phases/{task}/index.json` + `phases/{task}/step{N}.md`
+  - **Agent 정의 / 워크플로우 변경**: `AGENTS.md` 의 Agents 디렉토리 표 + `docs/agents/*.md` (각 agent 의 spec)
+  - dev 서버에서 즉답으로 변경하면서 spec/docs 누락한 채 commit/push 금지. 시간 절약 명목으로도.
 - 커밋 메시지는 conventional commits (feat:, fix:, docs:, refactor:, test:, chore:).
 - PR은 `npm run check:spec`, `npm run lint`, `npm run test`가 통과해야 머지.
 - 노션 콘텐츠 변경 → 다음 빌드시 자동 반영. 수동 동기화는 `npm run sync:notion`.
