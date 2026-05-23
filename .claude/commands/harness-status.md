@@ -34,3 +34,6 @@
    - blocked 가 있으면: "차단 사유 해결 후 status 를 'pending' 으로 바꾸고 blocked_reason 삭제, 재실행."
 
 이 명령은 정보 출력만 한다. 자동 복구·정리를 시도하지 마라. 사용자가 결정할 수 있도록 안내만.
+
+---
+Agent profile: see [`docs/agents/harness-status.md`](../../docs/agents/harness-status.md) for inputs/outputs/tools/guardrails/AC.

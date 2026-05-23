@@ -156,3 +156,6 @@ execute.py가 자동으로 처리하는 것:
 - **status 가 `pending` 인 채로 종료된 경우**: execute.py 의 retry 카운터는 0으로 리셋되므로 그대로 재실행하면 처음부터 attempt 1. `started_at` 은 보존되어 첫 시작 시각이 유지된다.
 
 여러 task 동시 진행: phase 디렉토리만 다르면 `feat-{task-name}` 브랜치, `phases/{task}/.lock`, `phases/{task}/index.json` 모두 분리된다. 두 task 를 별도 터미널에서 동시 실행해도 안전.
+
+---
+Agent profile: see [`docs/agents/harness.md`](../../docs/agents/harness.md) for inputs/outputs/tools/guardrails/AC.
