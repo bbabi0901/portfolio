@@ -1,5 +1,12 @@
 # Test Scenarios (사용자 플로우 기반)
 
+<!-- agents-md-meta -->
+**Owner agent**: qa-runner (Virtual → 현재 harness) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, TESTING.md, PAGES.md, spec.json
+**SSoT keys**: spec.testScenarios (TS-XX 매핑)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 각 시나리오는 `TS-XX`로 식별되며 `spec.json testScenarios[]`에 등록된다. 시나리오는 Given/When/Then 구조 + 매핑 파일로 관리.
 
 ## 페르소나

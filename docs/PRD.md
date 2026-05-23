@@ -1,5 +1,12 @@
 # PRD: AI Portfolio (김윤수 대화형 포트폴리오)
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, spec.json, ARCHITECTURE.md, ADR.md, PAGES.md
+**SSoT keys**: spec.service, spec.features (제품 비전)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 목표
 방문자가 채팅 한 번으로 김윤수의 커리어·프로젝트·기술을 노션 기록 기반으로 정확하게 이해할 수 있는 사이트.
 

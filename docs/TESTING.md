@@ -1,5 +1,12 @@
 # Testing Guide (TDD)
 
+<!-- agents-md-meta -->
+**Owner agent**: qa-runner (Virtual → 현재 harness) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, TEST_SCENARIOS.md, spec.json
+**SSoT keys**: spec.features.tests (파일 경로 매핑)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 원칙
 - **TDD**: 코드 변경 전에 실패 테스트를 작성한다. Red → Green → Refactor.
 - **SDD 연계**: spec.json `features[].tests`에 명시된 테스트 파일이 실제 존재해야 한다. `npm run check:spec`이 검증.

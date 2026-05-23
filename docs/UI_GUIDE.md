@@ -1,5 +1,12 @@
 # UI 디자인 가이드
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, PRD.md, PAGES.md, RESPONSIVE.md
+**SSoT keys**: spec.designTokens (UI 토큰)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 디자인 원칙
 1. **도구처럼 보여야 한다**. 마케팅 페이지 아님. 매일 쓰는 대시보드 같은 느낌.
 2. **콘텐츠가 주인공**. 장식은 최소. 무채색 + 포인트 1색.

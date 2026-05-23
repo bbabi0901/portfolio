@@ -1,5 +1,12 @@
 # Responsive Design Policy
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, UI_GUIDE.md, PAGES.md
+**SSoT keys**: spec.responsive.breakpoints, spec.responsive.maxW, spec.responsive.deviceMatrix
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## Breakpoints (Tailwind 기본)
 | 토큰 | min-width | 의도 |
 |---|---|---|

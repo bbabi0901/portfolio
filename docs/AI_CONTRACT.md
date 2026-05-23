@@ -1,5 +1,12 @@
 # AI Contract
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, PRD.md, CONTENT_GUIDE.md, NOTION_SCHEMA.md
+**SSoT keys**: spec.service.greeting, spec.errorPolicies, spec.suggestedQuestions
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 본 문서는 채팅 AI의 행동 규약. 시스템 프롬프트 전문, 모델 파라미터, 인젝션 방어, 답변 톤을 정의한다.
 
 ## 시스템 프롬프트 (현재 v1.0)

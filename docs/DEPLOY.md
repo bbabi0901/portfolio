@@ -1,5 +1,12 @@
 # Vercel 배포 가이드
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CLAUDE.md, ADR.md, NOTION_SCHEMA.md
+**SSoT keys**: (없음 — 배포 정책 자체)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 > 본 문서는 김윤수 AI Portfolio 의 Vercel 배포 절차와 환경변수 설정을 한 화면에 모은 운영자용 SSoT.
 
 ## 1. GitHub 연결

@@ -1,5 +1,12 @@
 # Pages — 와이어프레임 / 콘텐츠 / 엣지
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, PRD.md, UI_GUIDE.md, RESPONSIVE.md, AI_CONTRACT.md
+**SSoT keys**: spec.pages, spec.forms, spec.features (UI 매핑)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 공통 layout (`app/layout.tsx`)
 
 ```

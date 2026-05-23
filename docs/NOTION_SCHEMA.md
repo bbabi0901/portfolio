@@ -1,5 +1,12 @@
 # Notion Schema & Sync Policy
 
+<!-- agents-md-meta -->
+**Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
+**Related**: AGENTS.md, CONTENT_GUIDE.md, AI_CONTRACT.md, DEPLOY.md
+**SSoT keys**: (외부 — Notion DB 스키마)
+**Last verified**: 2026-05-23 — 사용자 (김윤수)
+<!-- /agents-md-meta -->
+
 ## 데이터 소스 구조
 
 ```
