@@ -36,9 +36,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
         </div>
       </header>
 
-      {project.impact ? (
-        <p className="text-sm text-neutral-300">{project.impact}</p>
-      ) : null}
+      {project.impact ? <p className="text-sm text-neutral-300">{project.impact}</p> : null}
 
       {project.techKeywords.length > 0 ? (
         <ul className="flex flex-wrap gap-1.5">

@@ -120,10 +120,7 @@ function loadSuggestedQuestions(): SuggestedQuestionMeta[] {
   }
 }
 
-function extractProfile(
-  pages: NotionPageContent[],
-  profileIds: Set<string>,
-): PortfolioProfile {
+function extractProfile(pages: NotionPageContent[], profileIds: Set<string>): PortfolioProfile {
   const profile: PortfolioProfile = {
     name: PROFILE_FALLBACK_NAME,
     oneLiner: PROFILE_FALLBACK_ONELINER,

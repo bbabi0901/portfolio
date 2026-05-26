@@ -61,10 +61,7 @@ describe("GreetingPlayer", () => {
   it("config.message 빈 문자열 → null 렌더 + onComplete 미호출", () => {
     const onComplete = vi.fn();
     const { container } = render(
-      <GreetingPlayer
-        config={{ ...baseConfig, message: "   " }}
-        onComplete={onComplete}
-      />,
+      <GreetingPlayer config={{ ...baseConfig, message: "   " }} onComplete={onComplete} />,
     );
     expect(container.querySelector('[data-slot="message-bubble"]')).toBeNull();
     act(() => {
@@ -94,9 +91,7 @@ describe("GreetingPlayer", () => {
   it("prefers-reduced-motion → 즉시 done + 정적 표시", () => {
     mockMatchMedia((q) => q === "(prefers-reduced-motion: reduce)");
     const onComplete = vi.fn();
-    const { container } = render(
-      <GreetingPlayer config={baseConfig} onComplete={onComplete} />,
-    );
+    const { container } = render(<GreetingPlayer config={baseConfig} onComplete={onComplete} />);
     expect(onComplete).toHaveBeenCalledTimes(1);
     const bubble = container.querySelector('[data-slot="message-bubble"]');
     expect(bubble).not.toBeNull();
@@ -150,11 +145,7 @@ describe("GreetingPlayer", () => {
   it("fastForwardSignal 변경 → 즉시 done + storage 기록", () => {
     const onComplete = vi.fn();
     const { rerender, container } = render(
-      <GreetingPlayer
-        config={baseConfig}
-        onComplete={onComplete}
-        fastForwardSignal={0}
-      />,
+      <GreetingPlayer config={baseConfig} onComplete={onComplete} fastForwardSignal={0} />,
     );
 
     // Mid-simulation: still in dots/streaming
@@ -165,13 +156,7 @@ describe("GreetingPlayer", () => {
     expect(onComplete).not.toHaveBeenCalled();
 
     // Trigger fast-forward
-    rerender(
-      <GreetingPlayer
-        config={baseConfig}
-        onComplete={onComplete}
-        fastForwardSignal={1}
-      />,
-    );
+    rerender(<GreetingPlayer config={baseConfig} onComplete={onComplete} fastForwardSignal={1} />);
 
     expect(onComplete).toHaveBeenCalledTimes(1);
     const bubble = container.querySelector('[data-slot="message-bubble"]');
@@ -233,9 +218,7 @@ describe("GreetingPlayer", () => {
     localStorage.setItem(STORAGE_KEY, String(past));
 
     const onComplete = vi.fn();
-    const { container } = render(
-      <GreetingPlayer config={baseConfig} onComplete={onComplete} />,
-    );
+    const { container } = render(<GreetingPlayer config={baseConfig} onComplete={onComplete} />);
 
     // Should NOT immediately complete (must run simulation)
     expect(onComplete).not.toHaveBeenCalled();

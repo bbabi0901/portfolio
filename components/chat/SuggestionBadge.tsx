@@ -26,7 +26,7 @@ export function SuggestionBadge({
       className={cn(
         "shrink-0 rounded-full border border-neutral-800 bg-transparent px-3 py-1.5 text-xs text-neutral-300",
         "hover:border-neutral-600 hover:text-white",
-        "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400",
+        "focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none",
         "transition-colors",
         visited && "opacity-60",
         className,

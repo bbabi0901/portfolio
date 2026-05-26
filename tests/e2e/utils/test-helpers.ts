@@ -25,6 +25,8 @@ export async function openSideMenu(page: Page): Promise<void> {
 
 /** 마지막 어시스턴트 메시지 텍스트 추출. */
 export async function getLastAssistantText(page: Page): Promise<string> {
-  const messages = page.locator('[role="log"] [data-role="assistant"], [role="log"] article').last();
+  const messages = page
+    .locator('[role="log"] [data-role="assistant"], [role="log"] article')
+    .last();
   return (await messages.textContent()) ?? "";
 }

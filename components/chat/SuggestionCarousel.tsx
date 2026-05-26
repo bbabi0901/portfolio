@@ -36,10 +36,7 @@ export function SuggestionCarousel({
     >
       <CarouselContent className="-ml-2">
         {questions.map((q) => (
-          <CarouselItem
-            key={q.id}
-            className="basis-[80%] pl-2 md:basis-1/2 lg:basis-1/3"
-          >
+          <CarouselItem key={q.id} className="basis-[80%] pl-2 md:basis-1/2 lg:basis-1/3">
             <SuggestionBadge
               text={q.text}
               category={q.category}

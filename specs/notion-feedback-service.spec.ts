@@ -3,11 +3,7 @@ import { http, HttpResponse } from "msw";
 
 import { server } from "@/tests/msw/server";
 import { clearEnvCache } from "@/lib/env";
-import {
-  appendFeedback,
-  chunkRichText,
-  hashUserAgent,
-} from "@/services/notion-feedback";
+import { appendFeedback, chunkRichText, hashUserAgent } from "@/services/notion-feedback";
 import type { FeedbackInput } from "@/types/feedback";
 
 const ENV_KEYS = ["NOTION_TOKEN", "NOTION_FEEDBACK_DB_ID", "MOCK_NOTION"] as const;
@@ -35,10 +31,7 @@ const baseInput: FeedbackInput = {
   reason: "incomplete",
   reasonDetail: "더 자세히 알고 싶어요",
   model: "gpt-4o-mini",
-  retrievalChunkTitles: [
-    "Micro-Frontend Architecture 마이그레이션 TF",
-    "Bidirectional Federation",
-  ],
+  retrievalChunkTitles: ["Micro-Frontend Architecture 마이그레이션 TF", "Bidirectional Federation"],
   uaHash: "abcd1234",
 };
 
@@ -128,9 +121,7 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
 
   it("정상 응답 → ok=true + notionPageId 반환", async () => {
     server.use(
-      http.post("https://api.notion.com/v1/pages", () =>
-        HttpResponse.json({ id: "page-123" }),
-      ),
+      http.post("https://api.notion.com/v1/pages", () => HttpResponse.json({ id: "page-123" })),
     );
 
     const res = await appendFeedback(baseInput);
@@ -156,7 +147,15 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
     expect(body.parent.database_id).toBe("db_id_test");
     expect(body.properties).toBeDefined();
 
-    const props = body.properties as Record<string, { title?: unknown[]; rich_text?: unknown[]; select?: { name: string }; status?: { name: string } }>;
+    const props = body.properties as Record<
+      string,
+      {
+        title?: unknown[];
+        rich_text?: unknown[];
+        select?: { name: string };
+        status?: { name: string };
+      }
+    >;
     // Title
     expect(Array.isArray(props.Title!.title)).toBe(true);
     // Question + Answer rich_text
@@ -232,9 +231,11 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
     const { reasonDetail: _omit, ...rest } = baseInput;
     void _omit;
     await appendFeedback(rest);
-    const props = (captured! as {
-      properties: Record<string, { rich_text: unknown[] }>;
-    }).properties;
+    const props = (
+      captured! as {
+        properties: Record<string, { rich_text: unknown[] }>;
+      }
+    ).properties;
     expect(props.ReasonDetail!.rich_text).toEqual([]);
   });
 
@@ -248,9 +249,11 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
     );
     const long = "가".repeat(3000);
     await appendFeedback({ ...baseInput, question: long });
-    const props = (captured! as {
-      properties: Record<string, { rich_text: unknown[] }>;
-    }).properties;
+    const props = (
+      captured! as {
+        properties: Record<string, { rich_text: unknown[] }>;
+      }
+    ).properties;
     expect(props.Question!.rich_text).toHaveLength(2);
   });
 
@@ -264,9 +267,11 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
     );
     const long = "ㅏ".repeat(150);
     await appendFeedback({ ...baseInput, question: long });
-    const props = (captured! as {
-      properties: Record<string, { title: Array<{ text: { content: string } }> }>;
-    }).properties;
+    const props = (
+      captured! as {
+        properties: Record<string, { title: Array<{ text: { content: string } }> }>;
+      }
+    ).properties;
     expect(props.Title!.title[0]!.text.content.length).toBeLessThanOrEqual(100);
   });
 
@@ -308,8 +313,9 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
 
   it("500 → reason='unknown'", async () => {
     server.use(
-      http.post("https://api.notion.com/v1/pages", () =>
-        new HttpResponse("server error", { status: 500 }),
+      http.post(
+        "https://api.notion.com/v1/pages",
+        () => new HttpResponse("server error", { status: 500 }),
       ),
     );
     const res = await appendFeedback(baseInput);
@@ -348,8 +354,9 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
 
   it("error message 에 NOTION_TOKEN 누설 X", async () => {
     server.use(
-      http.post("https://api.notion.com/v1/pages", () =>
-        new HttpResponse("server error", { status: 500 }),
+      http.post(
+        "https://api.notion.com/v1/pages",
+        () => new HttpResponse("server error", { status: 500 }),
       ),
     );
     const res = await appendFeedback(baseInput);

@@ -1,12 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { http, HttpResponse } from "msw";
 import { server } from "@/tests/msw/server";
-import {
-  checkRateLimit,
-  clearRateLimitMemory,
-  getClientIp,
-  hashIp,
-} from "@/lib/rate-limit";
+import { checkRateLimit, clearRateLimitMemory, getClientIp, hashIp } from "@/lib/rate-limit";
 import { clearEnvCache } from "@/lib/env";
 
 const UPSTASH_URL = "https://test.upstash.io";
@@ -61,7 +56,12 @@ describe("checkRateLimit (memory fallback)", () => {
     }
     const denied = await checkRateLimit({ key: "kw", limit: 3, windowSeconds: 60, now: t0 + 4 });
     expect(denied.ok).toBe(false);
-    const allowed = await checkRateLimit({ key: "kw", limit: 3, windowSeconds: 60, now: t0 + 60_001 });
+    const allowed = await checkRateLimit({
+      key: "kw",
+      limit: 3,
+      windowSeconds: 60,
+      now: t0 + 60_001,
+    });
     expect(allowed.ok).toBe(true);
   });
 
@@ -115,12 +115,7 @@ describe("checkRateLimit (Upstash)", () => {
   it("정상 응답 ZCARD < limit → ok", async () => {
     server.use(
       http.post(`${UPSTASH_URL}/pipeline`, () =>
-        HttpResponse.json([
-          { result: 0 },
-          { result: 1 },
-          { result: 1 },
-          { result: 1 },
-        ]),
+        HttpResponse.json([{ result: 0 }, { result: 1 }, { result: 1 }, { result: 1 }]),
       ),
     );
     const r = await checkRateLimit({ key: "u-ok", limit: 5, windowSeconds: 60 });
@@ -131,12 +126,7 @@ describe("checkRateLimit (Upstash)", () => {
   it("ZCARD >= limit → deny + retryAfter > 0", async () => {
     server.use(
       http.post(`${UPSTASH_URL}/pipeline`, () =>
-        HttpResponse.json([
-          { result: 0 },
-          { result: 1 },
-          { result: 5 },
-          { result: 1 },
-        ]),
+        HttpResponse.json([{ result: 0 }, { result: 1 }, { result: 5 }, { result: 1 }]),
       ),
     );
     const r = await checkRateLimit({ key: "u-deny", limit: 5, windowSeconds: 60 });
@@ -156,12 +146,7 @@ describe("checkRateLimit (Upstash)", () => {
           auth: request.headers.get("authorization"),
           body: await request.json(),
         };
-        return HttpResponse.json([
-          { result: 0 },
-          { result: 1 },
-          { result: 2 },
-          { result: 1 },
-        ]);
+        return HttpResponse.json([{ result: 0 }, { result: 1 }, { result: 2 }, { result: 1 }]);
       }),
     );
     await checkRateLimit({ key: "u-headers", limit: 10, windowSeconds: 60, now: 9_000_000_000 });
@@ -190,9 +175,7 @@ describe("checkRateLimit (Upstash)", () => {
   });
 
   it("Upstash 네트워크 에러 → 메모리 폴백", async () => {
-    server.use(
-      http.post(`${UPSTASH_URL}/pipeline`, () => HttpResponse.error()),
-    );
+    server.use(http.post(`${UPSTASH_URL}/pipeline`, () => HttpResponse.error()));
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const r = await checkRateLimit({ key: "u-net", limit: 1, windowSeconds: 60 });
     expect(r.ok).toBe(true);

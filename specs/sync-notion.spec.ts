@@ -91,16 +91,12 @@ describe("sync-notion script", () => {
 
     const { main } = await import(SCRIPT_PATH);
     await main({ outDir: tmpDir });
-    const a = JSON.parse(
-      fs.readFileSync(path.join(tmpDir, "portfolio.server.json"), "utf8"),
-    );
+    const a = JSON.parse(fs.readFileSync(path.join(tmpDir, "portfolio.server.json"), "utf8"));
 
     const tmp2 = fs.mkdtempSync(path.join(os.tmpdir(), "sync-notion-test-"));
     try {
       await main({ outDir: tmp2 });
-      const b = JSON.parse(
-        fs.readFileSync(path.join(tmp2, "portfolio.server.json"), "utf8"),
-      );
+      const b = JSON.parse(fs.readFileSync(path.join(tmp2, "portfolio.server.json"), "utf8"));
       const idsA = a.chunks.map((c: { id: string }) => c.id);
       const idsB = b.chunks.map((c: { id: string }) => c.id);
       expect(idsA).toEqual(idsB);

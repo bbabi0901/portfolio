@@ -180,10 +180,7 @@ class Service implements NotionService {
     }
   }
 
-  async queryDatabase(
-    databaseId: string,
-    opts?: QueryDatabaseOptions,
-  ): Promise<NotionPageRef[]> {
+  async queryDatabase(databaseId: string, opts?: QueryDatabaseOptions): Promise<NotionPageRef[]> {
     const refs = this.mock
       ? await this.queryFromFixture(databaseId)
       : await this.queryFromApi(databaseId);
@@ -277,14 +274,11 @@ class Service implements NotionService {
     do {
       const body: Record<string, unknown> = {};
       if (cursor) body.start_cursor = cursor;
-      const res = await this.requestWithRetry(
-        `${NOTION_BASE}/v1/databases/${databaseId}/query`,
-        {
-          method: "POST",
-          headers: this.headers(),
-          body: JSON.stringify(body),
-        },
-      );
+      const res = await this.requestWithRetry(`${NOTION_BASE}/v1/databases/${databaseId}/query`, {
+        method: "POST",
+        headers: this.headers(),
+        body: JSON.stringify(body),
+      });
       if (res.status === 401 || res.status === 403) {
         throw new PermissionDenied(`queryDatabase ${databaseId}: ${res.status}`);
       }
@@ -392,9 +386,7 @@ class Service implements NotionService {
     return null;
   }
 
-  private async getPageContentFromFixture(
-    pageId: string,
-  ): Promise<NotionPageContent | null> {
+  private async getPageContentFromFixture(pageId: string): Promise<NotionPageContent | null> {
     const md = await this.readFixtureText(`page-${pageId}.md`);
     if (md === null) return null;
     const ref = (await this.getPageRefFromFixture(pageId)) ?? {

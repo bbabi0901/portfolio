@@ -53,9 +53,7 @@ function readPortfolio(inFile: string | undefined): PortfolioServerData {
 }
 
 function normalizeQuestionText(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[\s.,!?;:'"()[\]{}<>~`@#$%^&*\-_=+/\\|]+/g, "");
+  return text.toLowerCase().replace(/[\s.,!?;:'"()[\]{}<>~`@#$%^&*\-_=+/\\|]+/g, "");
 }
 
 function generateAutoQuestions(
@@ -205,8 +203,7 @@ const isDirectRun = (() => {
   if (!entry) return false;
   const resolved = path.resolve(entry);
   return (
-    resolved.endsWith("generate-suggestions.ts") ||
-    resolved.endsWith("generate-suggestions.js")
+    resolved.endsWith("generate-suggestions.ts") || resolved.endsWith("generate-suggestions.js")
   );
 })();
 

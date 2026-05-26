@@ -64,11 +64,7 @@ interface UpstashResp {
   error?: string;
 }
 
-async function upstashGet(
-  baseUrl: string,
-  token: string,
-  key: string,
-): Promise<number> {
+async function upstashGet(baseUrl: string, token: string, key: string): Promise<number> {
   const res = await fetch(`${baseUrl}/get/${encodeURIComponent(key)}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -116,11 +112,7 @@ export async function getTodayUsage(now?: number): Promise<number> {
   const key = getKstDayKey(now);
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
     try {
-      return await upstashGet(
-        env.UPSTASH_REDIS_REST_URL,
-        env.UPSTASH_REDIS_REST_TOKEN,
-        key,
-      );
+      return await upstashGet(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN, key);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "unknown";
       console.warn(`[token-budget] upstash get failed, falling back: ${msg}`);
@@ -129,14 +121,9 @@ export async function getTodayUsage(now?: number): Promise<number> {
   return memoryGet(key);
 }
 
-export async function addTokenUsage(
-  usage: TokenUsage,
-  now?: number,
-): Promise<void> {
+export async function addTokenUsage(usage: TokenUsage, now?: number): Promise<void> {
   const prompt = Number.isFinite(usage.promptTokens) ? usage.promptTokens : 0;
-  const completion = Number.isFinite(usage.completionTokens)
-    ? usage.completionTokens
-    : 0;
+  const completion = Number.isFinite(usage.completionTokens) ? usage.completionTokens : 0;
   const total = Math.max(0, Math.trunc(prompt + completion));
   if (total === 0) return;
 
@@ -162,9 +149,7 @@ export async function addTokenUsage(
   memoryAdd(key, total);
 }
 
-export async function checkDailyTokenBudget(
-  now?: number,
-): Promise<BudgetCheck> {
+export async function checkDailyTokenBudget(now?: number): Promise<BudgetCheck> {
   const env = getServerEnv();
   const ms = now ?? Date.now();
   const cap = env.MAX_TOKENS_PER_DAY;

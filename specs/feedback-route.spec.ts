@@ -6,11 +6,7 @@ import { server } from "@/tests/msw/server";
 import { clearEnvCache } from "@/lib/env";
 import { clearRateLimitMemory } from "@/lib/rate-limit";
 
-const ENV_KEYS = [
-  "NOTION_TOKEN",
-  "NOTION_FEEDBACK_DB_ID",
-  "MOCK_NOTION",
-] as const;
+const ENV_KEYS = ["NOTION_TOKEN", "NOTION_FEEDBACK_DB_ID", "MOCK_NOTION"] as const;
 
 const original: Record<string, string | undefined> = {};
 
@@ -195,9 +191,11 @@ describe("POST /api/node/feedback - real notion (msw)", () => {
     });
     expect(res.status).toBe(200);
     expect(capturedBody).not.toBeNull();
-    const props = (capturedBody! as {
-      properties: Record<string, { rich_text: Array<{ text: { content: string } }> }>;
-    }).properties;
+    const props = (
+      capturedBody! as {
+        properties: Record<string, { rich_text: Array<{ text: { content: string } }> }>;
+      }
+    ).properties;
     const uaHashChunks = props["UA hash"]!.rich_text;
     expect(uaHashChunks.length).toBeGreaterThan(0);
     const uaValue = uaHashChunks[0]!.text.content;
@@ -285,8 +283,9 @@ describe("POST /api/node/feedback - real notion (msw)", () => {
 
   it("response body 에 NOTION_TOKEN 누설 X (500 에러 시)", async () => {
     server.use(
-      http.post("https://api.notion.com/v1/pages", () =>
-        new HttpResponse("server error", { status: 500 }),
+      http.post(
+        "https://api.notion.com/v1/pages",
+        () => new HttpResponse("server error", { status: 500 }),
       ),
     );
     const res = await postFeedback(validBody);

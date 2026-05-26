@@ -5,9 +5,7 @@ import type { ChatMessage, Citation } from "@/types/chat";
 import { MessageBubble } from "@/components/chat/MessageBubble";
 import { MessageList } from "@/components/chat/MessageList";
 import { MessageActionsBar } from "@/components/chat/MessageActionsBar";
-import {
-  FeedbackButtons,
-} from "@/components/chat/FeedbackButtons";
+import { FeedbackButtons } from "@/components/chat/FeedbackButtons";
 import { FeedbackPopover } from "@/components/chat/FeedbackPopover";
 import { SourceCitation } from "@/components/chat/SourceCitation";
 
@@ -99,9 +97,7 @@ describe("MessageList", () => {
   });
 
   it("메시지가 0개이고 emptyState 가 있으면 emptyState 가 렌더된다", () => {
-    render(
-      <MessageList messages={[]} emptyState={<div data-testid="empty">없음</div>} />,
-    );
+    render(<MessageList messages={[]} emptyState={<div data-testid="empty">없음</div>} />);
     expect(screen.getByTestId("empty")).toBeInTheDocument();
   });
 
@@ -213,12 +209,7 @@ describe("MessageActionsBar", () => {
 describe("FeedbackButtons + FeedbackPopover", () => {
   it("alreadySent=true 이면 두 버튼이 모두 disabled 된다", () => {
     render(
-      <FeedbackButtons
-        messageId="m-1"
-        alreadySent={true}
-        onUp={() => {}}
-        onDownStart={() => {}}
-      />,
+      <FeedbackButtons messageId="m-1" alreadySent={true} onUp={() => {}} onDownStart={() => {}} />,
     );
     expect(screen.getByRole("button", { name: /도움이 됐어요/ })).toBeDisabled();
     expect(screen.getByRole("button", { name: /도움이 안 됐어요/ })).toBeDisabled();

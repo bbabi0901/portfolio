@@ -80,8 +80,18 @@ describe("buildSystemPrompt", () => {
   });
 
   it("여러 chunks 모두 직렬화 + 구분자 포함", () => {
-    const a = makeChunk({ id: "a::0", sourceTitle: "A", sourceUrl: "https://www.notion.so/a", text: "AAA" });
-    const b = makeChunk({ id: "b::0", sourceTitle: "B", sourceUrl: "https://www.notion.so/b", text: "BBB" });
+    const a = makeChunk({
+      id: "a::0",
+      sourceTitle: "A",
+      sourceUrl: "https://www.notion.so/a",
+      text: "AAA",
+    });
+    const b = makeChunk({
+      id: "b::0",
+      sourceTitle: "B",
+      sourceUrl: "https://www.notion.so/b",
+      text: "BBB",
+    });
     const out = buildSystemPrompt({ chunks: [a, b] });
     expect(out).toContain("AAA");
     expect(out).toContain("BBB");

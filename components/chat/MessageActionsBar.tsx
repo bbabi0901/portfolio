@@ -71,10 +71,7 @@ export function MessageActionsBar({
     <div
       data-slot="message-actions-bar"
       data-message-id={messageId}
-      className={cn(
-        "mt-2 flex flex-wrap items-center gap-2 text-neutral-500",
-        className,
-      )}
+      className={cn("mt-2 flex flex-wrap items-center gap-2 text-neutral-500", className)}
     >
       <button
         type="button"
@@ -84,7 +81,7 @@ export function MessageActionsBar({
         className={cn(
           "inline-flex items-center gap-1 rounded-md p-1.5 text-neutral-400",
           "hover:bg-neutral-900 hover:text-neutral-200",
-          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400",
+          "focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none",
           "transition-colors",
         )}
       >

@@ -51,11 +51,7 @@ export function ModelSwitcher({
   const label = compact ? toShortLabel(value) : toLongLabel(value);
 
   return (
-    <Select
-      value={value}
-      onValueChange={(v) => onChange(v as ModelId)}
-      disabled={disabled}
-    >
+    <Select value={value} onValueChange={(v) => onChange(v as ModelId)} disabled={disabled}>
       <SelectTrigger
         size="sm"
         aria-label="답변 모델 선택"
@@ -67,9 +63,7 @@ export function ModelSwitcher({
           className,
         )}
       >
-        <SelectValue placeholder={disabled ? "사용 가능한 모델 없음" : label}>
-          {label}
-        </SelectValue>
+        <SelectValue placeholder={disabled ? "사용 가능한 모델 없음" : label}>{label}</SelectValue>
       </SelectTrigger>
       <SelectContent className="border border-neutral-700 bg-neutral-900 text-neutral-200">
         {available.map((id) => (

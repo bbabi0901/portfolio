@@ -97,20 +97,10 @@ export function FeedbackPopover({
           />
         )}
         <div className="mt-4 flex justify-end gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => handleOpenChange(false)}
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => handleOpenChange(false)}>
             취소
           </Button>
-          <Button
-            type="button"
-            size="sm"
-            disabled={!canSubmit}
-            onClick={handleSubmit}
-          >
+          <Button type="button" size="sm" disabled={!canSubmit} onClick={handleSubmit}>
             제출
           </Button>
         </div>

@@ -47,7 +47,8 @@ test.describe("/contact (TS-43, TS-46, TS-49)", () => {
     // 인라인 에러 또는 disabled 동작
     const emailInput = page.locator('input[name="email"]');
     const isInvalid = await emailInput.evaluate(
-      (el: HTMLInputElement) => el.validity?.valid === false || el.getAttribute("aria-invalid") === "true",
+      (el: HTMLInputElement) =>
+        el.validity?.valid === false || el.getAttribute("aria-invalid") === "true",
     );
     expect(isInvalid).toBe(true);
   });

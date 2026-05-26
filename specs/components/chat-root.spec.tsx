@@ -105,11 +105,7 @@ const baseSuggestions: SuggestedQuestionMeta[] = [
   },
 ];
 
-const allModels: ModelId[] = [
-  "gpt-4o-mini",
-  "claude-3-5-haiku-latest",
-  "gemini-2.0-flash-exp",
-];
+const allModels: ModelId[] = ["gpt-4o-mini", "claude-3-5-haiku-latest", "gemini-2.0-flash-exp"];
 
 function renderChat(overrides: Partial<ChatRootProps> = {}) {
   const props: ChatRootProps = {
@@ -194,9 +190,7 @@ describe("ChatRoot", () => {
   it("availableModels=[] 시 ModelSwitcher disabled + 채팅 disabled + Composer placeholder 변경", () => {
     renderChat({ availableModels: [] });
     expect(screen.getByRole("combobox", { name: /답변 모델/ })).toBeDisabled();
-    expect(
-      screen.getByPlaceholderText("지금은 사용할 수 있는 모델이 없어요"),
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("지금은 사용할 수 있는 모델이 없어요")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /전송/ })).toBeDisabled();
   });
 
@@ -245,9 +239,7 @@ describe("ChatRoot", () => {
 
   it("status='submitted' → 마지막에 typing 메시지 추가", () => {
     mockState.status = "submitted";
-    mockState.messages = [
-      { id: "u1", role: "user", parts: [{ type: "text", text: "hi" }] },
-    ];
+    mockState.messages = [{ id: "u1", role: "user", parts: [{ type: "text", text: "hi" }] }];
     const { container } = renderChat();
     const bubbles = container.querySelectorAll('[data-slot="message-bubble"]');
     const last = bubbles[bubbles.length - 1];
@@ -282,23 +274,19 @@ describe("ChatRoot", () => {
     mockState.error = new Error("HTTP 429 retry-after:5");
     const { container } = renderChat();
     expect(container.querySelector('[data-slot="error-state"]')).not.toBeNull();
-    expect(container.querySelector('[data-slot="error-countdown"]')!.textContent).toMatch(
-      /5|4|3/,
-    );
+    expect(container.querySelector('[data-slot="error-countdown"]')!.textContent).toMatch(/5|4|3/);
   });
 
   it("transport 의 custom fetch: X-Model-Substitution 헤더 시 toast.warning 호출", async () => {
     renderChat();
     const tx = transportInstances[0];
     expect(tx?.fetch).toBeTypeOf("function");
-    const realFetch = vi
-      .spyOn(globalThis, "fetch")
-      .mockResolvedValue(
-        new Response("ok", {
-          status: 200,
-          headers: { "X-Model-Substitution": "true" },
-        }),
-      );
+    const realFetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response("ok", {
+        status: 200,
+        headers: { "X-Model-Substitution": "true" },
+      }),
+    );
     try {
       const res = await tx!.fetch!("/api/chat", { method: "POST" });
       expect(res).toBeInstanceOf(Response);
@@ -312,17 +300,13 @@ describe("ChatRoot", () => {
     renderChat();
     const tx = transportInstances[0];
     expect(tx?.fetch).toBeTypeOf("function");
-    const realFetch = vi
-      .spyOn(globalThis, "fetch")
-      .mockResolvedValue(
-        new Response("err", {
-          status: 503,
-        }),
-      );
+    const realFetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response("err", {
+        status: 503,
+      }),
+    );
     try {
-      await expect(tx!.fetch!("/api/chat", { method: "POST" })).rejects.toThrow(
-        /HTTP 503/,
-      );
+      await expect(tx!.fetch!("/api/chat", { method: "POST" })).rejects.toThrow(/HTTP 503/);
     } finally {
       realFetch.mockRestore();
     }

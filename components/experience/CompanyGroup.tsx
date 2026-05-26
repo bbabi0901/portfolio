@@ -18,9 +18,7 @@ export function CompanyGroup({ group, className }: CompanyGroupProps) {
     >
       <header className="flex flex-col gap-1 border-b border-neutral-900 pb-2">
         <h2 className="text-lg font-medium text-white">{group.company}</h2>
-        {group.period ? (
-          <p className="text-xs text-neutral-500">{group.period}</p>
-        ) : null}
+        {group.period ? <p className="text-xs text-neutral-500">{group.period}</p> : null}
       </header>
       <div className="flex flex-col gap-3">
         {group.projects.map((p) => (

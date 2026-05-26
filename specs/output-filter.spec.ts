@@ -1,16 +1,9 @@
 import { describe, it, expect } from "vitest";
-import {
-  filterOutput,
-  extractUrls,
-  isAllowedUrl,
-  PROMPT_LEAK_PATTERNS,
-} from "@/lib/output-filter";
+import { filterOutput, extractUrls, isAllowedUrl, PROMPT_LEAK_PATTERNS } from "@/lib/output-filter";
 
 describe("extractUrls", () => {
   it("markdown link [text](url) 추출", () => {
-    const urls = extractUrls(
-      "본문 [MFE TF](https://www.notion.so/page-1) 끝.",
-    );
+    const urls = extractUrls("본문 [MFE TF](https://www.notion.so/page-1) 끝.");
     expect(urls).toEqual(["https://www.notion.so/page-1"]);
   });
 
@@ -25,24 +18,14 @@ describe("extractUrls", () => {
   });
 
   it("코드블록 내 URL 도 추출 (보수적 마스킹)", () => {
-    const text =
-      "```\ncurl https://evil.example.com/api\n```\n그리고 https://www.notion.so/p2";
+    const text = "```\ncurl https://evil.example.com/api\n```\n그리고 https://www.notion.so/p2";
     const urls = extractUrls(text);
-    expect(urls).toEqual([
-      "https://evil.example.com/api",
-      "https://www.notion.so/p2",
-    ]);
+    expect(urls).toEqual(["https://evil.example.com/api", "https://www.notion.so/p2"]);
   });
 
   it("여러 markdown link + raw URL 모두 추출", () => {
-    const urls = extractUrls(
-      "[a](https://a.com) 그리고 https://b.com 그리고 [c](mailto:x@y.com)",
-    );
-    expect(urls).toEqual([
-      "https://a.com",
-      "mailto:x@y.com",
-      "https://b.com",
-    ]);
+    const urls = extractUrls("[a](https://a.com) 그리고 https://b.com 그리고 [c](mailto:x@y.com)");
+    expect(urls).toEqual(["https://a.com", "mailto:x@y.com", "https://b.com"]);
   });
 
   it("URL 이 없으면 빈 배열", () => {
@@ -52,33 +35,25 @@ describe("extractUrls", () => {
 
 describe("isAllowedUrl", () => {
   it("allowed 목록에 정확히 있으면 true", () => {
-    expect(
-      isAllowedUrl("https://www.notion.so/page-1", [
-        "https://www.notion.so/page-1",
-      ]),
-    ).toBe(true);
+    expect(isAllowedUrl("https://www.notion.so/page-1", ["https://www.notion.so/page-1"])).toBe(
+      true,
+    );
   });
 
   it("query string 무시하고 매칭", () => {
     expect(
-      isAllowedUrl("https://www.notion.so/page-1?v=abc", [
-        "https://www.notion.so/page-1",
-      ]),
+      isAllowedUrl("https://www.notion.so/page-1?v=abc", ["https://www.notion.so/page-1"]),
     ).toBe(true);
   });
 
   it("fragment 무시하고 매칭", () => {
     expect(
-      isAllowedUrl("https://www.notion.so/page-1#section", [
-        "https://www.notion.so/page-1",
-      ]),
+      isAllowedUrl("https://www.notion.so/page-1#section", ["https://www.notion.so/page-1"]),
     ).toBe(true);
   });
 
   it("github.com/YoonsooKim9 prefix → true (public allowlist)", () => {
-    expect(
-      isAllowedUrl("https://github.com/YoonsooKim9/portfolio", []),
-    ).toBe(true);
+    expect(isAllowedUrl("https://github.com/YoonsooKim9/portfolio", [])).toBe(true);
     expect(isAllowedUrl("https://github.com/YoonsooKim9", [])).toBe(true);
   });
 
@@ -95,11 +70,9 @@ describe("isAllowedUrl", () => {
   });
 
   it("allowed 에 없는 외부 도메인은 false", () => {
-    expect(
-      isAllowedUrl("https://evil.example.com/x", [
-        "https://www.notion.so/page-1",
-      ]),
-    ).toBe(false);
+    expect(isAllowedUrl("https://evil.example.com/x", ["https://www.notion.so/page-1"])).toBe(
+      false,
+    );
   });
 });
 
@@ -174,8 +147,7 @@ describe("filterOutput — URL filtering", () => {
 
 describe("filterOutput — prompt leak detection", () => {
   it("system prompt 시그니처 누출 검출 + 줄 마스킹 (한국어)", () => {
-    const text =
-      "여기는 정상\n당신은 김윤수의 포트폴리오 비서입니다.\n다른 정상 문장";
+    const text = "여기는 정상\n당신은 김윤수의 포트폴리오 비서입니다.\n다른 정상 문장";
     const r = filterOutput({ text, allowedSourceUrls: [] });
     expect(r.promptLeakDetected).toBe(true);
     expect(r.text).toContain("[redacted]");
@@ -243,8 +215,7 @@ describe("filterOutput — prompt leak detection", () => {
 
 describe("filterOutput — pass-through", () => {
   it("정상 응답 통과 (변경 없음, maskedUrlCount=0, leak=false)", () => {
-    const text =
-      "안녕하세요. 저는 김윤수입니다. [경력](https://www.notion.so/career) 참고하세요.";
+    const text = "안녕하세요. 저는 김윤수입니다. [경력](https://www.notion.so/career) 참고하세요.";
     const r = filterOutput({
       text,
       allowedSourceUrls: ["https://www.notion.so/career"],

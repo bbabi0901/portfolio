@@ -3,11 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { app as edgeApp } from "@/app/api/[[...route]]/route";
 import { app as nodeApp } from "@/app/api/node/[[...route]]/route";
 import { clearEnvCache } from "@/lib/env";
-import {
-  checkRateLimit,
-  clearRateLimitMemory,
-  hashIp,
-} from "@/lib/rate-limit";
+import { checkRateLimit, clearRateLimitMemory, hashIp } from "@/lib/rate-limit";
 
 const validFeedbackBody = {
   messageId: "msg-rl",
@@ -65,9 +61,7 @@ async function postChat(headers: Record<string, string> = {}): Promise<Response>
   });
 }
 
-async function postFeedback(
-  headers: Record<string, string> = {},
-): Promise<Response> {
+async function postFeedback(headers: Record<string, string> = {}): Promise<Response> {
   return nodeApp.request("/api/node/feedback", {
     method: "POST",
     headers: { "Content-Type": "application/json", ...headers },
@@ -75,9 +69,7 @@ async function postFeedback(
   });
 }
 
-async function postContact(
-  headers: Record<string, string> = {},
-): Promise<Response> {
+async function postContact(headers: Record<string, string> = {}): Promise<Response> {
   return nodeApp.request("/api/node/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json", ...headers },

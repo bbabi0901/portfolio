@@ -22,7 +22,7 @@ export function TypingDots({ className, ariaLabel = "응답 생성 중" }: Typin
           key={delay}
           data-slot="typing-dot"
           aria-hidden="true"
-          className="inline-block h-1 w-1 rounded-full bg-current animate-[typing-dot_0.4s_ease-in-out_infinite] motion-reduce:animate-none"
+          className="inline-block h-1 w-1 animate-[typing-dot_0.4s_ease-in-out_infinite] rounded-full bg-current motion-reduce:animate-none"
           style={{ animationDelay: `${delay}ms` }}
         />
       ))}

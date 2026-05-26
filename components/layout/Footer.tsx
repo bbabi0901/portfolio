@@ -23,8 +23,7 @@ export function Footer({ lastUpdated, socials, className }: FooterProps) {
     >
       <div className="mx-auto flex max-w-3xl flex-col items-start gap-3 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 lg:px-8">
         <p>
-          마지막 업데이트:{" "}
-          <time dateTime={lastUpdated ?? ""}>{lastUpdated ?? "—"}</time>
+          마지막 업데이트: <time dateTime={lastUpdated ?? ""}>{lastUpdated ?? "—"}</time>
         </p>
 
         <div className="flex items-center gap-3">
@@ -65,7 +64,7 @@ export function Footer({ lastUpdated, socials, className }: FooterProps) {
           <PopoverTrigger
             type="button"
             aria-label="privacy"
-            className="inline-flex items-center gap-1 rounded-md p-1 text-neutral-500 transition-colors hover:text-neutral-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400"
+            className="inline-flex items-center gap-1 rounded-md p-1 text-neutral-500 transition-colors hover:text-neutral-300 focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none"
           >
             <Info size={12} strokeWidth={1.5} aria-hidden="true" />
           </PopoverTrigger>

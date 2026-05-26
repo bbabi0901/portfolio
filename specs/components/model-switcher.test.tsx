@@ -20,9 +20,7 @@ describe("ModelSwitcher", () => {
   });
 
   it("uses an aria-label of '답변 모델 선택'", () => {
-    render(
-      <ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} onChange={() => {}} />,
-    );
+    render(<ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} onChange={() => {}} />);
     expect(screen.getByRole("combobox")).toHaveAttribute("aria-label", "답변 모델 선택");
   });
 
@@ -45,9 +43,7 @@ describe("ModelSwitcher", () => {
 
   describe("inline pill style + compact (TS-73, FEAT-030)", () => {
     it("Trigger 가 rounded-full + h-8 + bg-transparent (인라인 pill)", () => {
-      render(
-        <ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} onChange={() => {}} />,
-      );
+      render(<ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} onChange={() => {}} />);
       const trigger = screen.getByRole("combobox");
       const cls = trigger.className;
       expect(cls).toMatch(/rounded-full/);
@@ -57,16 +53,19 @@ describe("ModelSwitcher", () => {
 
     it("compact=true → 짧은 라벨 (예: 'GPT-4o')", () => {
       render(
-        <ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} compact onChange={() => {}} />,
+        <ModelSwitcher
+          value="gpt-4o-mini"
+          available={["gpt-4o-mini"]}
+          compact
+          onChange={() => {}}
+        />,
       );
       // short label "GPT-4o" — 'mini' suffix 가 표시되지 않아야 함
       expect(screen.getByRole("combobox")).toHaveTextContent(/^GPT-4o$/);
     });
 
     it("compact=false → 풀 라벨 (예: 'GPT-4o mini')", () => {
-      render(
-        <ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} onChange={() => {}} />,
-      );
+      render(<ModelSwitcher value="gpt-4o-mini" available={["gpt-4o-mini"]} onChange={() => {}} />);
       expect(screen.getByRole("combobox")).toHaveTextContent("GPT-4o mini");
     });
 

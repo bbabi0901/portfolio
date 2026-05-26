@@ -90,12 +90,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             <FormItem>
               <FormLabel>이름</FormLabel>
               <FormControl>
-                <Input
-                  type="text"
-                  autoComplete="name"
-                  maxLength={40}
-                  {...field}
-                />
+                <Input type="text" autoComplete="name" maxLength={40} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -109,12 +104,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
             <FormItem>
               <FormLabel>이메일</FormLabel>
               <FormControl>
-                <Input
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  {...field}
-                />
+                <Input type="email" inputMode="email" autoComplete="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -151,20 +141,13 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
         />
 
         {showCaptcha ? (
-          <p
-            role="alert"
-            className="text-sm text-amber-300"
-          >
+          <p role="alert" className="text-sm text-amber-300">
             잠시만요 — 봇이 아닌지 확인이 필요해요. 잠시 후 다시 전송해 주세요.
           </p>
         ) : null}
 
         <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            aria-busy={isSubmitting}
-          >
+          <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="size-4 animate-spin" /> 전송 중

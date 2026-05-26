@@ -34,12 +34,7 @@ const mkData = (chunks: PortfolioChunk[]): PortfolioServerData => ({
 describe("retrieve", () => {
   it("returns top-K matching chunks (hybrid mode)", () => {
     const data = mkData([
-      mkChunk(
-        "c1",
-        "Module Federation 마이그레이션 작업",
-        ["MFE TF"],
-        ["Module Federation"],
-      ),
+      mkChunk("c1", "Module Federation 마이그레이션 작업", ["MFE TF"], ["Module Federation"]),
       mkChunk("c2", "전혀 무관한 토픽 내용입니다"),
     ]);
     const out = retrieve("Module Federation 어떻게?", data, {
@@ -63,9 +58,7 @@ describe("retrieve", () => {
   });
 
   it("respects topK", () => {
-    const chunks = Array.from({ length: 20 }, (_, i) =>
-      mkChunk(`c${i}`, `text body ${i}`),
-    );
+    const chunks = Array.from({ length: 20 }, (_, i) => mkChunk(`c${i}`, `text body ${i}`));
     const data = mkData(chunks);
     const out = retrieve("text", data, { topK: 5 });
     expect(out.results.length).toBeLessThanOrEqual(5);
@@ -95,9 +88,7 @@ describe("retrieve", () => {
   it("throws on dimension mismatch", () => {
     const chunkBad: PortfolioChunk = { ...mkChunk("c1", "x"), embedding: [1, 0] };
     const data = mkData([chunkBad]);
-    expect(() =>
-      retrieve("x", data, { queryEmbedding: fixtureEmbedding("x", 1536) }),
-    ).toThrow();
+    expect(() => retrieve("x", data, { queryEmbedding: fixtureEmbedding("x", 1536) })).toThrow();
   });
 
   it("handles empty data", () => {
@@ -140,10 +131,7 @@ describe("retrieve", () => {
   });
 
   it("is deterministic", () => {
-    const data = mkData([
-      mkChunk("c1", "Module Federation"),
-      mkChunk("c2", "Turbopack"),
-    ]);
+    const data = mkData([mkChunk("c1", "Module Federation"), mkChunk("c2", "Turbopack")]);
     const a = retrieve("Module Federation", data, {
       queryEmbedding: fixtureEmbedding("Module Federation", 1536),
     });

@@ -73,9 +73,7 @@ describe("layout metadata", () => {
   it("authors set with name 김윤수", () => {
     expect(meta.authors).toBeDefined();
     const authors = Array.isArray(meta.authors) ? meta.authors : [meta.authors];
-    expect(authors.some((a) => (a as { name?: string }).name === "김윤수")).toBe(
-      true,
-    );
+    expect(authors.some((a) => (a as { name?: string }).name === "김윤수")).toBe(true);
   });
 
   it("keywords includes 프론트엔드/Next.js", () => {
@@ -115,30 +113,24 @@ describe("layout viewport", () => {
 describe("page-level metadata", () => {
   it("/ (chat) title = '대화'", () => {
     expect(homePage.metadata.title).toBe("대화");
-    expect((homePage.metadata.alternates as { canonical?: string }).canonical).toBe(
-      "/",
-    );
+    expect((homePage.metadata.alternates as { canonical?: string }).canonical).toBe("/");
   });
 
   it("/about title = '자기소개'", () => {
     expect(aboutPage.metadata.title).toBe("자기소개");
-    expect(
-      (aboutPage.metadata.alternates as { canonical?: string }).canonical,
-    ).toBe("/about");
+    expect((aboutPage.metadata.alternates as { canonical?: string }).canonical).toBe("/about");
   });
 
   it("/experience title = '기술 이력'", () => {
     expect(experiencePage.metadata.title).toBe("기술 이력");
-    expect(
-      (experiencePage.metadata.alternates as { canonical?: string }).canonical,
-    ).toBe("/experience");
+    expect((experiencePage.metadata.alternates as { canonical?: string }).canonical).toBe(
+      "/experience",
+    );
   });
 
   it("/contact title = '연락하기'", () => {
     expect(contactPage.metadata.title).toBe("연락하기");
-    expect(
-      (contactPage.metadata.alternates as { canonical?: string }).canonical,
-    ).toBe("/contact");
+    expect((contactPage.metadata.alternates as { canonical?: string }).canonical).toBe("/contact");
   });
 
   it("not-found robots noindex/nofollow", () => {
@@ -177,29 +169,21 @@ describe("JsonLdPerson (regression)", () => {
 
   it("sameAs includes github URL", () => {
     const html = renderJsonLd();
-    const json = JSON.parse(
-      html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!,
-    );
+    const json = JSON.parse(html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!);
     expect(Array.isArray(json.sameAs)).toBe(true);
-    expect(
-      (json.sameAs as string[]).some((s) => s.includes("github.com/YoonsooKim9")),
-    ).toBe(true);
+    expect((json.sameAs as string[]).some((s) => s.includes("github.com/YoonsooKim9"))).toBe(true);
   });
 
   it("knowsAbout array has 3+ entries", () => {
     const html = renderJsonLd();
-    const json = JSON.parse(
-      html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!,
-    );
+    const json = JSON.parse(html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!);
     expect(Array.isArray(json.knowsAbout)).toBe(true);
     expect((json.knowsAbout as string[]).length).toBeGreaterThanOrEqual(3);
   });
 
   it("includes url + description", () => {
     const html = renderJsonLd();
-    const json = JSON.parse(
-      html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!,
-    );
+    const json = JSON.parse(html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!);
     expect(typeof json.url).toBe("string");
     expect(json.url.length).toBeGreaterThan(0);
     expect(typeof json.description).toBe("string");
@@ -207,9 +191,7 @@ describe("JsonLdPerson (regression)", () => {
 
   it("does not leak telephone/address (private info)", () => {
     const html = renderJsonLd();
-    const json = JSON.parse(
-      html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!,
-    );
+    const json = JSON.parse(html.match(/<script[^>]*>([\s\S]*?)<\/script>/)![1]!);
     expect(json.telephone).toBeUndefined();
     expect(json.address).toBeUndefined();
   });
@@ -228,9 +210,7 @@ describe("sitemap (4 routes)", () => {
   it("uses NEXT_PUBLIC_SITE_URL as base", () => {
     process.env.NEXT_PUBLIC_SITE_URL = "https://example.test";
     const entries = sitemap();
-    expect(entries.every((e) => e.url.startsWith("https://example.test"))).toBe(
-      true,
-    );
+    expect(entries.every((e) => e.url.startsWith("https://example.test"))).toBe(true);
   });
 });
 

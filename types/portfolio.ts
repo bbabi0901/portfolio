@@ -1,10 +1,4 @@
-export type ChunkCategory =
-  | "intro"
-  | "career"
-  | "project"
-  | "skill"
-  | "subpage"
-  | "personal";
+export type ChunkCategory = "intro" | "career" | "project" | "skill" | "subpage" | "personal";
 
 export type ProjectNotionCategory = "자체프로젝트" | "업무" | "외부활동";
 

@@ -26,9 +26,7 @@ describe("ScrollToTopOnRouteChange", () => {
     const calls = (window.scrollTo as ReturnType<typeof vi.fn>).mock.calls.length;
     mockPathname = "/about";
     rerender(<ScrollToTopOnRouteChange />);
-    expect(
-      (window.scrollTo as ReturnType<typeof vi.fn>).mock.calls.length,
-    ).toBeGreaterThan(calls);
+    expect((window.scrollTo as ReturnType<typeof vi.fn>).mock.calls.length).toBeGreaterThan(calls);
   });
 });
 
@@ -74,8 +72,6 @@ describe("LayoutClient routing cross-cutting", () => {
         <div>page</div>
       </LayoutClient>,
     );
-    expect(
-      (window.scrollTo as ReturnType<typeof vi.fn>).mock.calls.length,
-    ).toBeGreaterThan(before);
+    expect((window.scrollTo as ReturnType<typeof vi.fn>).mock.calls.length).toBeGreaterThan(before);
   });
 });

@@ -38,10 +38,7 @@ describe("estimateTokens", () => {
 
 describe("extractKeywords", () => {
   it("returns top-N", () => {
-    const kw = extractKeywords(
-      "Next.js Turbopack Turbopack Module Module Module Federation",
-      3,
-    );
+    const kw = extractKeywords("Next.js Turbopack Turbopack Module Module Module Federation", 3);
     expect(kw).toHaveLength(3);
     expect(kw[0]?.toLowerCase()).toBe("module");
   });

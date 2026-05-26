@@ -53,9 +53,7 @@ describe("robots", () => {
     const wildcard = rules.find((rule) => rule!.userAgent === "*");
     expect(wildcard).toBeDefined();
     expect(wildcard!.allow).toBe("/");
-    const disallow = Array.isArray(wildcard!.disallow)
-      ? wildcard!.disallow
-      : [wildcard!.disallow!];
+    const disallow = Array.isArray(wildcard!.disallow) ? wildcard!.disallow : [wildcard!.disallow!];
     expect(disallow).toContain("/api/");
   });
 
@@ -76,9 +74,7 @@ describe("JsonLdPerson", () => {
     expect(json["@type"]).toBe("Person");
     expect(json.name).toBe("김윤수");
     expect(Array.isArray(json.sameAs)).toBe(true);
-    expect(
-      (json.sameAs as string[]).some((s) => s.includes("github.com/YoonsooKim9")),
-    ).toBe(true);
+    expect((json.sameAs as string[]).some((s) => s.includes("github.com/YoonsooKim9"))).toBe(true);
   });
 
   it("does not include private info (telephone/address)", () => {

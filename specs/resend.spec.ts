@@ -71,11 +71,7 @@ describe("notifyContactReceived (실제 호출, msw mock)", () => {
   });
 
   it("정상 응답 → ok=true + id 반환", async () => {
-    server.use(
-      http.post("https://api.resend.com/emails", () =>
-        HttpResponse.json({ id: "re-1" }),
-      ),
-    );
+    server.use(http.post("https://api.resend.com/emails", () => HttpResponse.json({ id: "re-1" })));
     const res = await notifyContactReceived(baseInput);
     expect(res.ok).toBe(true);
     if (res.ok) expect(res.id).toBe("re-1");
@@ -129,10 +125,7 @@ describe("notifyContactReceived (실제 호출, msw mock)", () => {
 
   it("500 → reason='unknown'", async () => {
     server.use(
-      http.post(
-        "https://api.resend.com/emails",
-        () => new HttpResponse("err", { status: 500 }),
-      ),
+      http.post("https://api.resend.com/emails", () => new HttpResponse("err", { status: 500 })),
     );
     const res = await notifyContactReceived(baseInput);
     expect(res.ok).toBe(false);
@@ -160,10 +153,7 @@ describe("notifyContactReceived (실제 호출, msw mock)", () => {
 
   it("error 메시지에 RESEND_API_KEY 누설 X", async () => {
     server.use(
-      http.post(
-        "https://api.resend.com/emails",
-        () => new HttpResponse("err", { status: 500 }),
-      ),
+      http.post("https://api.resend.com/emails", () => new HttpResponse("err", { status: 500 })),
     );
     const res = await notifyContactReceived(baseInput);
     expect(res.ok).toBe(false);

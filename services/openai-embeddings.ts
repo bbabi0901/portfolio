@@ -140,9 +140,7 @@ async function safeText(res: Response): Promise<string> {
   }
 }
 
-export function createEmbeddingsService(
-  opts: EmbeddingsServiceOptions,
-): EmbeddingsService {
+export function createEmbeddingsService(opts: EmbeddingsServiceOptions): EmbeddingsService {
   if (!opts.apiKey) {
     throw new Error("createEmbeddingsService: apiKey is required");
   }

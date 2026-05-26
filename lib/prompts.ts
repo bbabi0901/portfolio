@@ -6,8 +6,7 @@ export interface BuildSystemPromptInput {
   ownerName?: string;
 }
 
-export const NO_RECORD_RESPONSE_KO =
-  "그 부분은 기록되어 있지 않습니다 — 다른 질문 있으세요?";
+export const NO_RECORD_RESPONSE_KO = "그 부분은 기록되어 있지 않습니다 — 다른 질문 있으세요?";
 export const NO_RECORD_RESPONSE_EN =
   "That topic is not in my records — feel free to ask something else.";
 
@@ -25,8 +24,7 @@ export function detectLanguage(userText: string): "ko" | "en" {
 }
 
 function serializeChunk(chunk: PortfolioChunk): string {
-  const heading =
-    chunk.headingPath.length > 0 ? ` > ${chunk.headingPath.join(" > ")}` : "";
+  const heading = chunk.headingPath.length > 0 ? ` > ${chunk.headingPath.join(" > ")}` : "";
   return [
     `## ${chunk.sourceTitle}${heading}`,
     chunk.text,
@@ -52,11 +50,7 @@ export function formatCitationsBlock(chunks: PortfolioChunk[]): string {
   return lines.join("\n");
 }
 
-function buildKoPrompt(
-  ownerName: string,
-  contextBlock: string,
-  isEmpty: boolean,
-): string {
+function buildKoPrompt(ownerName: string, contextBlock: string, isEmpty: boolean): string {
   const emptyClause = isEmpty
     ? `\n[빈 컨텍스트 처리]\n검색된 노션 기록이 없습니다. 답변은 정확히 다음 문장만 출력하세요:\n"${NO_RECORD_RESPONSE_KO}"\n`
     : "";
@@ -94,11 +88,7 @@ ${emptyClause}
 ${contextBlock}`;
 }
 
-function buildEnPrompt(
-  ownerName: string,
-  contextBlock: string,
-  isEmpty: boolean,
-): string {
+function buildEnPrompt(ownerName: string, contextBlock: string, isEmpty: boolean): string {
   const emptyClause = isEmpty
     ? `\n[Empty context]\nNo Notion records were retrieved. Output exactly this sentence and nothing else:\n"${NO_RECORD_RESPONSE_EN}"\n`
     : "";

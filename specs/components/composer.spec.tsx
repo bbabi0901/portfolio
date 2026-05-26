@@ -155,9 +155,7 @@ describe("Composer", () => {
     it("scrollHeight 변경 → textarea.style.height 가 갱신된다", () => {
       const onChange = vi.fn();
       const onSubmit = vi.fn();
-      const { rerender } = render(
-        <Composer value="" onChange={onChange} onSubmit={onSubmit} />,
-      );
+      const { rerender } = render(<Composer value="" onChange={onChange} onSubmit={onSubmit} />);
       const ta = screen.getByRole("textbox") as HTMLTextAreaElement;
       Object.defineProperty(ta, "scrollHeight", {
         configurable: true,
@@ -176,16 +174,12 @@ describe("Composer", () => {
 
     it("placeholder 기본값은 FEAT-030 의 prominent 문구", () => {
       setup();
-      expect(
-        screen.getByPlaceholderText(/김윤수에게 직접 물어보세요/),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/김윤수에게 직접 물어보세요/)).toBeInTheDocument();
     });
 
     it("placeholder prop 으로 override 가능", () => {
       setup({ placeholder: "무엇이든 물어보세요" });
-      expect(
-        screen.getByPlaceholderText("무엇이든 물어보세요"),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("무엇이든 물어보세요")).toBeInTheDocument();
     });
   });
 

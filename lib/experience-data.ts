@@ -107,9 +107,8 @@ function aggregateProjects(chunks: PortfolioChunk[]): ProjectSummary[] {
       techKeywords: tech,
       impact,
       category: meta.notionCategory ?? "자체프로젝트",
-      notionUrl: first.sourceUrl && first.sourceUrl.startsWith("http")
-        ? first.sourceUrl
-        : undefined,
+      notionUrl:
+        first.sourceUrl && first.sourceUrl.startsWith("http") ? first.sourceUrl : undefined,
     };
   });
 }
@@ -142,9 +141,7 @@ function groupPeriod(projects: ProjectSummary[]): string {
     NonNullable<ProjectSummary["period"]>
   >;
   if (periods.length === 0) return "";
-  const earliestStart = periods.reduce((acc, p) =>
-    p.start < acc.start ? p : acc,
-  );
+  const earliestStart = periods.reduce((acc, p) => (p.start < acc.start ? p : acc));
   const ongoing = periods.some((p) => p.ongoing);
   if (ongoing) return `${earliestStart.start} — 현재`;
   const latestEnd = periods.reduce((acc, p) => {

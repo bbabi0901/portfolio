@@ -4,10 +4,7 @@ import { Suspense } from "react";
 import { CategoryFilter } from "@/components/experience/CategoryFilter";
 import { ExperienceClient } from "@/components/experience/ExperienceClient";
 import { SkillsGrid } from "@/components/experience/SkillsGrid";
-import {
-  loadExperienceData,
-  type ProjectCategory,
-} from "@/lib/experience-data";
+import { loadExperienceData, type ProjectCategory } from "@/lib/experience-data";
 
 export const metadata: Metadata = {
   title: "기술 이력",
@@ -40,9 +37,7 @@ export default function ExperiencePage() {
   return (
     <main className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
       <header className="flex flex-col gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
-          기술 이력
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">기술 이력</h1>
         <Suspense fallback={null}>
           <CategoryFilter options={presentCategories} />
         </Suspense>
@@ -55,9 +50,7 @@ export default function ExperiencePage() {
   );
 }
 
-function collectCategories(
-  data: ReturnType<typeof loadExperienceData>,
-): ProjectCategory[] {
+function collectCategories(data: ReturnType<typeof loadExperienceData>): ProjectCategory[] {
   const found = new Set<ProjectCategory>();
   for (const g of data.groups) {
     for (const p of g.projects) found.add(p.category);

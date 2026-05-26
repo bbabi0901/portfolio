@@ -27,50 +27,45 @@ app.post(
   "/feedback",
   rateLimitMiddleware({ routeKey: "feedback", perMinute: 5, perDay: 30 }),
   async (c) => {
-  let raw: unknown;
-  try {
-    raw = await c.req.json();
-  } catch {
-    return c.json({ error: "invalid_request" }, 400);
-  }
+    let raw: unknown;
+    try {
+      raw = await c.req.json();
+    } catch {
+      return c.json({ error: "invalid_request" }, 400);
+    }
 
-  const parsed = FeedbackBodySchema.safeParse(raw);
-  if (!parsed.success) {
-    return c.json(
-      { error: "invalid_request", issues: parsed.error.issues },
-      400,
-    );
-  }
+    const parsed = FeedbackBodySchema.safeParse(raw);
+    if (!parsed.success) {
+      return c.json({ error: "invalid_request", issues: parsed.error.issues }, 400);
+    }
 
-  const ua = c.req.header("user-agent") ?? "";
-  const uaHash = await hashUserAgent(ua);
+    const ua = c.req.header("user-agent") ?? "";
+    const uaHash = await hashUserAgent(ua);
 
-  let res = await appendFeedback({ ...parsed.data, uaHash });
+    let res = await appendFeedback({ ...parsed.data, uaHash });
 
-  if (!res.ok && res.reason === "unknown") {
-    await new Promise((r) => setTimeout(r, FEEDBACK_RETRY_DELAY_MS));
-    res = await appendFeedback({ ...parsed.data, uaHash });
-  }
+    if (!res.ok && res.reason === "unknown") {
+      await new Promise((r) => setTimeout(r, FEEDBACK_RETRY_DELAY_MS));
+      res = await appendFeedback({ ...parsed.data, uaHash });
+    }
 
-  if (res.ok) {
-    return c.json({ ok: true, notionPageId: res.notionPageId }, 200);
-  }
+    if (res.ok) {
+      return c.json({ ok: true, notionPageId: res.notionPageId }, 200);
+    }
 
-  switch (res.reason) {
-    case "auth":
-      return c.json({ error: "feedback_unavailable" }, 503);
-    case "schema":
-      return c.json({ error: "feedback_invalid" }, 422);
-    default:
-      return c.json({ error: "feedback_failed" }, 502);
-  }
+    switch (res.reason) {
+      case "auth":
+        return c.json({ error: "feedback_unavailable" }, 503);
+      case "schema":
+        return c.json({ error: "feedback_invalid" }, 422);
+      default:
+        return c.json({ error: "feedback_failed" }, 502);
+    }
   },
 );
 
-app.post(
-  "/contact",
-  rateLimitMiddleware({ routeKey: "contact", perMinute: 3, perDay: 10 }),
-  (c) => c.json({ error: "not_implemented" }, 501),
+app.post("/contact", rateLimitMiddleware({ routeKey: "contact", perMinute: 3, perDay: 10 }), (c) =>
+  c.json({ error: "not_implemented" }, 501),
 );
 
 app.notFound((c) => c.json({ error: "not_found" }, 404));
