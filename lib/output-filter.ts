@@ -93,9 +93,7 @@ export function filterOutput(input: FilterInput): FilterResult {
   const { allowedSourceUrls } = input;
   let maskedUrlCount = 0;
 
-  const { text: leakMasked, leak: promptLeakDetected } = maskLeakLines(
-    input.text,
-  );
+  const { text: leakMasked, leak: promptLeakDetected } = maskLeakLines(input.text);
 
   let working = leakMasked.replace(MARKDOWN_LINK_RE, (_match, label, url) => {
     if (isAllowedUrl(url, allowedSourceUrls)) {

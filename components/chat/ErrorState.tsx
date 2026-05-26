@@ -40,12 +40,7 @@ function Countdown({ seconds }: CountdownProps) {
   );
 }
 
-export function ErrorState({
-  message,
-  retryAfterSeconds,
-  onRetry,
-  className,
-}: ErrorStateProps) {
+export function ErrorState({ message, retryAfterSeconds, onRetry, className }: ErrorStateProps) {
   const showCountdown = retryAfterSeconds !== undefined && retryAfterSeconds > 0;
 
   return (

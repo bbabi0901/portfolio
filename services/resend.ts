@@ -42,11 +42,7 @@ function siteHostFallback(siteUrl: string | undefined): string {
   }
 }
 
-function buildHtml(
-  fromName: string,
-  fromEmail: string,
-  message: string,
-): string {
+function buildHtml(fromName: string, fromEmail: string, message: string): string {
   const safeName = escapeHtml(fromName);
   const safeEmail = escapeHtml(fromEmail);
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");

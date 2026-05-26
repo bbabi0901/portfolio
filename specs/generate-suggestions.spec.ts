@@ -106,8 +106,8 @@ describe("generate-suggestions", () => {
     await generateMain({ inFile: fixturePath, outFile: out });
     const data = JSON.parse(fs.readFileSync(out, "utf-8"));
 
-    const dupMatches = data.suggestedQuestions.filter(
-      (q: { text: string }) => q.text.replace(/\s+/g, "").startsWith("김윤수어떤개발자예요"),
+    const dupMatches = data.suggestedQuestions.filter((q: { text: string }) =>
+      q.text.replace(/\s+/g, "").startsWith("김윤수어떤개발자예요"),
     );
     expect(dupMatches.length).toBe(1);
     expect(dupMatches[0].id).toBe("Q-001");
@@ -125,9 +125,7 @@ describe("generate-suggestions", () => {
       expect(Array.isArray(arr)).toBe(true);
       expect(arr.length).toBeLessThanOrEqual(3);
       for (const qid of arr) {
-        const exists = data.suggestedQuestions.some(
-          (q: { id: string }) => q.id === qid,
-        );
+        const exists = data.suggestedQuestions.some((q: { id: string }) => q.id === qid);
         expect(exists).toBe(true);
       }
     }

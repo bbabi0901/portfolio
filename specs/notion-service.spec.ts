@@ -73,21 +73,17 @@ describe("NotionService", () => {
 
     it("getPagesContent skips missing with onSkip callback", async () => {
       const skipped: string[] = [];
-      const contents = await svc.getPagesContent(
-        ["fixture-page-1", "missing", "fixture-resume"],
-        {
-          onSkip: (id) => skipped.push(id),
-        },
-      );
+      const contents = await svc.getPagesContent(["fixture-page-1", "missing", "fixture-resume"], {
+        onSkip: (id) => skipped.push(id),
+      });
       expect(contents).toHaveLength(2);
       expect(skipped).toContain("missing");
     });
 
     it("getPagesContent respects concurrency option", async () => {
-      const contents = await svc.getPagesContent(
-        ["fixture-page-1", "fixture-resume"],
-        { concurrency: 1 },
-      );
+      const contents = await svc.getPagesContent(["fixture-page-1", "fixture-resume"], {
+        concurrency: 1,
+      });
       expect(contents).toHaveLength(2);
     });
   });

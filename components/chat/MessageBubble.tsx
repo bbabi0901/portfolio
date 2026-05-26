@@ -17,11 +17,7 @@ export interface MessageBubbleProps {
   className?: string;
 }
 
-function ExternalLink({
-  href,
-  children,
-  ...rest
-}: ComponentPropsWithoutRef<"a">) {
+function ExternalLink({ href, children, ...rest }: ComponentPropsWithoutRef<"a">) {
   return (
     <a
       href={href}
@@ -67,11 +63,7 @@ const markdownComponents = {
   },
 };
 
-export function MessageBubble({
-  message,
-  onOpenSource,
-  className,
-}: MessageBubbleProps) {
+export function MessageBubble({ message, onOpenSource, className }: MessageBubbleProps) {
   const isUser = message.role === "user";
   const isTyping = message.status === "typing";
   const isStreaming = message.status === "streaming";
@@ -111,17 +103,14 @@ export function MessageBubble({
               <span
                 data-slot="streaming-cursor"
                 aria-hidden="true"
-                className="ml-0.5 inline-block h-4 w-1 align-middle bg-current animate-pulse"
+                className="ml-0.5 inline-block h-4 w-1 animate-pulse bg-current align-middle"
               />
             )}
           </>
         )}
       </div>
       {showCitations && (
-        <div
-          data-slot="message-citations"
-          className="mt-2 flex flex-wrap items-center gap-1"
-        >
+        <div data-slot="message-citations" className="mt-2 flex flex-wrap items-center gap-1">
           {message.citations!.map((c, i) => (
             <SourceCitation
               key={`${c.sourceTitle}-${i}`}

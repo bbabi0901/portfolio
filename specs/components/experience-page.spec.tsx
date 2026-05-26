@@ -88,11 +88,7 @@ describe("ProjectCard", () => {
   });
 
   it("tech chips 렌더", () => {
-    render(
-      <ProjectCard
-        project={project({ techKeywords: ["Next.js", "TypeScript"] })}
-      />,
-    );
+    render(<ProjectCard project={project({ techKeywords: ["Next.js", "TypeScript"] })} />);
     expect(screen.getByText("Next.js")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
   });
@@ -110,9 +106,7 @@ describe("ExperienceClient", () => {
   it("카테고리 필터 결과 0 → 빈 상태", () => {
     mockSearchParams = new URLSearchParams("category=외부활동");
     render(<ExperienceClient data={makeData()} />);
-    expect(
-      screen.getByText(/이 카테고리에 해당하는 프로젝트가 없어요/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/이 카테고리에 해당하는 프로젝트가 없어요/)).toBeInTheDocument();
   });
 
   it("category 미지정 → 모든 그룹 렌더", () => {
@@ -139,9 +133,7 @@ describe("ExperienceClient", () => {
         })}
       />,
     );
-    expect(
-      screen.getByRole("heading", { level: 2, name: "디라티오" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "디라티오" })).toBeInTheDocument();
     expect(screen.getByText("weju")).toBeInTheDocument();
   });
 
@@ -169,9 +161,7 @@ describe("ExperienceClient", () => {
         })}
       />,
     );
-    expect(
-      screen.queryByRole("heading", { level: 2, name: "디라티오" }),
-    ).toBeNull();
+    expect(screen.queryByRole("heading", { level: 2, name: "디라티오" })).toBeNull();
     expect(screen.getByText("weju")).toBeInTheDocument();
   });
 });

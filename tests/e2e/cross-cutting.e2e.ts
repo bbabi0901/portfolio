@@ -8,7 +8,9 @@ test.describe("cross-cutting (TS-63, TS-64, TS-65, TS-67)", () => {
     expect(ld).toBeTruthy();
     const data = JSON.parse(ld!) as { "@type": string; sameAs?: string[] };
     expect(data["@type"]).toBe("Person");
-    expect(data.sameAs).toEqual(expect.arrayContaining([expect.stringContaining("github.com/YoonsooKim9")]));
+    expect(data.sameAs).toEqual(
+      expect.arrayContaining([expect.stringContaining("github.com/YoonsooKim9")]),
+    );
   });
 
   test("TS-64: /opengraph-image 200 + image/png", async ({ request }) => {

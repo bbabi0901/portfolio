@@ -60,11 +60,7 @@ export function resolveModel(id: string | null | undefined): ModelSpec {
     return REGISTRY[id];
   }
   if (id != null) {
-    console.warn(
-      "[models] unknown model id %s, falling back to %s",
-      id,
-      DEFAULT_MODEL_ID,
-    );
+    console.warn("[models] unknown model id %s, falling back to %s", id, DEFAULT_MODEL_ID);
   }
   return REGISTRY[DEFAULT_MODEL_ID];
 }

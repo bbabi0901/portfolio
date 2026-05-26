@@ -14,11 +14,7 @@ export interface AboutSectionProps {
   className?: string;
 }
 
-function ExternalLink({
-  href,
-  children,
-  ...rest
-}: ComponentPropsWithoutRef<"a">) {
+function ExternalLink({ href, children, ...rest }: ComponentPropsWithoutRef<"a">) {
   return (
     <a
       href={href}
@@ -34,11 +30,7 @@ function ExternalLink({
 
 const markdownComponents = {
   a: ExternalLink,
-  code({
-    className: codeClassName,
-    children,
-    ...props
-  }: ComponentPropsWithoutRef<"code">) {
+  code({ className: codeClassName, children, ...props }: ComponentPropsWithoutRef<"code">) {
     const isInline = !codeClassName;
     if (isInline) {
       return (
@@ -68,30 +60,18 @@ const markdownComponents = {
   },
 };
 
-export function AboutSection({
-  heading,
-  subSections,
-  className,
-}: AboutSectionProps) {
+export function AboutSection({ heading, subSections, className }: AboutSectionProps) {
   return (
     <section className={cn("flex flex-col gap-4", className)}>
       <h2 className="text-lg font-medium text-white">{heading}</h2>
       <div className="flex flex-col gap-6">
         {subSections.map((sub, idx) => (
-          <div
-            key={`${sub.heading ?? "body"}-${idx}`}
-            className="flex flex-col gap-2"
-          >
+          <div key={`${sub.heading ?? "body"}-${idx}`} className="flex flex-col gap-2">
             {sub.heading ? (
-              <h3 className="text-sm font-medium text-neutral-300">
-                {sub.heading}
-              </h3>
+              <h3 className="text-sm font-medium text-neutral-300">{sub.heading}</h3>
             ) : null}
             <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={markdownComponents}
-              >
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                 {sub.body}
               </ReactMarkdown>
             </div>

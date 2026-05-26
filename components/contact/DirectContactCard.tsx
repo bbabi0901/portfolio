@@ -9,12 +9,7 @@ export interface DirectContactCardProps {
   className?: string;
 }
 
-export function DirectContactCard({
-  email,
-  github,
-  linkedin,
-  className,
-}: DirectContactCardProps) {
+export function DirectContactCard({ email, github, linkedin, className }: DirectContactCardProps) {
   return (
     <section
       aria-label="직접 연락"
@@ -26,10 +21,7 @@ export function DirectContactCard({
       <h2 className="text-sm font-medium text-neutral-300">직접 연락</h2>
       <ul className="flex flex-col gap-2 text-sm text-neutral-300">
         <li>
-          <a
-            href={`mailto:${email}`}
-            className="inline-flex items-center gap-2 hover:text-white"
-          >
+          <a href={`mailto:${email}`} className="inline-flex items-center gap-2 hover:text-white">
             <Mail className="size-4" strokeWidth={1.5} aria-hidden="true" />
             <span>{email}</span>
           </a>

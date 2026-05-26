@@ -131,9 +131,7 @@ async function upstashCheck(
   };
 }
 
-export async function checkRateLimit(
-  input: RateLimitInput,
-): Promise<RateLimitDecision> {
+export async function checkRateLimit(input: RateLimitInput): Promise<RateLimitDecision> {
   const env = getServerEnv();
 
   if (env.RATE_LIMIT_BYPASS === "1") {
@@ -147,11 +145,7 @@ export async function checkRateLimit(
 
   if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
     try {
-      return await upstashCheck(
-        env.UPSTASH_REDIS_REST_URL,
-        env.UPSTASH_REDIS_REST_TOKEN,
-        input,
-      );
+      return await upstashCheck(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN, input);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "unknown";
       console.warn(`[rate-limit] upstash failed, falling back to memory: ${msg}`);

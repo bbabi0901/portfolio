@@ -1,11 +1,7 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -39,24 +35,13 @@ export function ClearButton({
           <Trash2 strokeWidth={1.5} aria-hidden="true" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        data-slot="clear-conversation-popover"
-        className="w-72"
-      >
-        <div className="text-sm font-medium text-neutral-200">
-          대화를 모두 지울까요?
-        </div>
+      <PopoverContent align="end" data-slot="clear-conversation-popover" className="w-72">
+        <div className="text-sm font-medium text-neutral-200">대화를 모두 지울까요?</div>
         <p className="mt-1 text-xs text-neutral-500">
           답변과 입력 메시지가 모두 삭제됩니다. 첫 인사는 그대로 남아요.
         </p>
         <div className="mt-4 flex justify-end gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onOpenChange(false)}
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => onOpenChange(false)}>
             취소
           </Button>
           <Button type="button" size="sm" onClick={onConfirm}>

@@ -15,9 +15,7 @@ export function SkillsGrid({ skills, className }: SkillsGridProps) {
     <section className={cn("flex flex-col gap-4", className)} aria-label="Skills">
       <h2 className="text-lg font-medium text-white">Skills</h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {hasFrontend ? (
-          <SkillColumn title="Frontend" skills={skills.frontend} />
-        ) : null}
+        {hasFrontend ? <SkillColumn title="Frontend" skills={skills.frontend} /> : null}
         {hasSmartContract ? (
           <SkillColumn title="Smart Contract" skills={skills.smartContract} />
         ) : null}

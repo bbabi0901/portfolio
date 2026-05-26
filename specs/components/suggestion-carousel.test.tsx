@@ -18,9 +18,7 @@ describe("SuggestionCarousel", () => {
   });
 
   it("renders each question text", () => {
-    render(
-      <SuggestionCarousel questions={sample} visitedIds={new Set()} onSelect={() => {}} />,
-    );
+    render(<SuggestionCarousel questions={sample} visitedIds={new Set()} onSelect={() => {}} />);
     expect(screen.getByText("어떤 개발자예요?")).toBeInTheDocument();
     expect(screen.getByText("MFE 어떻게 했어요?")).toBeInTheDocument();
     expect(screen.getByText("Turbopack 결과는요?")).toBeInTheDocument();
@@ -28,9 +26,7 @@ describe("SuggestionCarousel", () => {
 
   it("invokes onSelect with the question when a badge is clicked", () => {
     const onSelect = vi.fn();
-    render(
-      <SuggestionCarousel questions={sample} visitedIds={new Set()} onSelect={onSelect} />,
-    );
+    render(<SuggestionCarousel questions={sample} visitedIds={new Set()} onSelect={onSelect} />);
     fireEvent.click(screen.getByText("MFE 어떻게 했어요?"));
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(onSelect).toHaveBeenCalledWith(sample[1]);
@@ -38,11 +34,7 @@ describe("SuggestionCarousel", () => {
 
   it("marks visited badges with data-visited and faded styling", () => {
     render(
-      <SuggestionCarousel
-        questions={sample}
-        visitedIds={new Set(["Q-002"])}
-        onSelect={() => {}}
-      />,
+      <SuggestionCarousel questions={sample} visitedIds={new Set(["Q-002"])} onSelect={() => {}} />,
     );
     const visited = screen.getByText("MFE 어떻게 했어요?").closest("button");
     const fresh = screen.getByText("어떤 개발자예요?").closest("button");

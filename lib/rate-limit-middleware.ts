@@ -15,9 +15,7 @@ export interface RateLimitMiddlewareOpts {
  * - On unexpected internal errors, fail-open (allow request through). The
  *   underlying checkRateLimit already falls back from Upstash to in-memory.
  */
-export function rateLimitMiddleware(
-  opts: RateLimitMiddlewareOpts,
-): MiddlewareHandler {
+export function rateLimitMiddleware(opts: RateLimitMiddlewareOpts): MiddlewareHandler {
   return async (c: Context, next: () => Promise<void>) => {
     let ipHash: string;
     try {
@@ -40,14 +38,10 @@ export function rateLimitMiddleware(
       return;
     }
     if (!minuteRes.ok) {
-      return c.json(
-        { error: "rate_limited", scope: "minute" },
-        429,
-        {
-          "Retry-After": String(minuteRes.retryAfter),
-          "X-RateLimit-Scope": "minute",
-        },
-      );
+      return c.json({ error: "rate_limited", scope: "minute" }, 429, {
+        "Retry-After": String(minuteRes.retryAfter),
+        "X-RateLimit-Scope": "minute",
+      });
     }
 
     let dayRes;
@@ -62,14 +56,10 @@ export function rateLimitMiddleware(
       return;
     }
     if (!dayRes.ok) {
-      return c.json(
-        { error: "rate_limited", scope: "day" },
-        429,
-        {
-          "Retry-After": String(dayRes.retryAfter),
-          "X-RateLimit-Scope": "day",
-        },
-      );
+      return c.json({ error: "rate_limited", scope: "day" }, 429, {
+        "Retry-After": String(dayRes.retryAfter),
+        "X-RateLimit-Scope": "day",
+      });
     }
 
     await next();

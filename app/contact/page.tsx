@@ -9,10 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  return (
-    <ContactClient
-      email="bbabi0901@gmail.com"
-      github="https://github.com/YoonsooKim9"
-    />
-  );
+  return <ContactClient email="bbabi0901@gmail.com" github="https://github.com/YoonsooKim9" />;
 }

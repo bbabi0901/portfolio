@@ -2,26 +2,18 @@
 
 <!-- agents-md-meta -->
 **Owner agent**: harness (Builder) — 본 문서는 Plan/Design phase 에서 갱신됨
-**Related**: AGENTS.md, CONTENT_GUIDE.md, AI_CONTRACT.md, DEPLOY.md
+**Related**: AGENTS.md, CONTENT_GUIDE.md, AI_CONTRACT.md, DEPLOY.md, NOTION_STRUCTURE.md
 **SSoT keys**: (외부 — Notion DB 스키마)
 **Last verified**: 2026-05-23 — 사용자 (김윤수)
 <!-- /agents-md-meta -->
 
-## 데이터 소스 구조
+> 이 문서는 **데이터 스키마·zod·청킹 규칙**을 다룬다. 워크스페이스의 실제 페이지 위치·ID·역할은 [`NOTION_STRUCTURE.md`](./NOTION_STRUCTURE.md) 참조.
 
-```
-Notion Workspace
-├── 기록v2 (페이지)
-│   ├── 🏠 홈
-│   ├── 📚 학습 노트 (DB) — 동기화 제외
-│   └── 📦 구 기록 (아카이브)
-│       ├── 프로젝트 (DB) ← 동기화 대상
-│       ├── 기획 (DB) — 제외
-│       ├── 해야할일 (DB) — 제외
-│       └── 여행 기록 (DB) — 제외
-├── 김윤수 이력서 (페이지) ← 동기화 대상
-└── (추가 예정) 자기소개/성격/취미/MBTI 페이지들 ← 화이트리스트 추가
-```
+## 데이터 소스 구조 (요약)
+
+본 프로젝트는 **`기록` 페이지를 단일 진실 소스(SSoT)** 로 삼는다. 자기소개·이력서·프로젝트 DB·스터디 DB·트러블슈팅 DB(TBD) 모두 기록 하위에 둔다. Q&A 피드백·Contact 같은 운영 DB는 프로젝트 DB의 "대화형 포트폴리오" row 하위에 위치.
+
+전체 트리·ID·역할 표는 [`NOTION_STRUCTURE.md`](./NOTION_STRUCTURE.md#페이지-트리) 참조.
 
 ## 화이트리스트
 

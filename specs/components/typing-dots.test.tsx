@@ -27,9 +27,7 @@ describe("TypingDots", () => {
 
   it("each dot uses the typing-dot animation with staggered delays", () => {
     const { container } = render(<TypingDots />);
-    const dots = Array.from(
-      container.querySelectorAll<HTMLElement>('[data-slot="typing-dot"]'),
-    );
+    const dots = Array.from(container.querySelectorAll<HTMLElement>('[data-slot="typing-dot"]'));
     expect(dots).toHaveLength(3);
     const [d0, d1, d2] = dots as [HTMLElement, HTMLElement, HTMLElement];
     expect(d0.style.animationDelay).toBe("0ms");

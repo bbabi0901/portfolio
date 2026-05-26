@@ -2,10 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import { app } from "@/app/api/[[...route]]/route";
 import { clearEnvCache } from "@/lib/env";
-import {
-  NO_RECORD_RESPONSE_KO,
-  NO_RECORD_RESPONSE_EN,
-} from "@/lib/prompts";
+import { NO_RECORD_RESPONSE_KO, NO_RECORD_RESPONSE_EN } from "@/lib/prompts";
 import { clearRateLimitMemory } from "@/lib/rate-limit";
 
 const ENV_KEYS = [

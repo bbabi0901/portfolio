@@ -28,7 +28,10 @@ test.describe("side menu (TS-23~26, TS-29)", () => {
   test("TS-26: '자기소개' 클릭 → /about + 시트 자동 close", async ({ page }) => {
     await page.goto("/");
     await openSideMenu(page);
-    await page.locator('[role="dialog"]').getByRole("link", { name: /자기소개/ }).click();
+    await page
+      .locator('[role="dialog"]')
+      .getByRole("link", { name: /자기소개/ })
+      .click();
     await expect(page).toHaveURL(/\/about/);
     await expect(page.locator('[role="dialog"]')).toBeHidden();
   });
@@ -36,14 +39,20 @@ test.describe("side menu (TS-23~26, TS-29)", () => {
   test("TS-26: '기술 이력' 클릭 → /experience", async ({ page }) => {
     await page.goto("/");
     await openSideMenu(page);
-    await page.locator('[role="dialog"]').getByRole("link", { name: /기술 이력/ }).click();
+    await page
+      .locator('[role="dialog"]')
+      .getByRole("link", { name: /기술 이력/ })
+      .click();
     await expect(page).toHaveURL(/\/experience/);
   });
 
   test("TS-26: '연락하기' 클릭 → /contact", async ({ page }) => {
     await page.goto("/");
     await openSideMenu(page);
-    await page.locator('[role="dialog"]').getByRole("link", { name: /연락하기/ }).click();
+    await page
+      .locator('[role="dialog"]')
+      .getByRole("link", { name: /연락하기/ })
+      .click();
     await expect(page).toHaveURL(/\/contact/);
   });
 

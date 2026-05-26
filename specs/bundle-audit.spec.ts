@@ -17,9 +17,7 @@ describe("TS-69 critical bundle audit (client embedding leak)", () => {
       // 빌드 산출물 없음 → skip
       return;
     }
-    const files = fs
-      .readdirSync(dir)
-      .filter((f) => f.endsWith(".js"));
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".js"));
 
     // 1530개 이상 연속된 numeric literal (음수/소수 포함) — embedding pattern.
     const re = /\[(?:-?\d+(?:\.\d+)?,){1530,}-?\d+(?:\.\d+)?\]/;

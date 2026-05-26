@@ -119,10 +119,7 @@ function renderForm(overrides: Partial<React.ComponentProps<typeof ContactForm>>
 async function fillValidFields(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/이름/i), "김윤수");
   await user.type(screen.getByLabelText(/이메일/i), "me@example.com");
-  await user.type(
-    screen.getByLabelText(/메시지/i),
-    "협업 문의드려요. 답변 부탁드립니다.",
-  );
+  await user.type(screen.getByLabelText(/메시지/i), "협업 문의드려요. 답변 부탁드립니다.");
 }
 
 describe("ContactForm", () => {
@@ -139,9 +136,7 @@ describe("ContactForm", () => {
     const { onSubmit } = renderForm();
     await user.click(screen.getByRole("button", { name: /전송/ }));
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(
-      screen.getByText(/이름을 입력해 주세요|이름은 1자 이상/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/이름을 입력해 주세요|이름은 1자 이상/)).toBeInTheDocument();
   });
 
   it("정상 제출 → onSubmit 호출 + 폼 reset", async () => {
@@ -173,9 +168,7 @@ describe("ContactForm", () => {
     const { onSubmit, container } = renderForm();
     await fillValidFields(user);
     // honeypot 강제 채움
-    const honey = container.querySelector(
-      "input[name='website']",
-    ) as HTMLInputElement;
+    const honey = container.querySelector("input[name='website']") as HTMLInputElement;
     expect(honey).not.toBeNull();
     fireEvent.change(honey, { target: { value: "spambot" } });
     vi.advanceTimersByTime(2000);
@@ -195,9 +188,7 @@ describe("ContactForm", () => {
     vi.advanceTimersByTime(500);
     await user.click(screen.getByRole("button", { name: /전송/ }));
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(
-      screen.getByText(/잠시만요|확인이 필요|봇이 아닌/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/잠시만요|확인이 필요|봇이 아닌/)).toBeInTheDocument();
   });
 
   it("beforeUnload: dirty 상태 → preventDefault", async () => {
@@ -226,9 +217,7 @@ describe("ContactForm", () => {
 
   it("honeypot 필드는 화면에 안 보이고 aria-hidden, tabIndex=-1", () => {
     const { container } = renderForm();
-    const honey = container.querySelector(
-      "input[name='website']",
-    ) as HTMLInputElement;
+    const honey = container.querySelector("input[name='website']") as HTMLInputElement;
     expect(honey).not.toBeNull();
     expect(honey.getAttribute("aria-hidden")).toBe("true");
     expect(honey.tabIndex).toBe(-1);
@@ -244,12 +233,7 @@ describe("DirectContactCard", () => {
   });
 
   it("github 외부 link → target=_blank rel 포함 noopener+noreferrer", () => {
-    render(
-      <DirectContactCard
-        email="x@y.z"
-        github="https://github.com/YoonsooKim9"
-      />,
-    );
+    render(<DirectContactCard email="x@y.z" github="https://github.com/YoonsooKim9" />);
     const gh = screen.getByRole("link", { name: /github/i });
     expect(gh.getAttribute("target")).toBe("_blank");
     expect(gh.getAttribute("rel")).toMatch(/noopener/);

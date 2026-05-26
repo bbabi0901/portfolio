@@ -1,10 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 
-import {
-  loadPortfolio,
-  clearPortfolioCache,
-  toClientData,
-} from "@/lib/portfolio-data";
+import { loadPortfolio, clearPortfolioCache, toClientData } from "@/lib/portfolio-data";
 
 describe("portfolio-data loader", () => {
   beforeEach(() => clearPortfolioCache());

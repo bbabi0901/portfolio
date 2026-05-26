@@ -144,12 +144,7 @@ describe("SideSheet", () => {
 
   it("displays lastUpdated when provided", () => {
     render(
-      <SideSheet
-        open={true}
-        onOpenChange={() => {}}
-        currentPath="/"
-        lastUpdated="2026-05-07"
-      />,
+      <SideSheet open={true} onOpenChange={() => {}} currentPath="/" lastUpdated="2026-05-07" />,
     );
     expect(screen.getByText(/2026-05-07/)).toBeInTheDocument();
   });
@@ -188,9 +183,7 @@ describe("Footer", () => {
     render(<Footer />);
     const trigger = screen.getByRole("button", { name: /privacy/i });
     await user.click(trigger);
-    expect(
-      await screen.findByText(/익명|학습 데이터|개인정보/),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/익명|학습 데이터|개인정보/)).toBeInTheDocument();
   });
 });
 

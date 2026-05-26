@@ -59,7 +59,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "MOCK_LLM=1 MOCK_NOTION=1 SKIP_NOTION_SYNC=1 RATE_LIMIT_BYPASS=1 npm run dev -- -p 3100",
+    command:
+      "MOCK_LLM=1 MOCK_NOTION=1 SKIP_NOTION_SYNC=1 RATE_LIMIT_BYPASS=1 npm run dev -- -p 3100",
     url: "http://localhost:3100",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

@@ -154,10 +154,7 @@ describe("token budget (memory)", () => {
 
   it("음수/NaN usage 방어 (clamp)", async () => {
     const now = Date.UTC(2026, 4, 7, 6, 0, 0);
-    await addTokenUsage(
-      { promptTokens: -50 as number, completionTokens: 100 },
-      now,
-    );
+    await addTokenUsage({ promptTokens: -50 as number, completionTokens: 100 }, now);
     // negative should not bring total below 0
     const used = await getTodayUsage(now);
     expect(used).toBeGreaterThanOrEqual(0);

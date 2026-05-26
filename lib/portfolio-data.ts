@@ -3,11 +3,7 @@ import "server-only";
 import fs from "node:fs";
 import path from "node:path";
 
-import type {
-  PortfolioChunk,
-  PortfolioClientData,
-  PortfolioServerData,
-} from "@/types/portfolio";
+import type { PortfolioChunk, PortfolioClientData, PortfolioServerData } from "@/types/portfolio";
 
 const SERVER_FILE = "data/portfolio.server.json";
 const SAMPLE_FILE = "data/portfolio.sample.json";
@@ -42,9 +38,7 @@ export function loadPortfolio(): PortfolioServerData {
   try {
     parsed = JSON.parse(raw);
   } catch (err) {
-    throw new Error(
-      `[portfolio-data] failed to parse ${source}: ${(err as Error).message}`,
-    );
+    throw new Error(`[portfolio-data] failed to parse ${source}: ${(err as Error).message}`);
   }
 
   const data = assertPortfolioServerData(parsed, source);
@@ -65,10 +59,7 @@ export function toClientData(data: PortfolioServerData): PortfolioClientData {
   };
 }
 
-function assertPortfolioServerData(
-  value: unknown,
-  source: string,
-): PortfolioServerData {
+function assertPortfolioServerData(value: unknown, source: string): PortfolioServerData {
   if (!isObject(value)) {
     throw new Error(`[portfolio-data] ${source}: root must be object`);
   }
@@ -83,9 +74,7 @@ function assertPortfolioServerData(
   }
   const chunks = value.chunks.map((c, i) => assertChunk(c, i, source));
   if (!Array.isArray(value.suggestedQuestions)) {
-    throw new Error(
-      `[portfolio-data] ${source}: suggestedQuestions must be array`,
-    );
+    throw new Error(`[portfolio-data] ${source}: suggestedQuestions must be array`);
   }
   if (!isObject(value.profile)) {
     throw new Error(`[portfolio-data] ${source}: profile must be object`);
@@ -99,11 +88,7 @@ function assertPortfolioServerData(
   };
 }
 
-function assertChunk(
-  value: unknown,
-  index: number,
-  source: string,
-): PortfolioChunk {
+function assertChunk(value: unknown, index: number, source: string): PortfolioChunk {
   if (!isObject(value)) {
     throw new Error(`[portfolio-data] ${source}: chunks[${index}] not object`);
   }
@@ -117,20 +102,14 @@ function assertChunk(
   ] as const;
   for (const key of requiredStrings) {
     if (typeof value[key] !== "string") {
-      throw new Error(
-        `[portfolio-data] ${source}: chunks[${index}].${key} must be string`,
-      );
+      throw new Error(`[portfolio-data] ${source}: chunks[${index}].${key} must be string`);
     }
   }
   if (typeof value.tokens !== "number") {
-    throw new Error(
-      `[portfolio-data] ${source}: chunks[${index}].tokens must be number`,
-    );
+    throw new Error(`[portfolio-data] ${source}: chunks[${index}].tokens must be number`);
   }
   if (!Array.isArray(value.headingPath)) {
-    throw new Error(
-      `[portfolio-data] ${source}: chunks[${index}].headingPath must be array`,
-    );
+    throw new Error(`[portfolio-data] ${source}: chunks[${index}].headingPath must be array`);
   }
   if (!Array.isArray(value.embedding) || value.embedding.length === 0) {
     throw new Error(

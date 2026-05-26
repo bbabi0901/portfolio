@@ -67,9 +67,7 @@ export function retrieve(
 
   const scored: RetrievalResult[] = data.chunks.map((chunk) => {
     const keyword = scoreKeyword(chunk, queryTokenSet);
-    const vector = queryEmbedding
-      ? cosineSimilarity(chunk.embedding, queryEmbedding)
-      : 0;
+    const vector = queryEmbedding ? cosineSimilarity(chunk.embedding, queryEmbedding) : 0;
     const merged = mergeScores(keyword, vector, {
       keyword: keywordWeight,
       vector: vectorWeight,

@@ -122,9 +122,7 @@ export function ChatRoot({
         fetch: async (input, init) => {
           const res = await fetch(input as RequestInfo, init);
           if (res.headers.get("X-Model-Substitution") === "true") {
-            toast.warning(
-              "이 모델은 일시적으로 사용 불가. 기본 모델로 대체했어요.",
-            );
+            toast.warning("이 모델은 일시적으로 사용 불가. 기본 모델로 대체했어요.");
           }
           if (!res.ok) {
             const retryAfter = res.headers.get("Retry-After");
@@ -162,12 +160,9 @@ export function ChatRoot({
     const head: ChatMessage[] = greetingMsg ? [greetingMsg] : [];
     const tail: ChatMessage[] = aiMessages.map((m, i) => {
       const isLast = i === aiMessages.length - 1;
-      const role: ChatMessage["role"] =
-        m.role === "user" ? "user" : "assistant";
+      const role: ChatMessage["role"] = m.role === "user" ? "user" : "assistant";
       const msgStatus: ChatMessage["status"] =
-        role === "assistant" && isLast && status === "streaming"
-          ? "streaming"
-          : "done";
+        role === "assistant" && isLast && status === "streaming" ? "streaming" : "done";
       return {
         id: m.id,
         role,
@@ -286,35 +281,19 @@ export function ChatRoot({
   );
 
   return (
-    <div
-      data-slot="chat-root"
-      className={cn("flex h-full flex-col", className)}
-    >
+    <div data-slot="chat-root" className={cn("flex h-full flex-col", className)}>
       <header
         data-slot="chat-header"
         className="flex items-center justify-between gap-2 border-b border-neutral-900 py-3"
       >
-        <h1 className="text-sm font-medium text-neutral-300">
-          김윤수 — AI Portfolio
-        </h1>
+        <h1 className="text-sm font-medium text-neutral-300">김윤수 — AI Portfolio</h1>
         <div className="flex items-center gap-1">
-          <ClearButton
-            open={clearOpen}
-            onOpenChange={setClearOpen}
-            onConfirm={clearConversation}
-          />
+          <ClearButton open={clearOpen} onOpenChange={setClearOpen} onConfirm={clearConversation} />
         </div>
       </header>
 
-      <div
-        ref={scrollRef}
-        data-slot="chat-scroll"
-        className="relative flex-1 overflow-y-auto py-4"
-      >
-        <MessageList
-          messages={allMessages}
-          emptyState={!greetingMsg ? <EmptyState /> : null}
-        />
+      <div ref={scrollRef} data-slot="chat-scroll" className="relative flex-1 overflow-y-auto py-4">
+        <MessageList messages={allMessages} emptyState={!greetingMsg ? <EmptyState /> : null} />
         {!greetingMsg && (
           <GreetingPlayer
             config={greeting}
@@ -335,7 +314,7 @@ export function ChatRoot({
         <JumpToLatestButton
           visible={!stuckBottom}
           onClick={jumpToBottom}
-          className="absolute right-4 -top-12 z-10"
+          className="absolute -top-12 right-4 z-10"
         />
       </div>
 
@@ -352,11 +331,7 @@ export function ChatRoot({
         onChange={setInput}
         onSubmit={handleSend}
         disabled={composerDisabled}
-        placeholder={
-          noModelsAvailable
-            ? "지금은 사용할 수 있는 모델이 없어요"
-            : undefined
-        }
+        placeholder={noModelsAvailable ? "지금은 사용할 수 있는 모델이 없어요" : undefined}
         leftAction={
           <ModelSwitcher
             value={modelId}

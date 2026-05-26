@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useReducer,
-  useRef,
-  useSyncExternalStore,
-  type JSX,
-} from "react";
+import { useEffect, useReducer, useRef, useSyncExternalStore, type JSX } from "react";
 import { MessageBubble } from "./MessageBubble";
 import { isGreetedRecent, writeGreetedAt } from "@/lib/greeting";
 import type { ChatMessage } from "@/types/chat";
@@ -137,27 +131,27 @@ export function GreetingPlayer({
     }
 
     const timers: Array<ReturnType<typeof setTimeout>> = [];
-    timers.push(
-      setTimeout(() => dispatch({ type: "start-dots" }), INITIAL_DOTS_DELAY_MS),
-    );
+    timers.push(setTimeout(() => dispatch({ type: "start-dots" }), INITIAL_DOTS_DELAY_MS));
     const streamingStart = INITIAL_DOTS_DELAY_MS + config.typingDelayMs;
     const words = tokenize(config.message);
-    timers.push(
-      setTimeout(() => dispatch({ type: "start-streaming", words }), streamingStart),
-    );
+    timers.push(setTimeout(() => dispatch({ type: "start-streaming", words }), streamingStart));
     const [min, max] = config.wordIntervalMs;
     let cumulative = streamingStart;
     for (let i = 0; i < words.length; i++) {
       cumulative += min + Math.random() * Math.max(0, max - min);
-      timers.push(
-        setTimeout(() => dispatch({ type: "reveal-next" }), cumulative),
-      );
+      timers.push(setTimeout(() => dispatch({ type: "reveal-next" }), cumulative));
     }
 
     return () => {
       timers.forEach(clearTimeout);
     };
-  }, [config.message, config.rememberDays, config.typingDelayMs, config.wordIntervalMs, reducedMotion]);
+  }, [
+    config.message,
+    config.rememberDays,
+    config.typingDelayMs,
+    config.wordIntervalMs,
+    reducedMotion,
+  ]);
 
   // Done transition: write storage, fire onComplete (once).
   useEffect(() => {

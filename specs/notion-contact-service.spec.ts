@@ -82,9 +82,7 @@ describe("appendContact (실제 호출, msw mock)", () => {
 
   it("정상 응답 → ok=true + notionPageId 반환", async () => {
     server.use(
-      http.post("https://api.notion.com/v1/pages", () =>
-        HttpResponse.json({ id: "ctc-1" }),
-      ),
+      http.post("https://api.notion.com/v1/pages", () => HttpResponse.json({ id: "ctc-1" })),
     );
 
     const res = await appendContact(baseInput);
@@ -126,9 +124,7 @@ describe("appendContact (실제 호출, msw mock)", () => {
     expect(props.Email!.email).toBe("user@example.com");
     // Message rich_text
     expect(Array.isArray(props.Message!.rich_text)).toBe(true);
-    expect(props.Message!.rich_text![0]!.text.content).toBe(
-      "안녕하세요. 협업 관련 문의 드립니다.",
-    );
+    expect(props.Message!.rich_text![0]!.text.content).toBe("안녕하세요. 협업 관련 문의 드립니다.");
     // UA hash
     expect(Array.isArray(props["UA hash"]!.rich_text)).toBe(true);
     expect(props["UA hash"]!.rich_text![0]!.text.content).toBe("abcd1234");
@@ -148,10 +144,7 @@ describe("appendContact (실제 호출, msw mock)", () => {
     await appendContact({ ...baseInput, name: longName });
     const props = (
       captured! as {
-        properties: Record<
-          string,
-          { title: Array<{ text: { content: string } }> }
-        >;
+        properties: Record<string, { title: Array<{ text: { content: string } }> }>;
       }
     ).properties;
     expect(props.Title!.title[0]!.text.content.length).toBeLessThanOrEqual(60);
@@ -205,10 +198,7 @@ describe("appendContact (실제 호출, msw mock)", () => {
   it("403 → reason='auth'", async () => {
     server.use(
       http.post("https://api.notion.com/v1/pages", () =>
-        HttpResponse.json(
-          { object: "error", code: "restricted_resource" },
-          { status: 403 },
-        ),
+        HttpResponse.json({ object: "error", code: "restricted_resource" }, { status: 403 }),
       ),
     );
     const res = await appendContact(baseInput);

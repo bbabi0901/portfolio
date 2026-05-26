@@ -30,7 +30,7 @@ export function Header({ onMenuOpen, menuOpen, className }: HeaderProps) {
           onClick={onMenuOpen}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
-          className="rounded-md p-2 text-neutral-400 transition-colors hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 md:p-2.5"
+          className="rounded-md p-2 text-neutral-400 transition-colors hover:bg-neutral-900 hover:text-white focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none md:p-2.5"
         >
           <Menu size={18} strokeWidth={1.5} aria-hidden="true" />
         </button>

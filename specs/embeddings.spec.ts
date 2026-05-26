@@ -1,10 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  cosineSimilarity,
-  normalize,
-  fixtureEmbedding,
-  mergeScores,
-} from "@/lib/embeddings";
+import { cosineSimilarity, normalize, fixtureEmbedding, mergeScores } from "@/lib/embeddings";
 
 describe("cosineSimilarity", () => {
   it("returns 1 for identical", () => {
