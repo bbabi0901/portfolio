@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { gateway } from "ai";
 import type { LanguageModel } from "ai";
 import type {
   LanguageModelV3,
@@ -51,6 +52,20 @@ const REGISTRY: Record<ModelId, ModelSpec> = {
 
 const KNOWN_IDS = Object.keys(REGISTRY) as ModelId[];
 
+// Vercel AI Gateway model IDs — "provider/model" format (ADR-025)
+const GATEWAY_MODEL_ID: Record<ModelId, string> = {
+  "gpt-4o-mini": "openai/gpt-4o-mini",
+  "claude-3-5-haiku-latest": "anthropic/claude-3-5-haiku-latest",
+  "gemini-2.0-flash-exp": "google/gemini-2.0-flash-exp",
+};
+
+// Direct provider API key env var names (fallback when Gateway not configured)
+const PROVIDER_ENV_KEY: Record<Provider, keyof ReturnType<typeof getServerEnv>> = {
+  openai: "OPENAI_API_KEY",
+  anthropic: "ANTHROPIC_API_KEY",
+  google: "GOOGLE_GENERATIVE_AI_API_KEY",
+};
+
 export function isKnownModel(id: string): id is ModelId {
   return (KNOWN_IDS as string[]).includes(id);
 }
@@ -64,12 +79,6 @@ export function resolveModel(id: string | null | undefined): ModelSpec {
   }
   return REGISTRY[DEFAULT_MODEL_ID];
 }
-
-const PROVIDER_ENV_KEY: Record<Provider, keyof ReturnType<typeof getServerEnv>> = {
-  openai: "OPENAI_API_KEY",
-  anthropic: "ANTHROPIC_API_KEY",
-  google: "GOOGLE_GENERATIVE_AI_API_KEY",
-};
 
 function lastUserText(prompt: LanguageModelV3CallOptions["prompt"]): string {
   for (let i = prompt.length - 1; i >= 0; i--) {
@@ -130,13 +139,24 @@ function createMockModel(modelId: ModelId): LanguageModelV3 {
 
 export function createModel(spec: ModelSpec): LanguageModel {
   const env = getServerEnv();
+
   if (env.MOCK_LLM === "1") {
     return createMockModel(spec.id);
   }
+
+  // Vercel AI Gateway 우선 (단일 결제·통합 관리 — ADR-025)
+  if (env.AI_GATEWAY_API_KEY) {
+    return gateway(GATEWAY_MODEL_ID[spec.id]);
+  }
+
+  // Fallback: 직접 provider 키 사용
   const envKey = PROVIDER_ENV_KEY[spec.provider];
   const apiKey = env[envKey];
   if (!apiKey || typeof apiKey !== "string") {
-    throw new Error(`provider:${spec.provider} API key not set`);
+    throw new Error(
+      `provider:${spec.provider} API key not set ` +
+        `(set AI_GATEWAY_API_KEY for Vercel AI Gateway, or ${envKey} for direct access)`
+    );
   }
   switch (spec.provider) {
     case "openai":
@@ -150,6 +170,11 @@ export function createModel(spec: ModelSpec): LanguageModel {
 
 export function listAvailableModels(): ModelSpec[] {
   const env = getServerEnv();
+  // Gateway가 있으면 모든 모델 사용 가능 (키 통합)
+  if (env.AI_GATEWAY_API_KEY) {
+    return KNOWN_IDS.map((id) => REGISTRY[id]);
+  }
+  // Fallback: 직접 키가 있는 provider의 모델만 반환
   return KNOWN_IDS.map((id) => REGISTRY[id]).filter((spec) => {
     const envKey = PROVIDER_ENV_KEY[spec.provider];
     return typeof env[envKey] === "string" && env[envKey] !== "";
