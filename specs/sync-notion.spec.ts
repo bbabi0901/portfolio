@@ -10,7 +10,7 @@ function freshEnv(): Record<string, string> {
     NOTION_TOKEN: "",
     NOTION_PROJECTS_DB_ID: "",
     NOTION_PROFILE_PAGE_IDS: "",
-    OPENAI_API_KEY: "",
+    AI_GATEWAY_API_KEY: "",
     MOCK_NOTION: "",
     MOCK_LLM: "",
     SKIP_NOTION_SYNC: "",
@@ -44,7 +44,7 @@ describe("sync-notion script", () => {
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "fake";
+    process.env.AI_GATEWAY_API_KEY = "fake";
     process.env.NOTION_PROFILE_PAGE_IDS = "fixture-resume";
 
     const { main } = await import(SCRIPT_PATH);
@@ -68,7 +68,7 @@ describe("sync-notion script", () => {
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "fake";
+    process.env.AI_GATEWAY_API_KEY = "fake";
 
     const { main } = await import(SCRIPT_PATH);
     await main({ outDir: tmpDir });
@@ -87,7 +87,7 @@ describe("sync-notion script", () => {
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "fake";
+    process.env.AI_GATEWAY_API_KEY = "fake";
 
     const { main } = await import(SCRIPT_PATH);
     await main({ outDir: tmpDir });
@@ -108,18 +108,18 @@ describe("sync-notion script", () => {
   it("rejects when NOTION_TOKEN missing and not in mock mode", async () => {
     process.env.MOCK_NOTION = "";
     process.env.NOTION_TOKEN = "";
-    process.env.OPENAI_API_KEY = "fake";
+    process.env.AI_GATEWAY_API_KEY = "fake";
     const { main } = await import(SCRIPT_PATH);
     await expect(main({ outDir: tmpDir })).rejects.toThrow(/NOTION_TOKEN/);
   });
 
-  it("rejects when OPENAI_API_KEY missing and not in mock LLM mode", async () => {
+  it("rejects when AI_GATEWAY_API_KEY missing and not in mock LLM mode", async () => {
     process.env.MOCK_NOTION = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "";
+    process.env.AI_GATEWAY_API_KEY = "";
     process.env.MOCK_LLM = "";
     const { main } = await import(SCRIPT_PATH);
-    await expect(main({ outDir: tmpDir })).rejects.toThrow(/OPENAI_API_KEY/);
+    await expect(main({ outDir: tmpDir })).rejects.toThrow(/AI_GATEWAY_API_KEY/);
   });
 });

@@ -44,7 +44,9 @@ const EnvSchema = z
     NOTION_TOKEN: z.string().optional(),
     NOTION_PROJECTS_DB_ID: z.string().optional(),
     NOTION_PROFILE_PAGE_IDS: z.string().optional(),
-    OPENAI_API_KEY: z.string().optional(),
+    AI_GATEWAY_API_KEY: z.string().optional(),
+    NOTION_TROUBLESHOOTING_DB_ID: z.string().optional(),
+    NOTION_EXTRA_PAGE_IDS: z.string().optional(),
     MOCK_NOTION: z.string().optional(),
     MOCK_LLM: z.string().optional(),
     SKIP_NOTION_SYNC: z.string().optional(),
@@ -85,7 +87,14 @@ function parseProfilePageIds(raw: string | undefined): string[] {
     .filter(Boolean);
 }
 
-function resolveCategory(page: NotionPageContent, profileIds: Set<string>): ChunkCategory {
+function resolveCategory(
+  page: NotionPageContent,
+  profileIds: Set<string>,
+  troubleshootingIds: Set<string>,
+  extraPageIds: Set<string>,
+): ChunkCategory {
+  if (troubleshootingIds.has(page.ref.id)) return "트러블슈팅";
+  if (extraPageIds.has(page.ref.id)) return "subpage";
   if (profileIds.has(page.ref.id)) {
     const title = page.ref.title.toLowerCase();
     if (title.includes("이력서") || title.includes("resume")) return "career";
@@ -207,8 +216,8 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
       fail("[sync-notion] NOTION_PROJECTS_DB_ID is required when MOCK_NOTION!=1");
     }
   }
-  if (!mockLlm && !env.OPENAI_API_KEY) {
-    fail("[sync-notion] OPENAI_API_KEY is required (set MOCK_LLM=1 to use fixtures)");
+  if (!mockLlm && !env.AI_GATEWAY_API_KEY) {
+    fail("[sync-notion] AI_GATEWAY_API_KEY is required (set MOCK_LLM=1 to use fixtures)");
   }
 
   const outDir = opts.outDir
@@ -224,7 +233,9 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     mock: mockNotion,
   });
   const embeddings = createEmbeddingsService({
-    apiKey: env.OPENAI_API_KEY || "fixture",
+    apiKey: env.AI_GATEWAY_API_KEY || "fixture",
+    baseURL: "https://ai-gateway.vercel.sh",
+    model: "openai/text-embedding-3-small",
     mock: mockLlm,
   });
 
@@ -244,14 +255,37 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     else console.warn(`[sync-notion] profile page skipped (not found / no access): ${id}`);
   }
 
-  const allIds = [...filteredProjects.map((p) => p.id), ...profileRefs.map((p) => p.id)];
+  // Troubleshooting DB — 완료 only
+  const troubleshootingRefs: NotionPageRef[] = [];
+  if (env.NOTION_TROUBLESHOOTING_DB_ID) {
+    const allTs = await notion.queryDatabase(env.NOTION_TROUBLESHOOTING_DB_ID, {});
+    troubleshootingRefs.push(...allTs.filter(r => r.status === "완료" || r.status === "Done"));
+  }
+
+  // Extra standalone pages
+  const extraPageIds = parseProfilePageIds(env.NOTION_EXTRA_PAGE_IDS);
+  const extraRefs: NotionPageRef[] = [];
+  for (const id of extraPageIds) {
+    const ref = await notion.getPageRef(id);
+    if (ref) extraRefs.push(ref);
+    else console.warn(`[sync-notion] extra page skipped (not found): ${id}`);
+  }
+
+  const allIds = [
+    ...filteredProjects.map(p => p.id),
+    ...profileRefs.map(p => p.id),
+    ...troubleshootingRefs.map(p => p.id),
+    ...extraRefs.map(p => p.id),
+  ];
   const pages = await notion.getPagesContent(allIds, {
     concurrency: 4,
     onSkip: (id, reason) => console.warn(`[sync-notion] page skipped (${reason}): ${id}`),
   });
 
   const profileIdSet = new Set(profileIds);
-  const chunks = chunkPages(pages, (p) => resolveCategory(p, profileIdSet), {
+  const troubleshootingIdSet = new Set(troubleshootingRefs.map(r => r.id));
+  const extraPageIdSet = new Set(extraRefs.map(r => r.id));
+  const chunks = chunkPages(pages, (p) => resolveCategory(p, profileIdSet, troubleshootingIdSet, extraPageIdSet), {
     onWarn: (msg) => console.warn(`[sync-notion] ${msg}`),
   });
 

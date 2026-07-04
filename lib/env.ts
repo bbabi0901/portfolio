@@ -11,6 +11,8 @@ const ServerEnvSchema = z.object({
   NOTION_TOKEN: z.string().optional(),
   NOTION_FEEDBACK_DB_ID: z.string().optional(),
   NOTION_CONTACT_DB_ID: z.string().optional(),
+  NOTION_TROUBLESHOOTING_DB_ID: z.string().optional(),
+  NOTION_EXTRA_PAGE_IDS: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   RESEND_TO_EMAIL: z.string().email().optional(),
   RESEND_FROM_EMAIL: z.string().email().optional(),
