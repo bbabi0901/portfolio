@@ -60,10 +60,14 @@
       "started_at": "2026-05-07T19:23:33+0900",
       "completed_at": "2026-05-07T19:31:00+0900",
       "summary": "app/layout.tsx metadata expanded (title.template '%s | 김윤수', applicationName, authors, creator, keywords, alternates.canonical '/', openGraph.locale ko_KR + url + siteName, twitter summary_large_image, robots.googleBot, icons.favicon); per-page metadata adds alternates.canonical for /, /about, /experience, /contact (no openGraph.images override); JsonLdPerson adds url/description/knowsAbout (7 entries); robots.ts disallow extended to /api/node/; opengraph-image.tsx tightens alt + Pretendard→system-ui→Apple SD Gothic Neo→Noto Sans KR fallback; specs/seo-meta.spec.ts (29 specs) covering layout/viewport/page-level/JsonLdPerson/sitemap/robots; 516 tests total."
+    },
     {
       "step": 4,
       "name": "error-503-page-lhci",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-07-04T10:00:00+09:00",
+      "completed_at": "2026-07-04T10:00:00+09:00",
+      "summary": "app/maintenance/page.tsx (token-budget 503 랜딩, robots noindex/nofollow), ErrorState에 kind='token-budget' 분기+/maintenance 링크 추가, lib/log.ts 구조화 로깅, .github/workflows/lhci.yml (disabled skeleton), .lighthouserc.json 임계값(perf 0.9, a11y/bp/seo 0.95). specs: maintenance-page.spec.tsx, lhci-config.spec.ts."
     }
   ],
   "created_at": "2026-05-07T18:57:18+0900"

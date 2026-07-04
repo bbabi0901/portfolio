@@ -43,15 +43,22 @@
       "started_at": "2026-05-07T17:55:35+0900",
       "completed_at": "2026-05-07T18:01:10+0900",
       "summary": "POST /api/node/feedback (Hono Node runtime) — zod 검증 (messageId/question≤4000/answer≤8000/reason 화이트리스트/model/retrievalChunkTitles≤20/reasonDetail≤500), UA hash via hashUserAgent, appendFeedback 호출, ERR-09 unknown 한정 1회 retry (1s), auth→503 feedback_unavailable, schema→422 feedback_invalid, unknown→502 feedback_failed. specs/feedback-route.spec.ts 26개 통과, 전체 439 tests pass, lint·tsc·build 클린, NOTION_TOKEN 응답 누설 X."
+    },
     {
       "step": 3,
       "name": "contact-route",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-07-04T10:00:00+09:00",
+      "completed_at": "2026-07-04T10:00:00+09:00",
+      "summary": "POST /api/node/contact 구현 — honeypot(website) 감지 → 200 _silent:true, elapsedMs<1500 → 422 too_fast, appendContact() 호출 → 200 channel:notion, not-configured → 503, Notion 실패+RESEND 설정 → 200 channel:resend, 모두 실패 → 502. specs/contact-route.spec.ts 추가."
     },
     {
       "step": 4,
       "name": "ui-wiring",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-07-04T10:00:00+09:00",
+      "completed_at": "2026-07-04T10:00:00+09:00",
+      "summary": "ContactClient mockSubmit→handleSubmit(실제 fetch), mountedAt ref로 elapsedMs 계산, toast 피드백. ChatRoot handleFeedback: up→toast, down→POST /api/node/feedback+feedbackSentRef 중복 방지. MessageBubble FeedbackPopover 통합. wiring 테스트 추가."
     }
   ],
   "created_at": "2026-05-07T17:42:24+0900"

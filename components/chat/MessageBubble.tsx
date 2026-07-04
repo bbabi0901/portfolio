@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentPropsWithoutRef } from "react";
+import { type ComponentPropsWithoutRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -8,10 +8,17 @@ import { cn } from "@/lib/utils";
 import type { ChatMessage, Citation } from "@/types/chat";
 import { TypingDots } from "./TypingDots";
 import { SourceCitation } from "./SourceCitation";
+import { MessageActionsBar } from "./MessageActionsBar";
+import { FeedbackPopover, type FeedbackReason } from "./FeedbackPopover";
+
+export interface DownFeedbackData {
+  reason: FeedbackReason;
+  reasonDetail?: string;
+}
 
 export interface MessageBubbleProps {
   message: ChatMessage;
-  onFeedback?: (messageId: string, kind: "up" | "down") => void;
+  onFeedback?: (messageId: string, kind: "up" | "down", data?: DownFeedbackData) => void;
   onCopy?: (messageId: string) => void;
   onOpenSource?: (citation: Citation) => void;
   className?: string;
@@ -63,12 +70,33 @@ const markdownComponents = {
   },
 };
 
-export function MessageBubble({ message, onOpenSource, className }: MessageBubbleProps) {
+export function MessageBubble({ message, onFeedback, onCopy, onOpenSource, className }: MessageBubbleProps) {
   const isUser = message.role === "user";
   const isTyping = message.status === "typing";
   const isStreaming = message.status === "streaming";
+  const isDone = message.status === "done";
   const showCitations =
-    !isUser && message.status === "done" && (message.citations?.length ?? 0) > 0;
+    !isUser && isDone && (message.citations?.length ?? 0) > 0;
+  const showActions = !isUser && isDone && !isTyping;
+
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
+  function handleFeedbackKind(kind: "up" | "down") {
+    if (kind === "up") {
+      onFeedback?.(message.id, "up");
+    } else {
+      setPopoverOpen(true);
+    }
+  }
+
+  function handlePopoverSubmit(reason: FeedbackReason, detail?: string) {
+    onFeedback?.(message.id, "down", { reason, reasonDetail: detail });
+    setPopoverOpen(false);
+  }
+
+  const trigger = (
+    <span style={{ display: "none" }} />
+  );
 
   return (
     <div
@@ -120,6 +148,25 @@ export function MessageBubble({ message, onOpenSource, className }: MessageBubbl
             />
           ))}
         </div>
+      )}
+      {showActions && (
+        <>
+          <MessageActionsBar
+            messageId={message.id}
+            text={message.content}
+            citations={message.citations ?? []}
+            onCopy={() => onCopy?.(message.id)}
+            onOpenSource={(citation) => onOpenSource?.(citation)}
+            onFeedback={handleFeedbackKind}
+            alreadySent={message.feedbackSent}
+          />
+          <FeedbackPopover
+            open={popoverOpen}
+            onOpenChange={setPopoverOpen}
+            onSubmit={handlePopoverSubmit}
+            trigger={trigger}
+          />
+        </>
       )}
     </div>
   );

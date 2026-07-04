@@ -19,6 +19,7 @@ import type { SuggestedQuestionMeta } from "@/types/portfolio";
 import { ModelSwitcher, type ModelId } from "./ModelSwitcher";
 import { SuggestionCarousel } from "./SuggestionCarousel";
 import { MessageList } from "./MessageList";
+import type { DownFeedbackData } from "./MessageBubble";
 import { Composer } from "./Composer";
 import { JumpToLatestButton } from "./JumpToLatestButton";
 import { GreetingPlayer, type GreetingConfig } from "./GreetingPlayer";
@@ -225,6 +226,64 @@ export function ChatRoot({
     setClearOpen(false);
   }, [status, stop, setMessages, error, clearError]);
 
+  // Feedback
+  const feedbackSentRef = useRef<Set<string>>(new Set());
+  const handleFeedback = useCallback(
+    async (messageId: string, kind: "up" | "down", data?: DownFeedbackData) => {
+      if (kind === "up") {
+        toast.success("고마워요!");
+        return;
+      }
+
+      if (feedbackSentRef.current.has(messageId)) return;
+
+      // Find question (previous user message) and answer (this assistant message)
+      const msgIndex = aiMessages.findIndex((m) => m.id === messageId);
+      const answer = msgIndex >= 0 ? uiMessageText(aiMessages[msgIndex]!) : "";
+      const question =
+        msgIndex > 0 && aiMessages[msgIndex - 1]!.role === "user"
+          ? uiMessageText(aiMessages[msgIndex - 1]!)
+          : "";
+
+      try {
+        const res = await fetch("/api/node/feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messageId,
+            question,
+            answer,
+            reason: data?.reason ?? "other",
+            reasonDetail: data?.reasonDetail,
+            model: modelId,
+            retrievalChunkTitles: [],
+          }),
+        });
+
+        if (res.ok) {
+          feedbackSentRef.current.add(messageId);
+          toast.success("고마워요, 보강할게요");
+          return;
+        }
+
+        if (res.status === 503) {
+          toast.error("피드백이 일시적으로 사용 불가에요");
+          return;
+        }
+
+        if (res.status === 429) {
+          toast.error("잠시 후 다시 시도해 주세요");
+          return;
+        }
+
+        toast.error("피드백 전송에 실패했어요");
+      } catch {
+        toast.error("인터넷 연결을 확인해 주세요");
+      }
+    },
+    [aiMessages, modelId],
+  );
+
   // Cmd+K shortcut
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -293,7 +352,7 @@ export function ChatRoot({
       </header>
 
       <div ref={scrollRef} data-slot="chat-scroll" className="relative flex-1 overflow-y-auto py-4">
-        <MessageList messages={allMessages} emptyState={!greetingMsg ? <EmptyState /> : null} />
+        <MessageList messages={allMessages} emptyState={!greetingMsg ? <EmptyState /> : null} onFeedback={handleFeedback} />
         {!greetingMsg && (
           <GreetingPlayer
             config={greeting}
