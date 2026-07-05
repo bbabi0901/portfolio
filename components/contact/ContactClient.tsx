@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { ContactForm, type ContactSubmitResult } from "./ContactForm";
 import { DirectContactCard } from "./DirectContactCard";
@@ -13,7 +13,10 @@ export interface ContactClientProps {
 }
 
 export function ContactClient({ email, github, linkedin }: ContactClientProps) {
-  const mountedAt = useRef(Date.now());
+  const mountedAt = useRef(0);
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
 
   async function handleSubmit(data: ContactInput): Promise<ContactSubmitResult> {
     const elapsedMs = Date.now() - mountedAt.current;

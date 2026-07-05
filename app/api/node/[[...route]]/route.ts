@@ -4,7 +4,6 @@ import { z } from "zod";
 
 import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { appendFeedback, hashUserAgent } from "@/services/notion-feedback";
-import { ContactSchema } from "@/lib/contact-schema";
 import { appendContact } from "@/services/notion-contact";
 import { notifyContactReceived } from "@/services/resend";
 import { getServerEnv } from "@/lib/env";
