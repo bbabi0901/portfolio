@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import Link from "next/link"
+import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "잠시 후 다시 만나요",
   robots: { index: false, follow: false },
-}
+};
 
 export default function MaintenancePage() {
   return (
@@ -19,5 +19,5 @@ export default function MaintenancePage() {
         ← 홈으로
       </Link>
     </main>
-  )
+  );
 }

@@ -70,13 +70,18 @@ const markdownComponents = {
   },
 };
 
-export function MessageBubble({ message, onFeedback, onCopy, onOpenSource, className }: MessageBubbleProps) {
+export function MessageBubble({
+  message,
+  onFeedback,
+  onCopy,
+  onOpenSource,
+  className,
+}: MessageBubbleProps) {
   const isUser = message.role === "user";
   const isTyping = message.status === "typing";
   const isStreaming = message.status === "streaming";
   const isDone = message.status === "done";
-  const showCitations =
-    !isUser && isDone && (message.citations?.length ?? 0) > 0;
+  const showCitations = !isUser && isDone && (message.citations?.length ?? 0) > 0;
   const showActions = !isUser && isDone && !isTyping;
 
   const [popoverOpen, setPopoverOpen] = useState(false);
@@ -94,9 +99,7 @@ export function MessageBubble({ message, onFeedback, onCopy, onOpenSource, class
     setPopoverOpen(false);
   }
 
-  const trigger = (
-    <span style={{ display: "none" }} />
-  );
+  const trigger = <span style={{ display: "none" }} />;
 
   return (
     <div

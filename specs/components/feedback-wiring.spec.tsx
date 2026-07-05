@@ -76,12 +76,7 @@ describe("FeedbackButtons - wiring", () => {
 
   it("alreadySent=true → 버튼 disabled", () => {
     render(
-      <FeedbackButtons
-        messageId="msg-1"
-        alreadySent={true}
-        onUp={vi.fn()}
-        onDownStart={vi.fn()}
-      />,
+      <FeedbackButtons messageId="msg-1" alreadySent={true} onUp={vi.fn()} onDownStart={vi.fn()} />,
     );
 
     const upBtn = screen.getByRole("button", { name: /도움이 됐어요/ });

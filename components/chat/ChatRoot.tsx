@@ -352,7 +352,11 @@ export function ChatRoot({
       </header>
 
       <div ref={scrollRef} data-slot="chat-scroll" className="relative flex-1 overflow-y-auto py-4">
-        <MessageList messages={allMessages} emptyState={!greetingMsg ? <EmptyState /> : null} onFeedback={handleFeedback} />
+        <MessageList
+          messages={allMessages}
+          emptyState={!greetingMsg ? <EmptyState /> : null}
+          onFeedback={handleFeedback}
+        />
         {!greetingMsg && (
           <GreetingPlayer
             config={greeting}
