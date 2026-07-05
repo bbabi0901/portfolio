@@ -105,7 +105,9 @@ describe("Feedback handleFeedback integration", () => {
       json: async () => ({ ok: true, notionPageId: "p-1" }),
     });
 
-    await fetch("/api/node/feedback", {
+    // Use mockFetch directly (global fetch is not stubbed in this file;
+    // using the real fetch would be intercepted by MSW and error out).
+    await mockFetch("/api/node/feedback", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

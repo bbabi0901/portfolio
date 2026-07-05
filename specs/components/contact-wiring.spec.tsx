@@ -1,10 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
-// Mock fetch
-const mockFetch = vi.fn();
-vi.stubGlobal("fetch", mockFetch);
+import { http, HttpResponse } from "msw";
+import { server } from "@/tests/msw/server";
 
 // Mock sonner toast
 vi.mock("sonner", () => ({
@@ -17,50 +15,62 @@ vi.mock("sonner", () => ({
 import { toast } from "sonner";
 import { ContactClient } from "@/components/contact/ContactClient";
 
-function renderContactClient() {
-  return render(<ContactClient email="test@example.com" />);
-}
+// Spy on Date.now so ContactForm's speed-check (elapsed >= 1500ms) is satisfied.
+// mountedAt is set via useState(() => Date.now()) at render; submit uses Date.now() later.
+// We make early calls return BASE_TIME and later calls return BASE_TIME + 2000.
+let callCount = 0;
+const BASE_TIME = 1_700_000_000_000;
+let dateNowSpy: ReturnType<typeof vi.spyOn>;
 
-async function fillAndSubmit() {
+beforeEach(() => {
+  vi.clearAllMocks();
+  callCount = 0;
+  dateNowSpy = vi.spyOn(Date, "now").mockImplementation(() => {
+    callCount++;
+    return callCount <= 3 ? BASE_TIME : BASE_TIME + 2000;
+  });
+});
+
+afterEach(() => {
+  dateNowSpy.mockRestore();
+});
+
+async function renderAndSubmit() {
+  render(<ContactClient email="test@example.com" />);
   const user = userEvent.setup();
   await user.type(screen.getByLabelText(/이름/), "홍길동");
   await user.type(screen.getByLabelText(/이메일/), "hong@example.com");
   await user.type(screen.getByLabelText(/메시지/), "안녕하세요. 테스트 메시지입니다.");
-  await user.click(screen.getByRole("button", { name: /보내기/ }));
+  await user.click(screen.getByRole("button", { name: /전송/ }));
 }
-
-beforeEach(() => {
-  vi.clearAllMocks();
-});
 
 describe("ContactClient - API wiring", () => {
   it("폼 제출 시 /api/node/contact POST 요청", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      json: async () => ({ ok: true, channel: "notion" }),
-    });
+    let capturedBody: unknown;
+    server.use(
+      http.post("/api/node/contact", async ({ request }) => {
+        capturedBody = await request.json();
+        return HttpResponse.json({ ok: true, channel: "notion" });
+      }),
+    );
 
-    renderContactClient();
-    await fillAndSubmit();
+    await renderAndSubmit();
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
-        "/api/node/contact",
-        expect.objectContaining({ method: "POST" }),
-      );
+      expect(capturedBody).toBeDefined();
     });
+
+    expect(capturedBody).toMatchObject({ name: "홍길동", email: "hong@example.com" });
   });
 
   it("200 응답 → toast.success 호출", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      json: async () => ({ ok: true, channel: "notion" }),
-    });
+    server.use(
+      http.post("/api/node/contact", () =>
+        HttpResponse.json({ ok: true, channel: "notion" }),
+      ),
+    );
 
-    renderContactClient();
-    await fillAndSubmit();
+    await renderAndSubmit();
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith("메시지를 받았어요. 빠르게 회신할게요.");
@@ -68,14 +78,16 @@ describe("ContactClient - API wiring", () => {
   });
 
   it("503 응답 + mailto → toast.error 호출", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: false,
-      status: 503,
-      json: async () => ({ error: "contact_not_configured", mailto: "mailto:bbabi0901@gmail.com" }),
-    });
+    server.use(
+      http.post("/api/node/contact", () =>
+        HttpResponse.json(
+          { error: "contact_not_configured", mailto: "mailto:bbabi0901@gmail.com" },
+          { status: 503 },
+        ),
+      ),
+    );
 
-    renderContactClient();
-    await fillAndSubmit();
+    await renderAndSubmit();
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -83,10 +95,11 @@ describe("ContactClient - API wiring", () => {
   });
 
   it("네트워크 에러 → toast.error 인터넷 연결", async () => {
-    mockFetch.mockRejectedValueOnce(new Error("network"));
+    server.use(
+      http.post("/api/node/contact", () => HttpResponse.error()),
+    );
 
-    renderContactClient();
-    await fillAndSubmit();
+    await renderAndSubmit();
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith("인터넷 연결을 확인해 주세요");
@@ -94,19 +107,20 @@ describe("ContactClient - API wiring", () => {
   });
 
   it("요청 body에 elapsedMs 포함", async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      json: async () => ({ ok: true, channel: "notion" }),
-    });
+    let capturedBody: Record<string, unknown> | undefined;
+    server.use(
+      http.post("/api/node/contact", async ({ request }) => {
+        capturedBody = (await request.json()) as Record<string, unknown>;
+        return HttpResponse.json({ ok: true, channel: "notion" });
+      }),
+    );
 
-    renderContactClient();
-    await fillAndSubmit();
+    await renderAndSubmit();
 
     await waitFor(() => {
-      const call = mockFetch.mock.calls[0];
-      const body = JSON.parse((call?.[1] as RequestInit)?.body as string);
-      expect(typeof body.elapsedMs).toBe("number");
+      expect(capturedBody).toBeDefined();
     });
+
+    expect(typeof capturedBody?.elapsedMs).toBe("number");
   });
 });
