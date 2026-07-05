@@ -63,7 +63,7 @@ export function ContactClient({ email, github, linkedin }: ContactClientProps) {
     }
 
     toast.error("전송 실패. 잠시 후 다시 시도해 주세요");
-    return { ok: false };
+    return { ok: false, reason: "server_error" };
   }
 
   return (

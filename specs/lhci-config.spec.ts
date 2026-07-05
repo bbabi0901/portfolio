@@ -35,7 +35,8 @@ describe(".lighthouserc.json", () => {
       ci: { assert: { assertions: Record<string, [string, { minScore: number }]> } };
     };
     const a11y = config.ci.assert.assertions["categories:accessibility"];
-    expect(a11y[1].minScore).toBe(0.95);
+    expect(a11y).toBeDefined();
+    expect(a11y![1].minScore).toBe(0.95);
   });
 
   it("seo 임계값 0.95", () => {
@@ -43,7 +44,8 @@ describe(".lighthouserc.json", () => {
       ci: { assert: { assertions: Record<string, [string, { minScore: number }]> } };
     };
     const seo = config.ci.assert.assertions["categories:seo"];
-    expect(seo[1].minScore).toBe(0.95);
+    expect(seo).toBeDefined();
+    expect(seo![1].minScore).toBe(0.95);
   });
 
   it("best-practices 임계값 0.95", () => {
@@ -51,6 +53,7 @@ describe(".lighthouserc.json", () => {
       ci: { assert: { assertions: Record<string, [string, { minScore: number }]> } };
     };
     const bp = config.ci.assert.assertions["categories:best-practices"];
-    expect(bp[1].minScore).toBe(0.95);
+    expect(bp).toBeDefined();
+    expect(bp![1].minScore).toBe(0.95);
   });
 });
