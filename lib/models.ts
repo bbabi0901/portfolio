@@ -155,7 +155,7 @@ export function createModel(spec: ModelSpec): LanguageModel {
   if (!apiKey || typeof apiKey !== "string") {
     throw new Error(
       `provider:${spec.provider} API key not set ` +
-        `(set AI_GATEWAY_API_KEY for Vercel AI Gateway, or ${envKey} for direct access)`
+        `(set AI_GATEWAY_API_KEY for Vercel AI Gateway, or ${envKey} for direct access)`,
     );
   }
   switch (spec.provider) {

@@ -259,7 +259,7 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
   const troubleshootingRefs: NotionPageRef[] = [];
   if (env.NOTION_TROUBLESHOOTING_DB_ID) {
     const allTs = await notion.queryDatabase(env.NOTION_TROUBLESHOOTING_DB_ID, {});
-    troubleshootingRefs.push(...allTs.filter(r => r.status === "완료" || r.status === "Done"));
+    troubleshootingRefs.push(...allTs.filter((r) => r.status === "완료" || r.status === "Done"));
   }
 
   // Extra standalone pages
@@ -272,10 +272,10 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
   }
 
   const allIds = [
-    ...filteredProjects.map(p => p.id),
-    ...profileRefs.map(p => p.id),
-    ...troubleshootingRefs.map(p => p.id),
-    ...extraRefs.map(p => p.id),
+    ...filteredProjects.map((p) => p.id),
+    ...profileRefs.map((p) => p.id),
+    ...troubleshootingRefs.map((p) => p.id),
+    ...extraRefs.map((p) => p.id),
   ];
   const pages = await notion.getPagesContent(allIds, {
     concurrency: 4,
@@ -283,11 +283,15 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
   });
 
   const profileIdSet = new Set(profileIds);
-  const troubleshootingIdSet = new Set(troubleshootingRefs.map(r => r.id));
-  const extraPageIdSet = new Set(extraRefs.map(r => r.id));
-  const chunks = chunkPages(pages, (p) => resolveCategory(p, profileIdSet, troubleshootingIdSet, extraPageIdSet), {
-    onWarn: (msg) => console.warn(`[sync-notion] ${msg}`),
-  });
+  const troubleshootingIdSet = new Set(troubleshootingRefs.map((r) => r.id));
+  const extraPageIdSet = new Set(extraRefs.map((r) => r.id));
+  const chunks = chunkPages(
+    pages,
+    (p) => resolveCategory(p, profileIdSet, troubleshootingIdSet, extraPageIdSet),
+    {
+      onWarn: (msg) => console.warn(`[sync-notion] ${msg}`),
+    },
+  );
 
   if (chunks.length === 0) {
     fail("[sync-notion] produced 0 chunks — refusing to write empty portfolio");
