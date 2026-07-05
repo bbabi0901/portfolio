@@ -27,7 +27,7 @@ describe(".lighthouserc.json", () => {
     };
     const perf = config.ci.assert.assertions["categories:performance"];
     expect(perf).toBeDefined();
-    expect(perf[1].minScore).toBe(0.9);
+    expect(perf![1].minScore).toBe(0.9);
   });
 
   it("accessibility 임계값 0.95", () => {
