@@ -3,7 +3,7 @@ import { handle } from "hono/vercel";
 import { streamText } from "ai";
 import { z } from "zod";
 
-import portfolioJson from "@/data/portfolio.sample.json";
+import portfolioJson from "@/data/portfolio.server.json";
 import { fixtureEmbedding } from "@/lib/embeddings";
 import { getServerEnv } from "@/lib/env";
 import {

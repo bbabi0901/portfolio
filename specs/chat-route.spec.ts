@@ -220,13 +220,13 @@ describe("/api/chat", () => {
         messages: [
           {
             role: "user",
-            content: "샘플 프로젝트 https://www.notion.so/fixture-page-1 link",
+            content: "GitHub https://github.com/YoonsooKim9 profile",
           },
         ],
       });
       expect(res.status).toBe(200);
       const text = await res.text();
-      expect(text).toContain("https://www.notion.so/fixture-page-1");
+      expect(text).toContain("https://github.com/YoonsooKim9");
     });
   });
 
