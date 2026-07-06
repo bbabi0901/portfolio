@@ -113,10 +113,12 @@ export function ChatRoot({
           return {
             body: {
               ...(body as Record<string, unknown>),
-              messages: messages.map((m) => ({
-                role: m.role,
-                content: uiMessageText(m),
-              })),
+              messages: messages
+                .filter((m) => m.role === "user" || m.role === "assistant")
+                .map((m) => ({
+                  role: m.role,
+                  content: uiMessageText(m),
+                })),
             },
           };
         },

@@ -30,6 +30,7 @@ function ExternalLink({ href, children, ...rest }: ComponentPropsWithoutRef<"a">
 
 const markdownComponents = {
   a: ExternalLink,
+  img: () => null,
   code({ className: codeClassName, children, ...props }: ComponentPropsWithoutRef<"code">) {
     const isInline = !codeClassName;
     if (isInline) {
