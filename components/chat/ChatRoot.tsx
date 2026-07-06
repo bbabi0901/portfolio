@@ -118,7 +118,8 @@ export function ChatRoot({
                 .map((m) => ({
                   role: m.role,
                   content: uiMessageText(m),
-                })),
+                }))
+                .filter((m) => m.content.trim().length > 0),
             },
           };
         },

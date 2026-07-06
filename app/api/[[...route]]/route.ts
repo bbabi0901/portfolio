@@ -126,22 +126,10 @@ app.post(
     });
 
     const encoder = new TextEncoder();
-    let filterBuffer = "";
     const filterTransform = new TransformStream<string, Uint8Array>({
       transform(chunk, controller) {
-        filterBuffer += chunk;
-        const idx = filterBuffer.lastIndexOf("\n");
-        if (idx === -1) return;
-        const safe = filterBuffer.slice(0, idx + 1);
-        filterBuffer = filterBuffer.slice(idx + 1);
-        const filtered = filterOutput({ text: safe, allowedSourceUrls });
+        const filtered = filterOutput({ text: chunk, allowedSourceUrls });
         controller.enqueue(encoder.encode(filtered.text));
-      },
-      flush(controller) {
-        if (filterBuffer.length > 0) {
-          const filtered = filterOutput({ text: filterBuffer, allowedSourceUrls });
-          controller.enqueue(encoder.encode(filtered.text));
-        }
       },
     });
 

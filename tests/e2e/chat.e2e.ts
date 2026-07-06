@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { skipGreeting } from "./utils/test-helpers";
+import { skipGreeting, sendChatMessage, getLastAssistantText } from "./utils/test-helpers";
 
 test.describe("chat (TS-01,03,04,12,13,14)", () => {
   test("TS-03: 추천 질문 carousel 렌더 (mock fixture)", async ({ page }) => {
@@ -65,6 +65,35 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
     await ta.press("Enter");
     // 사용자 메시지 미생성 (검증: log 의 메시지 개수 변화 없음, 또는 단순히 에러 없음)
     await expect(ta).toHaveValue("");
+  });
+});
+
+test.describe("chat multi-turn (TS-01)", () => {
+  test("TS-01: 연속 2번 질문 모두 응답 수신 — 빈 버블·400 에러 없음", async ({ page }) => {
+    await skipGreeting(page);
+    await page.goto("/");
+
+    // Turn 1
+    await sendChatMessage(page, "안녕하세요");
+    await page.waitForSelector('[data-role="assistant"][data-status="done"]', { timeout: 15000 });
+    const turn1Text = await getLastAssistantText(page);
+    expect(turn1Text.trim().length).toBeGreaterThan(0);
+
+    // Turn 2 — history에 Turn 1이 포함된 multi-turn 요청
+    await sendChatMessage(page, "더 알려줘요");
+    await page.waitForFunction(
+      () => {
+        const bubbles = document.querySelectorAll('[data-role="assistant"][data-status="done"]');
+        return bubbles.length >= 2;
+      },
+      { timeout: 15000 },
+    );
+    const turn2Text = await getLastAssistantText(page);
+    expect(turn2Text.trim().length).toBeGreaterThan(0);
+
+    // 에러 상태가 없어야 함
+    const errorState = await page.locator('[data-slot="error-state"]').isVisible().catch(() => false);
+    expect(errorState).toBe(false);
   });
 });
 

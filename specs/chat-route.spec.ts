@@ -237,4 +237,66 @@ describe("/api/chat", () => {
       expect([404, 405]).toContain(res.status);
     });
   });
+
+  describe("multi-turn", () => {
+    it("200: user + assistant + user history 정상 처리 (응답 비어있지 않음)", async () => {
+      setMockEnv();
+      const res = await postChat({
+        messages: [
+          { role: "user", content: "안녕하세요" },
+          { role: "assistant", content: "[mock-llm] 안녕하세요" },
+          { role: "user", content: "더 알려줘요" },
+        ],
+      });
+      expect(res.status).toBe(200);
+      const text = await res.text();
+      expect(text.trim().length).toBeGreaterThan(0);
+    });
+
+    it("400: history 에 content 빈 문자열 assistant 메시지 — API 레벨 거부", async () => {
+      setMockEnv();
+      const res = await postChat({
+        messages: [
+          { role: "user", content: "안녕" },
+          { role: "assistant", content: "" },
+          { role: "user", content: "두 번째 질문" },
+        ],
+      });
+      expect(res.status).toBe(400);
+    });
+
+    it("200: 3-turn 연속 대화 — 매 응답 비어있지 않음", async () => {
+      setMockEnv();
+      const turn1 = await postChat({
+        messages: [{ role: "user", content: "첫 번째" }],
+      });
+      expect(turn1.status).toBe(200);
+      const t1Text = await turn1.text();
+      expect(t1Text.trim().length).toBeGreaterThan(0);
+
+      const turn2 = await postChat({
+        messages: [
+          { role: "user", content: "첫 번째" },
+          { role: "assistant", content: t1Text },
+          { role: "user", content: "두 번째" },
+        ],
+      });
+      expect(turn2.status).toBe(200);
+      const t2Text = await turn2.text();
+      expect(t2Text.trim().length).toBeGreaterThan(0);
+
+      const turn3 = await postChat({
+        messages: [
+          { role: "user", content: "첫 번째" },
+          { role: "assistant", content: t1Text },
+          { role: "user", content: "두 번째" },
+          { role: "assistant", content: t2Text },
+          { role: "user", content: "세 번째" },
+        ],
+      });
+      expect(turn3.status).toBe(200);
+      const t3Text = await turn3.text();
+      expect(t3Text.trim().length).toBeGreaterThan(0);
+    });
+  });
 });

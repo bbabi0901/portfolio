@@ -31,6 +31,18 @@
   4. 새로고침 1회 → 시뮬레이션 생략 + 정적 표시
 - **파일**: `tests/e2e/chat.e2e.ts:firstGreeting`, `specs/greeting-player.spec.tsx`
 
+### TS-01b Multi-turn 연속 대화 (빈 응답·400 에러 없음)
+- **Given**: 인사 완료 후, 첫 번째 질문에 응답이 왔음
+- **When**: 사용자가 두 번째, 세 번째 질문을 이어서 보냄
+- **Then**:
+  1. 각 질문마다 응답 버블이 비어있지 않음 (text > 0)
+  2. 400 "요청 형식이 올바르지 않아요" 에러 발생 없음
+  3. assistant message history가 다음 요청에 정상 포함됨
+- **Coverage levels**:
+  - E2E: `tests/e2e/chat.e2e.ts:TS-01-multi-turn`
+  - Integration: `specs/chat-route.spec.ts:multi-turn`
+  - Unit: `specs/components/chat-root.spec.tsx:prepareSendMessagesRequest`
+
 ### TS-02 Reduced motion 첫 인사
 - **Given**: prefers-reduced-motion=reduce
 - **When**: 페이지 진입
