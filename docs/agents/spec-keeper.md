@@ -8,7 +8,7 @@
 
 > 본 agent 는 아직 구현되지 않음. 단 일부 동작은 `npm run check:spec` (현존) 이 부분 수행. spec-keeper 는 그 superset + 자동화.
 
-**Status**: 🟡 Virtual / 로드맵 — 우선순위 **상**
+**Status**: 🔵 Planned: check:spec 확장 — 우선순위 **상**
 
 ## Role
 
@@ -56,6 +56,19 @@
 - **buyer-facing 한국어 문구 변경 감지 시 CRITICAL**. `docs/AI_CONTRACT.md` 의 표준 문구는 SSoT. 임의 변경은 ERROR.
 - **에러 메시지에 spec.json 라인 번호 정확히**. 디버깅 도움 — "어디가 문제인지" 명확.
 - **flaky 동작 회피**. spec.json 의 features 가 50개 이하라 ms 단위 응답 가능. 그 이상 느리면 spec.schema.json 의 $ref 캐싱 검토.
+
+## 구현 로드맵
+
+### 즉시 확장 가능 (npm run check:spec 기반)
+현재 `check:spec`은 FEAT의 tests 파일 존재만 검증. 다음 항목 추가:
+1. `testScenarios[].file` 경로 실제 존재 검증
+2. `features[].status` ↔ 코드 실제 구현 여부 불일치 감지
+3. spec.json 버전 bump 필요 여부 감지 (새 FEAT 추가됐는데 version 동일)
+
+### 중기 (별도 스크립트)
+- `scripts/spec-audit.ts` — spec.json 전체 감사
+- OpenAPI contract 기반 API 응답 스키마 검증
+- AI_CONTRACT.md vs 실제 응답 텍스트 드리프트 감지
 
 ## AC (구현 시)
 

@@ -24,7 +24,7 @@
 │       ├── Q&A 피드백 (DB)    (369656db-6947-8168-b2d8-fbb4dc0fd5e6)   ✏️ write
 │       └── Contact (DB)       (369656db-6947-81c5-a4e0-f426a746e4d6)   ✏️ write
 ├── 스터디 (DB)               (f9ef6e77-e3a0-4b50-9296-810d844c865c)   ⛔ skip
-└── 트러블슈팅 (DB)            TBD                                       ⛔ skip · 향후 생성 예정
+└── 트러블슈팅 (DB)            (c4d7c55d-2f87-4d5e-9f12-e4a310623a98)   📥 sync · 트러블슈팅 · 상태=완료만
 ```
 
 > **참고**: 워크스페이스에 별도로 존재하는 `📖 기록v2` 페이지 트리는 본 프로젝트의 동기화 대상이 아니다. 사용자가 점진적으로 정리·제거 예정이며, 이 문서에서는 다루지 않는다.
@@ -38,6 +38,9 @@
 | **이력서** | `0d23b37e-…` | `NOTION_PROFILE_PAGE_IDS` | `career` ([`scripts/sync-notion.ts:91`](../scripts/sync-notion.ts#L91)) | 직무·연차·헤드라인·이력 추출 + 청크 임베딩. `/about` 인트로 + 챗봇 RAG. |
 | **자기소개** | `363656db-…` | `NOTION_PROFILE_PAGE_IDS` | `personal` ([`scripts/sync-notion.ts:92`](../scripts/sync-notion.ts#L92)) | 인성·MBTI·취미·장단점. H2 단위 청크. `/about` 섹션 + 챗봇 RAG. |
 | **프로젝트 (DB)** | `45b65a79-…` | `NOTION_PROJECTS_DB_ID` | `project` ([`scripts/sync-notion.ts:95`](../scripts/sync-notion.ts#L95)) | 카테고리=`자체프로젝트`/`업무`/`외부활동` + 상태=`Done`/`In progress`만 동기화. `/experience` 카드 + 챗봇 RAG. |
+| **트러블슈팅 (DB)** | `c4d7c55d-…` | `NOTION_TROUBLESHOOTING_DB_ID` | `트러블슈팅` | 상태=`완료`/`Done`인 항목만 동기화. 트러블슈팅 RAG. |
+
+> **NOTION_EXTRA_PAGE_IDS**: 쉼표 구분 page ID 목록. 개별 기술/서브페이지를 `subpage` 카테고리로 RAG 동기화.
 
 ### ✏️ 쓰기 대상 (사용자 입력이 노션 DB로 적재)
 
@@ -54,7 +57,6 @@
 | 페이지 / DB | ID | 이유 |
 |---|---|---|
 | 스터디 (DB) | `f9ef6e77-…` | 개인 학습 노트성. RAG 컨텍스트로 부적합. |
-| 트러블슈팅 (DB) | _TBD_ | 향후 사용자가 직접 생성 예정. 생성 시점에 sync 대상 여부 결정. |
 
 ## 환경변수 빠른 참조
 
@@ -66,18 +68,22 @@ NOTION_PROJECTS_DB_ID=45b65a79-1ab6-4ab3-aba8-72a84c3ca655
 NOTION_PROFILE_PAGE_IDS=0d23b37e-f6bb-42a2-acf8-5b33be3ea98a,363656db-6947-80d0-9c9c-eca1d37c2ba1
 NOTION_FEEDBACK_DB_ID=369656db-6947-8168-b2d8-fbb4dc0fd5e6
 NOTION_CONTACT_DB_ID=369656db-6947-81c5-a4e0-f426a746e4d6
+NOTION_TROUBLESHOOTING_DB_ID=c4d7c55d-2f87-4d5e-9f12-e4a310623a98   # optional
+NOTION_EXTRA_PAGE_IDS=<page-id-1>,<page-id-2>                         # optional, 쉼표 구분
 ```
 
 ## 카테고리 매핑 로직 요약
 
 [`scripts/sync-notion.ts:88`](../scripts/sync-notion.ts#L88) `resolveCategory()`:
 
-1. **페이지 ID가 `NOTION_PROFILE_PAGE_IDS`에 있을 때**
+1. **`NOTION_TROUBLESHOOTING_DB_ID` 출처일 때** → `트러블슈팅`
+2. **`NOTION_EXTRA_PAGE_IDS` 출처일 때** → `subpage`
+3. **페이지 ID가 `NOTION_PROFILE_PAGE_IDS`에 있을 때**
    - 페이지 제목에 `"이력서"` 또는 `"resume"` 포함 → `career`
    - 그 외 → `personal`
-2. **프로젝트 DB row일 때**
+4. **프로젝트 DB row일 때**
    - 카테고리 = `자체프로젝트` / `업무` / `외부활동` → `project`
-3. **그 외** → `subpage` (참고 청크)
+5. **그 외** → `subpage` (참고 청크)
 
 ## 새 페이지 추가 시 절차
 

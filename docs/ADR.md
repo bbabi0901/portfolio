@@ -135,3 +135,19 @@ MVP 속도 + 외부 의존성 최소 + 운영 부담 0 + 디테일은 spec.json�
 **결정**: 명시 토글 없음. 영어 질문은 영어로 답.
 **이유**: 한국어 우선 사용자, 토글 구현 부담 회피.
 **트레이드오프**: 언어 전환의 사용자 통제 약함. 추후 토글 옵션.
+
+### ADR-025: Vercel AI Gateway 도입 (멀티 LLM 통합 결제)
+**결정**: Vercel AI Gateway(`AI_GATEWAY_API_KEY`)를 1차 LLM 라우터로 도입. 직접 provider 키(OPENAI/ANTHROPIC/GOOGLE)는 fallback으로 유지.
+**이유**:
+- OpenAI/Anthropic/Google 3개 서비스를 각각 구독·결제·키 관리하는 번거로움 제거
+- Vercel 계정 하나로 통합 결제 (0% 마진, 제공자 정가)
+- `ai@6`의 `gateway()` 함수는 drop-in 호환 — `lib/models.ts` 1개 파일 수정으로 완료
+- `$5/월 무료 크레딧` 포함, 소규모 트래픽에 충분
+**코드 변경**:
+- `lib/env.ts` — `AI_GATEWAY_API_KEY` 필드 추가
+- `lib/models.ts` — `createModel()`: Gateway key 있으면 `gateway("provider/model")`, 없으면 직접 키 fallback
+- `lib/models.ts` — `listAvailableModels()`: Gateway key 있으면 모든 모델 활성, 없으면 직접 키 기준 필터
+**트레이드오프**:
+- Vercel 플랫폼 의존도 증가. 단 직접 키 fallback이 있으므로 탈출 경로 존재.
+- Gateway 다운 시 직접 키로 전환 필요 — `AI_GATEWAY_API_KEY` 제거 또는 직접 키 설정으로 대응.
+**활성화 방법**: Vercel 대시보드 > Storage > AI Gateway > Enable → `AI_GATEWAY_API_KEY` 발급 → `.env.local` 및 Vercel 환경변수에 추가.

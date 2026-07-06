@@ -13,7 +13,8 @@
 ## 분류
 
 - **Real (구현 완료)**: [harness](harness.md), [harness-status](harness-status.md), [harness-doctor](harness-doctor.md), [review](review.md)
-- **Virtual (예정/로드맵)**: [doc-gardener](doc-gardener.md), [qa-runner](qa-runner.md), [spec-keeper](spec-keeper.md), [refactor-bot](refactor-bot.md)
+- **Virtual (예정/로드맵)**: [doc-gardener](doc-gardener.md), [refactor-bot](refactor-bot.md)
+- **Planned (설계 완료 / 구현 가능)**: [qa-runner](qa-runner.md), [spec-keeper](spec-keeper.md), [harness-parallel](harness-parallel.md)
 
 ## 표준 7절 카드 형식
 
@@ -47,9 +48,10 @@
 | harness-doctor | [harness-doctor.md](harness-doctor.md) | Real | — |
 | review | [review.md](review.md) | Real | — |
 | doc-gardener | [doc-gardener.md](doc-gardener.md) | Virtual | 중 |
-| qa-runner | [qa-runner.md](qa-runner.md) | Virtual | 상 (Phase 8/9 deployment 전) |
-| spec-keeper | [spec-keeper.md](spec-keeper.md) | Virtual | 상 (`npm run check:spec` 가 부분 수행 — 자동화만 추가) |
+| qa-runner | [qa-runner.md](qa-runner.md) | planned (Phase 1 ready) | 상 (Phase 8/9 deployment 전) |
+| spec-keeper | [spec-keeper.md](spec-keeper.md) | planned (check:spec 확장) | 상 (`npm run check:spec` 가 부분 수행 — 자동화만 추가) |
 | refactor-bot | [refactor-bot.md](refactor-bot.md) | Virtual | 하 (본 프로젝트 규모 대비 ROI 낮음) |
+| harness-parallel | [harness-parallel.md](harness-parallel.md) | planned (design complete) | 중 (대형 task 병렬화 준비) |
 
 ## 운영 원칙 (요약 — 자세히는 각 파일)
 

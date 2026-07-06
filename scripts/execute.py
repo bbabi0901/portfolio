@@ -69,7 +69,8 @@ class StepExecutor:
                  from_step: Optional[int] = None,
                  max_retries: Optional[int] = None,
                  timeout: Optional[int] = None,
-                 verbose: bool = False):
+                 verbose: bool = False,
+                 max_cost_usd: float = 20.0):
         self._root = str(ROOT)
         self._phases_dir = ROOT / "phases"
         self._phase_dir = self._phases_dir / phase_dir_name
@@ -82,6 +83,7 @@ class StepExecutor:
         self._max_retries = max_retries if max_retries is not None else self.MAX_RETRIES
         self._timeout = timeout if timeout is not None else self.DEFAULT_TIMEOUT_SEC
         self._verbose = verbose
+        self._max_cost_usd = max_cost_usd
         self._lock_held = False
 
         if not self._phase_dir.is_dir():
@@ -98,7 +100,20 @@ class StepExecutor:
         self._phase_name = idx.get("phase", phase_dir_name)
         self._total = len(idx["steps"])
 
+    def _validate_phase_index(self) -> None:
+        """Validate phase index.json is well-formed JSON before doing anything."""
+        try:
+            with open(self._index_file, encoding="utf-8") as f:
+                json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"[ERROR] {self._index_file} JSON 파싱 실패: {e}", file=sys.stderr)
+            print("[HINT]  python3 -m json.tool로 확인 후 수정하세요.", file=sys.stderr)
+            sys.exit(1)
+        except FileNotFoundError:
+            pass  # _load_index() will handle this with a better error
+
     def run(self):
+        self._validate_phase_index()
         self._print_header()
         self._ensure_claude_cli()
         if self._dry_run:
@@ -208,10 +223,23 @@ class StepExecutor:
             return
         top = self._read_json(self._top_index_file)
         ts = self._stamp()
+
+        # Reconcile "completed" status: if any step is not completed, use "partial" instead
+        if status == "completed" and self._index_file.exists():
+            phase_index = self._read_json(self._index_file)
+            incomplete = [
+                s for s in phase_index.get("steps", [])
+                if s.get("status") not in ("completed",)
+            ]
+            if incomplete:
+                status = "partial"
+                print(f"[WARN] phase {self._phase_name}: {len(incomplete)}개 스텝 미완료 → status=partial")
+
         for phase in top.get("phases", []):
             if phase.get("dir") == self._phase_dir_name:
                 phase["status"] = status
-                ts_key = {"completed": "completed_at", "error": "failed_at", "blocked": "blocked_at"}.get(status)
+                ts_key = {"completed": "completed_at", "partial": "completed_at",
+                          "error": "failed_at", "blocked": "blocked_at"}.get(status)
                 if ts_key:
                     phase[ts_key] = ts
                 break
@@ -654,6 +682,16 @@ class StepExecutor:
             # attempt 메트릭 누적
             self._append_attempt_record(step_num, attempt, elapsed, output)
 
+            # 누적 비용 상한 검사
+            total_cost = sum(
+                a.get("cost_usd", 0.0)
+                for s in self._read_json(self._index_file).get("steps", [])
+                for a in s.get("attempts", [])
+            )
+            if total_cost >= self._max_cost_usd:
+                print(f"[WARN] 누적 비용 ${total_cost:.2f} — 상한 ${self._max_cost_usd:.2f} 도달. 이후 스텝 blocked 처리.")
+                sys.exit(3)  # distinct exit code for cost ceiling
+
             index = self._read_json(self._index_file)
             status = next((s.get("status", "pending") for s in index["steps"] if s["step"] == step_num), "pending")
             ts = self._stamp()
@@ -791,6 +829,9 @@ def main():
                         help=f"Claude 호출 타임아웃. 기본 {StepExecutor.DEFAULT_TIMEOUT_SEC} 초.")
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="프롬프트 길이, git stderr, 내부 분기를 stderr 로 출력.")
+    parser.add_argument("--max-cost-usd", type=float, default=20.0,
+                        metavar="USD",
+                        help="Phase 전체 누적 비용 상한 (기본 $20.00). 초과 시 다음 스텝 blocked 처리.")
     args = parser.parse_args()
 
     # 상호 배타 검증
@@ -807,6 +848,7 @@ def main():
         max_retries=args.max_retries,
         timeout=args.timeout,
         verbose=args.verbose,
+        max_cost_usd=args.max_cost_usd,
     ).run()
 
 
