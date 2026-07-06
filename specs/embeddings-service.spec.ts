@@ -164,7 +164,7 @@ describe("EmbeddingsService", () => {
         retryBackoffMs: 1,
       });
       await expect(svc.embed("x")).rejects.toThrow();
-      expect(calls).toBe(4);
+      expect(calls).toBe(6);
     });
 
     it("throws immediately on 5xx", async () => {

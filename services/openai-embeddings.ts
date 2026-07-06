@@ -26,7 +26,7 @@ const DEFAULT_MODEL = "text-embedding-3-small";
 const DEFAULT_DIMENSIONS = 1536;
 const DEFAULT_MAX_BATCH = 96;
 const DEFAULT_BACKOFF_MS = 250;
-const MAX_ATTEMPTS = 4;
+const MAX_ATTEMPTS = 6; // free tier: 3 RPM → 최대 60s 대기 필요
 
 class Service implements EmbeddingsService {
   private readonly apiKey: string;
@@ -99,7 +99,14 @@ class Service implements EmbeddingsService {
           if (attempt === MAX_ATTEMPTS - 1) {
             throw new Error(`OpenAI embeddings rate-limited after ${MAX_ATTEMPTS} attempts`);
           }
-          await sleep(this.backoffMs * 2 ** attempt);
+          // Retry-After 헤더 우선, 없으면 지수 백오프
+          // 실제 키에서는 최소 20s (free tier 3 RPM), 테스트(backoffMs=1)에서는 그대로
+          const retryAfter = res.headers.get("retry-after");
+          const expBackoff = this.backoffMs * 2 ** attempt;
+          const minWaitMs = this.backoffMs >= 1000 ? 20_000 : 0;
+          const waitMs = retryAfter ? Number(retryAfter) * 1000 : Math.max(expBackoff, minWaitMs);
+          console.warn(`[embeddings] rate-limited, waiting ${Math.round(waitMs / 1000)}s (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
+          await sleep(waitMs);
           continue;
         }
         const text = await safeText(res);
