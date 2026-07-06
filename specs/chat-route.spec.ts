@@ -130,11 +130,11 @@ describe("/api/chat", () => {
       process.env.ANTHROPIC_API_KEY = "sk-ant-test";
       clearEnvCache();
       const res = await postChat({
-        modelId: "claude-3-5-haiku-latest",
+        modelId: "claude-3-5-haiku",
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("claude-3-5-haiku-latest");
+      expect(res.headers.get("X-Model-Id")).toBe("claude-3-5-haiku");
       expect(res.headers.get("X-Model-Substitution")).toBeNull();
     });
   });

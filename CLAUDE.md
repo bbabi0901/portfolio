@@ -10,7 +10,9 @@
 - shadcn/ui (sheet, button, input, select, carousel, popover, scroll-area, toast, form, label, textarea, radio-group)
 - lucide-react 아이콘 (strokeWidth 1.5)
 - Hono on Next.js Route Handler (`app/api/[[...route]]/route.ts`)
-- Vercel AI SDK (`ai`, `@ai-sdk/openai`, `@ai-sdk/anthropic`, `@ai-sdk/google`)
+- Vercel AI SDK (`ai`, `@ai-sdk/openai`) + **OpenRouter** 단일 키 라우팅 (ADR-026)
+  - 채팅: `OPENROUTER_API_KEY` → `https://openrouter.ai/api/v1` (gpt-4o-mini / claude-3-5-haiku / gemini-2.0-flash)
+  - 임베딩: `OPENAI_API_KEY` 별도 (OpenRouter 미지원, 빌드 타임 전용)
 - `@ai-sdk/react`의 `useChat`
 - @notionhq/client + notion-to-md
 - react-markdown + remark-gfm + rehype-highlight
@@ -19,7 +21,7 @@
 
 ## 아키텍처 규칙
 - CRITICAL: 모든 LLM 호출과 Notion API 호출은 Hono 라우트(`app/api/[[...route]]/route.ts`)에서만. 클라이언트는 같은 origin의 `/api/*`만 호출.
-- CRITICAL: API 키(OPENAI_API_KEY, ANTHROPIC_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY, NOTION_TOKEN, RESEND_API_KEY)는 환경변수, 클라이언트 번들에 절대 포함 금지.
+- CRITICAL: API 키(OPENROUTER_API_KEY, OPENAI_API_KEY, NOTION_TOKEN, RESEND_API_KEY)는 환경변수, 클라이언트 번들에 절대 포함 금지.
 - CRITICAL: 답변은 `data/portfolio.server.json`(빌드 산출물) 컨텍스트로만 생성. 외부 지식은 system prompt에서 차단.
 - CRITICAL: `data/portfolio.server.json`(임베딩 포함)은 서버 전용. 클라이언트에는 `public/data/suggestions.json`(slim) 만 노출.
 - CRITICAL: spec.json 위반 시 빌드 차단. 신규 기능은 (1) spec.json 등록 → (2) 실패 테스트 작성 → (3) 구현 순서.

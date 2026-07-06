@@ -44,7 +44,8 @@ const EnvSchema = z
     NOTION_TOKEN: z.string().optional(),
     NOTION_PROJECTS_DB_ID: z.string().optional(),
     NOTION_PROFILE_PAGE_IDS: z.string().optional(),
-    AI_GATEWAY_API_KEY: z.string().optional(),
+    // 임베딩 전용 OpenAI 키 (OpenRouter는 /v1/embeddings 미지원)
+    OPENAI_API_KEY: z.string().optional(),
     NOTION_TROUBLESHOOTING_DB_ID: z.string().optional(),
     NOTION_EXTRA_PAGE_IDS: z.string().optional(),
     MOCK_NOTION: z.string().optional(),
@@ -216,8 +217,11 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
       fail("[sync-notion] NOTION_PROJECTS_DB_ID is required when MOCK_NOTION!=1");
     }
   }
-  if (!mockLlm && !env.AI_GATEWAY_API_KEY) {
-    fail("[sync-notion] AI_GATEWAY_API_KEY is required (set MOCK_LLM=1 to use fixtures)");
+  if (!mockLlm && !env.OPENAI_API_KEY) {
+    fail(
+      "[sync-notion] OPENAI_API_KEY is required for embeddings " +
+        "(OpenRouter는 /v1/embeddings 미지원. set MOCK_LLM=1 to use fixtures)",
+    );
   }
 
   const outDir = opts.outDir
@@ -233,9 +237,8 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     mock: mockNotion,
   });
   const embeddings = createEmbeddingsService({
-    apiKey: env.AI_GATEWAY_API_KEY || "fixture",
-    baseURL: "https://ai-gateway.vercel.sh",
-    model: "openai/text-embedding-3-small",
+    apiKey: env.OPENAI_API_KEY || "fixture",
+    model: "text-embedding-3-small",
     mock: mockLlm,
   });
 
