@@ -123,53 +123,47 @@ app.post(
       maxOutputTokens: spec.maxOutputTokens,
       temperature: spec.temperature,
       topP: spec.topP,
-      abortSignal: c.req.raw.signal,
     });
 
     const encoder = new TextEncoder();
-    const filteredStream = new ReadableStream<Uint8Array>({
-      async start(controller) {
-        let buffer = "";
-        try {
-          for await (const delta of result.textStream) {
-            buffer += delta;
-            const idx = buffer.lastIndexOf("\n");
-            if (idx === -1) continue;
-            const safe = buffer.slice(0, idx + 1);
-            buffer = buffer.slice(idx + 1);
-            const filtered = filterOutput({
-              text: safe,
-              allowedSourceUrls,
-            });
-            controller.enqueue(encoder.encode(filtered.text));
-          }
-          if (buffer.length > 0) {
-            const filtered = filterOutput({
-              text: buffer,
-              allowedSourceUrls,
-            });
-            controller.enqueue(encoder.encode(filtered.text));
-          }
-          try {
-            const usage = await result.usage;
-            const promptTokens = typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
-            const completionTokens =
-              typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
-            if (promptTokens + completionTokens > 0) {
-              await addTokenUsage({ promptTokens, completionTokens });
-            }
-          } catch (e) {
-            console.warn(
-              "[chat] addTokenUsage failed:",
-              e instanceof Error ? e.message : "unknown",
-            );
-          }
-          controller.close();
-        } catch (err) {
-          controller.error(err);
+    let filterBuffer = "";
+    const filterTransform = new TransformStream<string, Uint8Array>({
+      transform(chunk, controller) {
+        filterBuffer += chunk;
+        const idx = filterBuffer.lastIndexOf("\n");
+        if (idx === -1) return;
+        const safe = filterBuffer.slice(0, idx + 1);
+        filterBuffer = filterBuffer.slice(idx + 1);
+        const filtered = filterOutput({ text: safe, allowedSourceUrls });
+        controller.enqueue(encoder.encode(filtered.text));
+      },
+      flush(controller) {
+        if (filterBuffer.length > 0) {
+          const filtered = filterOutput({ text: filterBuffer, allowedSourceUrls });
+          controller.enqueue(encoder.encode(filtered.text));
         }
       },
     });
+
+    const filteredStream = result.textStream.pipeThrough(filterTransform);
+
+    result.usage
+      .then((usage) => {
+        const promptTokens = typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
+        const completionTokens =
+          typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
+        if (promptTokens + completionTokens > 0) {
+          addTokenUsage({ promptTokens, completionTokens }).catch((e) =>
+            console.warn(
+              "[chat] addTokenUsage failed:",
+              e instanceof Error ? e.message : "unknown",
+            ),
+          );
+        }
+      })
+      .catch((e) =>
+        console.warn("[chat] usage tracking failed:", e instanceof Error ? e.message : "unknown"),
+      );
 
     return new Response(filteredStream, { headers });
   },

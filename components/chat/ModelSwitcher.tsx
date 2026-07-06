@@ -56,6 +56,7 @@ export function ModelSwitcher({
       <SelectTrigger
         size="sm"
         aria-label="답변 모델 선택"
+        suppressHydrationWarning
         className={cn(
           "h-8 gap-1 rounded-full border-neutral-700 bg-transparent px-3 text-xs text-neutral-300",
           "hover:border-neutral-500 hover:text-white",

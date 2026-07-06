@@ -156,7 +156,7 @@ export function createModel(spec: ModelSpec): LanguageModel {
     apiKey: env.OPENROUTER_API_KEY,
     headers: {
       "HTTP-Referer": siteUrl,
-      "X-Title": "김윤수 포트폴리오",
+      "X-Title": "Yoonsoo Kim Portfolio",
     },
   });
   return or(OR_MODEL_ID[spec.id]);
