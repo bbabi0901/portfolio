@@ -126,32 +126,45 @@ app.post(
     });
 
     const encoder = new TextEncoder();
-    const filterTransform = new TransformStream<string, Uint8Array>({
-      transform(chunk, controller) {
-        const filtered = filterOutput({ text: chunk, allowedSourceUrls });
-        controller.enqueue(encoder.encode(filtered.text));
-      },
-    });
-
-    const filteredStream = result.textStream.pipeThrough(filterTransform);
-
-    result.usage
-      .then((usage) => {
-        const promptTokens = typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
-        const completionTokens =
-          typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
-        if (promptTokens + completionTokens > 0) {
-          addTokenUsage({ promptTokens, completionTokens }).catch((e) =>
+    // AI SDK v6 teeStream() 은 각 접근마다 새 branch 를 생성한다.
+    // result.usage 를 스트림 소비 전에 접근하면 unconsumed tee branch 가 생겨
+    // 백프레셔로 textStream 이 stall 된다 — multi-turn 에서 빈 응답의 원인.
+    // 해결: for await 로 textStream 을 완전 소비한 뒤에야 usage 에 접근한다.
+    const filteredStream = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        try {
+          for await (const chunk of result.textStream) {
+            const filtered = filterOutput({ text: chunk, allowedSourceUrls });
+            controller.enqueue(encoder.encode(filtered.text));
+          }
+        } catch (err) {
+          console.warn("[chat] stream error:", err instanceof Error ? err.message : String(err));
+        } finally {
+          controller.close();
+        }
+        // textStream 소비 완료 후 usage 접근 — tee 충돌 없음
+        result.usage
+          .then((usage) => {
+            const promptTokens = typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
+            const completionTokens =
+              typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
+            if (promptTokens + completionTokens > 0) {
+              addTokenUsage({ promptTokens, completionTokens }).catch((e) =>
+                console.warn(
+                  "[chat] addTokenUsage failed:",
+                  e instanceof Error ? e.message : "unknown",
+                ),
+              );
+            }
+          })
+          .catch((e) =>
             console.warn(
-              "[chat] addTokenUsage failed:",
+              "[chat] usage tracking failed:",
               e instanceof Error ? e.message : "unknown",
             ),
           );
-        }
-      })
-      .catch((e) =>
-        console.warn("[chat] usage tracking failed:", e instanceof Error ? e.message : "unknown"),
-      );
+      },
+    });
 
     return new Response(filteredStream, { headers });
   },

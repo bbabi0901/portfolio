@@ -150,10 +150,14 @@ export function createModel(spec: ModelSpec): LanguageModel {
   }
 
   // OpenRouter — 단일 키로 OpenAI/Anthropic/Google 라우팅 (ADR-026)
+  // compatibility: "compatible" — AI SDK v6 이 Responses API(/v1/responses) 대신
+  // Chat Completions API(/v1/chat/completions) 를 사용하도록 강제.
+  // OpenRouter 는 Responses API 를 지원하지 않아 multi-turn 에서 실패한다.
   const siteUrl = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const or = createOpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: env.OPENROUTER_API_KEY,
+    compatibility: "compatible",
     headers: {
       "HTTP-Referer": siteUrl,
       "X-Title": "Yoonsoo Kim Portfolio",
