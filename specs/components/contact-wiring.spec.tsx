@@ -65,9 +65,7 @@ describe("ContactClient - API wiring", () => {
 
   it("200 응답 → toast.success 호출", async () => {
     server.use(
-      http.post("/api/node/contact", () =>
-        HttpResponse.json({ ok: true, channel: "notion" }),
-      ),
+      http.post("/api/node/contact", () => HttpResponse.json({ ok: true, channel: "notion" })),
     );
 
     await renderAndSubmit();
@@ -95,9 +93,7 @@ describe("ContactClient - API wiring", () => {
   });
 
   it("네트워크 에러 → toast.error 인터넷 연결", async () => {
-    server.use(
-      http.post("/api/node/contact", () => HttpResponse.error()),
-    );
+    server.use(http.post("/api/node/contact", () => HttpResponse.error()));
 
     await renderAndSubmit();
 
