@@ -126,20 +126,24 @@ app.post(
     });
 
     const encoder = new TextEncoder();
-    // AI SDK v6 teeStream() 은 각 접근마다 새 branch 를 생성한다.
-    // result.usage 를 스트림 소비 전에 접근하면 unconsumed tee branch 가 생겨
-    // 백프레셔로 textStream 이 stall 된다 — multi-turn 에서 빈 응답의 원인.
-    // 해결: for await 로 textStream 을 완전 소비한 뒤에야 usage 에 접근한다.
     const filteredStream = new ReadableStream<Uint8Array>({
       async start(controller) {
+        let bytesWritten = 0;
         try {
           for await (const chunk of result.textStream) {
             const filtered = filterOutput({ text: chunk, allowedSourceUrls });
-            controller.enqueue(encoder.encode(filtered.text));
+            const encoded = encoder.encode(filtered.text);
+            controller.enqueue(encoded);
+            bytesWritten += encoded.length;
           }
         } catch (err) {
-          console.warn("[chat] stream error:", err instanceof Error ? err.message : String(err));
+          console.error("[chat] stream error:", err instanceof Error ? err.message : String(err));
         } finally {
+          if (bytesWritten === 0) {
+            // 스트림이 비어있으면 fallback 반환 — 빈 버블 대신 의미있는 응답
+            const fallback = language === "en" ? NO_RECORD_RESPONSE_EN : NO_RECORD_RESPONSE_KO;
+            controller.enqueue(encoder.encode(fallback));
+          }
           controller.close();
         }
         // textStream 소비 완료 후 usage 접근 — tee 충돌 없음
