@@ -1,7 +1,4 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import { createAnthropic } from "@ai-sdk/anthropic";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { gateway } from "ai";
 import type { LanguageModel } from "ai";
 import type {
   LanguageModelV3,
@@ -13,7 +10,7 @@ import type {
 } from "@ai-sdk/provider";
 import { getServerEnv } from "./env";
 
-export type ModelId = "gpt-4o-mini" | "claude-3-5-haiku-latest" | "gemini-2.0-flash-exp";
+export type ModelId = "gpt-4o-mini" | "claude-3-5-haiku" | "gemini-2.0-flash";
 export type Provider = "openai" | "anthropic" | "google";
 
 export interface ModelSpec {
@@ -26,6 +23,13 @@ export interface ModelSpec {
 
 export const DEFAULT_MODEL_ID: ModelId = "gpt-4o-mini";
 
+// OpenRouter 슬러그 — "provider/model" 형식 (openrouter.ai/models 참고, ADR-026)
+const OR_MODEL_ID: Record<ModelId, string> = {
+  "gpt-4o-mini": "openai/gpt-4o-mini",
+  "claude-3-5-haiku": "anthropic/claude-3-5-haiku",
+  "gemini-2.0-flash": "google/gemini-2.0-flash-exp",
+};
+
 const REGISTRY: Record<ModelId, ModelSpec> = {
   "gpt-4o-mini": {
     id: "gpt-4o-mini",
@@ -34,15 +38,15 @@ const REGISTRY: Record<ModelId, ModelSpec> = {
     temperature: 0.3,
     topP: 0.9,
   },
-  "claude-3-5-haiku-latest": {
-    id: "claude-3-5-haiku-latest",
+  "claude-3-5-haiku": {
+    id: "claude-3-5-haiku",
     provider: "anthropic",
     maxOutputTokens: 1024,
     temperature: 0.3,
     topP: 0.9,
   },
-  "gemini-2.0-flash-exp": {
-    id: "gemini-2.0-flash-exp",
+  "gemini-2.0-flash": {
+    id: "gemini-2.0-flash",
     provider: "google",
     maxOutputTokens: 1024,
     temperature: 0.3,
@@ -52,27 +56,20 @@ const REGISTRY: Record<ModelId, ModelSpec> = {
 
 const KNOWN_IDS = Object.keys(REGISTRY) as ModelId[];
 
-// Vercel AI Gateway model IDs — "provider/model" format (ADR-025)
-const GATEWAY_MODEL_ID: Record<ModelId, string> = {
-  "gpt-4o-mini": "openai/gpt-4o-mini",
-  "claude-3-5-haiku-latest": "anthropic/claude-3-5-haiku-latest",
-  "gemini-2.0-flash-exp": "google/gemini-2.0-flash-exp",
-};
-
-// Direct provider API key env var names (fallback when Gateway not configured)
-const PROVIDER_ENV_KEY: Record<Provider, keyof ReturnType<typeof getServerEnv>> = {
-  openai: "OPENAI_API_KEY",
-  anthropic: "ANTHROPIC_API_KEY",
-  google: "GOOGLE_GENERATIVE_AI_API_KEY",
+// 이전 model ID 문자열 하위 호환 매핑 (AI Gateway 시절 ID)
+const LEGACY_ID_MAP: Record<string, ModelId> = {
+  "claude-3-5-haiku-latest": "claude-3-5-haiku",
+  "gemini-2.0-flash-exp": "gemini-2.0-flash",
 };
 
 export function isKnownModel(id: string): id is ModelId {
-  return (KNOWN_IDS as string[]).includes(id);
+  return (KNOWN_IDS as string[]).includes(id) || id in LEGACY_ID_MAP;
 }
 
 export function resolveModel(id: string | null | undefined): ModelSpec {
-  if (id != null && isKnownModel(id)) {
-    return REGISTRY[id];
+  const normalized = id != null ? (LEGACY_ID_MAP[id] ?? id) : null;
+  if (normalized != null && (KNOWN_IDS as string[]).includes(normalized)) {
+    return REGISTRY[normalized as ModelId];
   }
   if (id != null) {
     console.warn("[models] unknown model id %s, falling back to %s", id, DEFAULT_MODEL_ID);
@@ -141,42 +138,32 @@ export function createModel(spec: ModelSpec): LanguageModel {
   const env = getServerEnv();
 
   if (env.MOCK_LLM === "1") {
-    return createMockModel(spec.id);
+    return createMockModel(spec.id) as unknown as LanguageModel;
   }
 
-  // Vercel AI Gateway 우선 (단일 결제·통합 관리 — ADR-025)
-  if (env.AI_GATEWAY_API_KEY) {
-    return gateway(GATEWAY_MODEL_ID[spec.id]);
-  }
-
-  // Fallback: 직접 provider 키 사용
-  const envKey = PROVIDER_ENV_KEY[spec.provider];
-  const apiKey = env[envKey];
-  if (!apiKey || typeof apiKey !== "string") {
+  if (!env.OPENROUTER_API_KEY) {
     throw new Error(
-      `provider:${spec.provider} API key not set ` +
-        `(set AI_GATEWAY_API_KEY for Vercel AI Gateway, or ${envKey} for direct access)`,
+      `OPENROUTER_API_KEY is not set. ` +
+        `https://openrouter.ai/keys 에서 발급 후 .env.local 에 추가. ` +
+        `테스트 우회: MOCK_LLM=1`,
     );
   }
-  switch (spec.provider) {
-    case "openai":
-      return createOpenAI({ apiKey })(spec.id);
-    case "anthropic":
-      return createAnthropic({ apiKey })(spec.id);
-    case "google":
-      return createGoogleGenerativeAI({ apiKey })(spec.id);
-  }
+
+  // OpenRouter — 단일 키로 OpenAI/Anthropic/Google 라우팅 (ADR-026)
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const or = createOpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: env.OPENROUTER_API_KEY,
+    headers: {
+      "HTTP-Referer": siteUrl,
+      "X-Title": "김윤수 포트폴리오",
+    },
+  });
+  return or(OR_MODEL_ID[spec.id]);
 }
 
 export function listAvailableModels(): ModelSpec[] {
   const env = getServerEnv();
-  // Gateway가 있으면 모든 모델 사용 가능 (키 통합)
-  if (env.AI_GATEWAY_API_KEY) {
-    return KNOWN_IDS.map((id) => REGISTRY[id]);
-  }
-  // Fallback: 직접 키가 있는 provider의 모델만 반환
-  return KNOWN_IDS.map((id) => REGISTRY[id]).filter((spec) => {
-    const envKey = PROVIDER_ENV_KEY[spec.provider];
-    return typeof env[envKey] === "string" && env[envKey] !== "";
-  });
+  if (!env.OPENROUTER_API_KEY && env.MOCK_LLM !== "1") return [];
+  return KNOWN_IDS.map((id) => REGISTRY[id]);
 }

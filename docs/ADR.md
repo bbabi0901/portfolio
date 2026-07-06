@@ -151,3 +151,22 @@ MVP 속도 + 외부 의존성 최소 + 운영 부담 0 + 디테일은 spec.json�
 - Vercel 플랫폼 의존도 증가. 단 직접 키 fallback이 있으므로 탈출 경로 존재.
 - Gateway 다운 시 직접 키로 전환 필요 — `AI_GATEWAY_API_KEY` 제거 또는 직접 키 설정으로 대응.
 **활성화 방법**: Vercel 대시보드 > Storage > AI Gateway > Enable → `AI_GATEWAY_API_KEY` 발급 → `.env.local` 및 Vercel 환경변수에 추가.
+
+---
+
+### ADR-026: OpenRouter 도입 (Vercel AI Gateway 대체)
+**결정**: LLM 라우터를 Vercel AI Gateway(`AI_GATEWAY_API_KEY`)에서 OpenRouter(`OPENROUTER_API_KEY`)로 교체.
+**이유**:
+- Vercel AI Gateway는 BYOK(Bring Your Own Key) 구조 — OpenAI/Anthropic/Google 각 키를 Vercel 대시보드에 별도 등록해야 함
+- OpenRouter는 진정한 단일 키 서비스 — 하나의 `OPENROUTER_API_KEY`로 100+ 모델 즉시 사용 가능
+- 저렴한 요금: gpt-4o-mini $0.15/1M, claude-3-5-haiku $0.80/1M, gemini-2.0-flash $0.10/1M (공급자 정가 수준)
+- Vercel 플랫폼 lock-in 없음
+**구현**:
+- `lib/models.ts` — `createOpenAI(baseURL: "https://openrouter.ai/api/v1")` + `HTTP-Referer`/`X-Title` 헤더
+- `lib/env.ts` — `AI_GATEWAY_API_KEY` 제거, `OPENROUTER_API_KEY` 추가, `OPENAI_API_KEY` 임베딩 전용으로 분리
+- 모델 ID: `"openai/gpt-4o-mini"`, `"anthropic/claude-3-5-haiku"`, `"google/gemini-2.0-flash-exp"`
+**중요 제약**:
+- **OpenRouter는 `/v1/embeddings` 미지원** — `sync:notion` 임베딩은 `OPENAI_API_KEY` (직접 OpenAI) 사용 유지
+- 임베딩은 빌드 타임에만 실행 (`npm run sync:notion`). 런타임 채팅에는 불필요.
+**트레이드오프**:
+- 임베딩 때문에 `OPENAI_API_KEY` 를 완전히 제거할 수 없음. 그러나 임베딩은 빌드 시에만 발생하고 비용이 매우 저렴($0.02/1M tokens). 런타임은 100% `OPENROUTER_API_KEY` 하나로 동작.

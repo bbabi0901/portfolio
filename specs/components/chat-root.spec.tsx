@@ -105,7 +105,7 @@ const baseSuggestions: SuggestedQuestionMeta[] = [
   },
 ];
 
-const allModels: ModelId[] = ["gpt-4o-mini", "claude-3-5-haiku-latest", "gemini-2.0-flash-exp"];
+const allModels: ModelId[] = ["gpt-4o-mini", "claude-3-5-haiku", "gemini-2.0-flash"];
 
 function renderChat(overrides: Partial<ChatRootProps> = {}) {
   const props: ChatRootProps = {
@@ -170,18 +170,18 @@ describe("ChatRoot", () => {
     await user.click(trigger);
     const opt = await screen.findByRole("option", { name: /Claude/i });
     await user.click(opt);
-    expect(localStorage.getItem("portfolio.model")).toBe("claude-3-5-haiku-latest");
+    expect(localStorage.getItem("portfolio.model")).toBe("claude-3-5-haiku");
   });
 
   it("페이지 로드 시 localStorage 의 모델 ID 복원 (available 안에 있으면)", () => {
-    localStorage.setItem("portfolio.model", "gemini-2.0-flash-exp");
+    localStorage.setItem("portfolio.model", "gemini-2.0-flash");
     renderChat();
     const trigger = screen.getByRole("combobox", { name: /답변 모델/ });
     expect(trigger.textContent).toContain("Gemini");
   });
 
   it("저장된 모델 ID가 available 에 없으면 default 사용", () => {
-    localStorage.setItem("portfolio.model", "claude-3-5-haiku-latest");
+    localStorage.setItem("portfolio.model", "claude-3-5-haiku");
     renderChat({ availableModels: ["gpt-4o-mini"] });
     const trigger = screen.getByRole("combobox", { name: /답변 모델/ });
     expect(trigger.textContent).toContain("GPT");

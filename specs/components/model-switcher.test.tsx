@@ -11,8 +11,8 @@ describe("ModelSwitcher", () => {
   it("shows the currently selected model label", () => {
     render(
       <ModelSwitcher
-        value="claude-3-5-haiku-latest"
-        available={["gpt-4o-mini", "claude-3-5-haiku-latest"]}
+        value="claude-3-5-haiku"
+        available={["gpt-4o-mini", "claude-3-5-haiku"]}
         onChange={() => {}}
       />,
     );
@@ -29,7 +29,7 @@ describe("ModelSwitcher", () => {
     render(
       <ModelSwitcher
         value="gpt-4o-mini"
-        available={["gpt-4o-mini", "claude-3-5-haiku-latest"]}
+        available={["gpt-4o-mini", "claude-3-5-haiku"]}
         onChange={onChange}
       />,
     );
@@ -37,7 +37,7 @@ describe("ModelSwitcher", () => {
   });
 
   it("accepts all three known model ids in the type", () => {
-    const ids: ModelId[] = ["gpt-4o-mini", "claude-3-5-haiku-latest", "gemini-2.0-flash-exp"];
+    const ids: ModelId[] = ["gpt-4o-mini", "claude-3-5-haiku", "gemini-2.0-flash"];
     expect(ids).toHaveLength(3);
   });
 
@@ -72,8 +72,8 @@ describe("ModelSwitcher", () => {
     it("compact 라벨 매핑: Haiku / Gemini 단축", () => {
       const { rerender } = render(
         <ModelSwitcher
-          value="claude-3-5-haiku-latest"
-          available={["claude-3-5-haiku-latest"]}
+          value="claude-3-5-haiku"
+          available={["claude-3-5-haiku"]}
           compact
           onChange={() => {}}
         />,
@@ -81,8 +81,8 @@ describe("ModelSwitcher", () => {
       expect(screen.getByRole("combobox")).toHaveTextContent("Haiku");
       rerender(
         <ModelSwitcher
-          value="gemini-2.0-flash-exp"
-          available={["gemini-2.0-flash-exp"]}
+          value="gemini-2.0-flash"
+          available={["gemini-2.0-flash"]}
           compact
           onChange={() => {}}
         />,

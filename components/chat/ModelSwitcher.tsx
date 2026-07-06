@@ -8,19 +8,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import type { ModelId } from "@/lib/models";
 
-export type ModelId = "gpt-4o-mini" | "claude-3-5-haiku-latest" | "gemini-2.0-flash-exp";
+export type { ModelId };
 
 const MODEL_LABELS_LONG: Record<ModelId, string> = {
   "gpt-4o-mini": "GPT-4o mini",
-  "claude-3-5-haiku-latest": "Claude 3.5 Haiku",
-  "gemini-2.0-flash-exp": "Gemini 2.0 Flash",
+  "claude-3-5-haiku": "Claude 3.5 Haiku",
+  "gemini-2.0-flash": "Gemini 2.0 Flash",
 };
 
 const MODEL_LABELS_SHORT: Record<ModelId, string> = {
   "gpt-4o-mini": "GPT-4o",
-  "claude-3-5-haiku-latest": "Haiku",
-  "gemini-2.0-flash-exp": "Gemini",
+  "claude-3-5-haiku": "Haiku",
+  "gemini-2.0-flash": "Gemini",
 };
 
 export interface ModelSwitcherProps {
@@ -33,11 +34,11 @@ export interface ModelSwitcherProps {
 }
 
 export function toLongLabel(id: ModelId): string {
-  return MODEL_LABELS_LONG[id];
+  return MODEL_LABELS_LONG[id] ?? id;
 }
 
 export function toShortLabel(id: ModelId): string {
-  return MODEL_LABELS_SHORT[id];
+  return MODEL_LABELS_SHORT[id] ?? id;
 }
 
 export function ModelSwitcher({
