@@ -73,7 +73,12 @@ async function postContact(headers: Record<string, string> = {}): Promise<Respon
   return nodeApp.request("/api/node/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json", ...headers },
-    body: JSON.stringify({ name: "x", email: "a@b.co", message: "hi there" }),
+    body: JSON.stringify({
+      name: "테스트",
+      email: "a@b.co",
+      message: "안녕하세요. 협업 문의드립니다.",
+      elapsedMs: 2000,
+    }),
   });
 }
 
@@ -202,9 +207,7 @@ describe("rateLimit /api/node/contact", () => {
   it("4회째 minute deny → 429 + scope=minute", async () => {
     for (let i = 0; i < 3; i++) {
       const r = await postContact();
-      // /contact handler currently returns 501; rate limit middleware should
-      // still allow the first 3 within the minute window.
-      expect(r.status).toBe(501);
+      expect(r.status).toBe(200);
     }
     const denied = await postContact();
     expect(denied.status).toBe(429);
@@ -229,7 +232,7 @@ describe("rateLimit /api/node/contact", () => {
   it("동일 IP 다른 라우트는 격리 (contact ≠ feedback)", async () => {
     for (let i = 0; i < 3; i++) {
       const r = await postContact();
-      expect(r.status).toBe(501);
+      expect(r.status).toBe(200);
     }
     const contactDeny = await postContact();
     expect(contactDeny.status).toBe(429);

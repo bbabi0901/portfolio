@@ -157,7 +157,7 @@ export function MessageBubble({
           <MessageActionsBar
             messageId={message.id}
             text={message.content}
-            citations={message.citations ?? []}
+            citations={[]}
             onCopy={() => onCopy?.(message.id)}
             onOpenSource={(citation) => onOpenSource?.(citation)}
             onFeedback={handleFeedbackKind}

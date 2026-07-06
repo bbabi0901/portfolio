@@ -54,7 +54,7 @@ export async function appendContact(
   if (!env.NOTION_TOKEN) {
     return {
       ok: false,
-      reason: "auth",
+      reason: "not-configured",
       message: "NOTION_TOKEN not configured",
     };
   }
