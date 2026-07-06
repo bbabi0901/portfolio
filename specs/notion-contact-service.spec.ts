@@ -54,13 +54,13 @@ describe("appendContact (MOCK_NOTION=1)", () => {
 });
 
 describe("appendContact 환경변수 부재", () => {
-  it("NOTION_TOKEN 부재 → reason='auth'", async () => {
+  it("NOTION_TOKEN 부재 → reason='not-configured'", async () => {
     process.env.NOTION_CONTACT_DB_ID = "db_id_test";
     delete process.env.NOTION_TOKEN;
     clearEnvCache();
     const res = await appendContact(baseInput);
     expect(res.ok).toBe(false);
-    if (!res.ok) expect(res.reason).toBe("auth");
+    if (!res.ok) expect(res.reason).toBe("not-configured");
   });
 
   it("NOTION_CONTACT_DB_ID 부재 → reason='not-configured' (ERR-27)", async () => {

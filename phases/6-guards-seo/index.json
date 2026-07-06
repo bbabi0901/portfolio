@@ -64,7 +64,10 @@
     {
       "step": 4,
       "name": "error-503-page-lhci",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-07-04T10:00:00+09:00",
+      "completed_at": "2026-07-04T10:00:00+09:00",
+      "summary": "app/maintenance/page.tsx (token-budget 503 랜딩, robots noindex/nofollow), ErrorState에 kind='token-budget' 분기+/maintenance 링크 추가, lib/log.ts 구조화 로깅, .github/workflows/lhci.yml (disabled skeleton), .lighthouserc.json 임계값(perf 0.9, a11y/bp/seo 0.95). specs: maintenance-page.spec.tsx, lhci-config.spec.ts."
     }
   ],
   "created_at": "2026-05-07T18:57:18+0900"

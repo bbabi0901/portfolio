@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TriangleAlert } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -9,6 +10,7 @@ export interface ErrorStateProps {
   message: string;
   retryAfterSeconds?: number;
   onRetry?: () => void;
+  kind?: "default" | "token-budget";
   className?: string;
 }
 
@@ -40,7 +42,13 @@ function Countdown({ seconds }: CountdownProps) {
   );
 }
 
-export function ErrorState({ message, retryAfterSeconds, onRetry, className }: ErrorStateProps) {
+export function ErrorState({
+  message,
+  retryAfterSeconds,
+  onRetry,
+  kind = "default",
+  className,
+}: ErrorStateProps) {
   const showCountdown = retryAfterSeconds !== undefined && retryAfterSeconds > 0;
 
   return (
@@ -61,7 +69,15 @@ export function ErrorState({ message, retryAfterSeconds, onRetry, className }: E
         <p className="text-red-200">{message}</p>
         {showCountdown && <Countdown seconds={retryAfterSeconds!} />}
       </div>
-      {onRetry && (
+      {kind === "token-budget" && (
+        <Link
+          href="/maintenance"
+          className="text-xs text-red-300 underline underline-offset-2 hover:text-red-200"
+        >
+          자세히 보기
+        </Link>
+      )}
+      {onRetry && kind !== "token-budget" && (
         <Button
           type="button"
           variant="ghost"
