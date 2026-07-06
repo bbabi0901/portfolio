@@ -5,7 +5,7 @@
 **Related**: ../../AGENTS.md, ../../spec.json, ../TEST_SCENARIOS.md, ../TESTING.md, index.md
 **SSoT keys**: spec.testScenarios (TS-NN 실행 대상), spec.features.tests (파일 매핑)
 **Last verified**: 2026-05-23 — 사용자 (김윤수)
-**Status**: 🟡 Virtual / 로드맵 — 우선순위 **상** (Phase 8/9 deployment 전 필요)
+**Status**: 🔵 Planned: Phase 1 구현 가능 — 우선순위 **상** (Phase 8/9 deployment 전 필요)
 <!-- /agents-md-meta -->
 
 > 본 agent 는 아직 구현되지 않음. 실제 구현 시 `.claude/commands/qa-run.md` + `.github/workflows/qa.yml` + 보고서 생성기를 별도 phase 로.
@@ -66,6 +66,24 @@
 - **flaky test 자동 재실행 ≤ 2회**. 무한 retry 금지 (CI 비용).
 - **회귀 라벨 신중**. 첫 통과 이력이 없는 신규 테스트의 실패는 회귀 아님. main 의 마지막 통과 commit 과 비교.
 - **시크릿/.env 본문 출력 금지**. 실패 stacktrace 에 환경변수 값이 들어가면 마스킹.
+
+## 구현 로드맵
+
+### Phase 1: Local test mapping (현재 작업 가능)
+1. `spec.json`의 `testScenarios[].file` 경로 → vitest 파일 매핑 테이블 생성
+2. `npm run test -- --reporter=json > qa-results.json` 로 구조화 출력
+3. `scripts/qa-map.ts` — testScenarios[] ↔ 실제 테스트 결과 매핑 리포트 생성
+
+### Phase 2: GitHub Actions 연동
+- `.github/workflows/qa.yml` 추가
+- Trigger: `pull_request` + `push to main`
+- Steps: checkout → install → `MOCK_LLM=1 MOCK_NOTION=1 npm run test -- --reporter=json` → parse → comment on PR
+- PR comment format: `✅ TS-01 통과 | ❌ TS-05 실패 (링크)`
+
+### Phase 3: Regression detection
+- Compare current run vs last passing run (store in `phases/qa-runs/`)
+- Auto-label PR: `qa-pass` / `qa-fail` / `regression`
+- Create GitHub Issue on regression with test name + stacktrace
 
 ## AC (구현 시)
 

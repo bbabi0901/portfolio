@@ -60,6 +60,7 @@
       "started_at": "2026-05-07T19:23:33+0900",
       "completed_at": "2026-05-07T19:31:00+0900",
       "summary": "app/layout.tsx metadata expanded (title.template '%s | 김윤수', applicationName, authors, creator, keywords, alternates.canonical '/', openGraph.locale ko_KR + url + siteName, twitter summary_large_image, robots.googleBot, icons.favicon); per-page metadata adds alternates.canonical for /, /about, /experience, /contact (no openGraph.images override); JsonLdPerson adds url/description/knowsAbout (7 entries); robots.ts disallow extended to /api/node/; opengraph-image.tsx tightens alt + Pretendard→system-ui→Apple SD Gothic Neo→Noto Sans KR fallback; specs/seo-meta.spec.ts (29 specs) covering layout/viewport/page-level/JsonLdPerson/sitemap/robots; 516 tests total."
+    },
     {
       "step": 4,
       "name": "error-503-page-lhci",
