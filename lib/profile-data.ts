@@ -30,6 +30,18 @@ export interface ProfileData {
 const READING_WORDS_PER_MINUTE = 200;
 const KOREAN_CHARS_PER_WORD = 2;
 
+/**
+ * 노션 자기소개 페이지의 히어로 이미지는 서명 만료되는 S3 URL 로 동기화되므로,
+ * 빌드 산출물(oneLiner) 에 이미지 마크다운이 존재하면 커밋된 정적 asset 을 가리킨다.
+ * (실제 이미지 파일: public/images/profile.jpg — scripts/sync 가 아닌 수동 갱신)
+ */
+const PROFILE_IMAGE_ASSET = "/images/profile.jpg";
+const IMAGE_MARKDOWN_RE = /!\[[^\]]*\]\(https?:\/\/[^)]+\)/;
+
+export function resolveProfileImageUrl(oneLiner: string | undefined | null): string | null {
+  return oneLiner && IMAGE_MARKDOWN_RE.test(oneLiner) ? PROFILE_IMAGE_ASSET : null;
+}
+
 export function calculateReadingMinutes(body: string): {
   minutes: number;
   words: number;
@@ -113,7 +125,7 @@ export function loadProfileData(): ProfileData | null {
     intro,
     contact,
     sections,
-    imageUrl: null,
+    imageUrl: resolveProfileImageUrl(data.profile.oneLiner),
     totalReadingMinutes,
   };
 }

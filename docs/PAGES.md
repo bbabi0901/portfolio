@@ -116,6 +116,10 @@
 ### 데이터
 - `data/portfolio.server.json`의 카테고리 = `프로필`/`성격`/`취미` 청크들 (서버 import)
 - 마크다운 → MDX 컴포넌트로 렌더 (`@next/mdx` 또는 `next-mdx-remote/rsc`)
+- **프로필 이미지 (FEAT-032)**: 노션 자기소개 히어로 이미지는 서명 만료되는 S3 URL 이라 직접 참조 불가.
+  → 커밋된 정적 asset `public/images/profile.jpg` (512×512, EXIF/GPS strip, 수동 갱신) 사용.
+  `lib/profile-data.ts`의 `resolveProfileImageUrl()`가 `oneLiner`에 이미지 마크다운이 있으면 이 경로를,
+  없으면 `null`(이니셜 `ProfileFallback`)을 반환. 갱신은 노션 이미지 재다운로드 → 동일 경로 덮어쓰기.
 
 ### 인터랙션
 - "대화로 이어가기 →" 버튼 → `/?q={prefilled}` 또는 단순 `/` 이동.
