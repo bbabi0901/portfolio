@@ -24,7 +24,7 @@ export default function AboutPage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl space-y-8 px-4 py-12 md:px-6 lg:px-8">
+    <main className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
       <AboutHero
         intro={profile.intro}
         imageUrl={profile.imageUrl}
@@ -35,6 +35,7 @@ export default function AboutPage() {
           key={section.heading}
           heading={section.heading}
           subSections={section.subSections}
+          className="mt-12 border-t border-neutral-800 pt-10"
         />
       ))}
     </main>

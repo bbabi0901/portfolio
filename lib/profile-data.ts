@@ -76,6 +76,13 @@ export function loadProfileData(): ProfileData | null {
   }
 
   const sections = Array.from(grouped.values());
+  sections.sort((a, b) => {
+    const aIsIntj = a.heading.includes("INTJ");
+    const bIsIntj = b.heading.includes("INTJ");
+    if (aIsIntj && !bIsIntj) return -1;
+    if (!aIsIntj && bIsIntj) return 1;
+    return 0;
+  });
 
   let totalWords = 0;
   for (const section of sections) {
