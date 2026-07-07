@@ -28,6 +28,6 @@ fi
 # PR 게이트 (PRD/CLAUDE.md 정렬): check:spec → lint → test (build 제외 — prebuild 가 sync:notion 트리거하기 때문)
 npm run check:spec 2>&1 || { echo "[stop-hook] check:spec failed" >&2; exit 2; }
 npm run lint       2>&1 || { echo "[stop-hook] lint failed" >&2; exit 2; }
-MOCK_LLM=1 MOCK_NOTION=1 npm run test 2>&1 || { echo "[stop-hook] test failed" >&2; exit 2; }
+npm run test       2>&1 || { echo "[stop-hook] test failed" >&2; exit 2; }
 
 exit 0

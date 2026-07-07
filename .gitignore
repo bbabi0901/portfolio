@@ -53,3 +53,6 @@ phases/*/run.log
 
 # Playwright MCP 스냅샷 아티팩트
 .playwright-mcp/
+
+# 에이전트 worktree (임베디드 repo)
+.claude/worktrees/
