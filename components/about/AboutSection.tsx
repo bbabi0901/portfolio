@@ -305,7 +305,7 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
 // ─── Main component ──────────────────────────────────────────────────────────
 
 function isCareerSection(heading: string): boolean {
-  return heading.includes("자기 소개") || heading.includes("About Me");
+  return heading.includes("자기 소개") || heading.includes("About Me") || heading === "기술 이력";
 }
 
 export function AboutSection({ heading, subSections, className }: AboutSectionProps) {
@@ -326,10 +326,7 @@ export function AboutSection({ heading, subSections, className }: AboutSectionPr
                   <h3 className="text-sm font-medium text-neutral-300 mb-3">{sub.heading}</h3>
                 )}
                 {entries.length > 0 ? (
-                  <>
-                    <h3 className="text-[15px] font-medium text-neutral-200 mb-4">기술 이력</h3>
-                    <CareerTimeline intro={intro} entries={entries} />
-                  </>
+                  <CareerTimeline intro="" entries={entries} />
                 ) : (
                   <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
                     <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>

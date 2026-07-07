@@ -72,12 +72,14 @@ export function loadProfileData(): ProfileData | null {
     const headingPath = chunk.headingPath;
     const heading = headingPath[0] ?? "기타";
     if (CONTACT_HEADINGS.some((h) => heading.includes(h))) continue;
+    const normalizedHeading =
+      heading.includes("자기 소개") || heading.includes("About Me") ? "기술 이력" : heading;
     const subHeading = headingPath.slice(1).join(" → ") || undefined;
 
-    let section = grouped.get(heading);
+    let section = grouped.get(normalizedHeading);
     if (!section) {
-      section = { heading, subSections: [] };
-      grouped.set(heading, section);
+      section = { heading: normalizedHeading, subSections: [] };
+      grouped.set(normalizedHeading, section);
     }
     section.subSections.push({
       heading: subHeading,
