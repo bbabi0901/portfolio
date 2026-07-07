@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import { AboutHero } from "@/components/about/AboutHero";
-import { AboutSection } from "@/components/about/AboutSection";
+import { AboutSection, CareerTimelineSection } from "@/components/about/AboutSection";
 
 describe("AboutHero", () => {
   it("imageUrl null → SVG initial fallback", () => {
@@ -55,5 +55,22 @@ describe("AboutSection", () => {
     expect(link).toHaveAttribute("target", "_blank");
     expect(link.getAttribute("rel")).toMatch(/noopener/);
     expect(link.getAttribute("rel")).toMatch(/noreferrer/);
+  });
+});
+
+describe("CareerTimelineSection", () => {
+  it("career blockquote 마크다운을 타임라인(회사명)으로 렌더", () => {
+    const body = [
+      "> 소프트웨어 엔지니어",
+      "> | 디라티오",
+      "",
+      "> 2025.01 - 현재",
+      "",
+      "- 프로젝트 개요",
+      "- 성과 A",
+    ].join("\n");
+    render(<CareerTimelineSection subSections={[{ body }]} />);
+    expect(screen.getAllByText(/디라티오/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/프로젝트 개요/)).toBeInTheDocument();
   });
 });

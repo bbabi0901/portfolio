@@ -302,11 +302,41 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
   );
 }
 
-// ─── Main component ──────────────────────────────────────────────────────────
+// ─── Career timeline section (reusable, no h2 heading) ──────────────────────
 
-function isCareerSection(heading: string): boolean {
-  return heading.includes("자기 소개") || heading.includes("About Me") || heading === "기술 이력";
+export function CareerTimelineSection({
+  subSections,
+  className,
+}: {
+  subSections: AboutSubSectionData[];
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-col gap-6", className)}>
+      {subSections.map((sub, idx) => {
+        const { entries } = parseCareerMarkdown(sub.body);
+        return (
+          <div key={`${sub.heading ?? "body"}-${idx}`}>
+            {sub.heading && (
+              <h3 className="text-sm font-medium text-neutral-300 mb-3">{sub.heading}</h3>
+            )}
+            {entries.length > 0 ? (
+              <CareerTimeline intro="" entries={entries} />
+            ) : (
+              <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                  {sub.body}
+                </ReactMarkdown>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
+
+// ─── Main component (non-career sections) ───────────────────────────────────
 
 export function AboutSection({ heading, subSections, className }: AboutSectionProps) {
   return (
@@ -315,49 +345,23 @@ export function AboutSection({ heading, subSections, className }: AboutSectionPr
         {heading}
       </h2>
 
-      {isCareerSection(heading) ? (
-        // Career sections: parse markdown into timeline
-        <div className="flex flex-col gap-6">
-          {subSections.map((sub, idx) => {
-            const { intro, entries } = parseCareerMarkdown(sub.body);
-            return (
-              <div key={`${sub.heading ?? "body"}-${idx}`}>
-                {sub.heading && (
-                  <h3 className="text-sm font-medium text-neutral-300 mb-3">{sub.heading}</h3>
-                )}
-                {entries.length > 0 ? (
-                  <CareerTimeline intro="" entries={entries} />
-                ) : (
-                  <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                      {sub.body}
-                    </ReactMarkdown>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        // Non-career sections: regular markdown
-        <div className="flex flex-col">
-          {subSections.map((sub, idx) => (
-            <div
-              key={`${sub.heading ?? "body"}-${idx}`}
-              className={cn("flex flex-col gap-2 py-4", idx > 0 && "border-t border-neutral-800/60")}
-            >
-              {sub.heading ? (
-                <h3 className="text-sm font-medium text-neutral-300">{sub.heading}</h3>
-              ) : null}
-              <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
-                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                  {injectProjectSeparators(sub.body)}
-                </ReactMarkdown>
-              </div>
+      <div className="flex flex-col">
+        {subSections.map((sub, idx) => (
+          <div
+            key={`${sub.heading ?? "body"}-${idx}`}
+            className={cn("flex flex-col gap-2 py-4", idx > 0 && "border-t border-neutral-800/60")}
+          >
+            {sub.heading ? (
+              <h3 className="text-sm font-medium text-neutral-300">{sub.heading}</h3>
+            ) : null}
+            <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                {injectProjectSeparators(sub.body)}
+              </ReactMarkdown>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

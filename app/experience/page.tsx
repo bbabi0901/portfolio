@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
+import { cn } from "@/lib/utils";
+import { CareerTimelineSection } from "@/components/about/AboutSection";
 import { CategoryFilter } from "@/components/experience/CategoryFilter";
 import { ExperienceClient } from "@/components/experience/ExperienceClient";
 import { SkillsGrid } from "@/components/experience/SkillsGrid";
 import { loadExperienceData, type ProjectCategory } from "@/lib/experience-data";
+import { loadProfileData } from "@/lib/profile-data";
+
+const CAREER_HEADING = "기술 이력";
 
 export const metadata: Metadata = {
   title: "기술 이력",
-  description: "김윤수의 회사·프로젝트 타임라인 + 보유 스킬.",
+  description: "김윤수의 커리어·프로젝트 타임라인 + 보유 스킬.",
   alternates: { canonical: "/experience" },
 };
 
@@ -18,13 +23,15 @@ const ALL_CATEGORIES: ProjectCategory[] = ["자체프로젝트", "업무", "외�
 
 export default function ExperiencePage() {
   const data = loadExperienceData();
+  const careerSection = loadProfileData()?.sections.find((s) => s.heading === CAREER_HEADING);
 
-  if (
-    data.groups.length === 0 &&
-    data.others.length === 0 &&
-    data.skills.frontend.length === 0 &&
-    data.skills.smartContract.length === 0
-  ) {
+  const hasProjectData =
+    data.groups.length > 0 ||
+    data.others.length > 0 ||
+    data.skills.frontend.length > 0 ||
+    data.skills.smartContract.length > 0;
+
+  if (!hasProjectData && !careerSection) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
         <p className="text-neutral-400">기술 이력이 준비 중입니다.</p>
@@ -38,14 +45,32 @@ export default function ExperiencePage() {
     <main className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
       <header className="flex flex-col gap-3">
         <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">기술 이력</h1>
-        <Suspense fallback={null}>
-          <CategoryFilter options={presentCategories} />
-        </Suspense>
       </header>
-      <Suspense fallback={null}>
-        <ExperienceClient data={data} />
-      </Suspense>
-      <SkillsGrid skills={data.skills} />
+      {careerSection && (
+        <section className="flex flex-col gap-5">
+          <h2 className="text-[15px] font-medium text-neutral-200">커리어 타임라인</h2>
+          <CareerTimelineSection subSections={careerSection.subSections} />
+        </section>
+      )}
+      {hasProjectData && (
+        <>
+          <section
+            className={cn(
+              "flex flex-col gap-6",
+              careerSection && "border-t border-neutral-800 pt-10",
+            )}
+          >
+            <h2 className="text-[15px] font-medium text-neutral-200">프로젝트</h2>
+            <Suspense fallback={null}>
+              <CategoryFilter options={presentCategories} />
+            </Suspense>
+            <Suspense fallback={null}>
+              <ExperienceClient data={data} />
+            </Suspense>
+          </section>
+          <SkillsGrid skills={data.skills} />
+        </>
+      )}
     </main>
   );
 }
