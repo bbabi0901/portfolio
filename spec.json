@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -385,6 +385,24 @@
       "expectedSourceTitles": [
         "김윤수 이력서"
       ]
+    },
+    {
+      "id": "Q-019",
+      "category": "personal",
+      "text": "취미가 어떻게 되세요?",
+      "expectedSourceTitles": []
+    },
+    {
+      "id": "Q-020",
+      "category": "personal",
+      "text": "요즘 어떤 거에 관심 있어요?",
+      "expectedSourceTitles": []
+    },
+    {
+      "id": "Q-021",
+      "category": "personal",
+      "text": "어떤 성격이에요?",
+      "expectedSourceTitles": []
     }
   ],
   "errorPolicies": [
