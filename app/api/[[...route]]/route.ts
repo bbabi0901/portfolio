@@ -147,13 +147,14 @@ app.post(
           controller.close();
         }
         // textStream 소비 완료 후 usage 접근 — tee 충돌 없음
-        result.usage
+        // result.usage 는 PromiseLike 라 Promise.resolve 로 감싸 .catch 체이닝 보장
+        Promise.resolve(result.usage)
           .then((usage) => {
             const promptTokens = typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
             const completionTokens =
               typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
             if (promptTokens + completionTokens > 0) {
-              addTokenUsage({ promptTokens, completionTokens }).catch((e) =>
+              addTokenUsage({ promptTokens, completionTokens }).catch((e: unknown) =>
                 console.warn(
                   "[chat] addTokenUsage failed:",
                   e instanceof Error ? e.message : "unknown",
@@ -161,7 +162,7 @@ app.post(
               );
             }
           })
-          .catch((e) =>
+          .catch((e: unknown) =>
             console.warn(
               "[chat] usage tracking failed:",
               e instanceof Error ? e.message : "unknown",

@@ -35,6 +35,13 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      # route.ts 등이 data/portfolio.server.json(빌드 산출물)을 정적 import 하므로
+      # 타입체크·빌드 전에 fixture(MOCK_NOTION/MOCK_LLM)로 생성해 둔다.
+      - name: Generate portfolio data (fixtures)
+        run: npm run sync:notion
+        env:
+          SKIP_NOTION_SYNC: ""
+
       - name: Type check
         run: npx tsc --noEmit
 

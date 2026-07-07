@@ -21,7 +21,11 @@ try {
   const envFile = readFileSync(resolve(process.cwd(), ".env.local"), "utf-8");
   for (const line of envFile.split("\n")) {
     const m = /^([A-Z_][A-Z0-9_]*)=(.*)$/.exec(line.trim());
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    const key = m?.[1];
+    const val = m?.[2];
+    if (key && val !== undefined && !process.env[key]) {
+      process.env[key] = val.replace(/^["']|["']$/g, "");
+    }
   }
 } catch {
   // .env.local 없으면 환경변수 직접 주입 가정
