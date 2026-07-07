@@ -2,37 +2,30 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 
 import { AboutHero } from "@/components/about/AboutHero";
-import { AboutSection } from "@/components/about/AboutSection";
+import { AboutSection, CareerTimelineSection } from "@/components/about/AboutSection";
 
 describe("AboutHero", () => {
   it("imageUrl null → SVG initial fallback", () => {
-    const { container } = render(
-      <AboutHero intro="한 줄 소개" imageUrl={null} totalReadingMinutes={1} />,
-    );
+    const { container } = render(<AboutHero imageUrl={null} />);
     const svg = container.querySelector("svg[data-slot='profile-fallback']");
     expect(svg).not.toBeNull();
   });
 
   it("imageUrl 있음 → next/image 가 렌더된다", () => {
-    render(<AboutHero intro="한 줄 소개" imageUrl="/profile.jpg" totalReadingMinutes={1} />);
+    render(<AboutHero imageUrl="/profile.jpg" />);
     const img = screen.getByAltText(/김윤수/);
     expect(img).toBeInTheDocument();
   });
 
-  it("'약 X분 읽기' 표시", () => {
-    render(<AboutHero intro="X" imageUrl={null} totalReadingMinutes={3} />);
-    expect(screen.getByText(/약 3분/)).toBeInTheDocument();
+  it("연락처 phone 렌더", () => {
+    render(<AboutHero imageUrl={null} contact={{ phone: "010-1234-5678" }} />);
+    expect(screen.getByText("010-1234-5678")).toBeInTheDocument();
   });
 
-  it("intro 텍스트 렌더", () => {
-    render(
-      <AboutHero
-        intro="프론트엔드 + 스마트컨트랙트 개발자"
-        imageUrl={null}
-        totalReadingMinutes={1}
-      />,
-    );
-    expect(screen.getByText(/프론트엔드 \+ 스마트컨트랙트 개발자/)).toBeInTheDocument();
+  it("연락처 email 렌더 + mailto 링크", () => {
+    render(<AboutHero imageUrl={null} contact={{ email: "test@example.com" }} />);
+    const link = screen.getByRole("link", { name: /test@example.com/ });
+    expect(link).toHaveAttribute("href", "mailto:test@example.com");
   });
 });
 
@@ -60,5 +53,22 @@ describe("AboutSection", () => {
     expect(link).toHaveAttribute("target", "_blank");
     expect(link.getAttribute("rel")).toMatch(/noopener/);
     expect(link.getAttribute("rel")).toMatch(/noreferrer/);
+  });
+});
+
+describe("CareerTimelineSection", () => {
+  it("career blockquote 마크다운을 타임라인(회사명)으로 렌더", () => {
+    const body = [
+      "> 소프트웨어 엔지니어",
+      "> | 디라티오",
+      "",
+      "> 2025.01 - 현재",
+      "",
+      "- 프로젝트 개요",
+      "- 성과 A",
+    ].join("\n");
+    render(<CareerTimelineSection subSections={[{ body }]} />);
+    expect(screen.getAllByText(/디라티오/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/프로젝트 개요/)).toBeInTheDocument();
   });
 });

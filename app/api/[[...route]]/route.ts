@@ -3,7 +3,7 @@ import { handle } from "hono/vercel";
 import { streamText } from "ai";
 import { z } from "zod";
 
-import portfolioJson from "@/data/portfolio.sample.json";
+import portfolioJson from "@/data/portfolio.server.json";
 import { fixtureEmbedding } from "@/lib/embeddings";
 import { getServerEnv } from "@/lib/env";
 import {
@@ -123,51 +123,51 @@ app.post(
       maxOutputTokens: spec.maxOutputTokens,
       temperature: spec.temperature,
       topP: spec.topP,
-      abortSignal: c.req.raw.signal,
     });
 
     const encoder = new TextEncoder();
     const filteredStream = new ReadableStream<Uint8Array>({
       async start(controller) {
-        let buffer = "";
+        let bytesWritten = 0;
         try {
-          for await (const delta of result.textStream) {
-            buffer += delta;
-            const idx = buffer.lastIndexOf("\n");
-            if (idx === -1) continue;
-            const safe = buffer.slice(0, idx + 1);
-            buffer = buffer.slice(idx + 1);
-            const filtered = filterOutput({
-              text: safe,
-              allowedSourceUrls,
-            });
-            controller.enqueue(encoder.encode(filtered.text));
+          for await (const chunk of result.textStream) {
+            const filtered = filterOutput({ text: chunk, allowedSourceUrls });
+            const encoded = encoder.encode(filtered.text);
+            controller.enqueue(encoded);
+            bytesWritten += encoded.length;
           }
-          if (buffer.length > 0) {
-            const filtered = filterOutput({
-              text: buffer,
-              allowedSourceUrls,
-            });
-            controller.enqueue(encoder.encode(filtered.text));
+        } catch (err) {
+          console.error("[chat] stream error:", err instanceof Error ? err.message : String(err));
+        } finally {
+          if (bytesWritten === 0) {
+            // 스트림이 비어있으면 fallback 반환 — 빈 버블 대신 의미있는 응답
+            const fallback = language === "en" ? NO_RECORD_RESPONSE_EN : NO_RECORD_RESPONSE_KO;
+            controller.enqueue(encoder.encode(fallback));
           }
-          try {
-            const usage = await result.usage;
+          controller.close();
+        }
+        // textStream 소비 완료 후 usage 접근 — tee 충돌 없음
+        // result.usage 는 PromiseLike 라 Promise.resolve 로 감싸 .catch 체이닝 보장
+        Promise.resolve(result.usage)
+          .then((usage) => {
             const promptTokens = typeof usage?.inputTokens === "number" ? usage.inputTokens : 0;
             const completionTokens =
               typeof usage?.outputTokens === "number" ? usage.outputTokens : 0;
             if (promptTokens + completionTokens > 0) {
-              await addTokenUsage({ promptTokens, completionTokens });
+              addTokenUsage({ promptTokens, completionTokens }).catch((e: unknown) =>
+                console.warn(
+                  "[chat] addTokenUsage failed:",
+                  e instanceof Error ? e.message : "unknown",
+                ),
+              );
             }
-          } catch (e) {
+          })
+          .catch((e: unknown) =>
             console.warn(
-              "[chat] addTokenUsage failed:",
+              "[chat] usage tracking failed:",
               e instanceof Error ? e.message : "unknown",
-            );
-          }
-          controller.close();
-        } catch (err) {
-          controller.error(err);
-        }
+            ),
+          );
       },
     });
 

@@ -35,6 +35,12 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      # route.ts 등이 data/portfolio.server.json(빌드 산출물)을 정적 import 하므로
+      # 타입체크·빌드·테스트 전에 커밋된 sample.json 을 stand-in 으로 복사해 둔다.
+      # (프로덕션은 sync:notion 이 실제 데이터로 생성)
+      - name: Provide portfolio data (sample stand-in)
+        run: cp data/portfolio.sample.json data/portfolio.server.json
+
       - name: Type check
         run: npx tsc --noEmit
 

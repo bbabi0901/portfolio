@@ -39,6 +39,7 @@
 
 ## 개발 프로세스
 - CRITICAL: 새 기능 구현 시 반드시 (1) spec.json `features[]`에 FEAT-XXX 등록 → (2) 실패 테스트 작성 → (3) 통과 구현. (TDD + SDD)
+- CRITICAL (사용자 명시): 핵심 기능(채팅·RAG·스트리밍 등)은 반드시 3개 레벨 테스트가 모두 존재해야 한다. Unit(`specs/`, Vitest) + Integration(`specs/`, API 엔드포인트 레벨) + E2E(`tests/e2e/`, Playwright, MOCK_LLM=1). 신규 핵심 기능은 테스트 시나리오 설계 → 실패 테스트 작성 → 구현 순서 엄수.
 - CRITICAL: 사용자에게 보이는 변경은 docs/TEST_SCENARIOS.md의 TS-XX와 매핑되어야 함.
 - **CRITICAL (사용자 명시): 사용자/기획자가 새 기능·디자인·UX·규칙·이슈 fix 를 요청할 때마다 그 변경을 적절한 SSoT 파일에 즉시 기록한다.** PR 머지 전 self-check 의무. 기록 매핑:
   - **기능 / 동작**: `spec.json` features[] (FEAT-XXX) + testScenarios[] (TS-NN, file 경로 매핑) + version bump
@@ -51,6 +52,12 @@
   - **작업 분할**: `phases/{task}/index.json` + `phases/{task}/step{N}.md`
   - **Agent 정의 / 워크플로우 변경**: `AGENTS.md` 의 Agents 디렉토리 표 + `docs/agents/*.md` (각 agent 의 spec)
   - dev 서버에서 즉답으로 변경하면서 spec/docs 누락한 채 commit/push 금지. 시간 절약 명목으로도.
+- **CRITICAL (사용자 명시): LLM API 연동 변경 시 수동 검증 필수.** 모든 테스트는 `MOCK_LLM=1`에서 실행되므로 실제 API 문제를 감지 못한다. 아래 상황에서 반드시 `MOCK_LLM` 미설정 상태로 로컬에서 multi-turn 직접 확인 후 merge:
+  - `@ai-sdk/*` 버전 업그레이드
+  - `lib/models.ts` LLM 호출 방식 변경
+  - 스트리밍 파이프라인(`app/api/[[...route]]/route.ts`) 변경
+  - 수동 검증 방법: `npm run test:smoke` (OPENROUTER_API_KEY 필요) 또는 dev 서버에서 직접 2-turn 대화 확인
+- **`@ai-sdk/openai`에서 OpenRouter 호출 시 반드시 `or.chat(modelId)` 사용.** `or(modelId)` 단독 호출은 Responses API를 사용해 OpenRouter에서 무음 실패한다. (ADR-026 참조)
 - 커밋 메시지는 conventional commits (feat:, fix:, docs:, refactor:, test:, chore:).
 - PR은 `npm run check:spec`, `npm run lint`, `npm run test`가 통과해야 머지.
 - 노션 콘텐츠 변경 → 다음 빌드시 자동 반영. 수동 동기화는 `npm run sync:notion`.

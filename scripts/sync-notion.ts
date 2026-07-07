@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { chunkPages } from "@/lib/chunking";
 import { createNotionService } from "@/services/notion";
-import { createEmbeddingsService } from "@/services/openai-embeddings";
+import { createEmbeddingsService, VOYAGE_PRESET } from "@/services/openai-embeddings";
 import type { NotionPageContent, NotionPageRef } from "@/types/notion";
 import type {
   ChunkCategory,
@@ -44,7 +44,9 @@ const EnvSchema = z
     NOTION_TOKEN: z.string().optional(),
     NOTION_PROJECTS_DB_ID: z.string().optional(),
     NOTION_PROFILE_PAGE_IDS: z.string().optional(),
-    // 임베딩 전용 OpenAI 키 (OpenRouter는 /v1/embeddings 미지원)
+    // 임베딩 전용 키 (OpenRouter는 /v1/embeddings 미지원)
+    // VOYAGE_API_KEY 우선, 없으면 OPENAI_API_KEY 폴백
+    VOYAGE_API_KEY: z.string().optional(),
     OPENAI_API_KEY: z.string().optional(),
     NOTION_TROUBLESHOOTING_DB_ID: z.string().optional(),
     NOTION_EXTRA_PAGE_IDS: z.string().optional(),
@@ -217,10 +219,10 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
       fail("[sync-notion] NOTION_PROJECTS_DB_ID is required when MOCK_NOTION!=1");
     }
   }
-  if (!mockLlm && !env.OPENAI_API_KEY) {
+  if (!mockLlm && !env.VOYAGE_API_KEY && !env.OPENAI_API_KEY) {
     fail(
-      "[sync-notion] OPENAI_API_KEY is required for embeddings " +
-        "(OpenRouter는 /v1/embeddings 미지원. set MOCK_LLM=1 to use fixtures)",
+      "[sync-notion] VOYAGE_API_KEY 또는 OPENAI_API_KEY 가 필요합니다 " +
+        "(OpenRouter는 /v1/embeddings 미지원). MOCK_LLM=1 로 픽스처 사용 가능.",
     );
   }
 
@@ -236,10 +238,14 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     token: env.NOTION_TOKEN || "fixture",
     mock: mockNotion,
   });
+  const useVoyage = !!env.VOYAGE_API_KEY && !env.OPENAI_API_KEY;
+  const embeddingsApiKey = env.VOYAGE_API_KEY || env.OPENAI_API_KEY || "fixture";
+  const embeddingsPreset = useVoyage ? VOYAGE_PRESET : {};
   const embeddings = createEmbeddingsService({
-    apiKey: env.OPENAI_API_KEY || "fixture",
+    apiKey: embeddingsApiKey,
     model: "text-embedding-3-small",
     mock: mockLlm,
+    ...embeddingsPreset,
   });
 
   const projectsDbId = env.NOTION_PROJECTS_DB_ID || "fixture-db";

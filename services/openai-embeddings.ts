@@ -8,8 +8,12 @@ export interface EmbeddingsServiceOptions {
   baseURL?: string;
   model?: string;
   dimensions?: number;
+  /** true 시 요청 바디에서 dimensions 필드 제외 (Voyage AI 등 미지원 API용) */
+  omitDimensions?: boolean;
   maxBatchSize?: number;
   retryBackoffMs?: number;
+  /** 배치 간 대기 ms (rate limit 사전 방지용, 기본 0) */
+  batchDelayMs?: number;
 }
 
 export interface EmbeddingsService {
@@ -28,14 +32,28 @@ const DEFAULT_MAX_BATCH = 96;
 const DEFAULT_BACKOFF_MS = 250;
 const MAX_ATTEMPTS = 6; // free tier: 3 RPM → 최대 60s 대기 필요
 
+// Voyage AI 프리셋 — OpenRouter 미지원 임베딩 대안 (무료 50M tokens/월)
+// https://docs.voyageai.com/reference/embeddings-api
+export const VOYAGE_PRESET: Partial<EmbeddingsServiceOptions> = {
+  baseURL: "https://api.voyageai.com",
+  model: "voyage-3-lite",
+  dimensions: 1024,
+  omitDimensions: true, // Voyage API는 dimensions 파라미터 미지원
+  maxBatchSize: 8, // free tier TPM 제한 방지
+  batchDelayMs: 2000, // 배치 간 2s 딜레이로 rate limit 사전 방지
+  retryBackoffMs: 2000, // 429 시 2s→4s→8s... 대기
+};
+
 class Service implements EmbeddingsService {
   private readonly apiKey: string;
   private readonly mock: boolean;
   private readonly baseURL: string;
   private readonly model: string;
   private readonly dimensions: number;
+  private readonly omitDimensions: boolean;
   private readonly maxBatchSize: number;
   private readonly backoffMs: number;
+  private readonly batchDelayMs: number;
 
   constructor(opts: EmbeddingsServiceOptions) {
     this.apiKey = opts.apiKey;
@@ -43,8 +61,10 @@ class Service implements EmbeddingsService {
     this.baseURL = (opts.baseURL ?? DEFAULT_BASE_URL).replace(/\/+$/, "");
     this.model = opts.model ?? DEFAULT_MODEL;
     this.dimensions = opts.dimensions ?? DEFAULT_DIMENSIONS;
+    this.omitDimensions = !!opts.omitDimensions;
     this.maxBatchSize = Math.max(1, opts.maxBatchSize ?? DEFAULT_MAX_BATCH);
     this.backoffMs = opts.retryBackoffMs ?? DEFAULT_BACKOFF_MS;
+    this.batchDelayMs = opts.batchDelayMs ?? 0;
   }
 
   async embed(text: string): Promise<number[]> {
@@ -59,6 +79,7 @@ class Service implements EmbeddingsService {
     }
     const out: number[][] = new Array(texts.length);
     for (let i = 0; i < texts.length; i += this.maxBatchSize) {
+      if (i > 0 && this.batchDelayMs > 0) await sleep(this.batchDelayMs);
       const slice = texts.slice(i, i + this.maxBatchSize);
       const vectors = await this.callOpenAI(slice);
       for (let j = 0; j < vectors.length; j++) {
@@ -70,11 +91,9 @@ class Service implements EmbeddingsService {
 
   private async callOpenAI(inputs: string[]): Promise<number[][]> {
     const url = `${this.baseURL}/v1/embeddings`;
-    const body = JSON.stringify({
-      model: this.model,
-      input: inputs,
-      dimensions: this.dimensions,
-    });
+    const bodyObj: Record<string, unknown> = { model: this.model, input: inputs };
+    if (!this.omitDimensions) bodyObj.dimensions = this.dimensions;
+    const body = JSON.stringify(bodyObj);
 
     let lastErr: Error | null = null;
     for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
@@ -100,12 +119,14 @@ class Service implements EmbeddingsService {
             throw new Error(`OpenAI embeddings rate-limited after ${MAX_ATTEMPTS} attempts`);
           }
           // Retry-After 헤더 우선, 없으면 지수 백오프
-          // 실제 키에서는 최소 20s (free tier 3 RPM), 테스트(backoffMs=1)에서는 그대로
+          // OpenAI 무료 티어(3 RPM) 대비 minWait 20s; 테스트(backoffMs=1)는 0
           const retryAfter = res.headers.get("retry-after");
           const expBackoff = this.backoffMs * 2 ** attempt;
-          const minWaitMs = this.backoffMs >= 1000 ? 20_000 : 0;
+          const minWaitMs = this.backoffMs >= 10_000 ? 20_000 : 0;
           const waitMs = retryAfter ? Number(retryAfter) * 1000 : Math.max(expBackoff, minWaitMs);
-          console.warn(`[embeddings] rate-limited, waiting ${Math.round(waitMs / 1000)}s (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
+          console.warn(
+            `[embeddings] rate-limited, waiting ${Math.round(waitMs / 1000)}s (attempt ${attempt + 1}/${MAX_ATTEMPTS})`,
+          );
           await sleep(waitMs);
           continue;
         }
@@ -114,15 +135,15 @@ class Service implements EmbeddingsService {
       }
       if (res.status === 401) {
         const text = await safeText(res);
-        throw new Error(`OpenAI embeddings unauthorized: ${text}`);
+        throw new Error(`Embeddings unauthorized: ${text}`);
       }
       if (res.status >= 500) {
         const text = await safeText(res);
-        throw new Error(`OpenAI embeddings server error ${res.status}: ${text}`);
+        throw new Error(`Embeddings server error ${res.status}: ${text}`);
       }
       if (!res.ok) {
         const text = await safeText(res);
-        throw new Error(`OpenAI embeddings failed ${res.status}: ${text}`);
+        throw new Error(`Embeddings failed ${res.status}: ${text}`);
       }
 
       const json = (await res.json()) as EmbeddingResponse;

@@ -168,5 +168,6 @@ MVP 속도 + 외부 의존성 최소 + 운영 부담 0 + 디테일은 spec.json�
 **중요 제약**:
 - **OpenRouter는 `/v1/embeddings` 미지원** — `sync:notion` 임베딩은 `OPENAI_API_KEY` (직접 OpenAI) 사용 유지
 - 임베딩은 빌드 타임에만 실행 (`npm run sync:notion`). 런타임 채팅에는 불필요.
+- **`@ai-sdk/openai v3+`는 `or(modelId)` 호출 시 Responses API(`/v1/responses`)를 기본 사용한다.** OpenRouter는 Chat Completions API만 지원하므로 반드시 **`or.chat(modelId)`** 로 호출할 것. `or(modelId)` 단독 호출 금지. 이를 어기면 모든 실제 LLM 호출이 무음으로 실패하며 빈 응답이 반환된다.
 **트레이드오프**:
 - 임베딩 때문에 `OPENAI_API_KEY` 를 완전히 제거할 수 없음. 그러나 임베딩은 빌드 시에만 발생하고 비용이 매우 저렴($0.02/1M tokens). 런타임은 100% `OPENROUTER_API_KEY` 하나로 동작.

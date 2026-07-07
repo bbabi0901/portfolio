@@ -4,8 +4,9 @@ const ServerEnvSchema = z.object({
   // OpenRouter — 단일 키로 OpenAI/Anthropic/Google 통합 (ADR-026)
   // 채팅 모델 라우팅 전용. 임베딩은 OPENAI_API_KEY 사용.
   OPENROUTER_API_KEY: z.string().optional(),
-  // 임베딩 전용 (OpenRouter는 /v1/embeddings 미지원)
-  // sync:notion 실행 시 필요. 런타임 채팅에는 불필요.
+  // 임베딩 전용 (OpenRouter는 /v1/embeddings 미지원), sync:notion 빌드 타임만 사용
+  // VOYAGE_API_KEY 우선 (무료 50M tokens/월), 없으면 OPENAI_API_KEY 폴백 (ADR-026)
+  VOYAGE_API_KEY: z.string().optional(),
   OPENAI_API_KEY: z.string().optional(),
   NOTION_TOKEN: z.string().optional(),
   NOTION_FEEDBACK_DB_ID: z.string().optional(),

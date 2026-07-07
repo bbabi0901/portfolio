@@ -34,13 +34,13 @@ describe("buildSystemPrompt", () => {
     expect(out).toContain(NO_RECORD_RESPONSE_EN);
   });
 
-  it("chunks 의 sourceTitle, headingPath, sourceUrl, text 모두 직렬화", () => {
+  it("chunks 의 sourceTitle, headingPath, text 모두 직렬화 (sourceUrl 은 프롬프트에 미포함)", () => {
     const chunk = makeChunk();
     const out = buildSystemPrompt({ chunks: [chunk] });
     expect(out).toContain("MFE 마이그레이션 TF");
     expect(out).toContain("아키텍처");
     expect(out).toContain("Bidirectional Federation");
-    expect(out).toContain("https://www.notion.so/page-1");
+    expect(out).not.toContain("https://www.notion.so/page-1");
     expect(out).toContain("Module Federation 을 Vite 기반으로 전환했습니다.");
   });
 
@@ -95,8 +95,8 @@ describe("buildSystemPrompt", () => {
     const out = buildSystemPrompt({ chunks: [a, b] });
     expect(out).toContain("AAA");
     expect(out).toContain("BBB");
-    expect(out).toContain("https://www.notion.so/a");
-    expect(out).toContain("https://www.notion.so/b");
+    expect(out).not.toContain("https://www.notion.so/a");
+    expect(out).not.toContain("https://www.notion.so/b");
   });
 
   it("chunk text 를 truncate 하지 않는다 (긴 본문 그대로)", () => {
