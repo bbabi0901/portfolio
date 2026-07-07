@@ -15,7 +15,7 @@ export function TypingDots({ className, ariaLabel = "응답 생성 중" }: Typin
       role="status"
       aria-live="polite"
       aria-label={ariaLabel}
-      className={cn("inline-flex items-center gap-1 text-neutral-400", className)}
+      className={cn("text-muted inline-flex items-center gap-1", className)}
     >
       {DOT_DELAYS_MS.map((delay) => (
         <span

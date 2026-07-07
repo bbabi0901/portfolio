@@ -97,11 +97,11 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       data-slot="composer"
       onSubmit={handleFormSubmit}
       className={cn(
-        "rounded-3xl border border-neutral-700 bg-neutral-900/40",
+        "border-line-strong bg-elevated/40 rounded-3xl border",
         "px-3 py-2 md:px-4 md:py-3",
         "shadow-[0_0_0_1px_rgba(255,255,255,0.04)]",
         "transition-colors",
-        "focus-within:border-neutral-500 focus-within:bg-neutral-900/60",
+        "focus-within:border-line-strong focus-within:bg-elevated/60",
         "pb-[max(0.5rem,env(safe-area-inset-bottom))]",
         className,
       )}
@@ -124,8 +124,8 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
         }}
         className={cn(
           "block w-full resize-none bg-transparent",
-          "text-[15px] leading-relaxed text-white md:text-sm",
-          "placeholder:text-neutral-500",
+          "text-foreground text-[15px] leading-relaxed md:text-sm",
+          "placeholder:text-subtle",
           "outline-none focus:outline-none",
           "max-h-[144px] min-h-[24px] overflow-y-auto",
         )}
@@ -139,7 +139,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
               aria-live="polite"
               className={cn(
                 "text-xs tabular-nums select-none",
-                remaining < 0 ? "text-red-400" : "text-neutral-500",
+                remaining < 0 ? "text-danger" : "text-subtle",
               )}
             >
               {remaining}

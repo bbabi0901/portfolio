@@ -22,7 +22,7 @@ export default function AboutPage() {
   if (!profile) {
     return (
       <main className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
-        <p className="text-neutral-400">자기소개 페이지가 준비 중입니다.</p>
+        <p className="text-muted">자기소개 페이지가 준비 중입니다.</p>
       </main>
     );
   }
@@ -37,27 +37,25 @@ export default function AboutPage() {
           key={section.heading}
           heading={section.heading}
           subSections={section.subSections}
-          className="mt-12 border-t border-neutral-800 pt-10"
+          className="border-line mt-12 border-t pt-10"
         />
       ))}
 
       <Link
         href="/experience"
-        className="group mt-12 flex items-center gap-4 rounded-lg border border-neutral-800 p-5 transition-colors hover:border-neutral-600"
+        className="group border-line hover:border-line-strong mt-12 flex items-center gap-4 rounded-lg border p-5 transition-colors"
       >
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-neutral-800 text-neutral-400 transition-colors group-hover:border-neutral-600 group-hover:text-neutral-200">
+        <span className="border-line text-muted group-hover:border-line-strong group-hover:text-foreground flex size-10 shrink-0 items-center justify-center rounded-full border transition-colors">
           <Briefcase size={18} strokeWidth={1.5} />
         </span>
         <span className="flex flex-col gap-0.5">
-          <span className="text-[14px] font-medium text-neutral-200">기술 이력이 궁금하다면?</span>
-          <span className="text-[12px] text-neutral-500">
-            회사·프로젝트 타임라인과 보유 스킬 보기
-          </span>
+          <span className="text-foreground text-[14px] font-medium">기술 이력이 궁금하다면?</span>
+          <span className="text-subtle text-[12px]">회사·프로젝트 타임라인과 보유 스킬 보기</span>
         </span>
         <ArrowRight
           size={16}
           strokeWidth={1.5}
-          className="ml-auto shrink-0 text-neutral-600 transition-colors group-hover:text-neutral-300"
+          className="text-faint group-hover:text-body ml-auto shrink-0 transition-colors"
         />
       </Link>
     </main>

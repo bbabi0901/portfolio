@@ -13,15 +13,15 @@ export function DirectContactCard({ email, github, linkedin, className }: Direct
   return (
     <section
       aria-label="직접 연락"
-      className={cn(
-        "flex flex-col gap-3 rounded-lg border border-neutral-800 bg-[#141414] p-5",
-        className,
-      )}
+      className={cn("border-line bg-surface flex flex-col gap-3 rounded-lg border p-5", className)}
     >
-      <h2 className="text-sm font-medium text-neutral-300">직접 연락</h2>
-      <ul className="flex flex-col gap-2 text-sm text-neutral-300">
+      <h2 className="text-body text-sm font-medium">직접 연락</h2>
+      <ul className="text-body flex flex-col gap-2 text-sm">
         <li>
-          <a href={`mailto:${email}`} className="inline-flex items-center gap-2 hover:text-white">
+          <a
+            href={`mailto:${email}`}
+            className="hover:text-foreground inline-flex items-center gap-2"
+          >
             <Mail className="size-4" strokeWidth={1.5} aria-hidden="true" />
             <span>{email}</span>
           </a>
@@ -32,7 +32,7 @@ export function DirectContactCard({ email, github, linkedin, className }: Direct
               href={github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 hover:text-white"
+              className="hover:text-foreground inline-flex items-center gap-2"
             >
               <Github className="size-4" strokeWidth={1.5} aria-hidden="true" />
               <span>GitHub</span>
@@ -45,7 +45,7 @@ export function DirectContactCard({ email, github, linkedin, className }: Direct
               href={linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 hover:text-white"
+              className="hover:text-foreground inline-flex items-center gap-2"
             >
               <Linkedin className="size-4" strokeWidth={1.5} aria-hidden="true" />
               <span>LinkedIn</span>

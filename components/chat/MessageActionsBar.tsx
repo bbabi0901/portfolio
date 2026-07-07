@@ -71,7 +71,7 @@ export function MessageActionsBar({
     <div
       data-slot="message-actions-bar"
       data-message-id={messageId}
-      className={cn("mt-2 flex flex-wrap items-center gap-2 text-neutral-500", className)}
+      className={cn("text-subtle mt-2 flex flex-wrap items-center gap-2", className)}
     >
       <button
         type="button"
@@ -79,9 +79,9 @@ export function MessageActionsBar({
         title={justCopied ? "복사됨" : "복사"}
         onClick={handleCopy}
         className={cn(
-          "inline-flex items-center gap-1 rounded-md p-1.5 text-neutral-400",
-          "hover:bg-neutral-900 hover:text-neutral-200",
-          "focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none",
+          "text-muted inline-flex items-center gap-1 rounded-md p-1.5",
+          "hover:bg-elevated hover:text-foreground",
+          "focus-visible:ring-muted focus-visible:ring-1 focus-visible:outline-none",
           "transition-colors",
         )}
       >

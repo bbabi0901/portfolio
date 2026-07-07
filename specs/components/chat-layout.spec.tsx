@@ -42,7 +42,7 @@ describe("ChatRoot layout (TS-71)", () => {
     // 3: SuggestionCarousel wrapper — border-t (이제 위쪽 경계)
     expect(children[3]?.getAttribute("data-slot")).toBe("suggestion-wrapper");
     expect(children[3]?.className).toMatch(/border-t/);
-    expect(children[3]?.className).not.toMatch(/border-b/);
+    expect(children[3]?.className).not.toMatch(/\bborder-b\b/);
     // 4: Composer form
     expect(children[4]?.tagName).toBe("FORM");
     expect(children[4]?.getAttribute("data-slot")).toBe("composer");

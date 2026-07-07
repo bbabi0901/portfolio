@@ -25,40 +25,48 @@
 | 의미 없는 fade-in stagger 애니메이션 | 첫 인상 호도, INP 악화 |
 | "magic" emoji 다용 | 진지함 결여 |
 
-## 색상 (다크 고정)
+## 색상 (라이트/다크 시맨틱 토큰)
 
-### 배경
-| 용도 | Tailwind / 값 |
-|------|------|
-| 페이지 | `bg-[#0a0a0a]` |
-| 카드/패널 | `bg-[#141414]` |
-| 입력/Composer | `bg-neutral-900` |
-| 메뉴 overlay | `bg-black/60` |
+테마는 `next-themes`로 시스템 자동 + 사이드바 토글(시스템/라이트/다크). 토큰은
+`app/globals.css`의 `:root`(라이트)·`.dark`에 정의, Tailwind v4 `@theme inline`으로
+유틸 생성. **하드코딩 색(`bg-neutral-900`, `text-white` 등) 금지 — 아래 시맨틱 유틸만 사용.**
+
+### 표면(배경)
+| 용도 | 유틸 | 라이트 / 다크 |
+|------|------|------|
+| 페이지 | `bg-background` | `#ffffff` / `#0a0a0a` |
+| 카드/패널 | `bg-surface` | `#fafafa` / `#141414` |
+| 입력/Composer/hover | `bg-elevated` | `#f4f4f5` / `#171717` |
+| 메뉴 overlay | `bg-black/50` (양쪽 공용) | |
 
 ### 텍스트
-| 용도 | Tailwind |
-|------|------|
-| 주 텍스트 | `text-white` |
-| 본문 | `text-neutral-300` |
-| 보조 | `text-neutral-400` |
-| 비활성 | `text-neutral-500` |
-| 코드 | `text-neutral-200 font-mono` |
+| 용도 | 유틸 | 라이트 / 다크 |
+|------|------|------|
+| 주 텍스트 | `text-foreground` | `#0a0a0a` / `#ffffff` |
+| 본문 | `text-body` | `#3f3f46` / `#d4d4d4` |
+| 보조 | `text-muted` | `#52525b` / `#a3a3a3` |
+| 비활성 | `text-subtle` | `#71717a` / `#737373` |
+| 흐린 장식 | `text-faint` | `#a1a1aa` / `#525252` |
 
 ### 보더
-| 용도 | Tailwind |
-|------|------|
-| 카드/패널 | `border border-neutral-800` |
-| 입력 | `border border-neutral-800` (focus: `border-neutral-600`) |
-| 활성 메뉴 항목 | `border-l-2 border-lime-300` |
+| 용도 | 유틸 | 라이트 / 다크 |
+|------|------|------|
+| 카드/패널 | `border-line` | `#e4e4e7` / `#262626` |
+| 입력 focus | `border-line-strong` | `#d4d4d8` / `#525252` |
+| 섹션 경계 | `border-line-subtle` | `#f4f4f5` / `#171717` |
+| 활성 메뉴 항목 | `border-l-2 border-brand` | |
 
-### 데이터/시맨틱 색상
-| 용도 | Tailwind |
-|------|------|
-| 포인트 (사용자 메시지 강조, 활성 메뉴 표시) | `text-lime-300` (배경 사용 자제) |
-| 성공 토스트 | `text-emerald-300 border-emerald-900/50 bg-emerald-950/50` |
-| 에러 토스트 | `text-red-300 border-red-900/50 bg-red-950/50` |
-| 경고 토스트 | `text-amber-300 border-amber-900/50 bg-amber-950/50` |
-| 중립 토스트 | `text-neutral-300 border-neutral-800 bg-neutral-900` |
+### 포인트/시맨틱 색상
+| 용도 | 유틸 | 라이트 / 다크 |
+|------|------|------|
+| 포인트 브랜드 | `text-brand` / `bg-brand` | `#4d7c0f`·`#84cc16` / `#bef264` |
+| 반전(브랜드/전경 위 텍스트, 유저 말풍선) | `bg-foreground text-background` | |
+| 에러 | `text-danger`, `bg-danger-surface border-danger-border` | |
+| 경고 / 성공 | `text-warning` / `text-success` | |
+| 마크다운 prose | `prose dark:prose-invert` | |
+
+> shadcn/ui 컴포넌트는 표준 토큰(`bg-primary`, `border-input`, `text-muted-foreground`,
+> `bg-accent` 등)을 사용 — globals.css에서 위 시맨틱 팔레트에 매핑됨.
 
 ## 컴포넌트
 ### 카드

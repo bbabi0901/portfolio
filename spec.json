@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1121,6 +1121,18 @@
         "FEAT-003",
         "FEAT-021"
       ]
+    },
+    {
+      "id": "FEAT-031",
+      "name": "Light/Dark Theme — 시맨틱 토큰 체계 + 시스템 자동 + 사이드바 토글",
+      "status": "planned",
+      "priority": "P1",
+      "tests": [
+        "specs/seo-meta.spec.ts",
+        "specs/components/composer.spec.tsx",
+        "specs/components/chat-layout.spec.tsx"
+      ],
+      "dependencies": []
     }
   ],
   "testScenarios": [

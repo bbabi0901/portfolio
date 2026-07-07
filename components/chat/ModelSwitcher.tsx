@@ -58,8 +58,8 @@ export function ModelSwitcher({
         aria-label="답변 모델 선택"
         suppressHydrationWarning
         className={cn(
-          "h-8 gap-1 rounded-full border-neutral-700 bg-transparent px-3 text-xs text-neutral-300",
-          "hover:border-neutral-500 hover:text-white",
+          "border-line-strong text-body h-8 gap-1 rounded-full bg-transparent px-3 text-xs",
+          "hover:border-line-strong hover:text-foreground",
           "focus:outline-none focus-visible:ring-0",
           "data-[disabled]:opacity-50",
           className,
@@ -67,7 +67,7 @@ export function ModelSwitcher({
       >
         <SelectValue placeholder={disabled ? "사용 가능한 모델 없음" : label}>{label}</SelectValue>
       </SelectTrigger>
-      <SelectContent className="border border-neutral-700 bg-neutral-900 text-neutral-200">
+      <SelectContent className="border-line-strong bg-elevated text-foreground border">
         {available.map((id) => (
           <SelectItem key={id} value={id} className="text-xs">
             {toLongLabel(id)}

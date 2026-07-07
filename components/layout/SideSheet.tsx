@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { SideMenuItem } from "./SideMenuItem";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 export interface SideSheetProps {
@@ -55,7 +56,7 @@ export function SideSheet({
         side="right"
         showCloseButton
         className={cn(
-          "flex h-full w-screen max-w-full flex-col gap-0 border-l border-neutral-900 bg-[#0a0a0a] p-0 text-neutral-200 motion-reduce:transition-none sm:max-w-none md:w-80",
+          "border-line-subtle bg-background text-foreground flex h-full w-screen max-w-full flex-col gap-0 border-l p-0 motion-reduce:transition-none sm:max-w-none md:w-80",
           className,
         )}
         onOpenAutoFocus={(e) => {
@@ -65,8 +66,8 @@ export function SideSheet({
           firstLink?.focus();
         }}
       >
-        <SheetHeader className="border-b border-neutral-900 p-4">
-          <SheetTitle className="text-sm font-medium text-white">메뉴</SheetTitle>
+        <SheetHeader className="border-line-subtle border-b p-4">
+          <SheetTitle className="text-foreground text-sm font-medium">메뉴</SheetTitle>
           <SheetDescription className="sr-only">사이트 내 페이지로 이동합니다.</SheetDescription>
         </SheetHeader>
 
@@ -86,7 +87,11 @@ export function SideSheet({
           </ul>
         </nav>
 
-        <footer className="border-t border-neutral-900 p-4">
+        <div className="border-line-subtle border-t p-4">
+          <ThemeToggle />
+        </div>
+
+        <footer className="border-line-subtle border-t p-4">
           {socials && (socials.github || socials.email || socials.linkedin) ? (
             <div className="flex items-center gap-3">
               {socials.github ? (
@@ -95,7 +100,7 @@ export function SideSheet({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
-                  className="rounded-md p-1.5 text-neutral-400 transition-colors hover:bg-neutral-900 hover:text-white"
+                  className="text-muted hover:bg-elevated hover:text-foreground rounded-md p-1.5 transition-colors"
                 >
                   <Github size={16} strokeWidth={1.5} aria-hidden="true" />
                 </a>
@@ -104,7 +109,7 @@ export function SideSheet({
                 <a
                   href={socials.email}
                   aria-label="Email"
-                  className="rounded-md p-1.5 text-neutral-400 transition-colors hover:bg-neutral-900 hover:text-white"
+                  className="text-muted hover:bg-elevated hover:text-foreground rounded-md p-1.5 transition-colors"
                 >
                   <Mail size={16} strokeWidth={1.5} aria-hidden="true" />
                 </a>
@@ -115,7 +120,7 @@ export function SideSheet({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="rounded-md p-1.5 text-neutral-400 transition-colors hover:bg-neutral-900 hover:text-white"
+                  className="text-muted hover:bg-elevated hover:text-foreground rounded-md p-1.5 transition-colors"
                 >
                   <Linkedin size={16} strokeWidth={1.5} aria-hidden="true" />
                 </a>
@@ -123,7 +128,7 @@ export function SideSheet({
             </div>
           ) : null}
           {lastUpdated ? (
-            <p className="mt-3 text-xs text-neutral-500">마지막 업데이트: {lastUpdated}</p>
+            <p className="text-subtle mt-3 text-xs">마지막 업데이트: {lastUpdated}</p>
           ) : null}
         </footer>
       </SheetContent>

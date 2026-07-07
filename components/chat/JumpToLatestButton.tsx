@@ -21,7 +21,7 @@ export function JumpToLatestButton({ visible, onClick, className }: JumpToLatest
       onClick={onClick}
       aria-label="가장 최신 메시지로 이동"
       className={cn(
-        "gap-1.5 rounded-full text-xs text-neutral-300",
+        "text-body gap-1.5 rounded-full text-xs",
         "animate-[fade-in_0.2s_ease-out] motion-reduce:animate-none",
         className,
       )}

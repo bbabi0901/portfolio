@@ -35,7 +35,7 @@ function Countdown({ seconds }: CountdownProps) {
     <p
       data-slot="error-countdown"
       aria-live="polite"
-      className="mt-1 text-[11px] text-red-300/80 tabular-nums"
+      className="text-danger/80 mt-1 text-[11px] tabular-nums"
     >
       {remaining}초 뒤 다시 시도할 수 있어요
     </p>
@@ -56,23 +56,23 @@ export function ErrorState({
       data-slot="error-state"
       role="alert"
       className={cn(
-        "mx-auto my-4 flex max-w-md items-start gap-3 rounded-lg border border-red-900/50 bg-red-950/30 p-3",
+        "border-danger-border bg-danger-surface mx-auto my-4 flex max-w-md items-start gap-3 rounded-lg border p-3",
         className,
       )}
     >
       <TriangleAlert
-        className="mt-0.5 h-4 w-4 shrink-0 text-red-300"
+        className="text-danger mt-0.5 h-4 w-4 shrink-0"
         strokeWidth={1.5}
         aria-hidden="true"
       />
       <div className="flex-1 text-xs">
-        <p className="text-red-200">{message}</p>
+        <p className="text-danger">{message}</p>
         {showCountdown && <Countdown seconds={retryAfterSeconds!} />}
       </div>
       {kind === "token-budget" && (
         <Link
           href="/maintenance"
-          className="text-xs text-red-300 underline underline-offset-2 hover:text-red-200"
+          className="text-danger hover:text-danger text-xs underline underline-offset-2"
         >
           자세히 보기
         </Link>
@@ -84,7 +84,7 @@ export function ErrorState({
           size="sm"
           onClick={onRetry}
           disabled={showCountdown}
-          className="text-red-200 hover:bg-red-950/50 hover:text-red-100"
+          className="text-danger hover:bg-danger-surface hover:text-danger"
         >
           다시 시도
         </Button>

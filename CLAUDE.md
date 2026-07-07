@@ -31,11 +31,12 @@
 - 시간 표기는 항상 한국 시간 (Asia/Seoul, KST).
 
 ## 디자인 규칙
-- 다크 모드 only. `<html class="dark">` 고정. `theme-color: #0a0a0a`.
+- 라이트/다크 테마 지원. 기본 시스템(`prefers-color-scheme`) 자동, 사이드바(SideSheet) 토글로 시스템/라이트/다크 선택. `next-themes`가 `<html>`에 `.light`/`.dark` 클래스 토글. `theme-color`는 라이트 `#ffffff`/다크 `#0a0a0a` media 쌍.
+- CRITICAL: 색상은 하드코딩 Tailwind 색(`bg-neutral-900`, `text-white` 등) 금지, 반드시 `app/globals.css`의 시맨틱 토큰 유틸 사용. 표면: `bg-background`/`bg-surface`/`bg-elevated`, 텍스트: `text-foreground`/`text-body`/`text-muted`/`text-subtle`/`text-faint`, 경계: `border-line`/`border-line-strong`/`border-line-subtle`, 포인트: `text-brand`/`bg-brand`, 상태: `text-danger`/`text-warning`/`text-success`. 반전(라임/전경 위 텍스트)은 `bg-foreground text-background`. 마크다운 prose는 `prose dark:prose-invert`.
 - AI 슬롭 안티패턴 금지: backdrop-filter blur, gradient-text, "Powered by AI" 배지, glow 애니메이션, 보라/네온 브랜드 색, 모든 카드 동일 rounded-2xl, blur-3xl orb. 자세한 정책은 docs/UI_GUIDE.md.
 - 애니메이션 화이트리스트만 사용. 그 외 모두 금지.
 - 한국어 폰트: Pretendard Variable (next/font/local), fallback 시스템.
-- 색상은 무채색(neutral) + 포인트 1색 (lime-300, 절제). 자세한 토큰은 docs/UI_GUIDE.md.
+- 색상은 무채색(neutral) + 포인트 1색 (brand = lime, 라이트 lime-600 / 다크 lime-300, 절제). 자세한 토큰은 docs/UI_GUIDE.md.
 
 ## 개발 프로세스
 - CRITICAL: 새 기능 구현 시 반드시 (1) spec.json `features[]`에 FEAT-XXX 등록 → (2) 실패 테스트 작성 → (3) 통과 구현. (TDD + SDD)

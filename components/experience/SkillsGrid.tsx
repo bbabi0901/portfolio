@@ -13,7 +13,7 @@ export function SkillsGrid({ skills, className }: SkillsGridProps) {
 
   return (
     <section className={cn("flex flex-col gap-4", className)} aria-label="Skills">
-      <h2 className="text-lg font-medium text-white">Skills</h2>
+      <h2 className="text-foreground text-lg font-medium">Skills</h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {hasFrontend ? <SkillColumn title="Frontend" skills={skills.frontend} /> : null}
         {hasSmartContract ? (
@@ -27,13 +27,10 @@ export function SkillsGrid({ skills, className }: SkillsGridProps) {
 function SkillColumn({ title, skills }: { title: string; skills: string[] }) {
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-sm font-medium text-neutral-300">{title}</h3>
+      <h3 className="text-body text-sm font-medium">{title}</h3>
       <ul className="flex flex-wrap gap-1.5">
         {skills.map((s) => (
-          <li
-            key={s}
-            className="rounded-md border border-neutral-800 px-2 py-0.5 text-xs text-neutral-400"
-          >
+          <li key={s} className="border-line text-muted rounded-md border px-2 py-0.5 text-xs">
             {s}
           </li>
         ))}

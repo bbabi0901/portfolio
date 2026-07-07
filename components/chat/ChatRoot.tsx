@@ -346,9 +346,9 @@ export function ChatRoot({
     <div data-slot="chat-root" className={cn("flex h-full flex-col", className)}>
       <header
         data-slot="chat-header"
-        className="flex items-center justify-between gap-2 border-b border-neutral-900 py-3"
+        className="border-line-subtle flex items-center justify-between gap-2 border-b py-3"
       >
-        <h1 className="text-sm font-medium text-neutral-300">김윤수 — AI Portfolio</h1>
+        <h1 className="text-body text-sm font-medium">김윤수 — AI Portfolio</h1>
         <div className="flex items-center gap-1">
           <ClearButton open={clearOpen} onOpenChange={setClearOpen} onConfirm={clearConversation} />
         </div>
@@ -384,7 +384,7 @@ export function ChatRoot({
         />
       </div>
 
-      <div data-slot="suggestion-wrapper" className="border-t border-neutral-900 py-3">
+      <div data-slot="suggestion-wrapper" className="border-line-subtle border-t py-3">
         <SuggestionCarousel
           questions={suggestions}
           visitedIds={visited}

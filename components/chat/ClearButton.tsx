@@ -30,14 +30,14 @@ export function ClearButton({
           aria-label="새 대화"
           title="새 대화 (⌘K)"
           disabled={disabled}
-          className={cn("text-neutral-400 hover:text-white", className)}
+          className={cn("text-muted hover:text-foreground", className)}
         >
           <Trash2 strokeWidth={1.5} aria-hidden="true" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" data-slot="clear-conversation-popover" className="w-72">
-        <div className="text-sm font-medium text-neutral-200">대화를 모두 지울까요?</div>
-        <p className="mt-1 text-xs text-neutral-500">
+        <div className="text-foreground text-sm font-medium">대화를 모두 지울까요?</div>
+        <p className="text-subtle mt-1 text-xs">
           답변과 입력 메시지가 모두 삭제됩니다. 첫 인사는 그대로 남아요.
         </p>
         <div className="mt-4 flex justify-end gap-2">
