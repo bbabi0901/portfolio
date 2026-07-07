@@ -26,9 +26,8 @@ export default function AboutPage() {
   return (
     <main className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
       <AboutHero
-        intro={profile.intro}
         imageUrl={profile.imageUrl}
-        totalReadingMinutes={profile.totalReadingMinutes}
+        contact={profile.contact}
       />
       {profile.sections.map((section) => (
         <AboutSection

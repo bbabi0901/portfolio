@@ -271,17 +271,27 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
               {/* Bullet groups */}
               <div className="flex flex-col gap-4">
                 {entry.bulletGroups.map((group, gIdx) => (
-                  <ul key={gIdx} className="list-none pl-0 space-y-1.5 m-0">
-                    {group.map((bullet, bIdx) => (
-                      <li
-                        key={bIdx}
-                        className="flex gap-2 text-[13px] text-neutral-400 leading-relaxed"
-                      >
-                        <span className="mt-[6px] shrink-0 w-1 h-1 rounded-full bg-neutral-700" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div key={gIdx} className="flex flex-col gap-1">
+                    {/* group[0]: project name (중분류) */}
+                    {group[0] && (
+                      <p className="text-[12px] font-medium text-neutral-300 leading-snug">
+                        {group[0]}
+                      </p>
+                    )}
+                    {/* group[1+]: achievements (소분류) */}
+                    {group.length > 1 && (
+                      <ul className="list-none space-y-1 m-0 ml-2 pl-3 border-l border-neutral-800/60">
+                        {group.slice(1).map((bullet, bIdx) => (
+                          <li
+                            key={bIdx}
+                            className="text-[11px] text-neutral-500 leading-relaxed"
+                          >
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -301,7 +311,7 @@ function isCareerSection(heading: string): boolean {
 export function AboutSection({ heading, subSections, className }: AboutSectionProps) {
   return (
     <section className={cn("flex flex-col gap-5", className)}>
-      <h2 className="text-[11px] font-medium tracking-widest text-neutral-500 uppercase">
+      <h2 className="text-[15px] font-medium text-neutral-200">
         {heading}
       </h2>
 
