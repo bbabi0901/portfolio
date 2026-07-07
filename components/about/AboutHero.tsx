@@ -61,16 +61,16 @@ export function AboutHero({
           <div className="flex flex-col gap-1.5">
             {phone && (
               <div className="flex items-center gap-2">
-                <Phone size={12} strokeWidth={1.5} className="text-neutral-600 shrink-0" />
+                <Phone size={12} strokeWidth={1.5} className="shrink-0 text-neutral-600" />
                 <span className="text-[12px] text-neutral-500">{phone}</span>
               </div>
             )}
             {email && (
               <div className="flex items-center gap-2">
-                <Mail size={12} strokeWidth={1.5} className="text-neutral-600 shrink-0" />
+                <Mail size={12} strokeWidth={1.5} className="shrink-0 text-neutral-600" />
                 <a
                   href={`mailto:${email}`}
-                  className="text-[12px] text-neutral-500 hover:text-neutral-300 transition-colors"
+                  className="text-[12px] text-neutral-500 transition-colors hover:text-neutral-300"
                 >
                   {email}
                 </a>
@@ -83,7 +83,7 @@ export function AboutHero({
                   href={notionUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[12px] text-neutral-500 hover:text-neutral-300 transition-colors"
+                  className="text-[12px] text-neutral-500 transition-colors hover:text-neutral-300"
                 >
                   Notion 포트폴리오
                 </a>
@@ -124,7 +124,7 @@ function NotionIcon() {
   return (
     <span
       aria-hidden="true"
-      className="inline-flex items-center justify-center w-3 h-3 rounded-[2px] bg-neutral-800 border border-neutral-700 text-[8px] font-bold text-neutral-300 shrink-0"
+      className="inline-flex h-3 w-3 shrink-0 items-center justify-center rounded-[2px] border border-neutral-700 bg-neutral-800 text-[8px] font-bold text-neutral-300"
       style={{ fontFamily: "serif", lineHeight: 1 }}
     >
       N

@@ -128,15 +128,15 @@ function hasReadableText(body: string): boolean {
   return stripped.length > 0;
 }
 
-function extractContact(
-  chunks: ReturnType<typeof loadPortfolio>["chunks"],
-): ProfileContact {
+function extractContact(chunks: ReturnType<typeof loadPortfolio>["chunks"]): ProfileContact {
   const contactChunk = chunks.find((c) => c.headingPath[0]?.includes("이름"));
   if (!contactChunk) return {};
 
   const text = contactChunk.text;
   const phoneMatch = text.match(/\*\*연락처\*\*[\s\S]*?>\s*([\d\-]+)/);
-  const emailMatch = text.match(/\*\*이메일\*\*[\s\S]*?>\s*([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/);
+  const emailMatch = text.match(
+    /\*\*이메일\*\*[\s\S]*?>\s*([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/,
+  );
   const notionMatch = text.match(/\((https:\/\/app\.notion\.com\/[^)]+)\)/);
 
   return {

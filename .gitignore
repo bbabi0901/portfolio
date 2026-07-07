@@ -50,3 +50,6 @@ phases/*/run.log
 .idea/
 *.swp
 *.swo
+
+# Playwright MCP 스냅샷 아티팩트
+.playwright-mcp/

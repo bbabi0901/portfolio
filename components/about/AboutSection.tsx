@@ -80,11 +80,15 @@ function parseCareerEntry(lines: string[]): CareerEntry {
   }
   for (const dl of dateBlock) {
     const raw = dl.replace(/^>\s*/, "").replace(/\*\*/g, "").replace(/\*/g, "").trim();
-    if (/\d{4}/.test(raw)) { period = raw; break; }
+    if (/\d{4}/.test(raw)) {
+      period = raw;
+      break;
+    }
   }
 
   // Skip separators
-  while (i < lines.length && ((lines[i] ?? "").trim() === "" || (lines[i] ?? "").trim() === "---")) i++;
+  while (i < lines.length && ((lines[i] ?? "").trim() === "" || (lines[i] ?? "").trim() === "---"))
+    i++;
 
   const bulletGroups = parseBulletGroups(lines.slice(i));
 
@@ -115,7 +119,8 @@ function parseCareerMarkdown(text: string): { intro: string; entries: CareerEntr
 
   const firstStart = careerStarts[0] ?? 0;
   const introLines = lines.slice(0, firstStart);
-  while (introLines.length > 0 && (introLines[introLines.length - 1] ?? "").trim() === "") introLines.pop();
+  while (introLines.length > 0 && (introLines[introLines.length - 1] ?? "").trim() === "")
+    introLines.pop();
 
   const entries: CareerEntry[] = careerStarts.map((start, e) => {
     const nextStart = careerStarts[e + 1];
@@ -162,7 +167,7 @@ const markdownComponents = {
   img: () => null,
   blockquote({ children }: ComponentPropsWithoutRef<"blockquote">) {
     return (
-      <div className="my-3 border-l-2 border-neutral-700 pl-3 not-italic text-neutral-300 [&>p]:my-0.5 [&>p]:leading-snug">
+      <div className="my-3 border-l-2 border-neutral-700 pl-3 text-neutral-300 not-italic [&>p]:my-0.5 [&>p]:leading-snug">
         {children}
       </div>
     );
@@ -179,7 +184,7 @@ const markdownComponents = {
   },
   li({ children, ...props }: ComponentPropsWithoutRef<"li">) {
     return (
-      <li className="text-neutral-300 leading-relaxed marker:text-neutral-600" {...props}>
+      <li className="leading-relaxed text-neutral-300 marker:text-neutral-600" {...props}>
         {children}
       </li>
     );
@@ -203,7 +208,11 @@ const markdownComponents = {
         </code>
       );
     }
-    return <code className={codeClassName} {...props}>{children}</code>;
+    return (
+      <code className={codeClassName} {...props}>
+        {children}
+      </code>
+    );
   },
   pre({ children, ...props }: ComponentPropsWithoutRef<"pre">) {
     return (
@@ -236,35 +245,37 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
         {entries.map((entry, idx) => (
           <div key={`${entry.company}-${idx}`} className="flex">
             {/* Left column: company / role / period — hidden on mobile */}
-            <div className="hidden sm:block w-[116px] shrink-0 text-right pr-5 pt-0.5 pb-8">
-              <p className="text-[12px] font-medium text-neutral-200 leading-snug">{entry.company}</p>
-              <p className="text-[11px] text-neutral-500 mt-0.5 leading-snug">{entry.role}</p>
-              <p className="text-[11px] text-neutral-600 mt-2">{entry.period}</p>
+            <div className="hidden w-[116px] shrink-0 pt-0.5 pr-5 pb-8 text-right sm:block">
+              <p className="text-[12px] leading-snug font-medium text-neutral-200">
+                {entry.company}
+              </p>
+              <p className="mt-0.5 text-[11px] leading-snug text-neutral-500">{entry.role}</p>
+              <p className="mt-2 text-[11px] text-neutral-600">{entry.period}</p>
             </div>
 
             {/* Dot + line column */}
-            <div className="hidden sm:flex shrink-0 flex-col items-center">
+            <div className="hidden shrink-0 flex-col items-center sm:flex">
               <div
                 className={cn(
-                  "mt-1.5 w-[7px] h-[7px] rounded-full shrink-0",
+                  "mt-1.5 h-[7px] w-[7px] shrink-0 rounded-full",
                   entry.isActive ? "bg-lime-300" : "bg-neutral-600",
                 )}
               />
-              {idx < entries.length - 1 && (
-                <div className="mt-1.5 w-px flex-1 bg-neutral-800" />
-              )}
+              {idx < entries.length - 1 && <div className="mt-1.5 w-px flex-1 bg-neutral-800" />}
             </div>
 
             {/* Content column */}
-            <div className="flex-1 min-w-0 pl-5 pb-8">
+            <div className="min-w-0 flex-1 pb-8 pl-5">
               {/* Mobile header */}
-              <div className="sm:hidden mb-3">
+              <div className="mb-3 sm:hidden">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[13px] font-medium text-neutral-200 leading-snug">{entry.company}</p>
-                    <p className="text-[11px] text-neutral-500 mt-0.5">{entry.role}</p>
+                    <p className="text-[13px] leading-snug font-medium text-neutral-200">
+                      {entry.company}
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-neutral-500">{entry.role}</p>
                   </div>
-                  <p className="text-[11px] text-neutral-600 shrink-0 mt-0.5">{entry.period}</p>
+                  <p className="mt-0.5 shrink-0 text-[11px] text-neutral-600">{entry.period}</p>
                 </div>
               </div>
 
@@ -274,18 +285,15 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
                   <div key={gIdx} className="flex flex-col gap-1">
                     {/* group[0]: project name (중분류) */}
                     {group[0] && (
-                      <p className="text-[12px] font-medium text-neutral-300 leading-snug">
+                      <p className="text-[12px] leading-snug font-medium text-neutral-300">
                         {group[0]}
                       </p>
                     )}
                     {/* group[1+]: achievements (소분류) */}
                     {group.length > 1 && (
-                      <ul className="list-none space-y-1 m-0 ml-2 pl-3 border-l border-neutral-800/60">
+                      <ul className="m-0 ml-2 list-none space-y-1 border-l border-neutral-800/60 pl-3">
                         {group.slice(1).map((bullet, bIdx) => (
-                          <li
-                            key={bIdx}
-                            className="text-[11px] text-neutral-500 leading-relaxed"
-                          >
+                          <li key={bIdx} className="text-[11px] leading-relaxed text-neutral-500">
                             {bullet}
                           </li>
                         ))}
@@ -318,7 +326,7 @@ export function CareerTimelineSection({
         return (
           <div key={`${sub.heading ?? "body"}-${idx}`}>
             {sub.heading && (
-              <h3 className="text-sm font-medium text-neutral-300 mb-3">{sub.heading}</h3>
+              <h3 className="mb-3 text-sm font-medium text-neutral-300">{sub.heading}</h3>
             )}
             {entries.length > 0 ? (
               <CareerTimeline intro="" entries={entries} />
@@ -341,9 +349,7 @@ export function CareerTimelineSection({
 export function AboutSection({ heading, subSections, className }: AboutSectionProps) {
   return (
     <section className={cn("flex flex-col gap-5", className)}>
-      <h2 className="text-[15px] font-medium text-neutral-200">
-        {heading}
-      </h2>
+      <h2 className="text-[15px] font-medium text-neutral-200">{heading}</h2>
 
       <div className="flex flex-col">
         {subSections.map((sub, idx) => (

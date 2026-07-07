@@ -25,11 +25,7 @@ export function detectLanguage(userText: string): "ko" | "en" {
 
 function serializeChunk(chunk: PortfolioChunk): string {
   const heading = chunk.headingPath.length > 0 ? ` > ${chunk.headingPath.join(" > ")}` : "";
-  return [
-    `## ${chunk.sourceTitle}${heading}`,
-    chunk.text,
-    "---",
-  ].join("\n");
+  return [`## ${chunk.sourceTitle}${heading}`, chunk.text, "---"].join("\n");
 }
 
 function serializeContext(chunks: PortfolioChunk[]): string {

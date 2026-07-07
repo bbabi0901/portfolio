@@ -6,9 +6,7 @@ import { AboutSection, CareerTimelineSection } from "@/components/about/AboutSec
 
 describe("AboutHero", () => {
   it("imageUrl null → SVG initial fallback", () => {
-    const { container } = render(
-      <AboutHero imageUrl={null} />,
-    );
+    const { container } = render(<AboutHero imageUrl={null} />);
     const svg = container.querySelector("svg[data-slot='profile-fallback']");
     expect(svg).not.toBeNull();
   });

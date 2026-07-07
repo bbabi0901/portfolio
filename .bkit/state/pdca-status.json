@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-05-07T10:20:55.371Z",
+  "lastUpdated": "2026-07-07T07:23:54.136Z",
   "activeFeatures": [
     "suspicious-booth-708e0c",
     "[[...route]]",
@@ -20,7 +20,12 @@
     "seo",
     "notion-feedback.ts",
     "notion-contact.ts",
-    "resend.ts"
+    "resend.ts",
+    "maintenance",
+    "agent-ad27cf5c582720680",
+    "portfolio",
+    ".claude",
+    "ui"
   ],
   "primaryFeature": "suspicious-booth-708e0c",
   "features": {
@@ -46,9 +51,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:43:04.987Z",
-        "lastUpdated": "2026-05-07T10:20:55.370Z"
+        "lastUpdated": "2026-07-06T13:44:18.818Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/app/api/[[...route]]/route.ts"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/app/api/[[...route]]/route.ts"
     },
     "chat": {
       "phase": "do",
@@ -59,9 +64,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:43:07.947Z",
-        "lastUpdated": "2026-05-07T07:12:09.549Z"
+        "lastUpdated": "2026-07-06T10:19:09.546Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/components/chat/ChatRoot.tsx"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/components/chat/ChatRoot.tsx"
     },
     "scripts": {
       "phase": "do",
@@ -72,9 +77,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:09.774Z",
-        "lastUpdated": "2026-05-07T02:06:33.037Z"
+        "lastUpdated": "2026-07-06T13:45:54.319Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/scripts/generate-suggestions.ts"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/scripts/smoke-test-llm.ts"
     },
     "tests": {
       "phase": "do",
@@ -111,9 +116,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:44:56.265Z",
-        "lastUpdated": "2026-05-07T10:18:03.558Z"
+        "lastUpdated": "2026-07-07T07:21:44.607Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/specs/token-budget.spec.ts"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/specs/components/about-page.spec.tsx"
     },
     "e2e": {
       "phase": "do",
@@ -124,9 +129,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:45:17.168Z",
-        "lastUpdated": "2026-05-06T08:10:48.896Z"
+        "lastUpdated": "2026-07-06T10:19:40.658Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/tests/e2e/smoke.e2e.ts"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/tests/e2e/chat.e2e.ts"
     },
     "notion.ts": {
       "phase": "do",
@@ -150,9 +155,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-06T01:54:24.120Z",
-        "lastUpdated": "2026-05-07T01:50:52.316Z"
+        "lastUpdated": "2026-07-06T08:29:18.623Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/services/openai-embeddings.ts"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/services/openai-embeddings.ts"
     },
     "stubs": {
       "phase": "do",
@@ -189,9 +194,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-07T07:40:23.127Z",
-        "lastUpdated": "2026-05-07T07:40:45.245Z"
+        "lastUpdated": "2026-07-07T07:21:03.832Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/app/about/page.tsx"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/app/about/page.tsx"
     },
     "experience": {
       "phase": "do",
@@ -202,9 +207,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-07T07:48:36.317Z",
-        "lastUpdated": "2026-05-07T07:49:41.361Z"
+        "lastUpdated": "2026-07-07T07:23:54.134Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/app/experience/page.tsx"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/app/experience/page.tsx"
     },
     "contact": {
       "phase": "do",
@@ -215,9 +220,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-07T07:58:19.961Z",
-        "lastUpdated": "2026-05-07T08:04:15.110Z"
+        "lastUpdated": "2026-07-05T14:04:12.573Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/components/contact/ContactForm.tsx"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/.claude/worktrees/agent-ad27cf5c582720680/components/contact/ContactClient.tsx"
     },
     "seo": {
       "phase": "do",
@@ -254,9 +259,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-05-07T08:53:23.528Z",
-        "lastUpdated": "2026-05-07T08:53:23.528Z"
+        "lastUpdated": "2026-07-05T15:06:44.344Z"
       },
-      "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/services/notion-contact.ts"
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/.claude/worktrees/agent-ad27cf5c582720680/services/notion-contact.ts"
     },
     "resend.ts": {
       "phase": "do",
@@ -270,6 +275,71 @@
         "lastUpdated": "2026-05-07T08:53:36.418Z"
       },
       "lastFile": "/Users/yoonsoo/Projects/portfolio/.claude/worktrees/suspicious-booth-708e0c/services/resend.ts"
+    },
+    "maintenance": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-04T07:59:56.801Z",
+        "lastUpdated": "2026-07-04T07:59:56.801Z"
+      },
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/.claude/worktrees/agent-ad27cf5c582720680/app/maintenance/page.tsx"
+    },
+    "agent-ad27cf5c582720680": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-04T08:00:19.813Z",
+        "lastUpdated": "2026-07-04T08:00:19.813Z"
+      },
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/.claude/worktrees/agent-ad27cf5c582720680/lib/log.ts"
+    },
+    "portfolio": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-04T08:10:02.117Z",
+        "lastUpdated": "2026-07-07T06:22:48.983Z"
+      },
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/lib/profile-data.ts"
+    },
+    ".claude": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-06T02:05:26.940Z",
+        "lastUpdated": "2026-07-06T02:05:26.940Z"
+      },
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/.claude/hooks/post-session-check.sh"
+    },
+    "ui": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-07-06T08:52:10.104Z",
+        "lastUpdated": "2026-07-06T08:52:10.104Z"
+      },
+      "lastFile": "/Users/oonoo/Projects/MyProjects/portfolio/components/ui/popover.tsx"
     }
   },
   "pipeline": {
@@ -280,7 +350,7 @@
   "session": {
     "startedAt": "2026-05-05T08:26:34.540Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-05-07T10:20:55.371Z"
+    "lastActivity": "2026-07-07T07:23:54.136Z"
   },
   "history": [
     {
@@ -1888,6 +1958,1032 @@
     {
       "timestamp": "2026-05-07T10:20:55.371Z",
       "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:57:52.542Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:57:58.157Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:58:09.731Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:58:20.033Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:58:31.875Z",
+      "feature": "contact",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:58:39.406Z",
+      "feature": "contact",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:19.514Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:23.986Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:27.636Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:32.001Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:42.249Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:46.829Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T07:59:56.801Z",
+      "feature": "maintenance",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:00:01.008Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:00:05.311Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:00:08.962Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:00:14.616Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:00:19.814Z",
+      "feature": "agent-ad27cf5c582720680",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:00:56.980Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:01:11.998Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:01:20.492Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:01:29.394Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:02.118Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:11.865Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:24.825Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:31.892Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:36.568Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:40.947Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:53.658Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:10:57.921Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-04T08:11:04.145Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T13:23:49.321Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T13:23:49.879Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T13:23:53.866Z",
+      "feature": "contact",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T13:23:58.225Z",
+      "feature": "contact",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T14:04:12.574Z",
+      "feature": "contact",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T14:04:22.782Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T14:06:14.988Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T15:06:44.345Z",
+      "feature": "notion-contact.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T15:06:52.027Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T15:06:58.570Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T15:07:03.439Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T15:07:07.297Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T15:07:12.273Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T16:44:51.294Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T16:44:59.428Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T16:45:19.087Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T16:45:33.538Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T16:48:31.164Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-05T16:49:36.657Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:13.395Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:18.865Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:22.063Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:29.155Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:34.033Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:38.396Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:29:47.286Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:37:38.746Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:53:49.934Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:54:45.947Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:54:51.444Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:55:01.948Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:55:06.480Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:56:09.618Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:57:14.165Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T01:58:06.013Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T02:05:26.941Z",
+      "feature": ".claude",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T05:25:34.626Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T05:25:42.488Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T05:29:47.489Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T05:30:04.119Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:10:50.235Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:10:56.551Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:10:59.977Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:11:03.863Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:11:12.962Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:11:17.722Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:11:23.447Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:11:28.846Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:11:35.876Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:18:28.571Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:18:35.490Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:18:39.471Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:18:44.169Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:20:22.811Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:20:36.195Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:24:48.198Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:24:54.615Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:24:59.562Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:25:06.766Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:29:18.624Z",
+      "feature": "openai-embeddings.ts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:52:06.220Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:52:10.105Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T08:52:18.097Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:00:39.279Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:06:03.918Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:06:08.033Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:06:11.811Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:06:40.729Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:17:31.722Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:22:12.086Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:22:20.483Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:23:19.241Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:28:04.361Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:28:11.053Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:28:16.268Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:29:40.794Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:31:16.001Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:31:38.527Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:31:55.868Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:32:12.595Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:32:30.849Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:32:53.865Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:33:29.733Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:34:10.214Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:35:14.491Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:35:34.439Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:36:25.908Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:36:41.116Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:43:35.975Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:43:42.047Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:43:46.519Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:44:16.010Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T09:44:19.764Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T10:19:05.413Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T10:19:09.546Z",
+      "feature": "chat",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T10:19:27.879Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T10:19:32.384Z",
+      "feature": "e2e",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T10:19:40.658Z",
+      "feature": "e2e",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T12:49:27.941Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T12:51:33.868Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T13:44:07.408Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T13:44:18.818Z",
+      "feature": "[[...route]]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T13:45:14.392Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-06T13:45:54.320Z",
+      "feature": "scripts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T04:04:52.596Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T04:04:58.517Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T04:05:06.474Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T04:57:19.414Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:01:25.429Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:01:32.945Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:01:40.627Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:30:31.412Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:30:49.723Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:30:57.428Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T05:33:23.059Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:09.324Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:13.849Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:17.963Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:25.439Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:42.151Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:46.433Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:09:51.037Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:11:39.221Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:11:43.871Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:12:01.337Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:15:28.214Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:16:23.974Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:22:48.984Z",
+      "feature": "portfolio",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:22:52.293Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T06:22:57.042Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:20:37.148Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:20:53.394Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:21:03.832Z",
+      "feature": "about",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:21:10.673Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:21:22.094Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:21:33.647Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:21:44.607Z",
+      "feature": "specs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:22:55.083Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:23:04.555Z",
+      "feature": "experience",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-07-07T07:23:54.136Z",
+      "feature": "experience",
       "phase": "do",
       "action": "updated"
     }

@@ -92,7 +92,10 @@ test.describe("chat multi-turn (TS-01)", () => {
     expect(turn2Text.trim().length).toBeGreaterThan(0);
 
     // 에러 상태가 없어야 함
-    const errorState = await page.locator('[data-slot="error-state"]').isVisible().catch(() => false);
+    const errorState = await page
+      .locator('[data-slot="error-state"]')
+      .isVisible()
+      .catch(() => false);
     expect(errorState).toBe(false);
   });
 });

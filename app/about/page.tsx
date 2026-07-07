@@ -31,10 +31,7 @@ export default function AboutPage() {
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
-      <AboutHero
-        imageUrl={profile.imageUrl}
-        contact={profile.contact}
-      />
+      <AboutHero imageUrl={profile.imageUrl} contact={profile.contact} />
       {sections.map((section) => (
         <AboutSection
           key={section.heading}
@@ -53,7 +50,9 @@ export default function AboutPage() {
         </span>
         <span className="flex flex-col gap-0.5">
           <span className="text-[14px] font-medium text-neutral-200">기술 이력이 궁금하다면?</span>
-          <span className="text-[12px] text-neutral-500">회사·프로젝트 타임라인과 보유 스킬 보기</span>
+          <span className="text-[12px] text-neutral-500">
+            회사·프로젝트 타임라인과 보유 스킬 보기
+          </span>
         </span>
         <ArrowRight
           size={16}

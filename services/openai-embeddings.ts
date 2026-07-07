@@ -38,10 +38,10 @@ export const VOYAGE_PRESET: Partial<EmbeddingsServiceOptions> = {
   baseURL: "https://api.voyageai.com",
   model: "voyage-3-lite",
   dimensions: 1024,
-  omitDimensions: true,  // Voyage API는 dimensions 파라미터 미지원
-  maxBatchSize: 8,       // free tier TPM 제한 방지
-  batchDelayMs: 2000,    // 배치 간 2s 딜레이로 rate limit 사전 방지
-  retryBackoffMs: 2000,  // 429 시 2s→4s→8s... 대기
+  omitDimensions: true, // Voyage API는 dimensions 파라미터 미지원
+  maxBatchSize: 8, // free tier TPM 제한 방지
+  batchDelayMs: 2000, // 배치 간 2s 딜레이로 rate limit 사전 방지
+  retryBackoffMs: 2000, // 429 시 2s→4s→8s... 대기
 };
 
 class Service implements EmbeddingsService {
@@ -124,7 +124,9 @@ class Service implements EmbeddingsService {
           const expBackoff = this.backoffMs * 2 ** attempt;
           const minWaitMs = this.backoffMs >= 10_000 ? 20_000 : 0;
           const waitMs = retryAfter ? Number(retryAfter) * 1000 : Math.max(expBackoff, minWaitMs);
-          console.warn(`[embeddings] rate-limited, waiting ${Math.round(waitMs / 1000)}s (attempt ${attempt + 1}/${MAX_ATTEMPTS})`);
+          console.warn(
+            `[embeddings] rate-limited, waiting ${Math.round(waitMs / 1000)}s (attempt ${attempt + 1}/${MAX_ATTEMPTS})`,
+          );
           await sleep(waitMs);
           continue;
         }
