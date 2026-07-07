@@ -45,7 +45,7 @@ export function AboutHero({
             width={imageSize}
             height={imageSize}
             priority
-            className="size-full rounded-full border border-neutral-800 object-cover"
+            className="border-line size-full rounded-full border object-cover"
           />
         ) : (
           <ProfileFallback initial={initial} />
@@ -53,7 +53,7 @@ export function AboutHero({
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
+        <h1 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">
           {ownerName}
         </h1>
 
@@ -61,16 +61,16 @@ export function AboutHero({
           <div className="flex flex-col gap-1.5">
             {phone && (
               <div className="flex items-center gap-2">
-                <Phone size={12} strokeWidth={1.5} className="shrink-0 text-neutral-600" />
-                <span className="text-[12px] text-neutral-500">{phone}</span>
+                <Phone size={12} strokeWidth={1.5} className="text-faint shrink-0" />
+                <span className="text-subtle text-[12px]">{phone}</span>
               </div>
             )}
             {email && (
               <div className="flex items-center gap-2">
-                <Mail size={12} strokeWidth={1.5} className="shrink-0 text-neutral-600" />
+                <Mail size={12} strokeWidth={1.5} className="text-faint shrink-0" />
                 <a
                   href={`mailto:${email}`}
-                  className="text-[12px] text-neutral-500 transition-colors hover:text-neutral-300"
+                  className="text-subtle hover:text-body text-[12px] transition-colors"
                 >
                   {email}
                 </a>
@@ -83,7 +83,7 @@ export function AboutHero({
                   href={notionUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[12px] text-neutral-500 transition-colors hover:text-neutral-300"
+                  className="text-subtle hover:text-body text-[12px] transition-colors"
                 >
                   Notion 포트폴리오
                 </a>
@@ -103,7 +103,7 @@ function ProfileFallback({ initial }: { initial: string }) {
       viewBox="0 0 128 128"
       role="img"
       aria-label="프로필 이미지"
-      className="size-full rounded-full border border-neutral-700 bg-neutral-900"
+      className="border-line-strong bg-elevated size-full rounded-full border"
     >
       <text
         x="50%"
@@ -124,7 +124,7 @@ function NotionIcon() {
   return (
     <span
       aria-hidden="true"
-      className="inline-flex h-3 w-3 shrink-0 items-center justify-center rounded-[2px] border border-neutral-700 bg-neutral-800 text-[8px] font-bold text-neutral-300"
+      className="border-line-strong bg-line text-body inline-flex h-3 w-3 shrink-0 items-center justify-center rounded-[2px] border text-[8px] font-bold"
       style={{ fontFamily: "serif", lineHeight: 1 }}
     >
       N

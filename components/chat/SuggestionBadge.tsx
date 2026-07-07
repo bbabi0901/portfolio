@@ -24,9 +24,9 @@ export function SuggestionBadge({
       data-visited={visited ? "true" : "false"}
       data-category={category}
       className={cn(
-        "shrink-0 rounded-full border border-neutral-800 bg-transparent px-3 py-1.5 text-xs text-neutral-300",
-        "hover:border-neutral-600 hover:text-white",
-        "focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none",
+        "border-line text-body shrink-0 rounded-full border bg-transparent px-3 py-1.5 text-xs",
+        "hover:border-line-strong hover:text-foreground",
+        "focus-visible:ring-muted focus-visible:ring-1 focus-visible:outline-none",
         "transition-colors",
         visited && "opacity-60",
         className,

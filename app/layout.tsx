@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { LayoutClient } from "@/components/layout/LayoutClient";
 import { JsonLdPerson } from "@/components/seo/JsonLdPerson";
 import { loadPortfolio } from "@/lib/portfolio-data";
@@ -61,8 +62,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -76,12 +80,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="ko" className="dark">
-      <body className="min-h-screen bg-[#0a0a0a] font-sans text-white antialiased">
-        <LayoutClient lastUpdated={lastUpdated} socials={socials}>
-          {children}
-        </LayoutClient>
-        <Toaster richColors />
+    <html lang="ko" suppressHydrationWarning>
+      <body className="bg-background text-foreground min-h-screen font-sans antialiased">
+        <ThemeProvider>
+          <LayoutClient lastUpdated={lastUpdated} socials={socials}>
+            {children}
+          </LayoutClient>
+          <Toaster richColors />
+        </ThemeProvider>
         <JsonLdPerson />
       </body>
     </html>

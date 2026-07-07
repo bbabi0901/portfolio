@@ -38,17 +38,17 @@ export function Timeline({ groups, activeCompany, onSelectCompany, className }: 
             onClick={() => handleClick(g.company)}
             data-active={active}
             className={cn(
-              "flex shrink-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs transition-colors focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none lg:shrink",
-              active ? "text-white" : "text-neutral-400 hover:text-neutral-200",
+              "focus-visible:ring-muted flex shrink-0 items-center gap-2 rounded-md px-2 py-1.5 text-left text-xs transition-colors focus-visible:ring-1 focus-visible:outline-none lg:shrink",
+              active ? "text-foreground" : "text-muted hover:text-foreground",
             )}
           >
             <span
               aria-hidden="true"
-              className={cn("size-1.5 rounded-full", active ? "bg-lime-300" : "bg-neutral-600")}
+              className={cn("size-1.5 rounded-full", active ? "bg-brand" : "bg-faint")}
             />
             <span className="flex flex-col">
               <span className="font-medium">{g.company}</span>
-              {g.period ? <span className="text-[11px] text-neutral-500">{g.period}</span> : null}
+              {g.period ? <span className="text-subtle text-[11px]">{g.period}</span> : null}
             </span>
           </button>
         );

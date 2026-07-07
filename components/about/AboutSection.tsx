@@ -154,7 +154,7 @@ function ExternalLink({ href, children, ...rest }: ComponentPropsWithoutRef<"a">
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-neutral-200 underline decoration-neutral-600 underline-offset-2 hover:decoration-neutral-300"
+      className="text-foreground decoration-subtle hover:decoration-body underline underline-offset-2"
       {...rest}
     >
       {children}
@@ -167,13 +167,13 @@ const markdownComponents = {
   img: () => null,
   blockquote({ children }: ComponentPropsWithoutRef<"blockquote">) {
     return (
-      <div className="my-3 border-l-2 border-neutral-700 pl-3 text-neutral-300 not-italic [&>p]:my-0.5 [&>p]:leading-snug">
+      <div className="border-line-strong text-body my-3 border-l-2 pl-3 not-italic [&>p]:my-0.5 [&>p]:leading-snug">
         {children}
       </div>
     );
   },
   hr() {
-    return <hr className="my-5 border-neutral-800" />;
+    return <hr className="border-line my-5" />;
   },
   ul({ children, ...props }: ComponentPropsWithoutRef<"ul">) {
     return (
@@ -184,7 +184,7 @@ const markdownComponents = {
   },
   li({ children, ...props }: ComponentPropsWithoutRef<"li">) {
     return (
-      <li className="leading-relaxed text-neutral-300 marker:text-neutral-600" {...props}>
+      <li className="text-body marker:text-faint leading-relaxed" {...props}>
         {children}
       </li>
     );
@@ -201,7 +201,7 @@ const markdownComponents = {
     if (isInline) {
       return (
         <code
-          className="rounded border border-neutral-800 bg-neutral-900 px-1 py-0.5 font-mono text-[12px] text-neutral-200"
+          className="border-line bg-elevated text-foreground rounded border px-1 py-0.5 font-mono text-[12px]"
           {...props}
         >
           {children}
@@ -217,7 +217,7 @@ const markdownComponents = {
   pre({ children, ...props }: ComponentPropsWithoutRef<"pre">) {
     return (
       <pre
-        className="overflow-x-auto rounded-md border border-neutral-800 bg-zinc-950 p-3 font-mono text-[12px] text-zinc-200"
+        className="border-line bg-elevated text-body overflow-x-auto rounded-md border p-3 font-mono text-[12px]"
         {...props}
       >
         {children}
@@ -233,7 +233,7 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
     <div className="flex flex-col gap-8">
       {/* Intro prose (tags + paragraphs before first career entry) */}
       {intro && (
-        <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
+        <div className="prose dark:prose-invert prose-sm text-body max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
             {intro}
           </ReactMarkdown>
@@ -246,11 +246,11 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
           <div key={`${entry.company}-${idx}`} className="flex">
             {/* Left column: company / role / period — hidden on mobile */}
             <div className="hidden w-[116px] shrink-0 pt-0.5 pr-5 pb-8 text-right sm:block">
-              <p className="text-[12px] leading-snug font-medium text-neutral-200">
+              <p className="text-foreground text-[12px] leading-snug font-medium">
                 {entry.company}
               </p>
-              <p className="mt-0.5 text-[11px] leading-snug text-neutral-500">{entry.role}</p>
-              <p className="mt-2 text-[11px] text-neutral-600">{entry.period}</p>
+              <p className="text-subtle mt-0.5 text-[11px] leading-snug">{entry.role}</p>
+              <p className="text-faint mt-2 text-[11px]">{entry.period}</p>
             </div>
 
             {/* Dot + line column */}
@@ -258,10 +258,10 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
               <div
                 className={cn(
                   "mt-1.5 h-[7px] w-[7px] shrink-0 rounded-full",
-                  entry.isActive ? "bg-lime-300" : "bg-neutral-600",
+                  entry.isActive ? "bg-brand" : "bg-faint",
                 )}
               />
-              {idx < entries.length - 1 && <div className="mt-1.5 w-px flex-1 bg-neutral-800" />}
+              {idx < entries.length - 1 && <div className="bg-line mt-1.5 w-px flex-1" />}
             </div>
 
             {/* Content column */}
@@ -270,12 +270,12 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
               <div className="mb-3 sm:hidden">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[13px] leading-snug font-medium text-neutral-200">
+                    <p className="text-foreground text-[13px] leading-snug font-medium">
                       {entry.company}
                     </p>
-                    <p className="mt-0.5 text-[11px] text-neutral-500">{entry.role}</p>
+                    <p className="text-subtle mt-0.5 text-[11px]">{entry.role}</p>
                   </div>
-                  <p className="mt-0.5 shrink-0 text-[11px] text-neutral-600">{entry.period}</p>
+                  <p className="text-faint mt-0.5 shrink-0 text-[11px]">{entry.period}</p>
                 </div>
               </div>
 
@@ -285,15 +285,13 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
                   <div key={gIdx} className="flex flex-col gap-1">
                     {/* group[0]: project name (중분류) */}
                     {group[0] && (
-                      <p className="text-[12px] leading-snug font-medium text-neutral-300">
-                        {group[0]}
-                      </p>
+                      <p className="text-body text-[12px] leading-snug font-medium">{group[0]}</p>
                     )}
                     {/* group[1+]: achievements (소분류) */}
                     {group.length > 1 && (
-                      <ul className="m-0 ml-2 list-none space-y-1 border-l border-neutral-800/60 pl-3">
+                      <ul className="border-line/60 m-0 ml-2 list-none space-y-1 border-l pl-3">
                         {group.slice(1).map((bullet, bIdx) => (
-                          <li key={bIdx} className="text-[11px] leading-relaxed text-neutral-500">
+                          <li key={bIdx} className="text-subtle text-[11px] leading-relaxed">
                             {bullet}
                           </li>
                         ))}
@@ -325,13 +323,11 @@ export function CareerTimelineSection({
         const { entries } = parseCareerMarkdown(sub.body);
         return (
           <div key={`${sub.heading ?? "body"}-${idx}`}>
-            {sub.heading && (
-              <h3 className="mb-3 text-sm font-medium text-neutral-300">{sub.heading}</h3>
-            )}
+            {sub.heading && <h3 className="text-body mb-3 text-sm font-medium">{sub.heading}</h3>}
             {entries.length > 0 ? (
               <CareerTimeline intro="" entries={entries} />
             ) : (
-              <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
+              <div className="prose dark:prose-invert prose-sm text-body max-w-none">
                 <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                   {sub.body}
                 </ReactMarkdown>
@@ -349,18 +345,16 @@ export function CareerTimelineSection({
 export function AboutSection({ heading, subSections, className }: AboutSectionProps) {
   return (
     <section className={cn("flex flex-col gap-5", className)}>
-      <h2 className="text-[15px] font-medium text-neutral-200">{heading}</h2>
+      <h2 className="text-foreground text-[15px] font-medium">{heading}</h2>
 
       <div className="flex flex-col">
         {subSections.map((sub, idx) => (
           <div
             key={`${sub.heading ?? "body"}-${idx}`}
-            className={cn("flex flex-col gap-2 py-4", idx > 0 && "border-t border-neutral-800/60")}
+            className={cn("flex flex-col gap-2 py-4", idx > 0 && "border-line/60 border-t")}
           >
-            {sub.heading ? (
-              <h3 className="text-sm font-medium text-neutral-300">{sub.heading}</h3>
-            ) : null}
-            <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
+            {sub.heading ? <h3 className="text-body text-sm font-medium">{sub.heading}</h3> : null}
+            <div className="prose dark:prose-invert prose-sm text-body max-w-none">
               <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                 {injectProjectSeparators(sub.body)}
               </ReactMarkdown>

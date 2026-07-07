@@ -22,28 +22,25 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
 
   return (
     <article
-      className={cn(
-        "flex flex-col gap-3 rounded-lg border border-neutral-800 bg-[#141414] p-5",
-        className,
-      )}
+      className={cn("border-line bg-surface flex flex-col gap-3 rounded-lg border p-5", className)}
       data-category={project.category}
     >
       <header className="flex flex-col gap-1">
-        <h3 className="text-base font-medium text-white">{project.title}</h3>
-        <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-neutral-500">
+        <h3 className="text-foreground text-base font-medium">{project.title}</h3>
+        <div className="text-subtle flex flex-wrap gap-x-2 gap-y-0.5 text-xs">
           {periodText ? <span>{periodText}</span> : null}
           {project.role ? <span>· {project.role}</span> : null}
         </div>
       </header>
 
-      {project.impact ? <p className="text-sm text-neutral-300">{project.impact}</p> : null}
+      {project.impact ? <p className="text-body text-sm">{project.impact}</p> : null}
 
       {project.techKeywords.length > 0 ? (
         <ul className="flex flex-wrap gap-1.5">
           {project.techKeywords.map((tech) => (
             <li
               key={tech}
-              className="rounded-md border border-neutral-800 px-2 py-0.5 text-[11px] text-neutral-400"
+              className="border-line text-muted rounded-md border px-2 py-0.5 text-[11px]"
             >
               {tech}
             </li>
@@ -57,7 +54,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
             href={project.notionUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-md border border-neutral-800 px-2.5 py-1 text-xs text-neutral-400 transition-colors hover:border-neutral-600 hover:text-white"
+            className="border-line text-muted hover:border-line-strong hover:text-foreground inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs transition-colors"
           >
             노션에서 자세히
             <ExternalLink size={12} strokeWidth={1.5} aria-hidden="true" />
@@ -67,7 +64,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
             type="button"
             disabled
             title="노션 페이지가 비공개입니다"
-            className="inline-flex items-center gap-1 rounded-md border border-neutral-800 px-2.5 py-1 text-xs text-neutral-600 opacity-60"
+            className="border-line text-faint inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs opacity-60"
           >
             노션에서 자세히
             <ExternalLink size={12} strokeWidth={1.5} aria-hidden="true" />

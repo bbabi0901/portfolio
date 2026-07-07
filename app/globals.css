@@ -1,10 +1,124 @@
 @import "tailwindcss";
 
+/* next-themes 는 <html> 에 .dark / .light 클래스를 토글한다.
+   dark: 유틸리티가 클래스 기반으로 동작하도록 커스텀 variant 정의. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── 시맨틱 색상 토큰 ─────────────────────────────────────────────────────────
+   라이트(:root) 기본, 다크(.dark) 오버라이드. 무채색 + lime 포인트 유지. */
+:root {
+  --background: #ffffff;
+  --surface: #fafafa;
+  --elevated: #f4f4f5;
+
+  --foreground: #0a0a0a;
+  --body: #3f3f46;
+  --muted: #52525b;
+  --subtle: #71717a;
+  --faint: #a1a1aa;
+
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --line-subtle: #f4f4f5;
+
+  --brand: #84cc16;
+  --brand-foreground: #4d7c0f;
+
+  --danger: #dc2626;
+  --danger-surface: #fef2f2;
+  --danger-border: #fecaca;
+  --success: #059669;
+  --warning: #d97706;
+
+  --overlay: rgba(0, 0, 0, 0.4);
+
+  /* shadcn/ui 표준 토큰 (내부 컴포넌트용) */
+  --primary: var(--foreground);
+  --primary-foreground: var(--background);
+  --secondary: var(--elevated);
+  --secondary-foreground: var(--foreground);
+  --card: var(--surface);
+  --card-foreground: var(--foreground);
+  --popover: var(--surface);
+  --popover-foreground: var(--foreground);
+  --muted-foreground: var(--muted);
+  --accent: var(--elevated);
+  --accent-foreground: var(--foreground);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--background);
+  --input: var(--line);
+  --ring: var(--subtle);
+}
+
+.dark {
+  --background: #0a0a0a;
+  --surface: #141414;
+  --elevated: #171717;
+
+  --foreground: #ffffff;
+  --body: #d4d4d4;
+  --muted: #a3a3a3;
+  --subtle: #737373;
+  --faint: #525252;
+
+  --line: #262626;
+  --line-strong: #525252;
+  --line-subtle: #171717;
+
+  --brand: #bef264;
+  --brand-foreground: #bef264;
+
+  --danger: #fca5a5;
+  --danger-surface: rgba(69, 10, 10, 0.3);
+  --danger-border: rgba(127, 29, 29, 0.5);
+  --success: #6ee7b7;
+  --warning: #fcd34d;
+
+  --overlay: rgba(0, 0, 0, 0.6);
+}
+
 @theme inline {
-  --color-bg: #0a0a0a;
-  --color-card: #141414;
-  --color-border: #262626;
-  --color-accent: #bef264;
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+
+  --color-foreground: var(--foreground);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-faint: var(--faint);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-subtle: var(--line-subtle);
+
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --color-danger-border: var(--danger-border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  /* shadcn/ui 표준 토큰 */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-border: var(--line);
+
   --font-sans: system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
@@ -16,6 +130,8 @@
   }
   body {
     line-height: 1.625;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 }
 

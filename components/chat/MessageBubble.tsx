@@ -30,7 +30,7 @@ function ExternalLink({ href, children, ...rest }: ComponentPropsWithoutRef<"a">
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-neutral-200 underline decoration-neutral-600 underline-offset-2 hover:decoration-neutral-300"
+      className="text-foreground decoration-subtle hover:decoration-body underline underline-offset-2"
       {...rest}
     >
       {children}
@@ -45,7 +45,7 @@ const markdownComponents = {
     if (isInline) {
       return (
         <code
-          className="rounded border border-neutral-800 bg-neutral-900 px-1 py-0.5 font-mono text-[12px] text-neutral-200"
+          className="border-line bg-elevated text-foreground rounded border px-1 py-0.5 font-mono text-[12px]"
           {...props}
         >
           {children}
@@ -61,7 +61,7 @@ const markdownComponents = {
   pre({ children, ...props }: ComponentPropsWithoutRef<"pre">) {
     return (
       <pre
-        className="overflow-x-auto rounded-md border border-neutral-800 bg-zinc-950 p-3 font-mono text-[12px] text-zinc-200"
+        className="border-line bg-elevated text-body overflow-x-auto rounded-md border p-3 font-mono text-[12px]"
         {...props}
       >
         {children}
@@ -110,9 +110,9 @@ export function MessageBubble({
       className={cn(
         "max-w-[85%] md:max-w-[75%]",
         isUser
-          ? "ml-auto rounded-2xl rounded-br-md bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
-          : "mr-auto text-sm leading-relaxed text-neutral-200",
-        !isUser && "prose prose-invert prose-sm prose-pre:bg-zinc-950",
+          ? "bg-foreground text-background ml-auto rounded-2xl rounded-br-md px-4 py-2 text-sm"
+          : "text-foreground mr-auto text-sm leading-relaxed",
+        !isUser && "prose prose-sm dark:prose-invert prose-pre:bg-elevated",
         className,
       )}
     >

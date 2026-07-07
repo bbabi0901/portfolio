@@ -19,10 +19,10 @@ export function FeedbackButtons({
   className,
 }: FeedbackButtonsProps) {
   const baseBtn = cn(
-    "inline-flex items-center justify-center rounded-md p-1.5 text-neutral-400",
-    "hover:text-neutral-200 hover:bg-neutral-900",
-    "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400",
-    "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-neutral-400",
+    "inline-flex items-center justify-center rounded-md p-1.5 text-muted",
+    "hover:text-foreground hover:bg-elevated",
+    "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-muted",
+    "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted",
     "transition-colors",
   );
 

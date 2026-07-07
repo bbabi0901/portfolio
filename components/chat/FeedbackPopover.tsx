@@ -63,10 +63,10 @@ export function FeedbackPopover({
         aria-labelledby={titleId}
         aria-describedby={descId}
       >
-        <div id={titleId} className="text-sm font-medium text-neutral-200">
+        <div id={titleId} className="text-foreground text-sm font-medium">
           어떤 부분이 아쉬웠나요?
         </div>
-        <p id={descId} className="mt-1 text-xs text-neutral-500">
+        <p id={descId} className="text-subtle mt-1 text-xs">
           이유를 알려주시면 답변을 보강하는 데 큰 도움이 됩니다.
         </p>
         <RadioGroup
@@ -79,7 +79,7 @@ export function FeedbackPopover({
             return (
               <div key={r.value} className="flex items-center gap-2">
                 <RadioGroupItem id={id} value={r.value} />
-                <Label htmlFor={id} className="text-xs text-neutral-300">
+                <Label htmlFor={id} className="text-body text-xs">
                   {r.label}
                 </Label>
               </div>

@@ -16,10 +16,7 @@ const PRIVACY_DETAIL =
 export function Footer({ lastUpdated, socials, className }: FooterProps) {
   return (
     <footer
-      className={cn(
-        "border-t border-neutral-900 bg-[#0a0a0a] text-[12px] text-neutral-500",
-        className,
-      )}
+      className={cn("border-line-subtle bg-background text-subtle border-t text-[12px]", className)}
     >
       <div className="mx-auto flex max-w-3xl flex-col items-start gap-3 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6 lg:px-8">
         <p>
@@ -33,7 +30,7 @@ export function Footer({ lastUpdated, socials, className }: FooterProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="rounded-md p-1 text-neutral-500 transition-colors hover:text-white"
+              className="text-subtle hover:text-foreground rounded-md p-1 transition-colors"
             >
               <Github size={14} strokeWidth={1.5} aria-hidden="true" />
             </a>
@@ -42,7 +39,7 @@ export function Footer({ lastUpdated, socials, className }: FooterProps) {
             <a
               href={socials.email}
               aria-label="Email"
-              className="rounded-md p-1 text-neutral-500 transition-colors hover:text-white"
+              className="text-subtle hover:text-foreground rounded-md p-1 transition-colors"
             >
               <Mail size={14} strokeWidth={1.5} aria-hidden="true" />
             </a>
@@ -53,7 +50,7 @@ export function Footer({ lastUpdated, socials, className }: FooterProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="rounded-md p-1 text-neutral-500 transition-colors hover:text-white"
+              className="text-subtle hover:text-foreground rounded-md p-1 transition-colors"
             >
               <Linkedin size={14} strokeWidth={1.5} aria-hidden="true" />
             </a>
@@ -64,13 +61,13 @@ export function Footer({ lastUpdated, socials, className }: FooterProps) {
           <PopoverTrigger
             type="button"
             aria-label="privacy"
-            className="inline-flex items-center gap-1 rounded-md p-1 text-neutral-500 transition-colors hover:text-neutral-300 focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none"
+            className="text-subtle hover:text-body focus-visible:ring-muted inline-flex items-center gap-1 rounded-md p-1 transition-colors focus-visible:ring-1 focus-visible:outline-none"
           >
             <Info size={12} strokeWidth={1.5} aria-hidden="true" />
           </PopoverTrigger>
           <PopoverContent
             align="end"
-            className="max-w-xs border border-neutral-800 bg-[#141414] text-xs leading-relaxed text-neutral-300"
+            className="border-line bg-surface text-body max-w-xs border text-xs leading-relaxed"
           >
             {PRIVACY_DETAIL}
           </PopoverContent>

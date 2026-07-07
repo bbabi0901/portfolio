@@ -171,3 +171,22 @@ MVP 속도 + 외부 의존성 최소 + 운영 부담 0 + 디테일은 spec.json�
 - **`@ai-sdk/openai v3+`는 `or(modelId)` 호출 시 Responses API(`/v1/responses`)를 기본 사용한다.** OpenRouter는 Chat Completions API만 지원하므로 반드시 **`or.chat(modelId)`** 로 호출할 것. `or(modelId)` 단독 호출 금지. 이를 어기면 모든 실제 LLM 호출이 무음으로 실패하며 빈 응답이 반환된다.
 **트레이드오프**:
 - 임베딩 때문에 `OPENAI_API_KEY` 를 완전히 제거할 수 없음. 그러나 임베딩은 빌드 시에만 발생하고 비용이 매우 저렴($0.02/1M tokens). 런타임은 100% `OPENROUTER_API_KEY` 하나로 동작.
+
+---
+
+### ADR-027: 라이트/다크 테마 도입 (다크 고정 폐지)
+**결정**: 기존 "다크 모드 only" 정책을 폐지하고 라이트/다크 테마를 시맨틱 CSS 변수 체계로 정식 지원.
+**이유**:
+- 사용자 요청. 다크 고정은 접근성·선호 다양성 측면에서 제약.
+- 색상이 하드코딩 Tailwind 클래스(`bg-neutral-900` 등 48개 파일·~260곳)로 퍼져 있어 테마 전환 불가 상태였음.
+**구현**:
+- `app/globals.css` — `:root`(라이트)·`.dark` CSS 변수 + Tailwind v4 `@theme inline`으로 유틸 생성. 시맨틱 토큰: `background/surface/elevated`, `foreground/body/muted/subtle/faint`, `line/line-strong/line-subtle`, `brand/brand-foreground`, `danger/warning/success`. shadcn 표준 토큰(`primary/card/popover/accent/input/ring/muted-foreground/destructive`)도 팔레트에 매핑.
+- 하드코딩 색 전부 시맨틱 유틸로 마이그레이션. 반전 요소는 `bg-foreground text-background`. 마크다운은 `prose dark:prose-invert`.
+- `next-themes` `ThemeProvider`(attribute="class", defaultTheme="system", enableSystem). `<html>` 고정 클래스 제거 + `suppressHydrationWarning`.
+- 토글 UI: `components/theme/ThemeToggle.tsx`(시스템/라이트/다크 세그먼트) — 사이드바(SideSheet) 하단.
+- `viewport.themeColor`: 라이트 `#ffffff`/다크 `#0a0a0a` media 쌍, `colorScheme: "light dark"`.
+**중요 제약**:
+- **하드코딩 Tailwind 색 금지** — 신규 UI는 반드시 시맨틱 토큰 유틸 사용(docs/UI_GUIDE.md 참조). 어기면 한쪽 테마에서 깨짐.
+- 브랜드 lime은 `brand` 토큰(shadcn `accent`와 충돌 방지 위해 분리). shadcn `accent`는 중립 hover.
+**트레이드오프**:
+- 토큰 체계로 유지보수성↑, 초기 마이그레이션 비용은 컸음(48파일). prose 등 서드파티 스타일은 `dark:` variant 병행 필요.

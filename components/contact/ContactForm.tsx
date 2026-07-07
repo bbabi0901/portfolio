@@ -141,7 +141,7 @@ export function ContactForm({ onSubmit, className }: ContactFormProps) {
         />
 
         {showCaptcha ? (
-          <p role="alert" className="text-sm text-amber-300">
+          <p role="alert" className="text-warning text-sm">
             잠시만요 — 봇이 아닌지 확인이 필요해요. 잠시 후 다시 전송해 주세요.
           </p>
         ) : null}

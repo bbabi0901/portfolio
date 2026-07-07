@@ -93,12 +93,15 @@ describe("layout metadata", () => {
 describe("layout viewport", () => {
   const vp = layoutModule.viewport;
 
-  it("themeColor = #0a0a0a", () => {
-    expect(vp.themeColor).toBe("#0a0a0a");
+  it("themeColor = 라이트/다크 media 쌍", () => {
+    expect(vp.themeColor).toEqual([
+      { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+      { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    ]);
   });
 
-  it("colorScheme = 'dark'", () => {
-    expect(vp.colorScheme).toBe("dark");
+  it("colorScheme = 'light dark'", () => {
+    expect(vp.colorScheme).toBe("light dark");
   });
 
   it("width = 'device-width'", () => {

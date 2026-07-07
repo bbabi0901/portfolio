@@ -34,7 +34,7 @@ export default function ExperiencePage() {
   if (!hasProjectData && !careerSection) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
-        <p className="text-neutral-400">기술 이력이 준비 중입니다.</p>
+        <p className="text-muted">기술 이력이 준비 중입니다.</p>
       </main>
     );
   }
@@ -44,23 +44,22 @@ export default function ExperiencePage() {
   return (
     <main className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
       <header className="flex flex-col gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">기술 이력</h1>
+        <h1 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">
+          기술 이력
+        </h1>
       </header>
       {careerSection && (
         <section className="flex flex-col gap-5">
-          <h2 className="text-[15px] font-medium text-neutral-200">커리어 타임라인</h2>
+          <h2 className="text-foreground text-[15px] font-medium">커리어 타임라인</h2>
           <CareerTimelineSection subSections={careerSection.subSections} />
         </section>
       )}
       {hasProjectData && (
         <>
           <section
-            className={cn(
-              "flex flex-col gap-6",
-              careerSection && "border-t border-neutral-800 pt-10",
-            )}
+            className={cn("flex flex-col gap-6", careerSection && "border-line border-t pt-10")}
           >
-            <h2 className="text-[15px] font-medium text-neutral-200">프로젝트</h2>
+            <h2 className="text-foreground text-[15px] font-medium">프로젝트</h2>
             <Suspense fallback={null}>
               <CategoryFilter options={presentCategories} />
             </Suspense>

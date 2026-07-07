@@ -129,11 +129,11 @@ describe("Composer", () => {
       expect(counter!.textContent?.trim()).toBe("100");
     });
 
-    it("remaining < 0 이면 카운터가 빨간색 클래스를 가진다", () => {
+    it("remaining < 0 이면 카운터가 위험(danger) 색 클래스를 가진다", () => {
       const { container } = setup({ value: "a".repeat(510), maxLength: 500 });
       const counter = container.querySelector('[data-slot="composer-counter"]');
       expect(counter).not.toBeNull();
-      expect(counter!.className).toMatch(/text-red/);
+      expect(counter!.className).toMatch(/text-danger/);
     });
 
     it("change 가 maxLength 초과하면 onChange 가 잘린 값으로 호출된다", () => {
@@ -184,21 +184,21 @@ describe("Composer", () => {
   });
 
   describe("Composer prominent box (TS-72, FEAT-030)", () => {
-    it("외곽 form 에 rounded-3xl + border-neutral-700 + bg-neutral-900/40", () => {
+    it("외곽 form 에 rounded-3xl + border-line-strong + bg-elevated/40", () => {
       const { container } = setup();
       const form = container.querySelector('form[data-slot="composer"]');
       expect(form).not.toBeNull();
       const cls = form?.className ?? "";
       expect(cls).toMatch(/rounded-3xl/);
-      expect(cls).toMatch(/border-neutral-700/);
-      expect(cls).toMatch(/bg-neutral-900\/40/);
+      expect(cls).toMatch(/border-line-strong/);
+      expect(cls).toMatch(/bg-elevated\/40/);
     });
 
-    it("focus-within 시 border-neutral-500 + bg-neutral-900/60", () => {
+    it("focus-within 시 border-line-strong + bg-elevated/60", () => {
       const { container } = setup();
       const cls = container.querySelector("form")?.className ?? "";
-      expect(cls).toMatch(/focus-within:border-neutral-500/);
-      expect(cls).toMatch(/focus-within:bg-neutral-900\/60/);
+      expect(cls).toMatch(/focus-within:border-line-strong/);
+      expect(cls).toMatch(/focus-within:bg-elevated\/60/);
     });
 
     it("Send 버튼: aria-label '메시지 전송' + rounded-full + size-8 md:size-9", () => {

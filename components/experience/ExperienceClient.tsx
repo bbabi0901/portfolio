@@ -60,7 +60,7 @@ export function ExperienceClient({ data, className }: ExperienceClientProps) {
       </aside>
       <div className="flex-1 space-y-8">
         {isEmpty ? (
-          <p className="text-sm text-neutral-400">
+          <p className="text-muted text-sm">
             이 카테고리에 해당하는 프로젝트가 없어요. 다른 카테고리를 선택해 보세요.
           </p>
         ) : (
@@ -70,7 +70,7 @@ export function ExperienceClient({ data, className }: ExperienceClientProps) {
             ))}
             {filtered.others.length > 0 ? (
               <section className="flex flex-col gap-4" aria-label="자체 프로젝트">
-                <h2 className="text-lg font-medium text-white">자체 프로젝트</h2>
+                <h2 className="text-foreground text-lg font-medium">자체 프로젝트</h2>
                 <div className="flex flex-col gap-3">
                   {filtered.others.map((p) => (
                     <ProjectCard key={p.id} project={p} />

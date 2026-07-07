@@ -45,10 +45,10 @@ export function CategoryFilter({ options, className }: CategoryFilterProps) {
             data-active={active}
             onClick={() => navigate(key)}
             className={cn(
-              "rounded-full border px-3 py-1.5 text-xs transition-colors focus-visible:ring-1 focus-visible:ring-neutral-400 focus-visible:outline-none",
+              "focus-visible:ring-muted rounded-full border px-3 py-1.5 text-xs transition-colors focus-visible:ring-1 focus-visible:outline-none",
               active
-                ? "border-neutral-300 bg-neutral-100 text-neutral-900"
-                : "border-neutral-800 text-neutral-300 hover:border-neutral-600 hover:text-white",
+                ? "border-foreground bg-foreground text-background"
+                : "border-line text-body hover:border-line-strong hover:text-foreground",
             )}
           >
             {label}
