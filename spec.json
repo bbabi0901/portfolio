@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1133,6 +1133,19 @@
         "specs/components/chat-layout.spec.tsx"
       ],
       "dependencies": []
+    },
+    {
+      "id": "FEAT-032",
+      "name": "About 히어로 프로필 이미지 — 노션 이미지 → 정적 asset(public/images/profile.jpg) 반영",
+      "status": "planned",
+      "priority": "P2",
+      "tests": [
+        "specs/profile-image.spec.ts",
+        "specs/components/about-page.spec.tsx"
+      ],
+      "dependencies": [
+        "FEAT-031"
+      ]
     }
   ],
   "testScenarios": [
@@ -1631,6 +1644,13 @@
       "title": "ModelSwitcher rendered inline inside Composer (not in Header)",
       "file": "specs/components/model-switcher.test.tsx",
       "anchor": "inline"
+    },
+    {
+      "id": "TS-74",
+      "feature": "FEAT-032",
+      "title": "oneLiner 이미지 마크다운 감지 시 정적 asset 경로 반환, 없으면 초기 fallback",
+      "file": "specs/profile-image.spec.ts",
+      "anchor": "FEAT-032"
     }
   ]
 }
