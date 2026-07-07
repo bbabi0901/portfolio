@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -274,7 +274,7 @@
     {
       "id": "Q-005",
       "category": "architecture",
-      "text": "Module Federation 어떻게 적용했어요?",
+      "text": "마이크로 프론트엔드 아키텍처를 어떻게 도입했어요?",
       "expectedSourceTitles": [
         "Micro-Frontend Architecture 마이그레이션 TF"
       ]
@@ -282,7 +282,7 @@
     {
       "id": "Q-006",
       "category": "architecture",
-      "text": "Feature-Sliced Design 써본 경험은요?",
+      "text": "대규모 프론트엔드 구조를 어떻게 설계했어요?",
       "expectedSourceTitles": [
         "밈코인 통합 소셜 플랫폼"
       ]
@@ -290,7 +290,7 @@
     {
       "id": "Q-007",
       "category": "performance",
-      "text": "Next.js Turbopack 도입 후 결과는요?",
+      "text": "빌드·번들 성능을 어떻게 개선했어요?",
       "expectedSourceTitles": [
         "Next.js 14 → 15 마이그레이션 & Turbopack 도입"
       ]
@@ -298,7 +298,7 @@
     {
       "id": "Q-008",
       "category": "performance",
-      "text": "리스트 가상화나 메모이제이션 적용 사례 있어요?",
+      "text": "렌더링 성능 최적화 경험이 있어요?",
       "expectedSourceTitles": [
         "밈코인 통합 소셜 플랫폼"
       ]
@@ -332,7 +332,7 @@
     {
       "id": "Q-012",
       "category": "realtime",
-      "text": "WebSocket이나 Centrifugo 경험 있어요?",
+      "text": "실시간 통신은 어떻게 구현했어요?",
       "expectedSourceTitles": [
         "밈코인 통합 소셜 플랫폼"
       ]
@@ -340,7 +340,7 @@
     {
       "id": "Q-013",
       "category": "pwa",
-      "text": "PWA Push 어떻게 구현했어요?",
+      "text": "웹 푸시 알림은 어떻게 구현했어요?",
       "expectedSourceTitles": [
         "PWA 적용",
         "밈코인 통합 소셜 플랫폼"
@@ -349,7 +349,7 @@
     {
       "id": "Q-014",
       "category": "pwa",
-      "text": "Flutter WebView 환경에서 작업해본 경험 있어요?",
+      "text": "하이브리드 앱(웹뷰) 환경에서 작업한 경험은요?",
       "expectedSourceTitles": [
         "밈코인 통합 소셜 플랫폼"
       ]
