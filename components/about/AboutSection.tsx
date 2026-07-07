@@ -326,7 +326,10 @@ export function AboutSection({ heading, subSections, className }: AboutSectionPr
                   <h3 className="text-sm font-medium text-neutral-300 mb-3">{sub.heading}</h3>
                 )}
                 {entries.length > 0 ? (
-                  <CareerTimeline intro={intro} entries={entries} />
+                  <>
+                    <h3 className="text-[15px] font-medium text-neutral-200 mb-4">기술 이력</h3>
+                    <CareerTimeline intro={intro} entries={entries} />
+                  </>
                 ) : (
                   <div className="prose prose-invert prose-sm max-w-none text-neutral-300">
                     <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
