@@ -64,11 +64,14 @@ export function loadProfileData(): ProfileData | null {
   const careerChunks = data.chunks.filter((c) => c.category === "career");
   const intro = extractIntro(careerChunks, data.profile.oneLiner);
 
+  const CONTACT_HEADINGS = ["이름", "연락처", "이메일"];
+
   const grouped = new Map<string, ProfileSection>();
   for (const chunk of personalChunks) {
     if (!hasReadableText(chunk.text)) continue;
     const headingPath = chunk.headingPath;
     const heading = headingPath[0] ?? "기타";
+    if (CONTACT_HEADINGS.some((h) => heading.includes(h))) continue;
     const subHeading = headingPath.slice(1).join(" → ") || undefined;
 
     let section = grouped.get(heading);
