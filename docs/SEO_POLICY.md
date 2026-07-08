@@ -56,7 +56,7 @@ export const metadata: Metadata = {
 - description: "프론트엔드 개발자 김윤수의 가치관, 성격, 취미."
 
 #### `/experience`
-- title: "기술 이력"
+- title: "커리어"
 - description: "디라티오, 체인아나토미, 반에프에서의 프로젝트 타임라인과 보유 스킬."
 
 #### `/contact`

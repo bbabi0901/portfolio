@@ -202,7 +202,7 @@
 
 ### TS-26 메뉴 항목 클릭 → 라우트 이동 + 자동 close
 - **Given**: 시트 열림
-- **When**: "기술 이력" 클릭
+- **When**: "커리어" 클릭
 - **Then**: `/experience` 진입 + 시트 닫힘
 - **파일**: `tests/e2e/side-menu.e2e.ts:navigation`
 

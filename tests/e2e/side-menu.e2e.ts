@@ -13,7 +13,7 @@ test.describe("side menu (TS-23~26, TS-29)", () => {
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole("link", { name: /대화/ })).toBeVisible();
     await expect(dialog.getByRole("link", { name: /자기소개/ })).toBeVisible();
-    await expect(dialog.getByRole("link", { name: /기술 이력/ })).toBeVisible();
+    await expect(dialog.getByRole("link", { name: /커리어/ })).toBeVisible();
     await expect(dialog.getByRole("link", { name: /연락하기/ })).toBeVisible();
   });
 
@@ -36,12 +36,12 @@ test.describe("side menu (TS-23~26, TS-29)", () => {
     await expect(page.locator('[role="dialog"]')).toBeHidden();
   });
 
-  test("TS-26: '기술 이력' 클릭 → /experience", async ({ page }) => {
+  test("TS-26: '커리어' 클릭 → /experience", async ({ page }) => {
     await page.goto("/");
     await openSideMenu(page);
     await page
       .locator('[role="dialog"]')
-      .getByRole("link", { name: /기술 이력/ })
+      .getByRole("link", { name: /커리어/ })
       .click();
     await expect(page).toHaveURL(/\/experience/);
   });

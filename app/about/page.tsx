@@ -6,7 +6,7 @@ import { AboutHero } from "@/components/about/AboutHero";
 import { AboutSection } from "@/components/about/AboutSection";
 import { loadProfileData } from "@/lib/profile-data";
 
-const CAREER_HEADING = "기술 이력";
+const CAREER_HEADING = "커리어";
 
 export const metadata: Metadata = {
   title: "자기소개",
@@ -41,6 +41,14 @@ export default function AboutPage() {
         />
       ))}
 
+      {profile.education && (
+        <AboutSection
+          heading={profile.education.heading}
+          subSections={profile.education.subSections}
+          className="border-line mt-12 border-t pt-10"
+        />
+      )}
+
       <Link
         href="/experience"
         className="group border-line hover:border-line-strong mt-12 flex items-center gap-4 rounded-lg border p-5 transition-colors"
@@ -49,7 +57,7 @@ export default function AboutPage() {
           <Briefcase size={18} strokeWidth={1.5} />
         </span>
         <span className="flex flex-col gap-0.5">
-          <span className="text-foreground text-[14px] font-medium">기술 이력이 궁금하다면?</span>
+          <span className="text-foreground text-[14px] font-medium">커리어가 궁금하다면?</span>
           <span className="text-subtle text-[12px]">회사·프로젝트 타임라인과 보유 스킬 보기</span>
         </span>
         <ArrowRight

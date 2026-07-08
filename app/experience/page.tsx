@@ -9,10 +9,10 @@ import { SkillsGrid } from "@/components/experience/SkillsGrid";
 import { loadExperienceData, type ProjectCategory } from "@/lib/experience-data";
 import { loadProfileData } from "@/lib/profile-data";
 
-const CAREER_HEADING = "기술 이력";
+const CAREER_HEADING = "커리어";
 
 export const metadata: Metadata = {
-  title: "기술 이력",
+  title: "커리어",
   description: "김윤수의 커리어·프로젝트 타임라인 + 보유 스킬.",
   alternates: { canonical: "/experience" },
 };
@@ -34,7 +34,7 @@ export default function ExperiencePage() {
   if (!hasProjectData && !careerSection) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
-        <p className="text-muted">기술 이력이 준비 중입니다.</p>
+        <p className="text-muted">커리어가 준비 중입니다.</p>
       </main>
     );
   }
@@ -45,7 +45,7 @@ export default function ExperiencePage() {
     <main className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
       <header className="flex flex-col gap-3">
         <h1 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">
-          기술 이력
+          커리어
         </h1>
       </header>
       {careerSection && (
