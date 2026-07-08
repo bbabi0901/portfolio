@@ -78,7 +78,8 @@ export function extractTitle(properties: Properties): string {
   // 명시적 키(DB 행: 이름/Name 등) 우선, 없으면 title 타입 속성 아무거나.
   // 독립 페이지(child page)의 제목 속성 키는 소문자 "title" 이라 키 목록에 없어 놓치던 버그 보완.
   const prop =
-    pickProperty(properties, TITLE_KEYS) ?? Object.values(properties).find((p) => p?.type === "title");
+    pickProperty(properties, TITLE_KEYS) ??
+    Object.values(properties).find((p) => p?.type === "title");
   if (prop?.type === "title" && Array.isArray(prop.title)) {
     return prop.title.map((t) => t.plain_text ?? "").join("");
   }
