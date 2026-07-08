@@ -454,6 +454,27 @@
   - NOTION_CONTACT_DB_ID 누락 → Contact 503 + 다른 페이지 정상
 - **파일**: `tests/e2e/cross-cutting.e2e.ts:envFallback`
 
+### TS-71 ChatRoot 레이아웃 순서 (FEAT-030)
+- **Given**: ChatRoot 렌더
+- **Then**: header → scroll-area → JumpToLatest → SuggestionCarousel(위쪽 border-t) → Composer form 순서
+- **파일**: `specs/components/chat-layout.spec.tsx`
+
+### TS-72 Composer prominent box (FEAT-030)
+- **Given**: Composer 렌더
+- **Then**: 외곽 form `rounded-3xl` + `border-line-strong` + `bg-elevated/40`, 액션 row 가 textarea 직하단 `justify-between`
+- **파일**: `specs/components/composer.spec.tsx`
+
+### TS-73 ModelSwitcher 위치 (FEAT-030)
+- **Given**: ChatRoot 렌더
+- **Then**: ModelSwitcher 가 Header 가 아닌 Composer 내부에 렌더
+- **파일**: `specs/components/model-switcher.test.tsx`
+
+### TS-74 프로필 이미지 정적 asset (FEAT-032)
+- **Given**: `oneLiner` 에 노션 이미지 마크다운 존재/부재
+- **When**: 자기소개(/about) 히어로 렌더
+- **Then**: 이미지 있으면 정적 asset `/images/profile.jpg`(next/image), 없으면 이니셜 `ProfileFallback`
+- **파일**: `specs/profile-image.spec.ts`
+
 ---
 
 ## 매핑 SSoT
