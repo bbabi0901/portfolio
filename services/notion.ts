@@ -48,6 +48,7 @@ interface NotionProperty {
   rich_text?: RichTextItem[];
   select?: { name?: string } | null;
   status?: { name?: string } | null;
+  multi_select?: { name?: string }[];
 }
 
 type Properties = Record<string, NotionProperty | undefined>;
@@ -73,19 +74,27 @@ function pickProperty(properties: Properties, keys: string[]): NotionProperty | 
   return undefined;
 }
 
-function extractTitle(properties: Properties): string {
-  const prop = pickProperty(properties, TITLE_KEYS);
+export function extractTitle(properties: Properties): string {
+  // 명시적 키(DB 행: 이름/Name 등) 우선, 없으면 title 타입 속성 아무거나.
+  // 독립 페이지(child page)의 제목 속성 키는 소문자 "title" 이라 키 목록에 없어 놓치던 버그 보완.
+  const prop =
+    pickProperty(properties, TITLE_KEYS) ?? Object.values(properties).find((p) => p?.type === "title");
   if (prop?.type === "title" && Array.isArray(prop.title)) {
     return prop.title.map((t) => t.plain_text ?? "").join("");
   }
   return "";
 }
 
-function extractSelectLike(properties: Properties, keys: string[]): string | undefined {
+export function extractSelectLike(properties: Properties, keys: string[]): string | undefined {
   const prop = pickProperty(properties, keys);
   if (!prop) return undefined;
   if (prop.type === "select" && prop.select && prop.select.name) return prop.select.name;
   if (prop.type === "status" && prop.status && prop.status.name) return prop.status.name;
+  // multi_select(예: 프로젝트 DB "카테고리") — 첫 옵션명 사용.
+  if (prop.type === "multi_select" && Array.isArray(prop.multi_select)) {
+    const first = prop.multi_select.find((o) => o && o.name);
+    if (first?.name) return first.name;
+  }
   return undefined;
 }
 

@@ -888,7 +888,9 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/sync-notion.spec.ts"
+        "specs/sync-notion.spec.ts",
+        "specs/notion-extract.spec.ts",
+        "specs/chunking.spec.ts"
       ]
     },
     {
@@ -1668,6 +1670,20 @@
       "title": "이력서 교육 청크 → /about 하단 '학력' 섹션(대학 학사 경력) 노출",
       "file": "specs/about-data.spec.ts",
       "anchor": "education"
+    },
+    {
+      "id": "TS-76",
+      "feature": "FEAT-005",
+      "title": "독립 페이지 소문자 title 제목 추출 + 프로젝트 DB multi_select 카테고리 인식",
+      "file": "specs/notion-extract.spec.ts",
+      "anchor": "extract"
+    },
+    {
+      "id": "TS-77",
+      "feature": "FEAT-005",
+      "title": "청커 merge 상한 — 큰 섹션이 짧은 헤딩 섹션(경력/학력)들을 흡수하지 않음",
+      "file": "specs/chunking.spec.ts",
+      "anchor": "mergeCap"
     }
   ]
 }

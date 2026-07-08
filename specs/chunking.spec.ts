@@ -58,6 +58,20 @@ describe("chunkMarkdown", () => {
     expect(chunks).toHaveLength(1);
   });
 
+  it("큰 섹션이 뒤따르는 짧은 헤딩 섹션들을 모두 흡수하지 않는다 (merge 상한, 이력서 경력/학력 보존)", () => {
+    // 큰 섹션(>targetTokens) 뒤에 짧은 헤딩 섹션이 많이 오는 이력서 형태 — 상한 없으면
+    // 전부 앞 청크로 흡수되어 회사/학교명 heading 이 소실됨. targetTokens 상한으로 방지.
+    const big = `## 자기소개\n${"word ".repeat(3000)}`;
+    const entries = Array.from(
+      { length: 10 },
+      (_, i) => `## 학교${i}\n${2012 + i}년 졸업 정보 라인`,
+    ).join("\n");
+    const chunks = chunkMarkdown(samplePage(`${big}\n${entries}`), "career");
+    const entryChunks = chunks.filter((c) => c.headingPath.some((h) => h.startsWith("학교")));
+    // 각 학교 섹션 heading 이 개별 청크로 보존됨 (붕괴 방지)
+    expect(entryChunks.length).toBeGreaterThanOrEqual(5);
+  });
+
   it("emits warning on > 30 chunks per page", () => {
     const sections = Array.from({ length: 35 }, (_, i) => `## S${i}\ncontent ${i}`).join("\n");
     const warns: string[] = [];

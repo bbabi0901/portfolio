@@ -287,7 +287,9 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     ...extraRefs.map((p) => p.id),
   ];
   const pages = await notion.getPagesContent(allIds, {
-    concurrency: 4,
+    // 동시성이 높으면 notion-to-md 의 중첩 블록(columns/callout) 자식 fetch 가
+    // Notion rate-limit 로 조용히 부분 수신되어 이력서 등 큰 페이지가 잘리는 사례가 있어 2 로 낮춤.
+    concurrency: 2,
     onSkip: (id, reason) => console.warn(`[sync-notion] page skipped (${reason}): ${id}`),
   });
 
