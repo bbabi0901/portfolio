@@ -95,7 +95,7 @@ describe("SideSheet", () => {
     render(<SideSheet open={true} onOpenChange={() => {}} currentPath="/" />);
     expect(screen.getByRole("link", { name: /^대화/ })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /자기소개/ })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /기술 이력/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /커리어/ })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /연락하기/ })).toBeInTheDocument();
   });
 

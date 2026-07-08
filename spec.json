@@ -87,7 +87,7 @@
       "route": "/experience",
       "name": "experience",
       "type": "ssg",
-      "title": "기술 이력",
+      "title": "커리어",
       "description": "디라티오, 체인아나토미, 반에프에서의 커리어·프로젝트 타임라인과 보유 스킬.",
       "ogImage": "/opengraph-image"
     },
@@ -403,6 +403,15 @@
       "category": "personal",
       "text": "어떤 성격이에요?",
       "expectedSourceTitles": []
+    },
+    {
+      "id": "Q-022",
+      "category": "architecture",
+      "text": "이 프로젝트는 어떻게 만들었어요? 어떤 구조를 갖고 있나요?",
+      "expectedSourceTitles": [
+        "AI 포트폴리오 (대화형 포트폴리오)",
+        "하네스 엔지니어링 (Harness Engineering)"
+      ]
     }
   ],
   "errorPolicies": [
@@ -879,7 +888,9 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/sync-notion.spec.ts"
+        "specs/sync-notion.spec.ts",
+        "specs/notion-extract.spec.ts",
+        "specs/chunking.spec.ts"
       ]
     },
     {
@@ -1054,7 +1065,8 @@
       "priority": "P0",
       "tests": [
         "tests/e2e/about.e2e.ts",
-        "specs/reading-time.spec.ts"
+        "specs/reading-time.spec.ts",
+        "specs/about-data.spec.ts"
       ]
     },
     {
@@ -1651,6 +1663,27 @@
       "title": "oneLiner 이미지 마크다운 감지 시 정적 asset 경로 반환, 없으면 초기 fallback",
       "file": "specs/profile-image.spec.ts",
       "anchor": "FEAT-032"
+    },
+    {
+      "id": "TS-75",
+      "feature": "FEAT-024",
+      "title": "이력서 교육 청크 → /about 하단 '학력' 섹션(대학 학사 경력) 노출",
+      "file": "specs/about-data.spec.ts",
+      "anchor": "education"
+    },
+    {
+      "id": "TS-76",
+      "feature": "FEAT-005",
+      "title": "독립 페이지 소문자 title 제목 추출 + 프로젝트 DB multi_select 카테고리 인식",
+      "file": "specs/notion-extract.spec.ts",
+      "anchor": "extract"
+    },
+    {
+      "id": "TS-77",
+      "feature": "FEAT-005",
+      "title": "청커 merge 상한 — 큰 섹션이 짧은 헤딩 섹션(경력/학력)들을 흡수하지 않음",
+      "file": "specs/chunking.spec.ts",
+      "anchor": "mergeCap"
     }
   ]
 }

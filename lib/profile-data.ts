@@ -23,9 +23,15 @@ export interface ProfileData {
   intro: string;
   contact: ProfileContact;
   sections: ProfileSection[];
+  education?: ProfileSection;
   imageUrl: string | null;
   totalReadingMinutes: number;
 }
+
+/** 이력서(career) 청크 중 학력/교육 섹션을 식별하는 heading 키워드 */
+const EDUCATION_HEADING_RE = /교육|education|학력/i;
+/** /about 하단에 노출할 학력 섹션 라벨 */
+const EDUCATION_SECTION_HEADING = "학력";
 
 const READING_WORDS_PER_MINUTE = 200;
 const KOREAN_CHARS_PER_WORD = 2;
@@ -85,7 +91,7 @@ export function loadProfileData(): ProfileData | null {
     const heading = headingPath[0] ?? "기타";
     if (CONTACT_HEADINGS.some((h) => heading.includes(h))) continue;
     const normalizedHeading =
-      heading.includes("자기 소개") || heading.includes("About Me") ? "기술 이력" : heading;
+      heading.includes("자기 소개") || heading.includes("About Me") ? "커리어" : heading;
     const subHeading = headingPath.slice(1).join(" → ") || undefined;
 
     let section = grouped.get(normalizedHeading);
@@ -121,13 +127,36 @@ export function loadProfileData(): ProfileData | null {
   const totalReadingMinutes =
     totalWords === 0 ? 0 : Math.ceil(totalWords / READING_WORDS_PER_MINUTE);
 
+  const education = extractEducation(careerChunks);
+
   return {
     intro,
     contact,
     sections,
+    education,
     imageUrl: resolveProfileImageUrl(data.profile.oneLiner),
     totalReadingMinutes,
   };
+}
+
+/**
+ * 이력서(career) 청크에서 학력/교육 섹션을 뽑아 /about 하단 "학력" 섹션으로 렌더한다.
+ * heading(headingPath[0]) 이 교육/education/학력 을 포함하는 career 청크를 모은다.
+ * 노션 이력서의 "교육 기관 (Education)" 섹션(대학 학사 등)이 여기에 해당.
+ */
+function extractEducation(
+  careerChunks: ReturnType<typeof loadPortfolio>["chunks"],
+): ProfileSection | undefined {
+  const eduChunks = careerChunks.filter(
+    (c) => EDUCATION_HEADING_RE.test(c.headingPath[0] ?? "") && hasReadableText(c.text),
+  );
+  if (eduChunks.length === 0) return undefined;
+
+  const subSections: ProfileSubSection[] = eduChunks.map((c) => ({
+    heading: c.headingPath.slice(1).join(" → ") || undefined,
+    body: c.text,
+  }));
+  return { heading: EDUCATION_SECTION_HEADING, subSections };
 }
 
 function hasReadableText(body: string): boolean {

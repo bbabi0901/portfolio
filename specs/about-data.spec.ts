@@ -146,6 +146,58 @@ describe("loadProfileData", () => {
     expect(result!.totalReadingMinutes).toBeGreaterThanOrEqual(1);
   });
 
+  it("career 교육 청크 → education 섹션(학력)으로 추출", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        {
+          id: "p1",
+          sourcePageId: "p1",
+          sourceTitle: "성격",
+          sourceUrl: "https://www.notion.so/p1",
+          category: "personal",
+          headingPath: ["성격"],
+          text: "ENFP",
+          tokens: 2,
+          embedding: [0.1],
+        },
+        {
+          id: "edu",
+          sourcePageId: "resume",
+          sourceTitle: "김윤수 이력서",
+          sourceUrl: "https://www.notion.so/resume",
+          category: "career",
+          headingPath: ["교육 기관 (Education)"],
+          text: "### 고려대학교 신소재공학부\n학사 졸업 · 2012.02 - 2018.03",
+          tokens: 20,
+          embedding: [0.1],
+        },
+      ]),
+    );
+    const result = loadProfileData();
+    expect(result!.education).toBeDefined();
+    expect(result!.education!.heading).toBe("학력");
+    expect(result!.education!.subSections[0]?.body).toContain("고려대학교 신소재공학부");
+  });
+
+  it("교육 청크 없음 → education undefined", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        {
+          id: "p1",
+          sourcePageId: "p1",
+          sourceTitle: "성격",
+          sourceUrl: "https://www.notion.so/p1",
+          category: "personal",
+          headingPath: ["성격"],
+          text: "ENFP",
+          tokens: 2,
+          embedding: [0.1],
+        },
+      ]),
+    );
+    expect(loadProfileData()!.education).toBeUndefined();
+  });
+
   it("career 청크 있으면 intro 를 첫 본문 라인으로 추출", () => {
     mockedLoadPortfolio.mockReturnValue(
       makeData([

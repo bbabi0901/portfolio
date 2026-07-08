@@ -124,8 +124,8 @@ describe("page-level metadata", () => {
     expect((aboutPage.metadata.alternates as { canonical?: string }).canonical).toBe("/about");
   });
 
-  it("/experience title = '기술 이력'", () => {
-    expect(experiencePage.metadata.title).toBe("기술 이력");
+  it("/experience title = '커리어'", () => {
+    expect(experiencePage.metadata.title).toBe("커리어");
     expect((experiencePage.metadata.alternates as { canonical?: string }).canonical).toBe(
       "/experience",
     );

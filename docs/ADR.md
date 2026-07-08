@@ -190,3 +190,26 @@ MVP 속도 + 외부 의존성 최소 + 운영 부담 0 + 디테일은 spec.json�
 - 브랜드 lime은 `brand` 토큰(shadcn `accent`와 충돌 방지 위해 분리). shadcn `accent`는 중립 hover.
 **트레이드오프**:
 - 토큰 체계로 유지보수성↑, 초기 마이그레이션 비용은 컸음(48파일). prose 등 서드파티 스타일은 `dark:` variant 병행 필요.
+
+---
+
+## ADR-028: Notion sync 견고성 — 제목/카테고리 추출 + 청커 merge 상한 + 동시성
+
+**결정**: 현재 노션 콘텐츠 구조(독립 페이지 이력서, multi_select 카테고리, columns/callout)에서 sync 가
+career/project 콘텐츠를 누락하던 문제를 아래로 수정한다.
+
+- **제목 추출**(`services/notion.ts` `extractTitle`): 명시적 키(`이름/Name/Title`) 다음, `title` 타입 속성
+  아무거나 fallback. 독립(child) 페이지의 소문자 `title` 속성을 못 읽어 이력서가 `(untitled)` → `career`
+  아닌 `personal` 로 오분류되던 버그 해결.
+- **카테고리 multi_select**(`extractSelectLike`): `select/status` 외 `multi_select`(프로젝트 DB "카테고리")도
+  첫 옵션명으로 인식. 미지원 시 프로젝트 전량 필터아웃(project 0)되던 문제 해결.
+- **청커 merge 상한**(`lib/chunking.ts`): 짧은 섹션을 직전 청크에 머지하되 `targetTokens(600)` 초과 시 중단.
+  상한이 없으면 헤딩만 있고 본문이 짧은 섹션(이력서의 경력/학력 항목)들이 한 청크로 흡수돼 회사·학교명
+  heading 이 소실됨.
+- **fetch 동시성 4→2**(`scripts/sync-notion.ts`): notion-to-md 의 중첩 블록 자식 fetch 가 rate-limit 로
+  조용히 부분 수신되어 큰 페이지(이력서)가 비결정적으로 잘리던 현상 완화.
+
+**결과**: 이력서 career 청크 3→16(교육/학력 청크 포함), 프로젝트 0→147 청크(자체 소개 페이지 포함). `/about`
+학력 섹션 렌더 + "이 프로젝트 어떻게 만들었어요?" RAG 답변 근거 확보.
+
+**트레이드오프**: 동시성↓ 로 sync 시간 소폭 증가. multi_select 는 첫 옵션만 사용(복수 카테고리 행은 첫 값 기준).

@@ -17,6 +17,7 @@ export interface ChunkOptions {
   onWarn?: (message: string) => void;
 }
 
+const DEFAULT_TARGET_TOKENS = 600;
 const DEFAULT_MAX_TOKENS = 1200;
 const DEFAULT_MAX_CHUNKS_PER_PAGE = 30;
 const DEFAULT_MERGE_BELOW_TOKENS = 150;
@@ -107,6 +108,7 @@ export function chunkMarkdown(
   category: ChunkCategory,
   options?: ChunkOptions,
 ): PortfolioChunk[] {
+  const targetTokens = options?.targetTokens ?? DEFAULT_TARGET_TOKENS;
   const maxTokens = options?.maxTokens ?? DEFAULT_MAX_TOKENS;
   const maxChunksPerPage = options?.maxChunksPerPage ?? DEFAULT_MAX_CHUNKS_PER_PAGE;
   const mergeBelowTokens = options?.mergeBelowTokens ?? DEFAULT_MERGE_BELOW_TOKENS;
@@ -127,7 +129,15 @@ export function chunkMarkdown(
   const merged: BuiltChunk[] = [];
   for (const b of built) {
     const prev = merged[merged.length - 1];
-    if (prev && b.tokens < mergeBelowTokens && prev.tokens >= mergeBelowTokens) {
+    // 짧은 섹션은 직전 청크에 머지하되, 직전 청크가 targetTokens 를 넘으면 멈춘다.
+    // (상한이 없으면 헤딩만 있고 본문이 짧은 섹션들 — 예: 이력서의 경력/학력 항목 —
+    //  이 전부 한 청크로 흡수돼 회사·학교명 등 구조가 소실되는 문제 방지)
+    if (
+      prev &&
+      b.tokens < mergeBelowTokens &&
+      prev.tokens >= mergeBelowTokens &&
+      prev.tokens < targetTokens
+    ) {
       prev.text = `${prev.text}\n\n${b.text}`;
       prev.tokens = estimateTokens(prev.text);
     } else {
