@@ -19,11 +19,12 @@ htmlcov/
 .env.local
 .env.*.local
 
-# build artifacts (서버 전용 / 클라이언트 노출)
-data/portfolio.server.json
+# build artifacts
+# data/portfolio.server.json 은 ADR-030 이후 커밋 대상 (조건부 sync 의 기반 데이터).
+# suggestions.json 은 gen:suggestions 가 prebuild 마다 서버 데이터에서 재생성 → 미커밋.
 public/data/suggestions.json
 
-# 단, fallback sample은 커밋한다
+# fallback sample 커밋 유지
 !data/portfolio.sample.json
 
 # Playwright

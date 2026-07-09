@@ -57,6 +57,7 @@ interface NotionPageRaw {
   id: string;
   url?: string;
   public_url?: string | null;
+  last_edited_time?: string;
   properties?: Properties;
 }
 
@@ -126,6 +127,7 @@ function pageToRef(page: NotionPageRaw): NotionPageRef {
   if (status) ref.status = status;
   const period = extractRichText(properties, PERIOD_KEYS);
   if (period) ref.period = period;
+  if (page.last_edited_time) ref.lastEditedTime = page.last_edited_time;
   return ref;
 }
 
