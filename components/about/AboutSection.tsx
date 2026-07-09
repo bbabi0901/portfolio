@@ -19,9 +19,27 @@ const SKIP_PREFIXES = ["포지션:", "기술:"];
 function parseBulletGroups(lines: string[]): string[][] {
   const groups: string[][] = [];
   let current: string[] = [];
+  let currentFromHeading = false;
+
+  const flush = () => {
+    if (current.length > 0) {
+      groups.push(current);
+      current = [];
+    }
+    currentFromHeading = false;
+  };
 
   for (const line of lines) {
     const trimmed = line.trim();
+
+    const headingMatch = trimmed.match(/^#{2,4}\s+(.+)$/);
+    if (headingMatch) {
+      // `### 프로젝트명` 헤딩 → 새 그룹의 타이틀 (career 청크 재구성 시 headingPath 재합성분)
+      flush();
+      current.push(headingMatch[1]!.replace(/\*\*/g, "").trim());
+      currentFromHeading = true;
+      continue;
+    }
 
     if (trimmed.startsWith("- ")) {
       const text = trimmed.slice(2).trim();
@@ -30,16 +48,14 @@ function parseBulletGroups(lines: string[]): string[][] {
       if (/^[가-힣\w\s]+ - [A-Z]/.test(text) && current.length === 0) break;
       current.push(text);
     } else if (trimmed === "" || trimmed === "---") {
-      if (current.length > 0) {
-        groups.push(current);
-        current = [];
-      }
+      // 헤딩 타이틀만 있는 그룹은 첫 불릿을 기다린다 (빈 줄로 끊지 않음)
+      if (!(currentFromHeading && current.length === 1)) flush();
     } else if (trimmed.startsWith(">")) {
       break; // hit an education blockquote – stop
     }
   }
 
-  if (current.length > 0) groups.push(current);
+  flush();
   return groups.filter((g) => g.length > 0);
 }
 

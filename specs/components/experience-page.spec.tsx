@@ -15,6 +15,7 @@ vi.mock("next/navigation", () => ({
 import { CategoryFilter } from "@/components/experience/CategoryFilter";
 import { ProjectCard } from "@/components/experience/ProjectCard";
 import { ExperienceClient } from "@/components/experience/ExperienceClient";
+import { ProjectTimeline } from "@/components/experience/ProjectTimeline";
 import { SkillsGrid } from "@/components/experience/SkillsGrid";
 import { Timeline } from "@/components/experience/Timeline";
 
@@ -133,7 +134,8 @@ describe("ExperienceClient", () => {
         })}
       />,
     );
-    expect(screen.getByRole("heading", { level: 2, name: "디라티오" })).toBeInTheDocument();
+    // 프로젝트 타임라인 템플릿: groups+others 를 하나의 타임라인으로 평탄화 렌더
+    expect(screen.getByText("MFE TF")).toBeInTheDocument();
     expect(screen.getByText("weju")).toBeInTheDocument();
   });
 
@@ -161,8 +163,37 @@ describe("ExperienceClient", () => {
         })}
       />,
     );
-    expect(screen.queryByRole("heading", { level: 2, name: "디라티오" })).toBeNull();
+    expect(screen.queryByText("MFE TF")).toBeNull();
     expect(screen.getByText("weju")).toBeInTheDocument();
+  });
+});
+
+describe("ProjectTimeline (커리어 타임라인 템플릿)", () => {
+  it("기간·카테고리·타이틀·설명·태그·노션 링크 렌더", () => {
+    render(
+      <ProjectTimeline
+        projects={[
+          project({
+            period: { start: "2025-09-01", end: "2026-01-31" },
+            techKeywords: ["web3", "defi"],
+          }),
+        ]}
+      />,
+    );
+    expect(screen.getByText("MFE TF")).toBeInTheDocument();
+    expect(screen.getByText("마이그레이션 주도")).toBeInTheDocument();
+    expect(screen.getAllByText("2025.09 - 2026.01").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("업무").length).toBeGreaterThan(0);
+    expect(screen.getByText("web3")).toBeInTheDocument();
+    const link = screen.getByRole("link", { name: /노션에서 자세히/ });
+    expect(link).toHaveAttribute("target", "_blank");
+  });
+
+  it("ongoing 프로젝트는 '현재' 로 표시", () => {
+    render(
+      <ProjectTimeline projects={[project({ period: { start: "2026-05-01", ongoing: true } })]} />,
+    );
+    expect(screen.getAllByText("2026.05 - 현재").length).toBeGreaterThan(0);
   });
 });
 

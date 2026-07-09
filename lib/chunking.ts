@@ -1,4 +1,4 @@
-import type { ChunkCategory, PortfolioChunk } from "@/types/portfolio";
+import type { ChunkCategory, PortfolioChunk, ProjectNotionCategory } from "@/types/portfolio";
 import type { NotionPageContent } from "@/types/notion";
 import { estimateTokens, extractKeywords } from "./tokenize";
 
@@ -129,16 +129,24 @@ export function chunkMarkdown(
   const merged: BuiltChunk[] = [];
   for (const b of built) {
     const prev = merged[merged.length - 1];
-    // 짧은 섹션은 직전 청크에 머지하되, 직전 청크가 targetTokens 를 넘으면 멈춘다.
-    // (상한이 없으면 헤딩만 있고 본문이 짧은 섹션들 — 예: 이력서의 경력/학력 항목 —
-    //  이 전부 한 청크로 흡수돼 회사·학교명 등 구조가 소실되는 문제 방지)
+    // 짧은 섹션은 직전 청크에 머지하되:
+    // - 직전 청크가 targetTokens 를 넘으면 멈춘다 (헤딩 구조 소실 방지 — 이력서 경력/학력)
+    // - 최상위(H2) 섹션 경계를 넘어 머지하지 않는다 ('직무 및 이력' 헤더가 '자기 소개'로
+    //   흡수되어 커리어 타임라인이 통째로 소실되던 문제 방지)
+    // - 머지 시 흡수 섹션의 하위 헤딩을 텍스트에 재주입해 프로젝트 제목을 보존한다
     if (
       prev &&
       b.tokens < mergeBelowTokens &&
       prev.tokens >= mergeBelowTokens &&
-      prev.tokens < targetTokens
+      prev.tokens < targetTokens &&
+      (b.headingPath[0] ?? "") === (prev.headingPath[0] ?? "")
     ) {
-      prev.text = `${prev.text}\n\n${b.text}`;
+      const sub = b.headingPath[b.headingPath.length - 1];
+      const headingLine =
+        sub && b.headingPath.join("→") !== prev.headingPath.join("→")
+          ? `${"#".repeat(b.headingPath.length + 1)} ${sub}\n`
+          : "";
+      prev.text = `${prev.text}\n\n${headingLine}${b.text}`;
       prev.tokens = estimateTokens(prev.text);
     } else {
       merged.push({ headingPath: [...b.headingPath], text: b.text, tokens: b.tokens });
@@ -161,6 +169,30 @@ export function chunkMarkdown(
     }
   }
 
+  // 프로젝트 페이지: 노션 DB 속성(카테고리·기간)을 projectMeta 로 보존 (프로젝트 타임라인용)
+  const refCategory = page.ref.category;
+  const notionCategory: ProjectNotionCategory | undefined =
+    refCategory === "자체프로젝트" || refCategory === "업무" || refCategory === "외부활동"
+      ? refCategory
+      : undefined;
+  const projectMeta =
+    category === "project" && (notionCategory || page.ref.periodStart)
+      ? {
+          ...(notionCategory ? { notionCategory } : {}),
+          ...(page.ref.periodStart
+            ? {
+                period: {
+                  start: page.ref.periodStart,
+                  ...(page.ref.periodEnd ? { end: page.ref.periodEnd } : {}),
+                  ...(!page.ref.periodEnd && page.ref.status === "In progress"
+                    ? { ongoing: true }
+                    : {}),
+                },
+              }
+            : {}),
+        }
+      : undefined;
+
   return final.map((b, idx) => {
     const seed = `${page.ref.id}::${b.headingPath.join("→") || `idx-${idx}`}::${idx}`;
     const id = stableHash(seed);
@@ -177,6 +209,7 @@ export function chunkMarkdown(
       embedding: [],
       tags,
       order: idx, // 페이지 내 문서 순서 — sortChunks 정렬 후에도 원본 순서 복원 가능
+      ...(projectMeta ? { projectMeta } : {}),
     };
   });
 }
