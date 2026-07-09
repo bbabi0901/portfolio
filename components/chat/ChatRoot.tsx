@@ -205,6 +205,25 @@ export function ChatRoot({
     [noModelsAvailable, status, stop, sendMessage, error, clearError, modelId],
   );
 
+  // 랜딩(/)에서 ?q=질문 으로 진입한 경우 마운트 시 1회 자동 전송 (FEAT-034).
+  // 서버 searchParams 대신 클라이언트에서 읽어 페이지 정적 렌더링을 유지한다.
+  const initialQuestionSentRef = useRef(false);
+  useEffect(() => {
+    if (initialQuestionSentRef.current) return;
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q")?.trim();
+    if (!q) return;
+    initialQuestionSentRef.current = true;
+    // URL 정리 (새로고침 시 재전송 방지)
+    params.delete("q");
+    const rest = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (rest ? `?${rest}` : ""));
+    const timer = setTimeout(() => handleSend(q), 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 1회만
+  }, []);
+
   // Visited suggestions
   const [visited, setVisited] = useState<Set<string>>(new Set());
   const handleSuggestion = useCallback(

@@ -23,7 +23,7 @@ export interface SideSheetProps {
 }
 
 const MENU_ITEMS = [
-  { href: "/", label: "대화", Icon: MessageCircle },
+  { href: "/chat", label: "대화", Icon: MessageCircle },
   { href: "/about", label: "자기소개", Icon: User },
   { href: "/experience", label: "커리어", Icon: Briefcase },
   { href: "/contact", label: "연락하기", Icon: Mail },

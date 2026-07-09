@@ -475,6 +475,18 @@
 - **Then**: 이미지 있으면 정적 asset `/images/profile.jpg`(next/image), 없으면 이니셜 `ProfileFallback`
 - **파일**: `specs/profile-image.spec.ts`
 
+### TS-81 랜딩 페이지 (FEAT-034)
+- **Given**: `/` 랜딩 (타이핑 인사 + 칩 + 채팅 인풋 버튼)
+- **When**: reduced-motion / 타이머 진행 / 칩·인풋 클릭
+- **Then**: 즉시·단어단위 인사 표시, 칩 → `/chat?q=`, 인풋 → `/chat` push
+- **파일**: `specs/components/landing-hero.spec.tsx`
+
+### TS-82 커리어 타임라인 재구성 (FEAT-025 회귀 방지)
+- **Given**: ADR-028 구조의 career 청크(order 뒤섞임, 헤딩은 headingPath 에만)
+- **When**: `loadProfileData().career`
+- **Then**: order 순 정렬 + `###` 헤딩 재합성으로 타임라인 마크다운 복원 (교육/이름 청크 제외)
+- **파일**: `specs/about-data.spec.ts`
+
 ---
 
 ## 매핑 SSoT

@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
 import * as layoutModule from "@/app/layout";
 import * as homePage from "@/app/page";
+import * as chatPage from "@/app/chat/page";
 import * as aboutPage from "@/app/about/page";
 import * as experiencePage from "@/app/experience/page";
 import * as contactPage from "@/app/contact/page";
@@ -114,9 +115,14 @@ describe("layout viewport", () => {
 });
 
 describe("page-level metadata", () => {
-  it("/ (chat) title = '대화'", () => {
-    expect(homePage.metadata.title).toBe("대화");
+  it("/ (landing) title = '김윤수 — AI Portfolio'", () => {
+    expect(homePage.metadata.title).toBe("김윤수 — AI Portfolio");
     expect((homePage.metadata.alternates as { canonical?: string }).canonical).toBe("/");
+  });
+
+  it("/chat title = '대화'", () => {
+    expect(chatPage.metadata.title).toBe("대화");
+    expect((chatPage.metadata.alternates as { canonical?: string }).canonical).toBe("/chat");
   });
 
   it("/about title = '자기소개'", () => {
@@ -200,11 +206,12 @@ describe("JsonLdPerson (regression)", () => {
   });
 });
 
-describe("sitemap (4 routes)", () => {
-  it("includes /, /about, /experience, /contact", () => {
+describe("sitemap (5 routes)", () => {
+  it("includes /, /chat, /about, /experience, /contact", () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://yoonsoo.dev/");
+    expect(urls).toContain("https://yoonsoo.dev/chat");
     expect(urls).toContain("https://yoonsoo.dev/about");
     expect(urls).toContain("https://yoonsoo.dev/experience");
     expect(urls).toContain("https://yoonsoo.dev/contact");

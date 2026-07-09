@@ -230,6 +230,101 @@ describe("loadProfileData", () => {
   });
 });
 
+describe("loadProfileData — career 타임라인 (ADR-028 career 청크 재구성)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  function careerChunk(
+    id: string,
+    headingPath: string[],
+    text: string,
+    order: number,
+  ): PortfolioServerData["chunks"][number] {
+    return {
+      id,
+      sourcePageId: "resume",
+      sourceTitle: "이력서",
+      sourceUrl: "https://www.notion.so/resume",
+      category: "career",
+      headingPath,
+      text,
+      tokens: 50,
+      embedding: [0.1],
+      order,
+    };
+  }
+
+  const personal = {
+    id: "p1",
+    sourcePageId: "p1",
+    sourceTitle: "성격",
+    sourceUrl: "https://www.notion.so/p1",
+    category: "personal" as const,
+    headingPath: ["성격"],
+    text: "ENFP",
+    tokens: 2,
+    embedding: [0.1],
+  };
+
+  it("직무 및 이력 career 청크들 → career 섹션으로 재구성 (문서 순서 + 헤딩 재합성)", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        personal,
+        // 실제 이력서 구조 모사: H2 본문에 첫 회사 callout, H3 프로젝트 청크들,
+        // 마지막 프로젝트 청크 끝에 다음 회사 callout(트레일링) 포함.
+        careerChunk(
+          "c1",
+          ["직무 및 이력 (Experience)"],
+          "> **소프트웨어 엔지니어  \n> | 디라티오**\n\n> 2025.01 - 현재\n\n---",
+          2,
+        ),
+        careerChunk(
+          "c3",
+          ["직무 및 이력 (Experience)", "밈코인 통합 소셜 플랫폼"],
+          "- FSD 아키텍처 전면 도입\n\n> **소프트웨어 엔지니어  \n> | 체인아나토미**\n\n> 2023.05 - 2025.01\n\n---",
+          4,
+        ),
+        // 정렬 검증: order 가 뒤섞여 들어와도 order 순으로 재구성돼야 함
+        careerChunk(
+          "c2",
+          ["직무 및 이력 (Experience)", "Micro-Frontend Architecture 마이그레이션 TF"],
+          "- 모놀리식 → MFE 전환 TF 주도",
+          3,
+        ),
+      ]),
+    );
+    const result = loadProfileData();
+    expect(result!.career).toBeDefined();
+    const body = result!.career!.subSections.map((s) => s.body).join("\n");
+    // 헤딩 재합성: H3 프로젝트명이 body 에 ### 로 복원돼야 parseCareerMarkdown 이 그룹핑 가능
+    expect(body).toContain("### Micro-Frontend Architecture 마이그레이션 TF");
+    expect(body).toContain("### 밈코인 통합 소셜 플랫폼");
+    // 문서 순서: MFE(order 3)가 밈코인(order 4)보다 먼저
+    expect(body.indexOf("Micro-Frontend")).toBeLessThan(body.indexOf("밈코인 통합 소셜 플랫폼"));
+    // 회사 callout 보존
+    expect(body).toContain("| 디라티오");
+    expect(body).toContain("| 체인아나토미");
+  });
+
+  it("교육/이름 career 청크는 career 섹션에서 제외", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        personal,
+        careerChunk("e1", ["교육 기관 (Education)", "고려대학교 신소재공학부"], "학사", 8),
+        careerChunk("n1", ["이름 : 김윤수"], "연락처 010", 0),
+      ]),
+    );
+    const result = loadProfileData();
+    expect(result!.career).toBeUndefined();
+  });
+
+  it("career 청크 없음 → career undefined (기존 동작 유지)", () => {
+    mockedLoadPortfolio.mockReturnValue(makeData([personal]));
+    expect(loadProfileData()!.career).toBeUndefined();
+  });
+});
+
 describe("calculateReadingMinutes", () => {
   it("한국어 200글자 → 1분", () => {
     const r = calculateReadingMinutes("가".repeat(200));

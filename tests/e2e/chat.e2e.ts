@@ -4,7 +4,7 @@ import { skipGreeting, sendChatMessage, getLastAssistantText } from "./utils/tes
 test.describe("chat (TS-01,03,04,12,13,14)", () => {
   test("TS-03: 추천 질문 carousel 렌더 (mock fixture)", async ({ page }) => {
     await skipGreeting(page);
-    await page.goto("/");
+    await page.goto("/chat");
     // 추천 질문 텍스트 중 하나 노출 확인 (fixture 의 Q-001/005/018 또는 spec.json 의 18개)
     const hasSuggestion = await page
       .getByRole("button", { name: /어떤 개발자|어떻게|뭐|연락/ })
@@ -16,7 +16,7 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
 
   test("TS-04: 모델 스위처 노출 (사용 가능 모델)", async ({ page }) => {
     await skipGreeting(page);
-    await page.goto("/");
+    await page.goto("/chat");
     // ModelSwitcher 가 chat header 또는 sidebar 에 위치
     const hasSwitcher = await page
       .getByLabel(/답변 모델|모델/)
@@ -30,14 +30,14 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
 
   test("TS-12: '새 대화' 또는 헤더 액션 노출", async ({ page }) => {
     await skipGreeting(page);
-    await page.goto("/");
+    await page.goto("/chat");
     // 헤더 또는 menu 어딘가 clear conversation 트리거
     await expect(page.locator("header, [role='banner']")).toBeVisible();
   });
 
   test("TS-13: IME composing 중 Enter → 전송 미발생", async ({ page }) => {
     await skipGreeting(page);
-    await page.goto("/");
+    await page.goto("/chat");
     const ta = page.locator("textarea").first();
     await ta.waitFor({ state: "visible", timeout: 5000 });
     await ta.focus();
@@ -58,7 +58,7 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
 
   test("TS-14: 빈 입력 Enter → 전송 미발생", async ({ page }) => {
     await skipGreeting(page);
-    await page.goto("/");
+    await page.goto("/chat");
     const ta = page.locator("textarea").first();
     await ta.waitFor({ state: "visible", timeout: 5000 });
     await ta.focus();
@@ -71,7 +71,7 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
 test.describe("chat multi-turn (TS-01)", () => {
   test("TS-01: 연속 2번 질문 모두 응답 수신 — 빈 버블·400 에러 없음", async ({ page }) => {
     await skipGreeting(page);
-    await page.goto("/");
+    await page.goto("/chat");
 
     // Turn 1
     await sendChatMessage(page, "안녕하세요");

@@ -23,10 +23,16 @@ export interface ProfileData {
   intro: string;
   contact: ProfileContact;
   sections: ProfileSection[];
+  /** 이력서(career) 청크에서 재구성한 커리어 타임라인 마크다운 (/experience) */
+  career?: ProfileSection;
   education?: ProfileSection;
   imageUrl: string | null;
   totalReadingMinutes: number;
 }
+
+/** 이력서(career) 청크 중 경력 타임라인 섹션 heading 매칭 */
+const CAREER_TIMELINE_HEADING_RE = /직무|경력|experience/i;
+const CAREER_SECTION_LABEL = "커리어";
 
 /** 이력서(career) 청크 중 학력/교육 섹션을 식별하는 heading 키워드 */
 const EDUCATION_HEADING_RE = /교육|education|학력/i;
@@ -128,15 +134,44 @@ export function loadProfileData(): ProfileData | null {
     totalWords === 0 ? 0 : Math.ceil(totalWords / READING_WORDS_PER_MINUTE);
 
   const education = extractEducation(careerChunks);
+  const career = extractCareer(careerChunks);
 
   return {
     intro,
     contact,
     sections,
+    career,
     education,
     imageUrl: resolveProfileImageUrl(data.profile.oneLiner),
     totalReadingMinutes,
   };
+}
+
+/**
+ * 이력서(career) 청크에서 경력 타임라인 마크다운을 재구성한다 (ADR-028 이후 구조).
+ * - 청크 text 에는 자기 heading 라인이 없으므로 headingPath[1](프로젝트명)을 `###` 으로 재합성.
+ * - sortChunks 는 headingPath 사전순이라 문서 순서가 소실됨 → `order` 필드로 원래 순서 복원.
+ * - 회사 callout(`> | 회사명`)·기간 블록은 청크 body 에 살아있어 CareerTimelineSection 의
+ *   parseCareerMarkdown 이 기존과 동일하게 타임라인으로 파싱한다.
+ */
+function extractCareer(
+  careerChunks: ReturnType<typeof loadPortfolio>["chunks"],
+): ProfileSection | undefined {
+  const timelineChunks = careerChunks
+    .filter(
+      (c) => CAREER_TIMELINE_HEADING_RE.test(c.headingPath[0] ?? "") && hasReadableText(c.text),
+    )
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  if (timelineChunks.length === 0) return undefined;
+
+  const body = timelineChunks
+    .map((c) => {
+      const sub = c.headingPath[1];
+      return sub ? `### ${sub}\n${c.text}` : c.text;
+    })
+    .join("\n\n");
+
+  return { heading: CAREER_SECTION_LABEL, subSections: [{ body }] };
 }
 
 /**

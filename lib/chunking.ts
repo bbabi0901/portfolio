@@ -176,6 +176,7 @@ export function chunkMarkdown(
       tokens: b.tokens,
       embedding: [],
       tags,
+      order: idx, // 페이지 내 문서 순서 — sortChunks 정렬 후에도 원본 순서 복원 가능
     };
   });
 }
