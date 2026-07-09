@@ -5,6 +5,12 @@ import path from "node:path";
 import { z } from "zod";
 
 import { chunkPages } from "@/lib/chunking";
+import {
+  type EmbeddingsCache,
+  embeddingCacheKey,
+  loadEmbeddingsCache,
+  saveEmbeddingsCache,
+} from "@/lib/embeddings-cache";
 import { createNotionService } from "@/services/notion";
 import { createEmbeddingsService, VOYAGE_PRESET } from "@/services/openai-embeddings";
 import type { NotionPageContent, NotionPageRef } from "@/types/notion";
@@ -25,6 +31,8 @@ export interface SyncOptions {
 const DEFAULT_OUT_DIR = "data";
 const DEFAULT_SERVER_FILE = "portfolio.server.json";
 const DEFAULT_SAMPLE_FILE = "portfolio.sample.json";
+const DEFAULT_CACHE_FILE = "embeddings-cache.json";
+const EMBED_GROUP_SIZE = 8; // 캐시 미스 임베딩을 소그룹으로 나눠 그룹마다 증분 저장(rate-limit 중단 시 재개 가능)
 
 const SAMPLE_MAX_CHUNKS = 8;
 const SAMPLE_DIMENSIONS = 16;
@@ -233,6 +241,7 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     : path.join(process.cwd(), DEFAULT_OUT_DIR);
   const serverFile = path.join(outDir, opts.serverFileName ?? DEFAULT_SERVER_FILE);
   const sampleFile = path.join(outDir, opts.sampleFileName ?? DEFAULT_SAMPLE_FILE);
+  const cacheFile = path.join(outDir, DEFAULT_CACHE_FILE);
 
   const notion = createNotionService({
     token: env.NOTION_TOKEN || "fixture",
@@ -308,13 +317,47 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     fail("[sync-notion] produced 0 chunks — refusing to write empty portfolio");
   }
 
-  const texts = chunks.map((c) => c.text);
-  const embeddedVectors = await embeddings.embedBatch(texts);
+  // ── 임베딩 (캐시 우선) ──────────────────────────────────────────────────────
+  // provider/model 이 바뀌면 벡터 공간이 달라지므로 네임스페이스에 포함해 캐시를 분리.
+  const embedModel = useVoyage ? (VOYAGE_PRESET.model ?? "voyage") : "text-embedding-3-small";
+  const embedDims = useVoyage ? (VOYAGE_PRESET.dimensions ?? 0) : 1536;
+  const embedNamespace = `${embedModel}@${embedDims}`;
+
+  const cache: EmbeddingsCache = loadEmbeddingsCache(cacheFile);
+  const keys = chunks.map((c) => embeddingCacheKey(embedNamespace, c.text));
+  const missIdx: number[] = [];
   for (let i = 0; i < chunks.length; i++) {
-    const v = embeddedVectors[i];
-    if (!v) fail(`[sync-notion] missing embedding for chunk index ${i}`);
+    if (!cache[keys[i]!]) missIdx.push(i);
+  }
+
+  // 캐시 미스만 소그룹으로 임베딩하고 그룹마다 증분 저장(rate-limit 로 중단돼도 재실행 시 재개).
+  for (let g = 0; g < missIdx.length; g += EMBED_GROUP_SIZE) {
+    const group = missIdx.slice(g, g + EMBED_GROUP_SIZE);
+    const vectors = await embeddings.embedBatch(group.map((i) => chunks[i]!.text));
+    for (let k = 0; k < group.length; k++) {
+      const v = vectors[k];
+      if (!v) fail(`[sync-notion] missing embedding for chunk index ${group[k]}`);
+      cache[keys[group[k]!]!] = v;
+    }
+    saveEmbeddingsCache(cacheFile, cache);
+  }
+
+  for (let i = 0; i < chunks.length; i++) {
+    const v = cache[keys[i]!];
+    if (!v) fail(`[sync-notion] missing cached embedding for chunk index ${i}`);
     chunks[i]!.embedding = v;
   }
+
+  // 더 이상 사용되지 않는 캐시 항목 제거 후 최종 저장.
+  const pruned: EmbeddingsCache = {};
+  for (const k of keys) {
+    const v = cache[k];
+    if (v) pruned[k] = v;
+  }
+  saveEmbeddingsCache(cacheFile, pruned);
+  console.log(
+    `[sync-notion] embeddings: ${missIdx.length} new (API), ${chunks.length - missIdx.length} from cache`,
+  );
 
   const sortedChunks = sortChunks(chunks);
   const profile = extractProfile(pages, profileIdSet);

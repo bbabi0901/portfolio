@@ -213,3 +213,26 @@ career/project 콘텐츠를 누락하던 문제를 아래로 수정한다.
 학력 섹션 렌더 + "이 프로젝트 어떻게 만들었어요?" RAG 답변 근거 확보.
 
 **트레이드오프**: 동시성↓ 로 sync 시간 소폭 증가. multi_select 는 첫 옵션만 사용(복수 카테고리 행은 첫 값 기준).
+
+---
+
+## ADR-029: 빌드타임 임베딩 캐시 (embeddings-cache.json)
+
+**배경**: ADR-028 로 sync 가 career/project 를 정상 포함하면서 청크 수가 크게 증가(≈240). 빌드마다
+전량 재임베딩하면 Voyage 무료 티어 rate-limit(3 RPM·소량 배치)에 걸려 `npm run build` prebuild 가 실패
+(`OpenAI embeddings rate-limited after 6 attempts`)해 Vercel 운영 배포가 깨진다.
+
+**결정**: 청크 텍스트(+provider/model 네임스페이스) 해시를 키로 임베딩 벡터를 `data/embeddings-cache.json`
+에 보관하고 **git 에 커밋**한다. `scripts/sync-notion.ts` 는 캐시 미스인 청크만 임베딩(소그룹 단위 증분 저장,
+rate-limit 로 중단돼도 재실행 시 이어서 채움)하고, 나머지는 캐시 재사용.
+- `lib/embeddings-cache.ts`: `embeddingCacheKey(namespace, text)`(sha256), `load/saveEmbeddingsCache`.
+- 네임스페이스 = `${model}@${dims}` — provider/model 변경 시 캐시 자동 무효화(벡터 공간 불일치 방지).
+- `.prettierignore` 에 캐시 파일 추가(대용량 compact JSON 재포맷 방지).
+
+**효과**: 캐시가 커밋돼 있으면 Vercel 빌드는 임베딩 API 호출 0회(전량 히트)로 즉시 성공. 콘텐츠가 바뀐
+청크만 소량 임베딩. 최초 완전 생성만 쿼터가 필요하며, 이후 배포는 rate-limit 무관.
+
+**운영 노트**: 캐시 최초 생성은 임베딩 쿼터가 있는 상태에서 `npm run sync:notion` 을 완료해 생성된
+`data/embeddings-cache.json` 을 커밋해야 한다. 커밋 전까지는 빌드가 라이브 임베딩(=rate-limit 취약)에 의존.
+
+**트레이드오프**: 캐시 파일이 커밋되어 리포 용량 증가(≈수백 KB~수 MB). 청크 텍스트 변경 시 해당 항목 재임베딩.
