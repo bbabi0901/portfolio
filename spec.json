@@ -890,7 +890,8 @@
       "tests": [
         "specs/sync-notion.spec.ts",
         "specs/notion-extract.spec.ts",
-        "specs/chunking.spec.ts"
+        "specs/chunking.spec.ts",
+        "specs/embeddings-cache.spec.ts"
       ]
     },
     {
@@ -1684,6 +1685,13 @@
       "title": "청커 merge 상한 — 큰 섹션이 짧은 헤딩 섹션(경력/학력)들을 흡수하지 않음",
       "file": "specs/chunking.spec.ts",
       "anchor": "mergeCap"
+    },
+    {
+      "id": "TS-78",
+      "feature": "FEAT-005",
+      "title": "임베딩 캐시 — 텍스트 해시 키 결정성 + 네임스페이스 분리 + 저장/로드 라운드트립",
+      "file": "specs/embeddings-cache.spec.ts",
+      "anchor": "cache"
     }
   ]
 }

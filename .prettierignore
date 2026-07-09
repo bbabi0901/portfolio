@@ -5,6 +5,7 @@ coverage
 playwright-report
 test-results
 data/portfolio.server.json
+data/embeddings-cache.json
 public/data
 .bkit
 .claude
