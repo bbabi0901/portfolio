@@ -47,9 +47,14 @@ export const metadata: Metadata = {
 
 ### 페이지별
 
-#### `/` (대화)
+#### `/` (랜딩, FEAT-034)
 - title: 기본 ("김윤수 — AI Portfolio")
-- description: "AI에게 물어보는 김윤수의 커리어와 프로젝트."
+- description: "프론트엔드 개발자 김윤수의 대화형 포트폴리오. 무엇이든 물어보세요."
+
+#### `/chat` (대화 — 기존 `/` 에서 이전)
+- title: "대화"
+- description: "김윤수에게 직접 물어보세요. 노션 기록 기반 답변."
+- canonical: /chat · sitemap 포함 (총 5개 라우트)
 
 #### `/about`
 - title: "자기소개"

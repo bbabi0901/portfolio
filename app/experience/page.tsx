@@ -9,8 +9,6 @@ import { SkillsGrid } from "@/components/experience/SkillsGrid";
 import { loadExperienceData, type ProjectCategory } from "@/lib/experience-data";
 import { loadProfileData } from "@/lib/profile-data";
 
-const CAREER_HEADING = "커리어";
-
 export const metadata: Metadata = {
   title: "커리어",
   description: "김윤수의 커리어·프로젝트 타임라인 + 보유 스킬.",
@@ -23,7 +21,8 @@ const ALL_CATEGORIES: ProjectCategory[] = ["자체프로젝트", "업무", "외�
 
 export default function ExperiencePage() {
   const data = loadExperienceData();
-  const careerSection = loadProfileData()?.sections.find((s) => s.heading === CAREER_HEADING);
+  // 이력서(career) 청크에서 재구성한 커리어 타임라인 (lib/profile-data.ts extractCareer)
+  const careerSection = loadProfileData()?.career;
 
   const hasProjectData =
     data.groups.length > 0 ||

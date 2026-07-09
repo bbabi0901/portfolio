@@ -22,6 +22,8 @@ export interface PortfolioChunk {
   embedding: number[];
   tags?: string[];
   projectMeta?: ProjectMeta;
+  /** 페이지 내 문서 순서 (0-base) — sortChunks 정렬로 소실되는 원본 순서 보존용 */
+  order?: number;
 }
 
 export interface SuggestedQuestionMeta {

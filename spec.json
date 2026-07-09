@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -69,9 +69,17 @@
   "pages": [
     {
       "route": "/",
+      "name": "landing",
+      "type": "ssg",
+      "title": "김윤수 — AI Portfolio",
+      "description": "프론트엔드 개발자 김윤수의 대화형 포트폴리오. 무엇이든 물어보세요.",
+      "ogImage": "/opengraph-image"
+    },
+    {
+      "route": "/chat",
       "name": "chat",
       "type": "client",
-      "title": "김윤수 — AI Portfolio",
+      "title": "대화",
       "description": "AI에게 물어보는 김윤수의 커리어와 프로젝트.",
       "ogImage": "/opengraph-image"
     },
@@ -1076,7 +1084,8 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "tests/e2e/experience.e2e.ts"
+        "tests/e2e/experience.e2e.ts",
+        "specs/about-data.spec.ts"
       ]
     },
     {
@@ -1171,6 +1180,19 @@
       ],
       "dependencies": [
         "FEAT-005"
+      ]
+    },
+    {
+      "id": "FEAT-034",
+      "name": "Landing Page — 타이핑 인사 + 추천 칩 + 채팅 인풋(/chat 이동), 챗은 /chat 으로 이전",
+      "status": "done",
+      "priority": "P1",
+      "tests": [
+        "specs/components/landing-hero.spec.tsx"
+      ],
+      "dependencies": [
+        "FEAT-001",
+        "FEAT-003"
       ]
     }
   ],
@@ -1719,6 +1741,20 @@
       "title": "sync:check 신선도 — 노션 last_edited_time vs generatedAt 비교 (STALE 목록/파싱 실패 안전)",
       "file": "specs/notion-freshness.spec.ts",
       "anchor": "compareFreshness"
+    },
+    {
+      "id": "TS-81",
+      "feature": "FEAT-034",
+      "title": "랜딩 — 타이핑 인사(reduced-motion 즉시), 칩 클릭 → /chat?q=, 인풋 클릭 → /chat 이동",
+      "file": "specs/components/landing-hero.spec.tsx",
+      "anchor": "landing"
+    },
+    {
+      "id": "TS-82",
+      "feature": "FEAT-025",
+      "title": "커리어 타임라인 데이터 레이어 — career 청크 order 정렬 + 헤딩 재합성 재구성 (회귀 방지)",
+      "file": "specs/about-data.spec.ts",
+      "anchor": "career"
     }
   ]
 }

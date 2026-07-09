@@ -17,14 +17,15 @@ afterEach(() => {
 });
 
 describe("sitemap", () => {
-  it("contains all 4 public routes", () => {
+  it("contains all 5 public routes", () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls).toContain("https://yoonsoo.dev/");
+    expect(urls).toContain("https://yoonsoo.dev/chat");
     expect(urls).toContain("https://yoonsoo.dev/about");
     expect(urls).toContain("https://yoonsoo.dev/experience");
     expect(urls).toContain("https://yoonsoo.dev/contact");
-    expect(entries.length).toBe(4);
+    expect(entries.length).toBe(5);
   });
 
   it("uses NEXT_PUBLIC_SITE_URL as base", () => {
