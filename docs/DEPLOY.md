@@ -46,13 +46,14 @@
 | `RATE_LIMIT_BYPASS` | dev 만 `1`. production 미설정. |
 | `MOCK_LLM` | dev/CI 만 `1`. production 미설정. |
 | `MOCK_NOTION` | dev/CI 만 `1`. production 미설정. |
-| `SKIP_NOTION_SYNC` | CI 만 `1`. production 미설정 (prebuild 가 sync 자동 트리거). |
+| `SKIP_NOTION_SYNC` | CI 만 `1`. production 미설정. |
+| `FORCE_NOTION_SYNC` | 평소 미설정. 빌드에서 노션 sync 를 강제하고 싶을 때만 `1` (ADR-030 — 기본은 커밋된 `data/portfolio.server.json` 사용, sync 생략). |
 
 ## 3. Build settings
 
 | 항목 | 값 |
 |------|------|
-| Build command | `npm run build` (prebuild 가 sync:notion + gen:suggestions 자동) |
+| Build command | `npm run build` (prebuild = check:spec + **sync:if-needed**(기본 생략, ADR-030) + gen:suggestions) |
 | Output directory | `.next` (default) |
 | Install command | `npm ci` |
 | Node 버전 | `.nvmrc` 의 22.12.0 (Vercel 자동 감지) |

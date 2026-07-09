@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1159,6 +1159,19 @@
       "dependencies": [
         "FEAT-031"
       ]
+    },
+    {
+      "id": "FEAT-033",
+      "name": "Conditional Notion Sync — 커밋형 RAG 데이터 + prebuild 게이트 + sync:check 신선도 검사 (ADR-030)",
+      "status": "done",
+      "priority": "P1",
+      "tests": [
+        "specs/sync-if-needed.spec.ts",
+        "specs/notion-freshness.spec.ts"
+      ],
+      "dependencies": [
+        "FEAT-005"
+      ]
     }
   ],
   "testScenarios": [
@@ -1692,6 +1705,20 @@
       "title": "임베딩 캐시 — 텍스트 해시 키 결정성 + 네임스페이스 분리 + 저장/로드 라운드트립",
       "file": "specs/embeddings-cache.spec.ts",
       "anchor": "cache"
+    },
+    {
+      "id": "TS-79",
+      "feature": "FEAT-033",
+      "title": "prebuild sync 게이트 — SKIP > FORCE > 데이터 부재(sync) > 생략 우선순위",
+      "file": "specs/sync-if-needed.spec.ts",
+      "anchor": "decideSync"
+    },
+    {
+      "id": "TS-80",
+      "feature": "FEAT-033",
+      "title": "sync:check 신선도 — 노션 last_edited_time vs generatedAt 비교 (STALE 목록/파싱 실패 안전)",
+      "file": "specs/notion-freshness.spec.ts",
+      "anchor": "compareFreshness"
     }
   ]
 }

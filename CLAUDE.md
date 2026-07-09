@@ -61,7 +61,7 @@
 - **`@ai-sdk/openai`에서 OpenRouter 호출 시 반드시 `or.chat(modelId)` 사용.** `or(modelId)` 단독 호출은 Responses API를 사용해 OpenRouter에서 무음 실패한다. (ADR-026 참조)
 - 커밋 메시지는 conventional commits (feat:, fix:, docs:, refactor:, test:, chore:).
 - PR은 `npm run check:spec`, `npm run lint`, `npm run test`가 통과해야 머지.
-- 노션 콘텐츠 변경 → 다음 빌드시 자동 반영. 수동 동기화는 `npm run sync:notion`.
+- **노션 콘텐츠 반영 플로우 (ADR-030, 조건부 sync)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.server.json` 을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.server.json` + `data/embeddings-cache.json` 커밋 → 푸시(=배포). prebuild 게이트 우선순위: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
 - 문서 변경(plan/PRD/Architecture/spec.json)이 코드 변경과 함께 가야 함.
 
 ## Git Workflow 규칙 (사용자 명시)
@@ -79,25 +79,27 @@
 ## 명령어
 ```
 npm run dev                # 개발 서버 (localhost:3000)
-npm run build              # prebuild(sync:notion + gen:suggestions) → next build
+npm run build              # prebuild(check:spec + sync:if-needed + gen:suggestions) → next build
 npm run lint
 npm run test               # vitest 단발
 npm run test:watch
 npm run e2e                # Playwright
-npm run sync:notion        # 노션 → data/portfolio.server.json + public/data/suggestions.json
+npm run sync:notion        # 노션 → data/portfolio.server.json (무조건 sync, 이후 data/ 커밋)
+npm run sync:if-needed     # prebuild 게이트 — 커밋 데이터 있으면 생략, FORCE_NOTION_SYNC=1 강제
+npm run sync:check         # 노션 last_edited_time vs generatedAt 신선도 검사 (STALE 시 exit 1)
 npm run gen:suggestions    # portfolio.server.json → 추천 질문 후보 + 관련 질문 매핑
 npm run check:spec         # spec.json 유효성 + 모든 FEAT의 tests 파일 존재 검증
 ```
 
 ## 파일 절대 규칙
 - `.env.local`은 git에 커밋 금지 (`.gitignore` 포함).
-- `data/portfolio.server.json`은 git 미커밋(빌드 산출물). 단 mini sample은 `data/portfolio.sample.json`로 커밋.
-- `public/data/suggestions.json`은 git 미커밋(빌드 산출물).
+- `data/portfolio.server.json`은 **git 커밋 (ADR-030)** — 조건부 sync 의 기반 데이터. 사이트가 이미 공개 서빙하는 콘텐츠이며 사용자가 public 리포 노출을 승인함. `data/embeddings-cache.json` 도 커밋. mini sample 은 `data/portfolio.sample.json` 커밋 유지(CI 폴백).
+- `public/data/suggestions.json`은 git 미커밋 — `gen:suggestions` 가 prebuild 마다 커밋된 서버 데이터에서 재생성.
 - `spec.json`, `spec.schema.json`은 커밋.
 - 노션 토큰은 logs에 절대 출력 금지.
 
 ## 현재 워크 컨텍스트
 - 소유자: 김윤수 (YoonsooKim9, bbabi0901@gmail.com)
-- 컨텐츠 소스: Notion 워크스페이스 (`기록v2` 하위)
+- 컨텐츠 소스: Notion 워크스페이스 (`기록` 페이지 하위 — `기록v2` 는 폐기 예정 트리, 동기화 대상 아님)
 - 배포 대상: Vercel
 - 시간 기준: KST

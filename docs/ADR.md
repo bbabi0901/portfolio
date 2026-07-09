@@ -236,3 +236,32 @@ rate-limit 로 중단돼도 재실행 시 이어서 채움)하고, 나머지는 
 `data/embeddings-cache.json` 을 커밋해야 한다. 커밋 전까지는 빌드가 라이브 임베딩(=rate-limit 취약)에 의존.
 
 **트레이드오프**: 캐시 파일이 커밋되어 리포 용량 증가(≈수백 KB~수 MB). 청크 텍스트 변경 시 해당 항목 재임베딩.
+
+---
+
+## ADR-030: 커밋형 RAG 데이터 + 조건부 노션 sync
+
+**배경**: prebuild 가 빌드마다 무조건 `sync:notion` 을 실행해 (1) 노션이 안 바뀐 배포에도 API 왕복이
+발생하고, (2) 임베딩 rate-limit(ADR-029 배경)이 배포 실패 요인으로 남아 있었다. 사용자 요구:
+"배포 시 요청하거나 필요하다고 판단될 때만 sync".
+
+**결정**:
+1. `data/portfolio.server.json` 을 **git 에 커밋**한다 (`.gitignore` 에서 제거). `route.ts` 의 정적
+   import 가 커밋 파일로 항상 충족되므로 sync 없는 빌드가 성립한다. `data/embeddings-cache.json`
+   (ADR-029)도 함께 커밋.
+   - 공개 리포 노출 트레이드오프: 파일에 이력서 전문·연락처가 포함되나 동일 내용이 이미 사이트
+     (/about, 챗봇)로 공개 서빙 중 — **사용자 승인 완료**.
+2. prebuild 를 `sync:if-needed` 게이트로 교체 (`scripts/sync-if-needed.ts`, FEAT-033):
+   `SKIP_NOTION_SYNC=1`(생략, CI) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
+   `npm run sync:notion` 직접 실행은 기존대로 무조건 sync.
+3. 신선도 판단용 `npm run sync:check` (`scripts/check-notion-freshness.ts` + `lib/notion-freshness.ts`):
+   소스 4종의 refs 만 조회(콘텐츠 fetch 없음)해 `last_edited_time`(신규 캡처, `services/notion.ts`) 의
+   최대값을 `generatedAt` 과 비교. STALE 이면 exit 1 + 변경 페이지 목록.
+4. 반영 플로우: 노션 수정 → `sync:check`(판단) → `sync:notion` → `data/` 커밋 → 푸시(=배포).
+   suggestions.json 은 순수 로컬 변환이라 prebuild 에서 계속 재생성(미커밋 유지).
+
+**효과**: Vercel 빌드는 노션/임베딩 API 0회 — 결정적·빠름·쿼터 무관. 노션 반영은 명시적 커밋으로
+추적 가능(어떤 콘텐츠 스냅샷이 배포됐는지 git 이력에 남음).
+
+**트레이드오프**: sync 마다 server.json 대형 diff(수 MB), 노션 수정이 자동 반영되지 않음(의도된 동작 —
+sync:check 로 판단). 페이지 삭제는 last_edited_time 으로 감지 불가 → 삭제 반영은 강제 sync.

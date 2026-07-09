@@ -29,7 +29,9 @@ npm ci
 cp .env.local.example .env.local
 # OPENAI_API_KEY, NOTION_TOKEN, NOTION_PROJECTS_DB_ID, NOTION_PROFILE_PAGE_IDS 등 채우기
 
-# 3) 노션 동기화 (콘텐츠 → 정적 JSON + 임베딩)
+# 3) (선택) 노션 재동기화 — 커밋된 data/portfolio.server.json 이 이미 있어 생략 가능
+#    노션 콘텐츠를 갱신했다면: sync:check 로 판단 → sync:notion → data/ 커밋
+npm run sync:check
 npm run sync:notion
 
 # 4) 개발 서버
@@ -43,13 +45,14 @@ http://localhost:3000
 | 명령어 | 설명 |
 |---|---|
 | `npm run dev` | 개발 서버 (localhost:3000) |
-| `npm run build` | prebuild(sync:notion + gen:suggestions) → next build |
+| `npm run build` | prebuild(check:spec + sync:if-needed + gen:suggestions) → next build |
 | `npm run start` | 프로덕션 빌드 실행 |
 | `npm run lint` | ESLint |
 | `npm run test` | Vitest 단발 |
 | `npm run test:watch` | Vitest watch |
 | `npm run e2e` | Playwright E2E |
-| `npm run sync:notion` | 노션 → `data/portfolio.server.json` + `public/data/suggestions.json` |
+| `npm run sync:notion` | 노션 → `data/portfolio.server.json` (무조건 sync — 이후 `data/` 커밋) |
+| `npm run sync:check` | 노션 last_edited_time 신선도 검사 — STALE 시 exit 1 |
 | `npm run gen:suggestions` | 추천 질문 + 관련 질문 매핑 |
 | `npm run check:spec` | spec.json 유효성 + 테스트 매핑 검증 |
 | `npm run audit:bundle` | 클라이언트 번들 감사 (임베딩 누출 0건) |
@@ -113,7 +116,7 @@ spec.json            서비스 스펙 SSoT
 
 1. Vercel에 GitHub 연결.
 2. 환경변수 입력 (Production / Preview).
-3. 배포. `prebuild`가 자동으로 노션 동기화.
+3. 배포. 빌드는 커밋된 `data/portfolio.server.json` 을 사용 (sync 생략 — ADR-030). 노션 콘텐츠 반영은 로컬 `sync:notion` → `data/` 커밋 → 푸시.
 4. (옵션) GitHub Action: 매일 1회 Redeploy 트리거.
 
 ## 라이선스
