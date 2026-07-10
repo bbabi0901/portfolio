@@ -146,56 +146,72 @@ describe("loadProfileData", () => {
     expect(result!.totalReadingMinutes).toBeGreaterThanOrEqual(1);
   });
 
-  it("career 교육 청크 → education 섹션(학력)으로 추출", () => {
+  const personalChunk = {
+    id: "p1",
+    sourcePageId: "p1",
+    sourceTitle: "성격",
+    sourceUrl: "https://www.notion.so/p1",
+    category: "personal" as const,
+    headingPath: ["성격"],
+    text: "ENFP",
+    tokens: 2,
+    embedding: [0.1],
+  };
+
+  function eduChunk(id: string, sub: string, text: string) {
+    return {
+      id,
+      sourcePageId: "resume",
+      sourceTitle: "이력서",
+      sourceUrl: "https://www.notion.so/resume",
+      category: "career" as const,
+      headingPath: ["교육 기관 (Education)", sub],
+      text,
+      tokens: 20,
+      embedding: [0.1],
+    };
+  }
+
+  it("교육 청크 중 대학(학사)만 education 으로 — 부트캠프 제외", () => {
     mockedLoadPortfolio.mockReturnValue(
       makeData([
+        personalChunk,
+        eduChunk("edu-boot", "코드스테이츠 BEB 7기", "> 2022.09 - 2023.02\n> Bootcamp 수료"),
+        eduChunk("edu-univ", "고려대학교 신소재공학부", "> 2012.02 - 2018.03"),
+      ]),
+    );
+    const result = loadProfileData();
+    expect(result!.education).toHaveLength(1);
+    expect(result!.education![0]!.title).toBe("고려대학교 신소재공학부");
+    expect(result!.education![0]!.period).toBe("2012.02 - 2018.03");
+  });
+
+  it("교육 청크 없음 → education undefined", () => {
+    mockedLoadPortfolio.mockReturnValue(makeData([personalChunk]));
+    expect(loadProfileData()!.education).toBeUndefined();
+  });
+
+  it("자격증 청크 → certifications (title + 발급기관 subtitle)", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        personalChunk,
         {
-          id: "p1",
-          sourcePageId: "p1",
-          sourceTitle: "성격",
-          sourceUrl: "https://www.notion.so/p1",
-          category: "personal",
-          headingPath: ["성격"],
-          text: "ENFP",
-          tokens: 2,
-          embedding: [0.1],
-        },
-        {
-          id: "edu",
+          id: "cert-aws",
           sourcePageId: "resume",
-          sourceTitle: "김윤수 이력서",
+          sourceTitle: "이력서",
           sourceUrl: "https://www.notion.so/resume",
-          category: "career",
-          headingPath: ["교육 기관 (Education)"],
-          text: "### 고려대학교 신소재공학부\n학사 졸업 · 2012.02 - 2018.03",
-          tokens: 20,
+          category: "career" as const,
+          headingPath: ["자격증 (Certification)", "AWS Certified AI Practitioner"],
+          text: "> Amazon Web Services",
+          tokens: 8,
           embedding: [0.1],
         },
       ]),
     );
     const result = loadProfileData();
-    expect(result!.education).toBeDefined();
-    expect(result!.education!.heading).toBe("학력");
-    expect(result!.education!.subSections[0]?.body).toContain("고려대학교 신소재공학부");
-  });
-
-  it("교육 청크 없음 → education undefined", () => {
-    mockedLoadPortfolio.mockReturnValue(
-      makeData([
-        {
-          id: "p1",
-          sourcePageId: "p1",
-          sourceTitle: "성격",
-          sourceUrl: "https://www.notion.so/p1",
-          category: "personal",
-          headingPath: ["성격"],
-          text: "ENFP",
-          tokens: 2,
-          embedding: [0.1],
-        },
-      ]),
-    );
-    expect(loadProfileData()!.education).toBeUndefined();
+    expect(result!.certifications).toHaveLength(1);
+    expect(result!.certifications![0]!.title).toBe("AWS Certified AI Practitioner");
+    expect(result!.certifications![0]!.subtitle).toBe("Amazon Web Services");
   });
 
   it("career 청크 있으면 intro 를 첫 본문 라인으로 추출", () => {

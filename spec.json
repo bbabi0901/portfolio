@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -96,7 +96,7 @@
       "name": "experience",
       "type": "ssg",
       "title": "커리어",
-      "description": "디라티오, 체인아나토미, 반에프에서의 커리어·프로젝트 타임라인과 보유 스킬.",
+      "description": "김윤수의 커리어·프로젝트 타임라인 + 학력·자격증·보유 스킬.",
       "ogImage": "/opengraph-image"
     },
     {
@@ -1084,8 +1084,9 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "tests/e2e/experience.e2e.ts",
-        "specs/about-data.spec.ts"
+        "specs/about-data.spec.ts",
+        "specs/experience-timeline.spec.ts",
+        "specs/components/experience-page.spec.tsx"
       ]
     },
     {
@@ -1447,29 +1448,29 @@
     {
       "id": "TS-38",
       "feature": "FEAT-025",
-      "title": "Experience direct access",
-      "file": "tests/e2e/experience.e2e.ts",
-      "anchor": "directAccess"
+      "title": "/experience 렌더 — 타임라인·학력·자격증·스킬 섹션",
+      "file": "specs/components/experience-page.spec.tsx",
+      "anchor": "sections"
     },
     {
       "id": "TS-39",
       "feature": "FEAT-025",
-      "title": "Category filter",
-      "file": "tests/e2e/experience.e2e.ts",
-      "anchor": "filter"
+      "title": "통합 커리어 타임라인 — 회사 경력 + 자체 프로젝트 병합 렌더",
+      "file": "specs/components/experience-page.spec.tsx",
+      "anchor": "unifiedTimeline"
     },
     {
       "id": "TS-40",
       "feature": "FEAT-025",
-      "title": "Empty result",
-      "file": "tests/e2e/experience.e2e.ts",
-      "anchor": "empty"
+      "title": "통합 타임라인 병합·정렬 — 시작일 내림차순, 회사 사이 삽입",
+      "file": "specs/experience-timeline.spec.ts",
+      "anchor": "merge"
     },
     {
       "id": "TS-41",
       "feature": "FEAT-025",
-      "title": "External link new tab",
-      "file": "tests/e2e/experience.e2e.ts",
+      "title": "자체 프로젝트 노션 링크 새 탭 (noopener/noreferrer)",
+      "file": "specs/components/experience-page.spec.tsx",
       "anchor": "externalLink"
     },
     {
@@ -1703,7 +1704,7 @@
     {
       "id": "TS-75",
       "feature": "FEAT-024",
-      "title": "이력서 교육 청크 → /about 하단 '학력' 섹션(대학 학사 경력) 노출",
+      "title": "학력 — /experience 분리 섹션, 대학(학사)만 렌더 (부트캠프 제외)",
       "file": "specs/about-data.spec.ts",
       "anchor": "education"
     },
@@ -1755,6 +1756,20 @@
       "title": "커리어 타임라인 데이터 레이어 — career 청크 order 정렬 + 헤딩 재합성 재구성 (회귀 방지)",
       "file": "specs/about-data.spec.ts",
       "anchor": "career"
+    },
+    {
+      "id": "TS-83",
+      "feature": "FEAT-025",
+      "title": "UnifiedTimeline — 회사/자체 프로젝트 행 렌더 (라벨·기간·태그·링크)",
+      "file": "specs/components/experience-page.spec.tsx",
+      "anchor": "TS-83"
+    },
+    {
+      "id": "TS-84",
+      "feature": "FEAT-025",
+      "title": "CredentialList + certifications 추출 — 학력·자격증 행 리스트 (AWS Certified AI Practitioner)",
+      "file": "specs/components/experience-page.spec.tsx",
+      "anchor": "TS-84"
     }
   ]
 }

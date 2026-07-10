@@ -19,13 +19,23 @@ export interface ProfileContact {
   notionUrl?: string;
 }
 
+/** /experience 학력·자격증 행 아이템 (제목 · 부제 · 기간) */
+export interface CredentialItem {
+  title: string;
+  subtitle?: string;
+  period?: string;
+}
+
 export interface ProfileData {
   intro: string;
   contact: ProfileContact;
   sections: ProfileSection[];
   /** 이력서(career) 청크에서 재구성한 커리어 타임라인 마크다운 (/experience) */
   career?: ProfileSection;
-  education?: ProfileSection;
+  /** 학력 — 학사(대학) 항목만. 부트캠프 등은 제외 (/experience 분리 섹션) */
+  education?: CredentialItem[];
+  /** 자격증 (/experience 분리 섹션) */
+  certifications?: CredentialItem[];
   imageUrl: string | null;
   totalReadingMinutes: number;
 }
@@ -33,11 +43,13 @@ export interface ProfileData {
 /** 이력서(career) 청크 중 경력 타임라인 섹션 heading 매칭 */
 const CAREER_TIMELINE_HEADING_RE = /직무|경력|experience/i;
 const CAREER_SECTION_LABEL = "커리어";
+/** 학력 섹션: 대학(학사) 항목만 렌더 — 부트캠프 제외 (사용자 결정) */
+const UNIVERSITY_TITLE_RE = /대학|university/i;
+const CERTIFICATION_HEADING_RE = /자격증|certification/i;
+const PERIOD_RANGE_RE = /\d{4}\.\d{2}\s*[-~–—]\s*(?:\d{4}\.\d{2}|현재)/;
 
 /** 이력서(career) 청크 중 학력/교육 섹션을 식별하는 heading 키워드 */
 const EDUCATION_HEADING_RE = /교육|education|학력/i;
-/** /about 하단에 노출할 학력 섹션 라벨 */
-const EDUCATION_SECTION_HEADING = "학력";
 
 const READING_WORDS_PER_MINUTE = 200;
 const KOREAN_CHARS_PER_WORD = 2;
@@ -134,6 +146,7 @@ export function loadProfileData(): ProfileData | null {
     totalWords === 0 ? 0 : Math.ceil(totalWords / READING_WORDS_PER_MINUTE);
 
   const education = extractEducation(careerChunks);
+  const certifications = extractCertifications(careerChunks);
   const career = extractCareer(careerChunks);
 
   return {
@@ -142,6 +155,7 @@ export function loadProfileData(): ProfileData | null {
     sections,
     career,
     education,
+    certifications,
     imageUrl: resolveProfileImageUrl(data.profile.oneLiner),
     totalReadingMinutes,
   };
@@ -174,24 +188,63 @@ function extractCareer(
   return { heading: CAREER_SECTION_LABEL, subSections: [{ body }] };
 }
 
+/** career 청크 하나를 학력/자격증 행 아이템으로 변환 (title=하위 heading, body에서 기간·부제 추출) */
+function toCredentialItem(
+  chunk: ReturnType<typeof loadPortfolio>["chunks"][number],
+): CredentialItem {
+  const title = (chunk.headingPath[chunk.headingPath.length - 1] ?? "").replace(/\*\*/g, "").trim();
+  const item: CredentialItem = { title };
+
+  for (const rawLine of chunk.text.split("\n")) {
+    const line = rawLine
+      .replace(/<[^>]+>/g, "")
+      .replace(/^>\s*/, "")
+      .replace(/\*\*/g, "")
+      .trim();
+    if (!line || line === "---") continue;
+    const periodMatch = line.match(PERIOD_RANGE_RE);
+    if (periodMatch && !item.period) {
+      item.period = periodMatch[0].replace(/\s+/g, " ").trim();
+      const rest = line.replace(periodMatch[0], "").replace(/^[·,\s]+|[·,\s]+$/g, "");
+      if (rest && !item.subtitle) item.subtitle = rest;
+      continue;
+    }
+    if (!item.subtitle) item.subtitle = line;
+  }
+  return item;
+}
+
 /**
- * 이력서(career) 청크에서 학력/교육 섹션을 뽑아 /about 하단 "학력" 섹션으로 렌더한다.
- * heading(headingPath[0]) 이 교육/education/학력 을 포함하는 career 청크를 모은다.
- * 노션 이력서의 "교육 기관 (Education)" 섹션(대학 학사 등)이 여기에 해당.
+ * 이력서(career) 청크의 "교육 기관 (Education)" 하위 항목 중 **대학(학사)만** 학력으로 추출.
+ * 부트캠프 등 비학위 과정은 렌더하지 않는다 (기록 자체는 RAG 답변용으로 유지).
  */
 function extractEducation(
   careerChunks: ReturnType<typeof loadPortfolio>["chunks"],
-): ProfileSection | undefined {
-  const eduChunks = careerChunks.filter(
-    (c) => EDUCATION_HEADING_RE.test(c.headingPath[0] ?? "") && hasReadableText(c.text),
-  );
-  if (eduChunks.length === 0) return undefined;
+): CredentialItem[] | undefined {
+  const items = careerChunks
+    .filter(
+      (c) =>
+        EDUCATION_HEADING_RE.test(c.headingPath[0] ?? "") &&
+        UNIVERSITY_TITLE_RE.test(c.headingPath[c.headingPath.length - 1] ?? ""),
+    )
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map(toCredentialItem)
+    .filter((i) => i.title.length > 0);
+  return items.length > 0 ? items : undefined;
+}
 
-  const subSections: ProfileSubSection[] = eduChunks.map((c) => ({
-    heading: c.headingPath.slice(1).join(" → ") || undefined,
-    body: c.text,
-  }));
-  return { heading: EDUCATION_SECTION_HEADING, subSections };
+/** 이력서(career) 청크의 "자격증 (Certification)" 하위 항목 추출 */
+function extractCertifications(
+  careerChunks: ReturnType<typeof loadPortfolio>["chunks"],
+): CredentialItem[] | undefined {
+  const items = careerChunks
+    .filter(
+      (c) => CERTIFICATION_HEADING_RE.test(c.headingPath[0] ?? "") && c.headingPath.length > 1,
+    )
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map(toCredentialItem)
+    .filter((i) => i.title.length > 0);
+  return items.length > 0 ? items : undefined;
 }
 
 function hasReadableText(body: string): boolean {

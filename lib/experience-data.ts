@@ -169,7 +169,15 @@ function extractSkills(chunks: PortfolioChunk[]): SkillsData {
   const smartContract = new Set<string>();
 
   for (const chunk of chunks) {
-    if (chunk.category !== "skill") continue;
+    // skill 카테고리(레거시) 또는 이력서(career)의 최상위 Front End / Smart Contract 스킬 섹션
+    // (sync 는 skill 카테고리를 만들지 않으므로 career 경로가 실데이터 소스)
+    const heading0 = chunk.headingPath[0] ?? "";
+    const isSkillChunk =
+      chunk.category === "skill" ||
+      (chunk.category === "career" &&
+        chunk.headingPath.length === 1 &&
+        (FRONTEND_HEADING.test(heading0) || SMART_CONTRACT_HEADING.test(heading0)));
+    if (!isSkillChunk) continue;
     const headingText = chunk.headingPath.join(" ");
     const tokens = parseSkillTokens(chunk.text);
     if (FRONTEND_HEADING.test(headingText)) {
