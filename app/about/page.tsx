@@ -41,14 +41,6 @@ export default function AboutPage() {
         />
       ))}
 
-      {profile.education && (
-        <AboutSection
-          heading={profile.education.heading}
-          subSections={profile.education.subSections}
-          className="border-line mt-12 border-t pt-10"
-        />
-      )}
-
       <Link
         href="/experience"
         className="group border-line hover:border-line-strong mt-12 flex items-center gap-4 rounded-lg border p-5 transition-colors"

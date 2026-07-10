@@ -1,199 +1,84 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 
-import type { ExperienceData, ProjectSummary } from "@/lib/experience-data";
-
-const mockPush = vi.fn();
-let mockSearchParams = new URLSearchParams();
-
-vi.mock("next/navigation", () => ({
-  useSearchParams: () => mockSearchParams,
-  useRouter: () => ({ push: mockPush, replace: mockPush }),
-  usePathname: () => "/experience",
-}));
-
-import { CategoryFilter } from "@/components/experience/CategoryFilter";
-import { ProjectCard } from "@/components/experience/ProjectCard";
-import { ExperienceClient } from "@/components/experience/ExperienceClient";
-import { ProjectTimeline } from "@/components/experience/ProjectTimeline";
+import { CredentialList } from "@/components/experience/CredentialList";
 import { SkillsGrid } from "@/components/experience/SkillsGrid";
-import { Timeline } from "@/components/experience/Timeline";
+import { UnifiedTimeline } from "@/components/experience/UnifiedTimeline";
+import type { TimelineItem } from "@/lib/experience-timeline";
+import type { ProjectSummary } from "@/lib/experience-data";
 
-beforeEach(() => {
-  mockPush.mockClear();
-  mockSearchParams = new URLSearchParams();
-});
-
-function project(over: Partial<ProjectSummary> = {}): ProjectSummary {
+function personal(over: Partial<ProjectSummary> = {}): ProjectSummary {
   return {
-    id: "p-mfe",
-    title: "MFE TF",
+    id: "p-ai",
+    title: "AI 포트폴리오",
+    techKeywords: ["rag", "next.js"],
+    impact: "노션 기록 기반 대화형 포트폴리오",
+    category: "자체프로젝트",
+    period: { start: "2026-05-01", ongoing: true },
+    notionUrl: "https://www.notion.so/p-ai",
+    ...over,
+  };
+}
+
+const COMPANY_ITEM: TimelineItem = {
+  kind: "company",
+  startKey: "2025.01",
+  entry: {
     company: "디라티오",
-    role: "Senior Frontend Engineer",
-    period: { start: "2025.01", ongoing: true },
-    techKeywords: ["MFE", "Module Federation"],
-    impact: "마이그레이션 주도",
-    category: "업무",
-    notionUrl: "https://www.notion.so/p-mfe",
-    ...over,
-  };
-}
+    role: "소프트웨어 엔지니어",
+    period: "2025.01 - 현재",
+    isActive: true,
+    bulletGroups: [["MFE TF", "전환 주도", "Module Federation 도입"]],
+  },
+};
 
-function makeData(over: Partial<ExperienceData> = {}): ExperienceData {
-  return {
-    groups: [
-      {
-        company: "디라티오",
-        period: "2025.01 — 현재",
-        projects: [project()],
-      },
-    ],
-    others: [],
-    skills: { frontend: ["TypeScript"], smartContract: ["Solidity"] },
-    ...over,
-  };
-}
-
-describe("CategoryFilter", () => {
-  it("active=전체 시 button 강조", () => {
-    render(<CategoryFilter options={["자체프로젝트", "업무", "외부활동"]} />);
-    const all = screen.getByRole("button", { name: /전체/ });
-    expect(all).toHaveAttribute("data-active", "true");
+describe("UnifiedTimeline (통합 커리어 타임라인, TS-83)", () => {
+  it("회사 항목: 회사명·직함·기간·프로젝트 그룹 렌더", () => {
+    render(<UnifiedTimeline items={[COMPANY_ITEM]} />);
+    expect(screen.getAllByText("디라티오").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("소프트웨어 엔지니어").length).toBeGreaterThan(0);
+    expect(screen.getByText("MFE TF")).toBeInTheDocument();
+    expect(screen.getByText("전환 주도")).toBeInTheDocument();
   });
 
-  it("category=업무 클릭 → URL ?category=업무", () => {
-    render(<CategoryFilter options={["자체프로젝트", "업무", "외부활동"]} />);
-    const btn = screen.getByRole("button", { name: /^업무$/ });
-    fireEvent.click(btn);
-    expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(String(mockPush.mock.calls[0]?.[0])).toContain("category=%EC%97%85%EB%AC%B4");
-  });
-
-  it("URL 에 category 가 있으면 해당 button 강조", () => {
-    mockSearchParams = new URLSearchParams("category=업무");
-    render(<CategoryFilter options={["자체프로젝트", "업무", "외부활동"]} />);
-    const btn = screen.getByRole("button", { name: /^업무$/ });
-    expect(btn).toHaveAttribute("data-active", "true");
-    const all = screen.getByRole("button", { name: /전체/ });
-    expect(all).toHaveAttribute("data-active", "false");
-  });
-});
-
-describe("ProjectCard", () => {
-  it("notionUrl null → '노션에서 자세히' disabled", () => {
-    render(<ProjectCard project={project({ notionUrl: undefined })} />);
-    const link = screen.queryByRole("link", { name: /노션에서 자세히/ });
-    expect(link).toBeNull();
-    const disabled = screen.getByRole("button", { name: /노션에서 자세히/ });
-    expect(disabled).toBeDisabled();
-  });
-
-  it("tech chips 렌더", () => {
-    render(<ProjectCard project={project({ techKeywords: ["Next.js", "TypeScript"] })} />);
-    expect(screen.getByText("Next.js")).toBeInTheDocument();
-    expect(screen.getByText("TypeScript")).toBeInTheDocument();
-  });
-
-  it("외부 노션 링크는 target=_blank rel=noopener noreferrer", () => {
-    render(<ProjectCard project={project()} />);
+  it("자체 프로젝트 항목: '자체 프로젝트' 라벨·기간·제목·설명·태그·노션 링크", () => {
+    const items: TimelineItem[] = [{ kind: "personal", startKey: "2026.05", project: personal() }];
+    render(<UnifiedTimeline items={items} />);
+    expect(screen.getAllByText("자체 프로젝트").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("2026.05 - 현재").length).toBeGreaterThan(0);
+    expect(screen.getByText("AI 포트폴리오")).toBeInTheDocument();
+    expect(screen.getByText("노션 기록 기반 대화형 포트폴리오")).toBeInTheDocument();
+    expect(screen.getByText("rag")).toBeInTheDocument();
     const link = screen.getByRole("link", { name: /노션에서 자세히/ });
     expect(link).toHaveAttribute("target", "_blank");
     expect(link.getAttribute("rel")).toMatch(/noopener/);
-    expect(link.getAttribute("rel")).toMatch(/noreferrer/);
+  });
+
+  it("회사 + 자체 프로젝트 혼합 순서 그대로 렌더", () => {
+    const items: TimelineItem[] = [
+      { kind: "personal", startKey: "2026.05", project: personal() },
+      COMPANY_ITEM,
+    ];
+    const { container } = render(<UnifiedTimeline items={items} />);
+    const text = container.textContent ?? "";
+    expect(text.indexOf("AI 포트폴리오")).toBeLessThan(text.indexOf("디라티오"));
   });
 });
 
-describe("ExperienceClient", () => {
-  it("카테고리 필터 결과 0 → 빈 상태", () => {
-    mockSearchParams = new URLSearchParams("category=외부활동");
-    render(<ExperienceClient data={makeData()} />);
-    expect(screen.getByText(/이 카테고리에 해당하는 프로젝트가 없어요/)).toBeInTheDocument();
-  });
-
-  it("category 미지정 → 모든 그룹 렌더", () => {
-    mockSearchParams = new URLSearchParams();
+describe("CredentialList (학력·자격증 행 리스트, TS-84)", () => {
+  it("제목·부제·기간 렌더", () => {
     render(
-      <ExperienceClient
-        data={makeData({
-          groups: [
-            {
-              company: "디라티오",
-              period: "2025.01 — 현재",
-              projects: [project()],
-            },
-          ],
-          others: [
-            project({
-              id: "p-weju",
-              title: "weju",
-              company: undefined,
-              category: "자체프로젝트",
-              notionUrl: undefined,
-            }),
-          ],
-        })}
-      />,
-    );
-    // 프로젝트 타임라인 템플릿: groups+others 를 하나의 타임라인으로 평탄화 렌더
-    expect(screen.getByText("MFE TF")).toBeInTheDocument();
-    expect(screen.getByText("weju")).toBeInTheDocument();
-  });
-
-  it("category=자체프로젝트 → others 만 렌더", () => {
-    mockSearchParams = new URLSearchParams("category=자체프로젝트");
-    render(
-      <ExperienceClient
-        data={makeData({
-          groups: [
-            {
-              company: "디라티오",
-              period: "2025.01 — 현재",
-              projects: [project()],
-            },
-          ],
-          others: [
-            project({
-              id: "p-weju",
-              title: "weju",
-              company: undefined,
-              category: "자체프로젝트",
-              notionUrl: undefined,
-            }),
-          ],
-        })}
-      />,
-    );
-    expect(screen.queryByText("MFE TF")).toBeNull();
-    expect(screen.getByText("weju")).toBeInTheDocument();
-  });
-});
-
-describe("ProjectTimeline (커리어 타임라인 템플릿)", () => {
-  it("기간·카테고리·타이틀·설명·태그·노션 링크 렌더", () => {
-    render(
-      <ProjectTimeline
-        projects={[
-          project({
-            period: { start: "2025-09-01", end: "2026-01-31" },
-            techKeywords: ["web3", "defi"],
-          }),
+      <CredentialList
+        items={[
+          { title: "고려대학교 신소재공학부", subtitle: "학사", period: "2012.02 - 2018.03" },
+          { title: "AWS Certified AI Practitioner", subtitle: "Amazon Web Services" },
         ]}
       />,
     );
-    expect(screen.getByText("MFE TF")).toBeInTheDocument();
-    expect(screen.getByText("마이그레이션 주도")).toBeInTheDocument();
-    expect(screen.getAllByText("2025.09 - 2026.01").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("업무").length).toBeGreaterThan(0);
-    expect(screen.getByText("web3")).toBeInTheDocument();
-    const link = screen.getByRole("link", { name: /노션에서 자세히/ });
-    expect(link).toHaveAttribute("target", "_blank");
-  });
-
-  it("ongoing 프로젝트는 '현재' 로 표시", () => {
-    render(
-      <ProjectTimeline projects={[project({ period: { start: "2026-05-01", ongoing: true } })]} />,
-    );
-    expect(screen.getAllByText("2026.05 - 현재").length).toBeGreaterThan(0);
+    expect(screen.getByText("고려대학교 신소재공학부")).toBeInTheDocument();
+    expect(screen.getByText("2012.02 - 2018.03")).toBeInTheDocument();
+    expect(screen.getByText("AWS Certified AI Practitioner")).toBeInTheDocument();
+    expect(screen.getByText("Amazon Web Services")).toBeInTheDocument();
   });
 });
 
@@ -211,26 +96,5 @@ describe("SkillsGrid", () => {
     expect(screen.getByText(/Smart Contract/)).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
     expect(screen.getByText("Solidity")).toBeInTheDocument();
-  });
-});
-
-describe("Timeline", () => {
-  it("회사 dot 클릭 → onSelectCompany", () => {
-    const onSelect = vi.fn();
-    render(
-      <Timeline
-        groups={[
-          {
-            company: "디라티오",
-            period: "2025.01 — 현재",
-            projects: [project()],
-          },
-        ]}
-        onSelectCompany={onSelect}
-      />,
-    );
-    const btn = screen.getByRole("button", { name: /디라티오/ });
-    fireEvent.click(btn);
-    expect(onSelect).toHaveBeenCalledWith("디라티오");
   });
 });

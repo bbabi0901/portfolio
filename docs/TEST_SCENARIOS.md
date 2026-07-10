@@ -475,6 +475,18 @@
 - **Then**: 이미지 있으면 정적 asset `/images/profile.jpg`(next/image), 없으면 이니셜 `ProfileFallback`
 - **파일**: `specs/profile-image.spec.ts`
 
+### TS-83 통합 커리어 타임라인 (FEAT-025, 2026-07 개편)
+- **Given**: 회사 경력(career 청크) + 자체 프로젝트(project 청크, 자체프로젝트)
+- **When**: `/experience` 렌더
+- **Then**: 시작일 내림차순 하나의 타임라인 — 회사 행(회사·직함·기간·프로젝트 그룹), 자체 프로젝트 행("자체 프로젝트" 라벨·제목·태그·노션 링크)
+- **파일**: `specs/components/experience-page.spec.tsx` + `specs/experience-timeline.spec.ts`
+
+### TS-84 학력·자격증 분리 섹션 (FEAT-025)
+- **Given**: 이력서의 교육 기관·자격증 섹션 (자격증: AWS Certified AI Practitioner)
+- **When**: `/experience` 하단 렌더
+- **Then**: 학력=대학(학사)만(부트캠프 제외), 자격증=발급기관 부제 — `CredentialList` 행 리스트
+- **파일**: `specs/components/experience-page.spec.tsx`, `specs/about-data.spec.ts`
+
 ### TS-81 랜딩 페이지 (FEAT-034)
 - **Given**: `/` 랜딩 (타이핑 인사 + 칩 + 채팅 인풋 버튼)
 - **When**: reduced-motion / 타이머 진행 / 칩·인풋 클릭

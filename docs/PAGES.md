@@ -139,10 +139,6 @@
 │  ## 취미                │
 │  ... (노션 콘텐츠)      │
 │                        │
-│  ## 학력                │
-│  고려대학교 신소재공학부 │
-│  ... (이력서 career)    │
-│                        │
 │  → "커리어가 궁금하다면?"│
 │      [커리어 보기 →]     │
 ├────────────────────────┤
@@ -152,7 +148,7 @@
 
 ### 데이터
 - `data/portfolio.server.json`의 카테고리 = `프로필`/`성격`/`취미` 청크들 (서버 import)
-- **학력 섹션 (TS-75)**: 이력서(`career`) 청크 중 heading 이 `교육`/`education`/`학력` 을 포함하는 청크를 `loadProfileData().education` 으로 뽑아 페이지 하단 "학력" 섹션으로 렌더 (대학 학사 경력). 해당 청크 없으면 미노출.
+- 학력 섹션은 2026-07 개편으로 `/experience` 로 이동 (TS-75 — 대학(학사)만 렌더).
 - 마크다운 → MDX 컴포넌트로 렌더 (`@next/mdx` 또는 `next-mdx-remote/rsc`)
 - **프로필 이미지 (FEAT-032)**: 노션 자기소개 히어로 이미지는 서명 만료되는 S3 URL 이라 직접 참조 불가.
   → 커밋된 정적 asset `public/images/profile.jpg` (512×512, EXIF/GPS strip, 수동 갱신) 사용.
@@ -174,15 +170,22 @@
 
 ---
 
-## `/experience` 커리어
+## `/experience` 커리어 (2026-07 개편)
 
-### 프로젝트 섹션 = 타임라인 템플릿 (커리어 타임라인과 동일 시각 문법)
-- `ProjectTimeline` 컴포넌트: 좌측 열 = 기간(YYYY.MM - YYYY.MM/현재) + 카테고리,
-  점(진행 중 = brand)+선, 우측 = 제목 + 설명(첫 줄) + 기술 태그(≤5) + 노션 링크(↗).
-- 정렬: 진행 중 우선 → 시작일 최신순. 기간은 노션 프로젝트 DB `기간`(date) 속성
-  → sync 시 `chunk.projectMeta.period` 로 보존.
-- 커리어 타임라인: career 청크 재구성 시 `###` 프로젝트 제목이 그룹 타이틀로 렌더
-  (parseBulletGroups 헤딩 지원). 청커는 H2 경계 밖 merge 금지 + 흡수 섹션 헤딩 재주입.
+### 구조 (위→아래)
+1. **커리어 타임라인 (통합)** — 회사 경력(career 청크 재구성)과 **자체 프로젝트**
+   (project 청크, notionCategory=자체프로젝트)를 시작일 내림차순 하나의 타임라인으로 병합
+   (`lib/experience-timeline.ts` buildUnifiedTimeline → `UnifiedTimeline`).
+   - 회사 행: 좌측 회사명·직함·기간, `###` 프로젝트 제목 그룹 + 불릿.
+   - 자체 프로젝트 행: 좌측 "자체 프로젝트" 라벨+기간, 우측 제목·설명·태그(≤5)·노션 링크(↗).
+   - 진행 중 항목은 brand 점. 기간은 노션 프로젝트 DB `기간`(date) → `projectMeta.period`.
+2. **학력** (분리 섹션, `CredentialList`) — **대학(학사)만 렌더, 부트캠프 제외**
+   (extractEducation: heading 대학|university 매칭). /about 에서 이동.
+3. **자격증** (분리 섹션, `CredentialList`) — 노션 이력서 "자격증 (Certification)" 섹션 소싱.
+   현재: AWS Certified AI Practitioner (Amazon Web Services).
+4. **보유 스킬** (SkillsGrid, 기존 유지).
+- 구 '프로젝트' 섹션(카테고리 필터+카드)은 제거 — 업무 프로젝트가 커리어 불릿과 중복.
+- 커리어 파서: `lib/career-markdown.ts` (H2 경계 밖 merge 금지 + 흡수 섹션 헤딩 재주입은 청커).
 
 ### 와이어프레임 (데스크톱)
 ```
