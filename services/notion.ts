@@ -49,6 +49,7 @@ interface NotionProperty {
   select?: { name?: string } | null;
   status?: { name?: string } | null;
   multi_select?: { name?: string }[];
+  date?: { start?: string | null; end?: string | null } | null;
 }
 
 type Properties = Record<string, NotionProperty | undefined>;
@@ -109,6 +110,17 @@ function extractRichText(properties: Properties, keys: string[]): string | undef
   return undefined;
 }
 
+function extractDateRange(
+  properties: Properties,
+  keys: string[],
+): { start?: string; end?: string } | undefined {
+  const prop = pickProperty(properties, keys);
+  if (prop?.type === "date" && prop.date && prop.date.start) {
+    return { start: prop.date.start, end: prop.date.end ?? undefined };
+  }
+  return undefined;
+}
+
 function notionUrlFor(pageId: string, providedUrl?: string): string {
   if (providedUrl) return providedUrl;
   return `https://www.notion.so/${pageId.replace(/-/g, "")}`;
@@ -127,6 +139,11 @@ function pageToRef(page: NotionPageRaw): NotionPageRef {
   if (status) ref.status = status;
   const period = extractRichText(properties, PERIOD_KEYS);
   if (period) ref.period = period;
+  const dateRange = extractDateRange(properties, PERIOD_KEYS);
+  if (dateRange) {
+    ref.periodStart = dateRange.start;
+    if (dateRange.end) ref.periodEnd = dateRange.end;
+  }
   if (page.last_edited_time) ref.lastEditedTime = page.last_edited_time;
   return ref;
 }

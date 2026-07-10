@@ -51,11 +51,29 @@ describe("chunkMarkdown", () => {
     expect(chunks[0]!.text).toContain("```");
   });
 
-  it("merges short trailing chunks", () => {
-    const md = `## Long\n${"word ".repeat(400)}\n## Tiny\nshort`;
+  it("merges short trailing chunks (같은 최상위 섹션 안에서만)", () => {
+    const md = `## Long\n${"word ".repeat(400)}\n### Tiny\nshort`;
     const chunks = chunkMarkdown(samplePage(md), "project", { mergeBelowTokens: 50 });
-    // tiny가 long에 머지되어 chunk 1개
+    // 같은 ## Long 하위의 tiny 는 머지되어 chunk 1개
     expect(chunks).toHaveLength(1);
+  });
+
+  it("H2(최상위 섹션) 경계를 넘어서는 merge 하지 않는다", () => {
+    // 이력서에서 '직무 및 이력' 헤더 청크가 '자기 소개' 청크로 흡수되어
+    // 회사 callout·타임라인이 통째로 소실되던 회귀 방지.
+    const md = `## 자기 소개\n${"word ".repeat(200)}\n## 직무 및 이력\n> | 회사명\n\n> 2025.01 - 현재`;
+    const chunks = chunkMarkdown(samplePage(md), "career", { mergeBelowTokens: 100 });
+    expect(chunks).toHaveLength(2);
+    expect(chunks[1]!.headingPath).toEqual(["직무 및 이력"]);
+    expect(chunks[1]!.text).toContain("| 회사명");
+  });
+
+  it("merge 시 흡수되는 섹션의 하위 헤딩을 텍스트에 재주입한다 (프로젝트 제목 보존)", () => {
+    const md = `## Experience\n${"word ".repeat(200)}\n### 전자책 커머스\n- Toss Payments 결제 구현`;
+    const chunks = chunkMarkdown(samplePage(md), "career", { mergeBelowTokens: 100 });
+    expect(chunks).toHaveLength(1);
+    expect(chunks[0]!.text).toContain("### 전자책 커머스");
+    expect(chunks[0]!.text).toContain("Toss Payments");
   });
 
   it("큰 섹션이 뒤따르는 짧은 헤딩 섹션들을 모두 흡수하지 않는다 (merge 상한, 이력서 경력/학력 보존)", () => {
