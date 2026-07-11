@@ -35,11 +35,11 @@ jobs:
       - name: Format check
         run: npm run format:check
 
-      # route.ts 등이 data/portfolio.server.json 을 정적 import 한다.
-      # ADR-030 이후 이 파일은 커밋되므로 평소엔 존재하지만, 없을 때만 sample 로 폴백
-      # (커밋된 실데이터를 덮어쓰지 않도록 조건부 복사).
-      - name: Provide portfolio data (sample fallback)
-        run: "[ -f data/portfolio.server.json ] || cp data/portfolio.sample.json data/portfolio.server.json"
+      # CI 테스트는 커밋된 실데이터가 아닌 sample 기준으로 돌아야 결정적이다
+      # (retrieval NO_RECORD 테스트 등이 실제 콘텐츠에 좌우되지 않도록 무조건 교체).
+      # Vercel 빌드는 이 워크플로와 무관하게 커밋된 실데이터를 사용한다 (ADR-030).
+      - name: Provide portfolio data (sample for deterministic tests)
+        run: cp data/portfolio.sample.json data/portfolio.server.json
 
       - name: Type check
         run: npx tsc --noEmit

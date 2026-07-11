@@ -265,3 +265,17 @@ rate-limit 로 중단돼도 재실행 시 이어서 채움)하고, 나머지는 
 
 **트레이드오프**: sync 마다 server.json 대형 diff(수 MB), 노션 수정이 자동 반영되지 않음(의도된 동작 —
 sync:check 로 판단). 페이지 삭제는 last_edited_time 으로 감지 불가 → 삭제 반영은 강제 sync.
+
+---
+
+## ADR-031: /api/chat Edge → Node 런타임 이전
+
+**배경**: ADR-030 으로 `data/portfolio.server.json`(271 청크, 임베딩 포함 ~수 MB)을 커밋하고
+Edge 라우트가 이를 정적 import 하자 Vercel 배포가 `Edge Function "api/[[...route]]" size is 1 MB
+and your plan size limit is 1 MB` 로 실패.
+
+**결정**: `/api/chat`(catch-all Edge 라우트)을 `runtime = "nodejs"` 로 이전. Node 함수는 번들
+한도 50MB, Vercel AI SDK 스트리밍(SSE) 지원. 콘텐츠 증가에도 여유.
+
+**트레이드오프**: Edge 대비 콜드스타트 소폭 증가. 대안(임베딩 분리 slim JSON)은 타입·테스트
+파급이 커서 보류 — 런타임 벡터 검색 도입 시 재검토.

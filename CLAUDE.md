@@ -27,7 +27,7 @@
 - CRITICAL: spec.json 위반 시 빌드 차단. 신규 기능은 (1) spec.json 등록 → (2) 실패 테스트 작성 → (3) 구현 순서.
 - 컴포넌트는 `components/`, 타입은 `types/`, 도메인 로직은 `lib/`, 외부 API 래퍼는 `services/`, 빌드 스크립트는 `scripts/`.
 - Server Components 기본. 인터랙션이 필요한 곳만 `"use client"`.
-- `/api/chat`은 Edge runtime, `/api/feedback`·`/api/contact`은 Node runtime (Notion SDK 안정성).
+- 모든 API 라우트는 Node runtime (ADR-031 — 커밋된 RAG 데이터가 Edge 1MB 번들 한도 초과. `/api/feedback`·`/api/contact`은 Notion SDK 안정성).
 - 시간 표기는 항상 한국 시간 (Asia/Seoul, KST).
 
 ## 디자인 규칙

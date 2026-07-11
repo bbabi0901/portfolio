@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { extractTitle, extractSelectLike } from "@/services/notion";
+import { extractTitle, extractSelectLike, stripVolatileUrlParams } from "@/services/notion";
 
 describe("extractTitle", () => {
   it("명시적 키(Name)에서 제목 추출", () => {
@@ -38,5 +38,23 @@ describe("extractSelectLike", () => {
   it("빈 multi_select → undefined", () => {
     const props = { 카테고리: { type: "multi_select", multi_select: [] } };
     expect(extractSelectLike(props as never, ["카테고리"])).toBeUndefined();
+  });
+});
+
+describe("stripVolatileUrlParams (임베딩 캐시 안정화)", () => {
+  it("S3 서명 쿼리(X-Amz-*)를 제거해 텍스트를 결정적으로 만든다", () => {
+    const md =
+      "![img](https://prod-files-secure.s3.us-west-2.amazonaws.com/a/b/photo.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Signature=abc123)\n본문";
+    const out = stripVolatileUrlParams(md);
+    expect(out).toContain("photo.jpg)");
+    expect(out).not.toContain("X-Amz");
+    // 같은 URL 에 다른 서명 → 동일 결과
+    const md2 = md.replace("abc123", "zzz999");
+    expect(stripVolatileUrlParams(md2)).toBe(out);
+  });
+
+  it("서명 없는 일반 URL 은 그대로 둔다", () => {
+    const md = "[링크](https://example.com/page?tab=1) 텍스트";
+    expect(stripVolatileUrlParams(md)).toBe(md);
   });
 });

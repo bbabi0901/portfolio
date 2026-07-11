@@ -372,7 +372,11 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
   };
 
   writeJson(serverFile, data);
-  writeJson(sampleFile, makeSampleData(data));
+  // sample 은 CI/테스트용 결정적 픽스처 — 이미 커밋돼 있으면 덮어쓰지 않는다
+  // (실데이터로 갱신되면 sample 기준으로 캘리브레이션된 테스트가 비결정적으로 깨짐).
+  if (!fs.existsSync(sampleFile)) {
+    writeJson(sampleFile, makeSampleData(data));
+  }
 
   console.log(
     `✓ ${data.chunks.length} chunks, ${pages.length} pages, ` +
