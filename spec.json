@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1022,12 +1022,13 @@
     },
     {
       "id": "FEAT-019",
-      "name": "SEO / OG / sitemap / robots / JSON-LD",
-      "status": "planned",
+      "name": "SEO / OG / sitemap / robots / JSON-LD — favicon(모노그램 K) + 페이지별 OG 카드(프로필 사진·Pretendard·Node 런타임)",
+      "status": "done",
       "priority": "P0",
       "tests": [
         "tests/e2e/cross-cutting.e2e.ts:seo",
-        "tests/e2e/cross-cutting.e2e.ts:og"
+        "tests/e2e/cross-cutting.e2e.ts:og",
+        "specs/og-images.spec.ts"
       ]
     },
     {
@@ -1770,6 +1771,20 @@
       "title": "청크 텍스트 결정성 — S3 서명 URL 쿼리 제거로 임베딩 캐시 영구 미스 방지",
       "file": "specs/notion-extract.spec.ts",
       "anchor": "stripVolatileUrlParams"
+    },
+    {
+      "id": "TS-86",
+      "feature": "FEAT-019",
+      "title": "favicon — 모노그램 K + 라임 점 (icon/apple-icon 라우트 + 정적 favicon.ico + link 자동 주입)",
+      "file": "specs/og-images.spec.ts",
+      "anchor": "TS-86"
+    },
+    {
+      "id": "TS-87",
+      "feature": "FEAT-019",
+      "title": "페이지별 OG 카드 — 프로필 사진 + Pretendard + 세그먼트별 타이틀 (1200×630, Node 런타임)",
+      "file": "specs/og-images.spec.ts",
+      "anchor": "TS-87"
     }
   ]
 }

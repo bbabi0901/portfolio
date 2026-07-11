@@ -57,3 +57,6 @@ phases/*/run.log
 
 # 에이전트 worktree (임베디드 repo)
 .claude/worktrees/
+
+# Vercel CLI 로컬 링크 (vercel link 산출물)
+.vercel

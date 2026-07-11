@@ -496,6 +496,16 @@
 - **Then**: order 순 정렬 + `###` 헤딩 재합성으로 타임라인 마크다운 복원 (교육/이름 청크 제외)
 - **파일**: `specs/about-data.spec.ts`
 
+### TS-86 favicon — 모노그램 K (FEAT-019)
+- **Given**: `app/icon.tsx`(32)·`app/apple-icon.tsx`(180)·정적 `app/favicon.ico`
+- **Then**: 라우트 계약(size/contentType) + `/favicon.ico` 200 + `<link rel="icon">`/`<link rel="apple-touch-icon">` 자동 주입
+- **파일**: `specs/og-images.spec.ts` + `tests/e2e/cross-cutting.e2e.ts:favicon`
+
+### TS-87 페이지별 OG 카드 (FEAT-019, ADR-033)
+- **Given**: `lib/og-card.tsx` 공용 빌더 + 라우트 5개(/, /chat, /about, /experience, /contact)의 `opengraph-image.tsx`
+- **Then**: 1200×630 png, alt 에 페이지명, Edge 런타임 금지(폰트 한도), 폰트·프로필 자산 존재, 페이지 og:image 메타가 세그먼트 경로 + 200
+- **파일**: `specs/og-images.spec.ts` + `tests/e2e/cross-cutting.e2e.ts:ogPerPage`
+
 ---
 
 ## 매핑 SSoT

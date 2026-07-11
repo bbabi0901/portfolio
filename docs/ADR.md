@@ -300,3 +300,25 @@ careerBody 만 받아 파싱·시작일 내림차순 정렬 (personal kind·proj
 동일 정보를 문장으로 전달. project 청크는 RAG 채팅 답변용으로 유지되므로 컨테이너 row 정리는
 별도 과제. 노션 캘아웃은 **built-in 아이콘**(briefcase)을 써야 함 — 이모지 아이콘은
 notion-to-md 마크다운에 텍스트로 노출돼 `> |` 파서 패턴을 깨뜨린다.
+
+## ADR-033: 페이지별 OG 카드 — Node 런타임 + 커밋형 Pretendard 폰트
+
+**배경**: OG 이미지가 루트 1장(Edge 런타임, 폰트 미주입, "yoonsoo.dev" 하드코딩)이었고,
+운영 `NEXT_PUBLIC_SITE_URL`이 죽은 도메인(portfolio.kirico.xyz)이라 og:image 절대 URL을
+크롤러가 가져올 수 없었다. favicon 자산도 전무(`/favicon.ico` 404).
+
+**결정**:
+- OG 카드를 공용 빌더(`lib/og-card.tsx`) + 라우트별 `opengraph-image.tsx`(/, /chat, /about,
+  /experience, /contact)로 재구성. 프로필 사진(원형) + 페이지별 타이틀 + Pretendard.
+- **런타임 Edge → Node**: 한글 폰트 woff(~1.1MB×2)가 Edge 번들 1MB 한도를 초과 (ADR-031과
+  동일한 결). `dynamic = "force-static"`으로 빌드 타임 생성해 콜드스타트 영향 없음.
+- **폰트 자산 커밋**: `assets/fonts/Pretendard-{SemiBold,Regular}.woff` (satori는 woff2
+  미지원 → woff, SIL OFL·LICENSE 동봉). 서버 전용 디렉터리라 클라이언트 번들 미포함.
+- favicon 은 코드 생성(`app/icon.tsx` 32 · `app/apple-icon.tsx` 180, 모노그램 K + 라임 점)
+  + 정적 `app/favicon.ico`(png-to-ico 변환 커밋). layout 의 수동 `icons` 필드 제거 —
+  파일 규약 자동 주입.
+- 도메인: Vercel `NEXT_PUBLIC_SITE_URL` = `https://yoonsoo.kirico.xyz` 로 교체 (기존 값은
+  DNS 미해석 도메인).
+
+**트레이드오프**: 폰트 커밋으로 repo +~2.2MB. 동적 텍스트(노션 헤드라인 연동)는 보류 —
+타이틀이 라우트 고정 문자열이라 빌드 타임 정적 생성이 더 단순·안정적.
