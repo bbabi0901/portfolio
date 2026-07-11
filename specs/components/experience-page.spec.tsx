@@ -25,9 +25,7 @@ const PERSONAL_ITEM: TimelineItem = {
     role: "",
     period: "2026.05 - 현재",
     isActive: true,
-    bulletGroups: [
-      ["AI 포트폴리오 (대화형 포트폴리오)", "직접 코드를 작성하지 않은 no-code 개발"],
-    ],
+    bulletGroups: [["AI 포트폴리오 (대화형 포트폴리오)", "직접 코드를 작성하지 않은 no-code 개발"]],
   },
 };
 

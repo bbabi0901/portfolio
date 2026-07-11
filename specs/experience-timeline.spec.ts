@@ -34,7 +34,11 @@ const CAREER_BODY = [
 describe("buildUnifiedTimeline (이력서 단일 소스 타임라인)", () => {
   it("이력서 마크다운의 회사·자체 프로젝트 항목을 시작일 내림차순으로 정렬", () => {
     const items = buildUnifiedTimeline(CAREER_BODY);
-    expect(items.map((i) => i.entry.company)).toEqual(["자체 프로젝트", "디라티오", "체인아나토미"]);
+    expect(items.map((i) => i.entry.company)).toEqual([
+      "자체 프로젝트",
+      "디라티오",
+      "체인아나토미",
+    ]);
   });
 
   it("자체 프로젝트 항목: 역할 없음(폴백 미적용) + 프로젝트명 그룹 + 진행 중", () => {
