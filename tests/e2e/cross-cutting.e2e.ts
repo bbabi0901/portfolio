@@ -19,6 +19,30 @@ test.describe("cross-cutting (TS-63, TS-64, TS-65, TS-67)", () => {
     expect(res.headers()["content-type"]).toMatch(/image\/png/);
   });
 
+  test("TS-86: favicon — /favicon.ico 200 + <link rel=icon> 자동 주입", async ({
+    page,
+    request,
+  }) => {
+    const ico = await request.get("/favicon.ico");
+    expect(ico.status()).toBe(200);
+    expect(ico.headers()["content-type"]).toMatch(/image\/x-icon/);
+    await page.goto("/");
+    expect(await page.locator('link[rel="icon"]').count()).toBeGreaterThan(0);
+    expect(await page.locator('link[rel="apple-touch-icon"]').count()).toBeGreaterThan(0);
+  });
+
+  test("TS-87: 페이지별 OG 카드 — /experience og:image 가 세그먼트 경로 + 200 png", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/experience");
+    const ogImage = await page.locator('meta[property="og:image"]').first().getAttribute("content");
+    expect(ogImage).toContain("/experience/opengraph-image");
+    const res = await request.get("/experience/opengraph-image");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toMatch(/image\/png/);
+  });
+
   test("TS-65: not-found 404 + 홈 링크", async ({ page, request }) => {
     const res = await request.get("/__not-existent-path-xyz__");
     expect(res.status()).toBe(404);

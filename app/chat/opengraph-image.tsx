@@ -1,13 +1,13 @@
 import { ogCard, OG_SIZE } from "@/lib/og-card";
 
 export const dynamic = "force-static";
-export const alt = "김윤수 — AI Portfolio · 노션 기록 기반 대화형 포트폴리오";
+export const alt = "AI 채팅 | 김윤수 — 김윤수에게 무엇이든 물어보세요";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
 export default function OpenGraphImage() {
   return ogCard({
-    title: "김윤수 — AI Portfolio",
-    subtitle: "노션 기록 기반 대화형 포트폴리오",
+    title: "AI 채팅",
+    subtitle: "김윤수에게 무엇이든 물어보세요",
   });
 }

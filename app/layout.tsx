@@ -56,9 +56,7 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  // icons 는 app 디렉터리 파일 규약(app/icon.tsx, app/apple-icon.tsx, app/favicon.ico)이 자동 주입
 };
 
 export const viewport: Viewport = {
