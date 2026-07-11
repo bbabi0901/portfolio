@@ -25,7 +25,8 @@ import { retrieve } from "@/lib/retriever";
 import { addTokenUsage, checkDailyTokenBudget } from "@/lib/token-budget";
 import type { PortfolioServerData } from "@/types/portfolio";
 
-export const runtime = "edge";
+// Edge 1MB 번들 한도로 커밋된 RAG 데이터(server.json)를 담을 수 없어 Node 로 이전 (ADR-031)
+export const runtime = "nodejs";
 
 const portfolioData = portfolioJson as unknown as PortfolioServerData;
 
@@ -41,7 +42,7 @@ const ChatRequestSchema = z.object({
 
 export const app = new Hono().basePath("/api");
 
-app.get("/health", (c) => c.json({ ok: true, runtime: "edge", ts: new Date().toISOString() }));
+app.get("/health", (c) => c.json({ ok: true, runtime: "nodejs", ts: new Date().toISOString() }));
 
 app.post(
   "/chat",

@@ -12,6 +12,6 @@ test.describe("smoke", () => {
     const res = await request.get("/api/health");
     expect(res.ok()).toBe(true);
     const body = await res.json();
-    expect(body.runtime).toBe("edge");
+    expect(body.runtime).toBe("nodejs");
   });
 });
