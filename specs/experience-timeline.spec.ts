@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { buildUnifiedTimeline } from "@/lib/experience-timeline";
-import type { ProjectSummary } from "@/lib/experience-data";
 
+// 이력서(career) 마크다운 단일 소스 — 회사 경력 + 자체 프로젝트 항목이 같은
+// blockquote 포맷(`> | 회사`, `> 기간`)으로 들어있다.
 const CAREER_BODY = [
   "> **소프트웨어 엔지니어  ",
   "> | 디라티오**",
@@ -20,52 +21,43 @@ const CAREER_BODY = [
   "---",
   "### 런치패드",
   "- 컨트랙트 설계",
+  "",
+  "> **| 자체 프로젝트**",
+  "",
+  "> 2026.05 - 현재",
+  "",
+  "---",
+  "### AI 포트폴리오 (대화형 포트폴리오)",
+  "- 직접 코드를 작성하지 않은 no-code 개발 — AI 에이전트와 하네스 워크플로우만으로 개발",
 ].join("\n");
 
-function personal(over: Partial<ProjectSummary> = {}): ProjectSummary {
-  return {
-    id: "p-ai",
-    title: "AI 포트폴리오",
-    techKeywords: ["rag"],
-    impact: "대화형 포트폴리오",
-    category: "자체프로젝트",
-    period: { start: "2026-05-01", ongoing: true },
-    ...over,
-  };
-}
-
-describe("buildUnifiedTimeline (커리어 + 자체 프로젝트 통합)", () => {
-  it("시작일 내림차순으로 회사·자체 프로젝트를 하나의 타임라인으로 병합", () => {
-    const items = buildUnifiedTimeline(CAREER_BODY, [personal()]);
-    expect(items.map((i) => i.kind)).toEqual(["personal", "company", "company"]);
-    expect(items[0]!.kind === "personal" && items[0]!.project.title).toBe("AI 포트폴리오");
-    expect(items[1]!.kind === "company" && items[1]!.entry.company).toBe("디라티오");
-    expect(items[2]!.kind === "company" && items[2]!.entry.company).toBe("체인아나토미");
-  });
-
-  it("회사 사이 시작일이면 사이에 삽입", () => {
-    const items = buildUnifiedTimeline(CAREER_BODY, [
-      personal({
-        id: "p-mid",
-        title: "중간 프로젝트",
-        period: { start: "2024-03-01", end: "2024-06-30" },
-      }),
-    ]);
-    expect(items.map((i) => (i.kind === "company" ? i.entry.company : i.project.title))).toEqual([
+describe("buildUnifiedTimeline (이력서 단일 소스 타임라인)", () => {
+  it("이력서 마크다운의 회사·자체 프로젝트 항목을 시작일 내림차순으로 정렬", () => {
+    const items = buildUnifiedTimeline(CAREER_BODY);
+    expect(items.map((i) => i.entry.company)).toEqual([
+      "자체 프로젝트",
       "디라티오",
-      "중간 프로젝트",
       "체인아나토미",
     ]);
   });
 
-  it("기간 없는 자체 프로젝트는 마지막", () => {
-    const items = buildUnifiedTimeline(CAREER_BODY, [personal({ period: undefined })]);
-    expect(items[items.length - 1]!.kind).toBe("personal");
+  it("자체 프로젝트 항목: 역할 없음(폴백 미적용) + 프로젝트명 그룹 + 진행 중", () => {
+    const items = buildUnifiedTimeline(CAREER_BODY);
+    const personal = items[0]!.entry;
+    expect(personal.company).toBe("자체 프로젝트");
+    expect(personal.role).toBe("");
+    expect(personal.isActive).toBe(true);
+    expect(personal.bulletGroups[0]?.[0]).toBe("AI 포트폴리오 (대화형 포트폴리오)");
+    expect(personal.bulletGroups[0]?.[1]).toContain("no-code 개발");
   });
 
-  it("커리어 본문 없음 → 자체 프로젝트만", () => {
-    const items = buildUnifiedTimeline(undefined, [personal()]);
-    expect(items).toHaveLength(1);
-    expect(items[0]!.kind).toBe("personal");
+  it("기간 없는 항목은 마지막", () => {
+    const body = ["> | 무기간", "", "---", "- 항목", "", CAREER_BODY].join("\n");
+    const items = buildUnifiedTimeline(body);
+    expect(items[items.length - 1]!.entry.company).toBe("무기간");
+  });
+
+  it("커리어 본문 없음 → 빈 타임라인", () => {
+    expect(buildUnifiedTimeline(undefined)).toEqual([]);
   });
 });

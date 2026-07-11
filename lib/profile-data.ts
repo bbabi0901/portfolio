@@ -40,8 +40,8 @@ export interface ProfileData {
   totalReadingMinutes: number;
 }
 
-/** 이력서(career) 청크 중 경력 타임라인 섹션 heading 매칭 */
-const CAREER_TIMELINE_HEADING_RE = /직무|경력|experience/i;
+/** 이력서(career) 청크 중 경력 타임라인 섹션 heading 매칭 — 회사 경력 + 자체 프로젝트 */
+const CAREER_TIMELINE_HEADING_RE = /직무|경력|experience|자체 프로젝트|personal project/i;
 const CAREER_SECTION_LABEL = "커리어";
 /** 학력 섹션: 대학(학사) 항목만 렌더 — 부트캠프 제외 (사용자 결정) */
 const UNIVERSITY_TITLE_RE = /대학|university/i;

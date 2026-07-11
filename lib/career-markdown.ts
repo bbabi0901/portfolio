@@ -106,7 +106,8 @@ function parseCareerEntry(lines: string[]): CareerEntry {
   const bulletGroups = parseBulletGroups(lines.slice(i));
 
   return {
-    role: role || "소프트웨어 엔지니어",
+    // 역할 미기재 항목(예: `| 자체 프로젝트` 단독 callout)은 빈 값 유지 — 직함을 렌더하지 않는다
+    role,
     company,
     period,
     isActive: period.includes("현재"),

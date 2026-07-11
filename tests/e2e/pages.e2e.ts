@@ -15,16 +15,17 @@ test.describe("/experience (TS-38, TS-39)", () => {
     await expect(page.locator("main")).toBeVisible();
   });
 
-  test("TS-39: 카테고리 필터 → URL ?category= 동기화", async ({ page }) => {
+  test("TS-39: 커리어 타임라인 — 이력서 단일 소스, 자체 프로젝트 1건 (중복 없음)", async ({
+    page,
+  }) => {
     await page.goto("/experience");
-    const filter = page.getByRole("button", { name: /업무/ }).first();
-    if (await filter.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await filter.click();
-      await expect(page).toHaveURL(/category=/);
-    } else {
-      // 빈 데이터로 인해 필터 미렌더 → SKIP
-      test.skip(true, "fixture 데이터에 카테고리 필터 옵션 없음");
-    }
+    await expect(page.getByRole("heading", { name: "커리어 타임라인" })).toBeVisible();
+    // 이력서의 자체 프로젝트 항목이 정확히 1건 렌더 (프로젝트 DB 병합 제거 — ADR-032)
+    await expect(page.getByText("AI 포트폴리오 (대화형 포트폴리오)")).toHaveCount(1);
+    // 항목당 좌측 컬럼(데스크톱) + 모바일 헤더 = 2회 — 중복 항목이면 4회가 된다
+    await expect(page.getByText("자체 프로젝트", { exact: true })).toHaveCount(2);
+    // 회사 항목도 같은 타임라인에 존재
+    await expect(page.getByText("디라티오", { exact: true })).toHaveCount(2);
   });
 });
 
