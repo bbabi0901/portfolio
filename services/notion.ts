@@ -126,6 +126,15 @@ function notionUrlFor(pageId: string, providedUrl?: string): string {
   return `https://www.notion.so/${pageId.replace(/-/g, "")}`;
 }
 
+/**
+ * 노션 첨부(S3)의 서명 URL 은 fetch 마다 X-Amz-Signature 등이 바뀐다 → 청크 텍스트가
+ * 매번 달라져 임베딩 캐시(ADR-029)가 영구 미스가 되는 문제 방지. 서명 쿼리스트링을
+ * 제거해 마크다운을 결정적으로 만든다 (URL 자체는 만료되므로 정보 손실 없음).
+ */
+export function stripVolatileUrlParams(markdown: string): string {
+  return markdown.replace(/(https:\/\/[^\s()<>"']+)\?[^\s()<>"']*X-Amz-[^\s()<>"']*/g, "$1");
+}
+
 function pageToRef(page: NotionPageRaw): NotionPageRef {
   const properties = page.properties ?? {};
   const ref: NotionPageRef = {
@@ -237,7 +246,7 @@ class Service implements NotionService {
       if (!ref) return null;
       const blocks = await this.n2m!.pageToMarkdown(pageId);
       const markdownObj = this.n2m!.toMarkdownString(blocks);
-      const markdown = (markdownObj.parent ?? "").trim();
+      const markdown = stripVolatileUrlParams((markdownObj.parent ?? "").trim());
       return { ref, markdown };
     } catch (err) {
       if (isPermissionDenied(err) || isNotFound(err)) return null;
