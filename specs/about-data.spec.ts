@@ -323,6 +323,38 @@ describe("loadProfileData — career 타임라인 (ADR-028 career 청크 재구�
     expect(body).toContain("| 체인아나토미");
   });
 
+  it("자체 프로젝트 (Personal Project) 청크도 career 섹션에 포함 (이력서 단일 소스)", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        personal,
+        careerChunk(
+          "c1",
+          ["직무 및 이력 (Experience)"],
+          "> **소프트웨어 엔지니어  \n> | 디라티오**\n\n> 2025.01 - 현재\n\n---",
+          2,
+        ),
+        careerChunk(
+          "s1",
+          ["자체 프로젝트 (Personal Project)"],
+          "> **| 자체 프로젝트**\n\n> 2026.05 - 현재\n\n---",
+          10,
+        ),
+        careerChunk(
+          "s2",
+          ["자체 프로젝트 (Personal Project)", "AI 포트폴리오 (대화형 포트폴리오)"],
+          "- 직접 코드를 작성하지 않은 no-code 개발",
+          11,
+        ),
+      ]),
+    );
+    const result = loadProfileData();
+    const body = result!.career!.subSections.map((s) => s.body).join("\n");
+    expect(body).toContain("| 자체 프로젝트");
+    expect(body).toContain("### AI 포트폴리오 (대화형 포트폴리오)");
+    // 문서 순서 유지: 회사 경력 뒤에 자체 프로젝트
+    expect(body.indexOf("| 디라티오")).toBeLessThan(body.indexOf("| 자체 프로젝트"));
+  });
+
   it("교육/이름 career 청크는 career 섹션에서 제외", () => {
     mockedLoadPortfolio.mockReturnValue(
       makeData([

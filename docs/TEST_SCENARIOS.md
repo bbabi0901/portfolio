@@ -280,22 +280,19 @@
 ### TS-38 페이지 직접 진입
 - **파일**: `tests/e2e/experience.e2e.ts:directAccess`
 
-### TS-39 카테고리 필터
-- **Given**: `/experience`
-- **When**: "업무" 필터 클릭
-- **Then**: URL `?category=업무` 동기화 + 결과 정확
-- **파일**: `tests/e2e/experience.e2e.ts:filter`
+### TS-39 통합 커리어 타임라인 — 이력서 단일 소스 렌더 (2026-07 중복 fix)
+- **Given**: 이력서(career 청크)에 회사 경력 + 자체 프로젝트 항목 (같은 blockquote 포맷)
+- **When**: `/experience` 커리어 타임라인 렌더
+- **Then**: 자체 프로젝트 1건 포함 하나의 타임라인 — project 청크는 미사용 (중복 원천 차단, ADR-032)
+- **파일**: `specs/components/experience-page.spec.tsx:unifiedTimeline`
 
-### TS-40 빈 결과
-- **Given**: 카테고리에 데이터 없음
-- **Then**: 빈 상태
-- **파일**: `tests/e2e/experience.e2e.ts:empty`
+### TS-40 통합 타임라인 파싱·정렬
+- **Given**: 이력서 커리어 마크다운 (회사 3 + 자체 프로젝트 1)
+- **When**: `buildUnifiedTimeline(careerBody)`
+- **Then**: 시작일 내림차순 정렬, 기간 없는 항목 마지막, 자체 프로젝트 role="" (폴백 없음)
+- **파일**: `specs/experience-timeline.spec.ts:merge`
 
-### TS-41 외부 링크 → 노션 새 탭
-- **Given**: ProjectCard
-- **When**: "노션에서 자세히" 클릭
-- **Then**: target=_blank, rel=noopener
-- **파일**: `tests/e2e/experience.e2e.ts:externalLink`
+### ~~TS-41 외부 링크 → 노션 새 탭~~ (폐기 — 2026-07 이력서 단일 소스 개편으로 타임라인의 노션 링크 제거)
 
 ### TS-42 모바일 horizontal / 데스크톱 vertical sticky
 - **파일**: `tests/visual/breakpoints.spec.ts:experience`
@@ -475,10 +472,10 @@
 - **Then**: 이미지 있으면 정적 asset `/images/profile.jpg`(next/image), 없으면 이니셜 `ProfileFallback`
 - **파일**: `specs/profile-image.spec.ts`
 
-### TS-83 통합 커리어 타임라인 (FEAT-025, 2026-07 개편)
-- **Given**: 회사 경력(career 청크) + 자체 프로젝트(project 청크, 자체프로젝트)
+### TS-83 통합 커리어 타임라인 (FEAT-025, 2026-07 이력서 단일 소스)
+- **Given**: 이력서(career 청크)의 회사 경력 + 자체 프로젝트 항목
 - **When**: `/experience` 렌더
-- **Then**: 시작일 내림차순 하나의 타임라인 — 회사 행(회사·직함·기간·프로젝트 그룹), 자체 프로젝트 행("자체 프로젝트" 라벨·제목·태그·노션 링크)
+- **Then**: 시작일 내림차순 하나의 타임라인 — 회사 행(회사·직함·기간·프로젝트 그룹), 자체 프로젝트 행("자체 프로젝트" 라벨·기간·프로젝트명·불릿, 직함 없음)
 - **파일**: `specs/components/experience-page.spec.tsx` + `specs/experience-timeline.spec.ts`
 
 ### TS-84 학력·자격증 분리 섹션 (FEAT-025)

@@ -19,11 +19,8 @@ export default function ExperiencePage() {
   const profile = loadProfileData();
   const data = loadExperienceData();
 
-  // 자체 프로젝트만 커리어 타임라인에 편입 (업무 프로젝트는 회사 불릿과 중복 — 섹션 제거됨)
-  const personalProjects = [...data.groups.flatMap((g) => g.projects), ...data.others].filter(
-    (p) => p.category === "자체프로젝트",
-  );
-  const timeline = buildUnifiedTimeline(profile?.career?.subSections[0]?.body, personalProjects);
+  // 커리어 타임라인은 이력서(career 청크) 단일 소스 — 자체 프로젝트도 이력서 항목으로 기록
+  const timeline = buildUnifiedTimeline(profile?.career?.subSections[0]?.body);
 
   const hasSkills = data.skills.frontend.length > 0 || data.skills.smartContract.length > 0;
   const isEmpty =

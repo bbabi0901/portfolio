@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1455,23 +1455,16 @@
     {
       "id": "TS-39",
       "feature": "FEAT-025",
-      "title": "통합 커리어 타임라인 — 회사 경력 + 자체 프로젝트 병합 렌더",
+      "title": "통합 커리어 타임라인 — 이력서 단일 소스 렌더 (회사 경력 + 자체 프로젝트 항목)",
       "file": "specs/components/experience-page.spec.tsx",
       "anchor": "unifiedTimeline"
     },
     {
       "id": "TS-40",
       "feature": "FEAT-025",
-      "title": "통합 타임라인 병합·정렬 — 시작일 내림차순, 회사 사이 삽입",
+      "title": "통합 타임라인 파싱·정렬 — 이력서 마크다운 단일 소스, 시작일 내림차순",
       "file": "specs/experience-timeline.spec.ts",
       "anchor": "merge"
-    },
-    {
-      "id": "TS-41",
-      "feature": "FEAT-025",
-      "title": "자체 프로젝트 노션 링크 새 탭 (noopener/noreferrer)",
-      "file": "specs/components/experience-page.spec.tsx",
-      "anchor": "externalLink"
     },
     {
       "id": "TS-42",
@@ -1760,7 +1753,7 @@
     {
       "id": "TS-83",
       "feature": "FEAT-025",
-      "title": "UnifiedTimeline — 회사/자체 프로젝트 행 렌더 (라벨·기간·태그·링크)",
+      "title": "UnifiedTimeline — 회사/자체 프로젝트 행 렌더 (라벨·기간, 직함은 있을 때만)",
       "file": "specs/components/experience-page.spec.tsx",
       "anchor": "TS-83"
     },
