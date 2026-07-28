@@ -111,9 +111,7 @@ CLAUDE.md README.md .env.local.example
 ## 패턴
 - **Server Components 기본**: 데이터 로드, 메타, SSG는 서버에서. 인터랙션이 필요한 곳만 `"use client"`.
 - **Hono on Route Handler**: `app/api/[[...route]]/route.ts`에 Hono 인스턴스를 마운트. `GET, POST, PATCH` 등 메서드 export로 Next.js Route Handler 인터페이스 충족.
-- **Edge vs Node 분리**:
-  - Edge runtime: `/api/chat` (스트리밍, 저지연 우선)
-  - Node runtime: `/api/feedback`, `/api/contact`, `/api/metrics` (Notion SDK 안정성)
+- **런타임: 전 라우트 Node (ADR-031)**: 커밋된 RAG 데이터가 Edge 1MB 번들 한도를 초과해 `/api/chat` 포함 모든 API 라우트가 Node runtime (`route.ts` 의 `export const runtime = "nodejs"`). AWS 전환(ADR-034) 후에도 Node 유지 — 사유가 "번들 한도" 에서 "AWS SDK + corpus 메모리 캐시" 로 갱신.
 - **데이터 분리**:
   - 서버 전용: `data/portfolio.server.json` (임베딩 포함, ~수 MB)
   - 클라이언트: `public/data/suggestions.json` (~수 KB, 추천 질문 + 프로필 한 줄)
@@ -152,7 +150,7 @@ portfolio.server.json
 suggestions.json 갱신 + relatedQuestions[chunkId] 매핑
 ```
 
-### 런타임 1: 채팅 (`/api/chat` Edge)
+### 런타임 1: 채팅 (`/api/chat` Node)
 ```
 사용자 입력 (POST)
   ↓ zod 검증 (메시지 길이, 모델 ID, role)
@@ -162,6 +160,8 @@ retriever.search(latestUserMessage)
   ├ 키워드 매칭 (lib/tokenize)
   ├ 임베딩 코사인 (lib/embeddings)
   └ 머지 (a=0.4 / b=0.6, top-K=8, ≤ 6000 토큰)
+  ※ 현재 프로덕션은 쿼리 임베딩을 계산하지 않아 실질 keyword-only.
+    벡터 병합은 테스트 경로에서만 동작 — 하이브리드 점등은 ADR-034 Phase 3 (아래 AWS 전환 절).
 prompts.build(systemPrompt, retrievedChunks)
   ↓ ai.streamText({ model, system, messages, temperature: 0.3, maxOutputTokens: 1024 })
 SSE 스트리밍 → 클라이언트
@@ -220,7 +220,7 @@ app/page (Chat)
   → components/chat/ModelSwitcher
   → components/chat/FeedbackButtons → /api/feedback
 
-/api/chat (Edge)
+/api/chat (Node)
   → lib/spec-loader (validate at startup)
   → lib/rate-limit
   → lib/portfolio-data → data/portfolio.server.json
@@ -284,10 +284,56 @@ app/layout (RSC) → Header (Client: 햄버거) → SideSheet (Client)
 - Honeypot + 시간 임계 + IP rate limit (Contact).
 - CSP: default-src 'self'; img-src 'self' data: https://prod-files-secure.s3.us-west-2.amazonaws.com (노션 이미지). LLM 응답 내 외부 링크는 사전 마스킹.
 - CORS: same-origin만.
-- 노션 토큰은 Edge에 배포되지 않음 (Edge에는 portfolio.server.json만, Notion API 직접 호출은 Node 라우트에서만).
+- 노션 토큰은 채팅 경로에서 참조되지 않음 (`/api/chat` 은 portfolio.server.json만 사용, Notion API 직접 호출은 `/api/feedback`·`/api/contact` 에서만).
 
 ## 성능 목표
 - 첫 토큰 TTFB p50 < 1.5s.
 - About/Experience 정적 페이지: TTFB < 200ms (Vercel CDN).
 - LCP < 2.5s, CLS < 0.1, INP < 200ms.
 - 클라이언트 JS 번들: gzipped < 250KB.
+
+## AWS 전환 (ADR-034, 진행 중)
+
+RAG 스택(챗 LLM·임베딩·벡터 스토어·인제스천)을 단계적으로 AWS 로 전환한다. 상세 결정·트레이드오프는 [ADR.md](ADR.md) ADR-034, IaC 배포 절차는 [infra/README.md](../infra/README.md).
+
+> **현재 런타임 동작은 무변경.** Phase 0 은 ADR/spec 등록 + `infra/` CDK 워크스페이스 부트스트랩까지이며 AWS 배포는 아직 수행되지 않았다. 챗은 여전히 OpenRouter, 임베딩은 빌드 타임 Voyage/OpenAI, 프로덕션 검색은 keyword-only, 데이터는 ADR-030 커밋 방식이다. 아래 파이프라인은 전부 **목표(예정)** 상태.
+
+### 목표 파이프라인 — 수집 (Phase 4 완료 시)
+```
+EventBridge Scheduler rate(24 hours)
+  ↓ Sync Lambda (freshness 선체크 — 노션 last_edited_time, stale 시에만 진행)
+Notion fetch → 청킹 (기존 lib/chunking.ts, chunk ID 체계 불변)
+  ↓ Bedrock Titan Text Embeddings v2 (1024차원)
+S3 Vectors 업서트 (key = chunk.id, metadata {category, sourcePageId})
+  + 표준 S3 corpus.json 갱신 (임베딩 제외, ~1.5MB)
+→ 노션 수정이 재배포 없이 최대 24h+10min 내 자동 반영 (수동 invoke 로 즉시 반영 가능)
+```
+
+### 목표 파이프라인 — 질의 (Phase 3 완료 시)
+```
+Vercel /api/chat (Node, OIDC → IAM Role 임시 자격)
+  ↓ corpus.json 메모리 캐시 (TTL 10분) + Titan v2 쿼리 임베딩
+  ├ 키워드 매칭 (기존 retriever, corpus 대상)
+  └ S3 Vectors QueryVectors (chunkId + score)
+  ↓ 하이브리드 머지 — 프로덕션 최초의 실질 하이브리드 검색 점등
+Bedrock Converse 스트리밍 (기본 Nova Lite / 옵션 Nova Micro·Claude Haiku)
+```
+
+### 인증 (Phase 1~)
+- Vercel OIDC federation → `portfolio-vercel-runtime` IAM Role (AssumeRoleWithWebIdentity). 장기 액세스 키 미발급.
+- env: `PORTFOLIO_AWS_ROLE_ARN`, `PORTFOLIO_AWS_REGION`(ap-northeast-2). Phase 1 부터 소비.
+
+### 단계 현황
+| Phase | 내용 | FEAT | 상태 |
+|-------|------|------|------|
+| 0 | ADR-034 + spec 등록 + `infra/` CDK 부트스트랩 (OpsStack 빌링 알람 $5·SNS, AccessStack OIDC·IAM Role) | FEAT-035~039 planned 등록 | **완료** (AWS 배포는 미수행) |
+| 1 | 챗 OpenRouter → Bedrock Converse 전환 | FEAT-035 | 예정 |
+| 2 | 임베딩 Voyage/OpenAI → Titan v2 (1024차원) 전환 | FEAT-036 | 예정 |
+| 3 | S3 Vectors + 런타임 하이브리드 검색 점등 | FEAT-037 | 예정 |
+| 4 | Lambda + EventBridge 자동 인제스천 | FEAT-038 | 예정 |
+| 5 | 구 키 제거 + 커밋 데이터 → fallback 슬림화 | FEAT-039 | 예정 |
+
+### 불변 계약 (전환 후에도 유지)
+- Bedrock/S3 Vectors 장애·타임아웃 → keyword-only 강등 (ERR-14, `X-Retrieval-Mode`).
+- corpus 장애 → 커밋된 fallback JSON, 빈 검색 → NO_RECORD 정적 응답 (ERR-08), 모델 장애 → `X-Model-Substitution`.
+- `MOCK_LLM=1` 은 AWS 호출 0회 — CI/E2E 결정성 유지.
