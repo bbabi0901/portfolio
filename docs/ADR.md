@@ -322,3 +322,53 @@ notion-to-md 마크다운에 텍스트로 노출돼 `> |` 파서 패턴을 깨�
 
 **트레이드오프**: 폰트 커밋으로 repo +~2.2MB. 동적 텍스트(노션 헤드라인 연동)는 보류 —
 타이틀이 라우트 고정 문자열이라 빌드 타임 정적 생성이 더 단순·안정적.
+
+## ADR-034: RAG 스택 AWS 전환 총괄 — Bedrock + S3 Vectors + Lambda 인제스천
+
+**상태**: 승인 (Phase 0 진행 중). ADR-004 의 출구 전략(pgvector)을 대체하며, 완료 시
+ADR-026(챗 부분)·ADR-029(캐시 저장 위치)·ADR-030(커밋형 데이터) 을 단계적으로 대체한다.
+ADR-031(Node 런타임)은 유지 — 사유가 "번들 한도" 에서 "AWS SDK + corpus 메모리 캐시" 로 갱신.
+
+**배경**: 현행 RAG 는 (1) 빌드 타임에 Voyage/OpenAI 로 임베딩 후 `data/portfolio.server.json`
+(3.3MB) 을 git 커밋, (2) 런타임은 쿼리 임베딩을 계산하지 않아 **실서비스 검색이 keyword-only**
+(벡터는 MOCK_LLM 테스트에서만 사용), (3) 커밋된 벡터(512차원)와 코드 경로(1024/1536차원)
+불일치, (4) 노션 수정 → 로컬 sync → 커밋 → 푸시(재배포)의 수동 5단계 반영. 소유자는 AWS
+활용 역량 축적과 콘텐츠 자동 반영을 원하며, 비용 최소화를 최우선 제약으로 명시했다.
+
+**결정**:
+1. **임베딩**: Bedrock Titan Text Embeddings v2 (1024차원, `amazon.titan-embed-text-v2:0`).
+   캐시 네임스페이스 `amazon.titan-embed-text-v2:0@1024` — ADR-029 메커니즘으로 전량 자동
+   무효화(재임베딩 ~$0.003), 512차원 불일치 해소.
+2. **벡터 스토어**: S3 Vectors (2025-12 GA, 서울 리전 지원 확인). 벡터 key = 기존 결정적
+   chunk.id, filterable metadata `{category, sourcePageId}` 만 저장. 청킹 로직(`lib/chunking.ts`)
+   과 chunk ID 체계는 불변. Knowledge Bases 미사용(커스텀 제어·테스트 호환 우선).
+3. **청크 텍스트**: 표준 S3 의 `corpus.json`(임베딩 제외, ~1.5MB) 단일 소스. 런타임은 TTL
+   10분 메모리 캐시. keyword 검색은 corpus 대상 기존 retriever 로직 그대로 — S3 Vectors 결과
+   (chunkId+score)와 병합해 **프로덕션 최초의 실질 하이브리드 검색**을 점등.
+4. **챗 LLM**: OpenRouter → Bedrock Converse (`@ai-sdk/amazon-bedrock`). 기본 모델
+   **Nova Lite**($0.06/$0.24 per 1M tok, 비용 최소화), 옵션 Nova Micro·Claude Haiku.
+   `or.chat()` 제약(ADR-026)은 소멸.
+5. **인제스천 자동화**: EventBridge Scheduler `rate(24 hours)` → Sync Lambda (freshness
+   선체크 → stale 시 fetch→청킹→임베딩→S3 Vectors 업서트 + corpus.json 갱신). 노션 수정이
+   재배포 없이 최대 24h+10min 내 자동 반영. 수동 invoke 로 즉시 반영 가능.
+6. **인증**: Vercel OIDC federation → IAM Role (AssumeRoleWithWebIdentity). 장기 액세스 키
+   미발급. 리전 ap-northeast-2(서울) + Vercel `icn1`.
+7. **IaC**: `infra/` 에 CDK(TypeScript) 독립 워크스페이스. Terraform 등가 매핑을 학습 노트로
+   병기.
+8. **폴백 계약 유지**: Bedrock/S3 Vectors 장애·타임아웃 → keyword-only (ERR-14,
+   `X-Retrieval-Mode`), corpus 장애 → 커밋된 `data/portfolio.fallback.json`(슬림), 빈 검색 →
+   NO_RECORD 정적 응답(ERR-08), 모델 장애 → `X-Model-Substitution`. MOCK_LLM=1 은 AWS 호출
+   0회(CI/E2E 결정성 유지, sample 픽스처 지속).
+
+**단계**: Phase 0 ADR/spec/infra 부트스트랩(FEAT-035~039 planned 등록) → 1 챗 Bedrock 전환
+(FEAT-035) → 2 Titan 임베딩(FEAT-036) → 3 S3 Vectors + 하이브리드 점등(FEAT-037, env 제거 =
+keyword-only kill switch) → 4 Lambda 자동 수집(FEAT-038) → 5 키·대형 커밋 데이터 제거(FEAT-039).
+
+**비용**: 고정비 ~$0 (Lambda/Scheduler/SSM/CloudWatch 프리티어 내, S3 Vectors 저장 ~1.5MB),
+변동비는 챗 LLM 뿐 — Nova Lite 기본 시 월 ~$0.5, 일 토큰캡(`MAX_TOKENS_PER_DAY`) 풀소진
+가정 상한 ~$2. 비용 알림은 CloudWatch billing alarm($5, 프리티어 무료 — AWS Budgets 미사용).
+
+**트레이드오프**: ADR-030 의 "빌드 = API 0회" 결정성을 콘텐츠 자동 반영과 맞바꾼다(단 폴백
+JSON + MOCK 게이트로 CI 결정성은 유지). 검색 경로에 AWS 왕복 2회(임베딩+쿼리)가 추가되나
+동일 리전 배치 + 800ms 타임아웃 강등으로 상쇄. S3 Vectors 는 GA 초기 서비스로 CDK L1 미지원
+가능성(→ AwsCustomResource 대비), `VectorStore` 인터페이스 추상화로 pgvector 출구 전략 보존.
