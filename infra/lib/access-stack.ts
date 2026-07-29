@@ -33,15 +33,12 @@ export class PortfolioAccessStack extends cdk.Stack {
     // production 환경의 이 프로젝트 함수만 assume 허용 (preview 는 필요 시 sub 조건 추가)
     this.runtimeRole = new iam.Role(this, "VercelRuntimeRole", {
       roleName: "portfolio-vercel-runtime",
-      assumedBy: new iam.WebIdentityPrincipal(
-        oidcProvider.openIdConnectProviderArn,
-        {
-          StringEquals: {
-            [`${issuer}:aud`]: `https://vercel.com/${props.vercelTeamSlug}`,
-            [`${issuer}:sub`]: `owner:${props.vercelTeamSlug}:project:${props.vercelProjectName}:environment:production`,
-          },
+      assumedBy: new iam.WebIdentityPrincipal(oidcProvider.openIdConnectProviderArn, {
+        StringEquals: {
+          [`${issuer}:aud`]: `https://vercel.com/${props.vercelTeamSlug}`,
+          [`${issuer}:sub`]: `owner:${props.vercelTeamSlug}:project:${props.vercelProjectName}:environment:production`,
         },
-      ),
+      }),
       description:
         "Vercel /api/chat runtime - least-privilege Bedrock invoke (+S3 Vectors query in Phase 3)",
       maxSessionDuration: cdk.Duration.hours(1),

@@ -29,9 +29,7 @@ export class PortfolioOpsStack extends cdk.Stack {
     this.alertTopic = new sns.Topic(this, "AlertTopic", {
       topicName: "portfolio-ops-alerts",
     });
-    this.alertTopic.addSubscription(
-      new subscriptions.EmailSubscription(props.alertEmail),
-    );
+    this.alertTopic.addSubscription(new subscriptions.EmailSubscription(props.alertEmail));
 
     const estimatedCharges = new cloudwatch.Metric({
       namespace: "AWS/Billing",
@@ -47,8 +45,7 @@ export class PortfolioOpsStack extends cdk.Stack {
       metric: estimatedCharges,
       threshold: props.billingAlarmUsd,
       evaluationPeriods: 1,
-      comparisonOperator:
-        cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
+      comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_THRESHOLD,
       treatMissingData: cloudwatch.TreatMissingData.NOT_BREACHING,
     });
     billingAlarm.addAlarmAction(new cwActions.SnsAction(this.alertTopic));
