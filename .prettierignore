@@ -15,3 +15,5 @@ spec.json
 spec.schema.json
 package-lock.json
 *.md
+infra/cdk.out
+infra/package-lock.json

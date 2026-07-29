@@ -61,7 +61,7 @@
 ## 4. 배포 후 첫 검증
 
 ```bash
-curl https://<your-domain>/api/health         # { ok: true, runtime: "edge" }
+curl https://<your-domain>/api/health         # { ok: true, runtime: "nodejs" } (전 라우트 Node, ADR-031)
 curl https://<your-domain>/api/node/health    # { ok: true, runtime: "node" }
 curl -I https://<your-domain>/opengraph-image # 200 + image/png
 curl https://<your-domain>/sitemap.xml | head -10
@@ -120,3 +120,21 @@ Vercel 대시보드 → Domains → 추가. `NEXT_PUBLIC_SITE_URL` 를 도메인
 ## 10. 모니터링
 
 Vercel Logs 가 `lib/log.ts` 의 JSON line 자동 수집. `route`, `status`, `latencyMs`, `ipHash`, `model` 검색 가능. 정확 IP / token 은 절대 로그에 들어가지 않음.
+
+## 11. AWS 인프라 (ADR-034)
+
+RAG 스택 AWS 전환용 IaC 는 `infra/` 의 CDK(TypeScript) 독립 워크스페이스에 있다 (Phase 0 부트스트랩 완료, **AWS 배포는 아직 미수행**). 스택 구성·Terraform 등가 매핑·일상 명령은 [infra/README.md](../infra/README.md) 참조.
+
+### 최초 배포 전제 조건 (1회)
+
+1. AWS CLI 설치 + 자격 증명 구성 (`aws configure sso` 권장).
+2. 콘솔 Billing preferences 에서 "Receive CloudWatch billing alerts" 활성화 (billing alarm 전제).
+3. `infra/cdk.json` 의 `portfolio:vercelTeamSlug` 를 실제 Vercel 팀 슬러그로 교체.
+4. `cdk bootstrap` — ap-northeast-2 + us-east-1 두 리전.
+5. `cdk deploy PortfolioOpsStack PortfolioAccessStack` (Ops = us-east-1 월 $5 billing alarm + SNS, Access = 서울 Vercel OIDC provider + `portfolio-vercel-runtime` IAM Role).
+6. SNS 구독 확인 메일 승인.
+7. Vercel: Project Settings → Security → **OIDC Federation 활성화** (Team issuer).
+8. Vercel env 설정: `PORTFOLIO_AWS_ROLE_ARN`(AccessStack output), `PORTFOLIO_AWS_REGION`=`ap-northeast-2`.
+9. Bedrock 콘솔(서울) Model access 신청: Nova Lite/Micro, Claude Haiku, Titan Embed v2.
+
+> `PORTFOLIO_AWS_ROLE_ARN` / `PORTFOLIO_AWS_REGION` 은 **Phase 1(FEAT-035)부터 소비**된다. 현재 런타임은 이 변수를 읽지 않으며, 챗은 여전히 OpenRouter 로 동작한다.

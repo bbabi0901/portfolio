@@ -13,6 +13,7 @@ const config = [
       "coverage",
       "test-results",
       ".claude/**", // ad-hoc worktrees, session state, plugin state — not project source
+      "infra/**", // CDK 독립 워크스페이스 (자체 tsc/vitest) — cdk.out 산출물 포함 제외
     ],
   },
   ...nextCoreWebVitals,

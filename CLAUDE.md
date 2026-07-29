@@ -13,6 +13,7 @@
 - Vercel AI SDK (`ai`, `@ai-sdk/openai`) + **OpenRouter** 단일 키 라우팅 (ADR-026)
   - 채팅: `OPENROUTER_API_KEY` → `https://openrouter.ai/api/v1` (gpt-4o-mini / claude-3-5-haiku / gemini-2.0-flash)
   - 임베딩: `OPENAI_API_KEY` 별도 (OpenRouter 미지원, 빌드 타임 전용)
+- **AWS 전환 진행 중 (ADR-034)**: 챗·임베딩 → Bedrock(Nova Lite 기본/Nova Micro/Claude Haiku, `@ai-sdk/amazon-bedrock` + Titan v2 1024차원), 벡터 → S3 Vectors(서울), 인제스천 → Lambda+EventBridge 24h, 인증 → Vercel OIDC→IAM role. IaC 는 `infra/` CDK TypeScript 워크스페이스. **Phase 0 완료, 런타임 미전환** — 위 OpenRouter/OPENAI 구성이 각 Phase 착륙 전까지 유효 (ADR-026/029/030 유지).
 - `@ai-sdk/react`의 `useChat`
 - @notionhq/client + notion-to-md
 - react-markdown + remark-gfm + rehype-highlight
@@ -89,6 +90,14 @@ npm run sync:if-needed     # prebuild 게이트 — 커밋 데이터 있으면 �
 npm run sync:check         # 노션 last_edited_time vs generatedAt 신선도 검사 (STALE 시 exit 1)
 npm run gen:suggestions    # portfolio.server.json → 추천 질문 후보 + 관련 질문 매핑
 npm run check:spec         # spec.json 유효성 + 모든 FEAT의 tests 파일 존재 검증
+```
+
+```
+# infra/ CDK 워크스페이스 (ADR-034, 독립 — 자체 npm install)
+cd infra && npm run build   # TypeScript 컴파일
+cd infra && npm run synth   # CloudFormation 템플릿 합성
+cd infra && npm run diff    # 배포된 스택과 diff
+cd infra && npm run deploy  # 배포 (AWS 자격 증명 필요)
 ```
 
 ## 파일 절대 규칙

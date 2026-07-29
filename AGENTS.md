@@ -42,6 +42,7 @@
 | 테스트 가이드 (TDD) | [docs/TESTING.md](docs/TESTING.md) |
 | SEO/OG | [docs/SEO_POLICY.md](docs/SEO_POLICY.md) |
 | 배포 | [docs/DEPLOY.md](docs/DEPLOY.md) |
+| 인프라 IaC (`infra/` CDK 워크스페이스, ADR-034) | [infra/README.md](infra/README.md) |
 | 콘텐츠 정책 | [docs/CONTENT_GUIDE.md](docs/CONTENT_GUIDE.md) |
 
 ## 작업 흐름 (한 줄 요약)
