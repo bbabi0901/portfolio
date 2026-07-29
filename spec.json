@@ -20,24 +20,24 @@
   },
   "models": [
     {
-      "id": "gpt-4o-mini",
-      "provider": "openai",
+      "id": "nova-lite",
+      "provider": "amazon",
       "default": true,
       "maxOutputTokens": 1024,
       "temperature": 0.3,
       "topP": 0.9
     },
     {
-      "id": "claude-3-5-haiku-latest",
-      "provider": "anthropic",
+      "id": "nova-micro",
+      "provider": "amazon",
       "default": false,
       "maxOutputTokens": 1024,
       "temperature": 0.3,
       "topP": 0.9
     },
     {
-      "id": "gemini-2.0-flash-exp",
-      "provider": "google",
+      "id": "claude-haiku",
+      "provider": "anthropic",
       "default": false,
       "maxOutputTokens": 1024,
       "temperature": 0.3,
@@ -1200,9 +1200,13 @@
     {
       "id": "FEAT-035",
       "name": "Bedrock 챗 LLM 전환 — OpenRouter → Bedrock Converse (Nova Lite 기본 / Nova Micro / Claude Haiku), Vercel OIDC → IAM Role 인증 (ADR-034/035)",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "P1",
-      "tests": [],
+      "tests": [
+        "specs/models.spec.ts",
+        "specs/chat-route.spec.ts",
+        "specs/components/model-switcher.test.tsx"
+      ],
       "dependencies": [
         "FEAT-001"
       ]
@@ -1838,6 +1842,13 @@
       "title": "페이지별 OG 카드 — 프로필 사진 + Pretendard + 세그먼트별 타이틀 (1200×630, Node 런타임)",
       "file": "specs/og-images.spec.ts",
       "anchor": "TS-87"
+    },
+    {
+      "id": "TS-88",
+      "feature": "FEAT-035",
+      "title": "Bedrock 모델 피커 — Nova Lite(기본)/Nova Micro/Claude Haiku 노출 + 레거시 OpenRouter ID 무보정 흡수(localStorage) + AWS 자격 증명 부재 시 채팅 비활성",
+      "file": "specs/models.spec.ts",
+      "anchor": "TS-88"
     }
   ]
 }

@@ -23,8 +23,8 @@ describe("ChatRoot layout (TS-71)", () => {
             expectedSourceTitles: [],
           },
         ]}
-        availableModels={["gpt-4o-mini"]}
-        defaultModelId={"gpt-4o-mini"}
+        availableModels={["nova-lite"]}
+        defaultModelId={"nova-lite"}
       />,
     );
     const root = container.querySelector('[data-slot="chat-root"]') as HTMLElement;
@@ -53,8 +53,8 @@ describe("ChatRoot layout (TS-71)", () => {
       <ChatRoot
         greeting={GREETING}
         suggestions={[]}
-        availableModels={["gpt-4o-mini"]}
-        defaultModelId={"gpt-4o-mini"}
+        availableModels={["nova-lite"]}
+        defaultModelId={"nova-lite"}
       />,
     );
     const header = container.querySelector("header");
@@ -67,8 +67,8 @@ describe("ChatRoot layout (TS-71)", () => {
       <ChatRoot
         greeting={GREETING}
         suggestions={[]}
-        availableModels={["gpt-4o-mini"]}
-        defaultModelId={"gpt-4o-mini"}
+        availableModels={["nova-lite"]}
+        defaultModelId={"nova-lite"}
       />,
     );
     const form = container.querySelector('form[data-slot="composer"]');

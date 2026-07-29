@@ -16,7 +16,7 @@ const validBody = {
   answer: "MFE 마이그레이션 TF에서 Vite 기반으로 적용했습니다.",
   reason: "incomplete" as const,
   reasonDetail: "더 자세히 알고 싶어요",
-  model: "gpt-4o-mini",
+  model: "nova-lite",
   retrievalChunkTitles: ["MFE TF", "Bidirectional Federation"],
 };
 

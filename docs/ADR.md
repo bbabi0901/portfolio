@@ -372,3 +372,31 @@ keyword-only kill switch) → 4 Lambda 자동 수집(FEAT-038) → 5 키·대형
 JSON + MOCK 게이트로 CI 결정성은 유지). 검색 경로에 AWS 왕복 2회(임베딩+쿼리)가 추가되나
 동일 리전 배치 + 800ms 타임아웃 강등으로 상쇄. S3 Vectors 는 GA 초기 서비스로 CDK L1 미지원
 가능성(→ AwsCustomResource 대비), `VectorStore` 인터페이스 추상화로 pgvector 출구 전략 보존.
+
+## ADR-035: 챗 LLM OpenRouter → Bedrock Converse 전환 (ADR-034 Phase 1, ADR-026 챗 부분 대체)
+
+**배경**: ADR-026 의 OpenRouter 단일 키 라우팅을 ADR-034 결정 4 에 따라 Bedrock 으로 교체.
+검색 경로는 일절 건드리지 않는 최소 런타임 변경으로, AWS 자격 증명 경로(OIDC)를 먼저
+실전 검증하는 것이 목적.
+
+**결정**:
+1. `lib/models.ts` 레지스트리 교체: `nova-lite`(**기본**, $0.06/$0.24 per 1M tok) /
+   `nova-micro`($0.035/$0.14) / `claude-haiku`(품질 옵션). 파라미터(1024/0.3/0.9) 유지.
+   Bedrock 모델 ID 는 APAC 교차 리전 inference profile (`apac.amazon.nova-lite-v1:0` 등) —
+   서울 리전 단독 미보유 모델 대비. 정확한 가용성은 `npm run test:smoke` 로 검증.
+2. 구 OpenRouter ID(gpt-4o-mini/claude-3-5-haiku/gemini-2.0-flash 및 -latest/-exp)는
+   `LEGACY_ID_MAP` 으로 무보정 흡수 — localStorage 저장분이 `X-Model-Substitution` 없이
+   새 모델로 매핑된다. gpt/gemini → nova-lite, claude → claude-haiku.
+3. 자격 증명: `services/aws-credentials.ts` — Vercel 은 `VERCEL_OIDC_TOKEN` +
+   `PORTFOLIO_AWS_ROLE_ARN` 으로 `@vercel/functions` OIDC provider, 로컬은
+   `PORTFOLIO_AWS_PROFILE` 로 Node provider chain. lazy import 로 MOCK 경로에서
+   AWS 모듈 로드 0회. 가용성 판정(`listAvailableModels`)은 두 env 중 하나 존재 기준.
+4. `@ai-sdk/amazon-bedrock` 은 **^4.x 고정** — 5.x 는 provider spec v4 로 리포의
+   `ai@6`(LanguageModelV3)과 비호환. `or.chat()` 제약(ADR-026)은 소멸.
+5. spec.json `models[]` 를 Bedrock 3종으로 교체(provider enum 에 `amazon` 추가),
+   MOCK_LLM mock 모델·`X-Model-Substitution`·`no_models_available` 503 계약 불변.
+
+**트레이드오프**: OpenRouter 의 멀티 프로바이더(GPT/Gemini) 선택권이 사라지고 Bedrock
+보유 모델로 한정된다(비용 최소화 우선). OPENROUTER_API_KEY env 는 Phase 5 까지 유지 —
+이 PR revert 만으로 즉시 복귀 가능. 머지 전 실 API 수동 검증(test:smoke) 필수 —
+AWS 자격 증명 + Bedrock model access 활성화가 전제.

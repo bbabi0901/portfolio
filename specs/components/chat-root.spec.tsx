@@ -105,14 +105,14 @@ const baseSuggestions: SuggestedQuestionMeta[] = [
   },
 ];
 
-const allModels: ModelId[] = ["gpt-4o-mini", "claude-3-5-haiku", "gemini-2.0-flash"];
+const allModels: ModelId[] = ["nova-lite", "claude-haiku", "nova-micro"];
 
 function renderChat(overrides: Partial<ChatRootProps> = {}) {
   const props: ChatRootProps = {
     greeting: baseGreeting,
     suggestions: baseSuggestions,
     availableModels: allModels,
-    defaultModelId: "gpt-4o-mini",
+    defaultModelId: "nova-lite",
     ...overrides,
   };
   return render(<ChatRoot {...props} />);
@@ -170,21 +170,21 @@ describe("ChatRoot", () => {
     await user.click(trigger);
     const opt = await screen.findByRole("option", { name: /Claude/i });
     await user.click(opt);
-    expect(localStorage.getItem("portfolio.model")).toBe("claude-3-5-haiku");
+    expect(localStorage.getItem("portfolio.model")).toBe("claude-haiku");
   });
 
   it("페이지 로드 시 localStorage 의 모델 ID 복원 (available 안에 있으면)", () => {
-    localStorage.setItem("portfolio.model", "gemini-2.0-flash");
+    localStorage.setItem("portfolio.model", "nova-micro");
     renderChat();
     const trigger = screen.getByRole("combobox", { name: /답변 모델/ });
-    expect(trigger.textContent).toContain("Gemini");
+    expect(trigger.textContent).toContain("Nova Micro");
   });
 
   it("저장된 모델 ID가 available 에 없으면 default 사용", () => {
-    localStorage.setItem("portfolio.model", "claude-3-5-haiku");
-    renderChat({ availableModels: ["gpt-4o-mini"] });
+    localStorage.setItem("portfolio.model", "claude-haiku");
+    renderChat({ availableModels: ["nova-lite"] });
     const trigger = screen.getByRole("combobox", { name: /답변 모델/ });
-    expect(trigger.textContent).toContain("GPT");
+    expect(trigger.textContent).toContain("Nova Lite");
   });
 
   it("availableModels=[] 시 ModelSwitcher disabled + 채팅 disabled + Composer placeholder 변경", () => {
@@ -201,7 +201,7 @@ describe("ChatRoot", () => {
     await user.click(badge);
     expect(mockState.sendMessage).toHaveBeenCalledWith(
       { text: "김윤수 어떤 개발자예요?" },
-      expect.objectContaining({ body: { modelId: "gpt-4o-mini" } }),
+      expect.objectContaining({ body: { modelId: "nova-lite" } }),
     );
     const visitedBadge = container.querySelector('[data-visited="true"]');
     expect(visitedBadge).not.toBeNull();
@@ -320,7 +320,7 @@ describe("ChatRoot", () => {
     fireEvent.keyDown(ta, { key: "Enter" });
     expect(mockState.sendMessage).toHaveBeenCalledWith(
       { text: "hello" },
-      expect.objectContaining({ body: { modelId: "gpt-4o-mini" } }),
+      expect.objectContaining({ body: { modelId: "nova-lite" } }),
     );
   });
 

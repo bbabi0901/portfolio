@@ -1,4 +1,4 @@
-import { createOpenAI } from "@ai-sdk/openai";
+import { createAmazonBedrock } from "@ai-sdk/amazon-bedrock";
 import type { LanguageModel } from "ai";
 import type {
   LanguageModelV3,
@@ -8,10 +8,11 @@ import type {
   LanguageModelV3StreamResult,
   LanguageModelV3Usage,
 } from "@ai-sdk/provider";
+import { createAwsCredentialProvider } from "@/services/aws-credentials";
 import { getServerEnv } from "./env";
 
-export type ModelId = "gpt-4o-mini" | "claude-3-5-haiku" | "gemini-2.0-flash";
-export type Provider = "openai" | "anthropic" | "google";
+export type ModelId = "nova-lite" | "nova-micro" | "claude-haiku";
+export type Provider = "amazon" | "anthropic";
 
 export interface ModelSpec {
   id: ModelId;
@@ -21,33 +22,35 @@ export interface ModelSpec {
   topP: number;
 }
 
-export const DEFAULT_MODEL_ID: ModelId = "gpt-4o-mini";
+// 비용 최소화 우선 (ADR-034): Nova Lite $0.06/$0.24 per 1M tok 기본,
+// Claude Haiku 는 품질 옵션. 서울 리전 미보유 모델 대비 APAC 교차 리전
+// inference profile(apac.) ID 사용 — 정확한 가용성은 test:smoke 로 검증.
+export const DEFAULT_MODEL_ID: ModelId = "nova-lite";
 
-// OpenRouter 슬러그 — "provider/model" 형식 (openrouter.ai/models 참고, ADR-026)
-const OR_MODEL_ID: Record<ModelId, string> = {
-  "gpt-4o-mini": "openai/gpt-4o-mini",
-  "claude-3-5-haiku": "anthropic/claude-3-5-haiku",
-  "gemini-2.0-flash": "google/gemini-2.0-flash-exp",
+const BEDROCK_MODEL_ID: Record<ModelId, string> = {
+  "nova-lite": "apac.amazon.nova-lite-v1:0",
+  "nova-micro": "apac.amazon.nova-micro-v1:0",
+  "claude-haiku": "apac.anthropic.claude-haiku-4-5-20251001-v1:0",
 };
 
 const REGISTRY: Record<ModelId, ModelSpec> = {
-  "gpt-4o-mini": {
-    id: "gpt-4o-mini",
-    provider: "openai",
+  "nova-lite": {
+    id: "nova-lite",
+    provider: "amazon",
     maxOutputTokens: 1024,
     temperature: 0.3,
     topP: 0.9,
   },
-  "claude-3-5-haiku": {
-    id: "claude-3-5-haiku",
+  "nova-micro": {
+    id: "nova-micro",
+    provider: "amazon",
+    maxOutputTokens: 1024,
+    temperature: 0.3,
+    topP: 0.9,
+  },
+  "claude-haiku": {
+    id: "claude-haiku",
     provider: "anthropic",
-    maxOutputTokens: 1024,
-    temperature: 0.3,
-    topP: 0.9,
-  },
-  "gemini-2.0-flash": {
-    id: "gemini-2.0-flash",
-    provider: "google",
     maxOutputTokens: 1024,
     temperature: 0.3,
     topP: 0.9,
@@ -56,10 +59,14 @@ const REGISTRY: Record<ModelId, ModelSpec> = {
 
 const KNOWN_IDS = Object.keys(REGISTRY) as ModelId[];
 
-// 이전 model ID 문자열 하위 호환 매핑 (AI Gateway 시절 ID)
+// 이전 model ID 문자열 하위 호환 매핑 — OpenRouter 시절(ADR-026) ID 는
+// localStorage 에 저장돼 있을 수 있어 substitution 없이 흡수한다.
 const LEGACY_ID_MAP: Record<string, ModelId> = {
-  "claude-3-5-haiku-latest": "claude-3-5-haiku",
-  "gemini-2.0-flash-exp": "gemini-2.0-flash",
+  "gpt-4o-mini": "nova-lite",
+  "gemini-2.0-flash": "nova-lite",
+  "gemini-2.0-flash-exp": "nova-lite",
+  "claude-3-5-haiku": "claude-haiku",
+  "claude-3-5-haiku-latest": "claude-haiku",
 };
 
 export function isKnownModel(id: string): id is ModelId {
@@ -134,6 +141,11 @@ function createMockModel(modelId: ModelId): LanguageModelV3 {
   };
 }
 
+/** Bedrock 호출 가능 여부 — Vercel OIDC 역할 또는 로컬 AWS 프로필 (ADR-034) */
+function hasAwsAccess(env: ReturnType<typeof getServerEnv>): boolean {
+  return Boolean(env.PORTFOLIO_AWS_ROLE_ARN || env.PORTFOLIO_AWS_PROFILE);
+}
+
 export function createModel(spec: ModelSpec): LanguageModel {
   const env = getServerEnv();
 
@@ -141,31 +153,27 @@ export function createModel(spec: ModelSpec): LanguageModel {
     return createMockModel(spec.id) as unknown as LanguageModel;
   }
 
-  if (!env.OPENROUTER_API_KEY) {
+  if (!hasAwsAccess(env)) {
     throw new Error(
-      `OPENROUTER_API_KEY is not set. ` +
-        `https://openrouter.ai/keys 에서 발급 후 .env.local 에 추가. ` +
+      `AWS 자격 증명이 없습니다. Vercel 은 PORTFOLIO_AWS_ROLE_ARN(OIDC), ` +
+        `로컬은 PORTFOLIO_AWS_PROFILE 을 설정하세요 (ADR-034). ` +
         `테스트 우회: MOCK_LLM=1`,
     );
   }
 
-  // OpenRouter — 단일 키로 OpenAI/Anthropic/Google 라우팅 (ADR-026)
-  // @ai-sdk/openai v3+ 는 or(modelId) 호출 시 Responses API(/v1/responses) 를 기본으로 사용한다.
-  // OpenRouter 는 Chat Completions API 만 지원하므로 or.chat(modelId) 을 명시적으로 사용해야 한다.
-  const siteUrl = env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const or = createOpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: env.OPENROUTER_API_KEY,
-    headers: {
-      "HTTP-Referer": siteUrl,
-      "X-Title": "Yoonsoo Kim Portfolio",
-    },
+  // Amazon Bedrock Converse — 챗 LLM (ADR-034, ADR-026 대체)
+  const bedrock = createAmazonBedrock({
+    region: env.PORTFOLIO_AWS_REGION,
+    credentialProvider: createAwsCredentialProvider({
+      roleArn: env.PORTFOLIO_AWS_ROLE_ARN,
+      profile: env.PORTFOLIO_AWS_PROFILE,
+    }),
   });
-  return or.chat(OR_MODEL_ID[spec.id]);
+  return bedrock(BEDROCK_MODEL_ID[spec.id]);
 }
 
 export function listAvailableModels(): ModelSpec[] {
   const env = getServerEnv();
-  if (!env.OPENROUTER_API_KEY && env.MOCK_LLM !== "1") return [];
+  if (!hasAwsAccess(env) && env.MOCK_LLM !== "1") return [];
   return KNOWN_IDS.map((id) => REGISTRY[id]);
 }
