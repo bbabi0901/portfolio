@@ -15,6 +15,8 @@ HOOKS_DIR = ROOT / ".claude" / "hooks"
 BLOCK_HOOK = HOOKS_DIR / "block-dangerous.sh"
 STOP_HOOK = HOOKS_DIR / "post-session-check.sh"
 START_HOOK = HOOKS_DIR / "session-start-check.sh"
+GATE_HOOK = HOOKS_DIR / "reviewer-gate.sh"
+POSTEDIT_HOOK = HOOKS_DIR / "post-edit-check.sh"
 
 
 # ---------------------------------------------------------------------------
@@ -25,9 +27,21 @@ class TestSettingsJson:
     def test_valid_json(self):
         json.loads(SETTINGS.read_text())
 
-    def test_has_three_hook_events(self):
+    def test_has_hook_events(self):
         cfg = json.loads(SETTINGS.read_text())
-        assert {"PreToolUse", "Stop", "SessionStart"} <= set(cfg["hooks"].keys())
+        assert {"PreToolUse", "PostToolUse", "Stop", "SessionStart"} <= set(cfg["hooks"].keys())
+
+    def test_pretooluse_edit_write_gate_wired(self):
+        cfg = json.loads(SETTINGS.read_text())
+        matchers = {e["matcher"]: e for e in cfg["hooks"]["PreToolUse"]}
+        assert "Edit|Write" in matchers
+        assert any("reviewer-gate.sh" in h["command"] for h in matchers["Edit|Write"]["hooks"])
+        assert any("reviewer-gate.sh" in h["command"] for h in matchers["Bash"]["hooks"])
+
+    def test_posttooluse_edit_check_wired(self):
+        cfg = json.loads(SETTINGS.read_text())
+        cmd = cfg["hooks"]["PostToolUse"][0]["hooks"][0]["command"]
+        assert "post-edit-check.sh" in cmd
 
     def test_pretooluse_matcher_is_bash(self):
         cfg = json.loads(SETTINGS.read_text())
@@ -59,7 +73,7 @@ class TestSettingsJson:
             "exit 1 은 non-blocking — 차단은 exit 2"
 
     def test_hook_scripts_exist_with_shebang(self):
-        for path in (BLOCK_HOOK, STOP_HOOK, START_HOOK):
+        for path in (BLOCK_HOOK, STOP_HOOK, START_HOOK, GATE_HOOK, POSTEDIT_HOOK):
             assert path.is_file(), f"missing: {path}"
             assert path.read_text().startswith("#!"), f"missing shebang: {path}"
 
@@ -230,3 +244,91 @@ class TestSessionStartHook:
         )
         assert r.returncode == 0
         assert "lock" in r.stderr.lower()
+
+
+# ---------------------------------------------------------------------------
+# reviewer-gate.sh — passes 갱신 권한 분리 + 게이트 자기보호 (ADR-036)
+# ---------------------------------------------------------------------------
+
+def _invoke_gate(tool_name: str, tool_input: dict) -> subprocess.CompletedProcess:
+    payload = json.dumps({
+        "session_id": "test",
+        "tool_name": tool_name,
+        "tool_input": tool_input,
+        "hook_event_name": "PreToolUse",
+    })
+    return subprocess.run(
+        ["bash", str(HOOKS_DIR / "reviewer-gate.sh")],
+        input=payload, capture_output=True, text=True,
+    )
+
+
+class TestReviewerGate:
+    def test_blocks_edit_on_stories_json(self):
+        r = _invoke_gate("Edit", {"file_path": str(ROOT / "phases/stories.json")})
+        assert r.returncode == 2, r.stderr
+
+    def test_blocks_write_on_hook_file(self):
+        r = _invoke_gate("Write", {"file_path": str(HOOKS_DIR / "post-session-check.sh")})
+        assert r.returncode == 2, r.stderr
+
+    def test_blocks_write_on_settings_json(self):
+        r = _invoke_gate("Write", {"file_path": str(SETTINGS)})
+        assert r.returncode == 2, r.stderr
+
+    def test_allows_edit_on_normal_file(self):
+        r = _invoke_gate("Edit", {"file_path": str(ROOT / "lib/models.ts")})
+        assert r.returncode == 0, r.stderr
+
+    def test_blocks_bash_write_to_stories(self):
+        cmd = "echo '{}' " + "> phases/stories.json"
+        r = _invoke_gate("Bash", {"command": cmd})
+        assert r.returncode == 2, r.stderr
+
+    def test_blocks_bash_mv_over_stories(self):
+        cmd = "jq '.x=1' phases/stories.json > /tmp/s && mv /tmp/s phases/stories.json"
+        r = _invoke_gate("Bash", {"command": cmd})
+        assert r.returncode == 2, r.stderr
+
+    def test_allows_bash_read_of_stories(self):
+        r = _invoke_gate("Bash", {"command": "cat phases/stories.json"})
+        assert r.returncode == 0, r.stderr
+
+    def test_allows_reviewer_ok_prefix(self):
+        cmd = "REVIEWER_OK=1 python3 -c 'pass' " + "> phases/stories.json"
+        r = _invoke_gate("Bash", {"command": cmd})
+        assert r.returncode == 0, r.stderr
+
+    def test_blocks_bash_sed_on_hooks(self):
+        cmd = "sed -i '' 's/exit 2/exit 0/' .claude/hooks/post-session-check.sh"
+        r = _invoke_gate("Bash", {"command": cmd})
+        assert r.returncode == 2, r.stderr
+
+
+# ---------------------------------------------------------------------------
+# post-edit-check.sh — 편집 파일 즉시 린트 (ADR-036)
+# ---------------------------------------------------------------------------
+
+class TestPostEditCheck:
+    def _invoke(self, file_path: str) -> subprocess.CompletedProcess:
+        payload = json.dumps({
+            "tool_name": "Edit",
+            "tool_input": {"file_path": file_path},
+            "hook_event_name": "PostToolUse",
+        })
+        return subprocess.run(
+            ["bash", str(HOOKS_DIR / "post-edit-check.sh")],
+            input=payload, capture_output=True, text=True,
+        )
+
+    def test_skips_non_code_file(self):
+        r = self._invoke(str(ROOT / "README.md"))
+        assert r.returncode == 0, r.stderr
+
+    def test_skips_missing_file(self):
+        r = self._invoke(str(ROOT / "lib/does-not-exist.ts"))
+        assert r.returncode == 0, r.stderr
+
+    def test_skips_infra_workspace(self):
+        r = self._invoke(str(ROOT / "infra/lib/ops-stack.ts"))
+        assert r.returncode == 0, r.stderr

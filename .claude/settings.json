@@ -4,7 +4,22 @@
       {
         "matcher": "Bash",
         "hooks": [
-          { "type": "command", "command": "bash .claude/hooks/block-dangerous.sh" }
+          { "type": "command", "command": "bash .claude/hooks/block-dangerous.sh" },
+          { "type": "command", "command": "bash .claude/hooks/reviewer-gate.sh" }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "bash .claude/hooks/reviewer-gate.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "bash .claude/hooks/post-edit-check.sh" }
         ]
       }
     ],

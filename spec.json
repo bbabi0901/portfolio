@@ -979,7 +979,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/greeting-player.spec.tsx",
+        "specs/components/greeting-player.spec.tsx",
         "tests/e2e/chat.e2e.ts:firstGreeting"
       ]
     },
@@ -1046,7 +1046,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/composer.spec.tsx"
+        "specs/components/composer.spec.tsx"
       ]
     },
     {
@@ -1096,7 +1096,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/contact-form.spec.tsx",
+        "specs/components/contact-form.spec.tsx",
         "specs/contact-route.spec.ts",
         "tests/e2e/contact.e2e.ts"
       ]
