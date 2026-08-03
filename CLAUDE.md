@@ -3,6 +3,7 @@
 > 채용 담당자/동료 개발자가 자연어로 김윤수의 커리어·프로젝트·기술을 물어보면, 노션 기록 기반으로 답하는 사이트.
 > 본 문서는 코드베이스 작업의 최우선 규칙. 충돌 시 본 문서가 docs/ 보다 우선한다.
 > Agent entry point: [AGENTS.md](AGENTS.md) — table of contents · role 매핑. 깊은 spec 은 `docs/agents/` 에.
+> **도메인 스코프 규칙**: `lib/CLAUDE.md`(RAG 코어) · `components/chat/CLAUDE.md`(챗 UI) · `infra/CLAUDE.md`(CDK) — 해당 디렉토리 작업 시 자동 로드됨. 도메인 디테일은 본 문서가 아니라 스코프 파일에 추가할 것 (토큰 효율).
 
 ## 기술 스택
 - Next.js 16 (App Router) + TypeScript strict

@@ -43,6 +43,7 @@
 | SEO/OG | [docs/SEO_POLICY.md](docs/SEO_POLICY.md) |
 | 배포 | [docs/DEPLOY.md](docs/DEPLOY.md) |
 | 인프라 IaC (`infra/` CDK 워크스페이스, ADR-034) | [infra/README.md](infra/README.md) |
+| 도메인 스코프 규칙 (해당 디렉토리 작업 시 자동 로드) | [lib/CLAUDE.md](lib/CLAUDE.md) · [components/chat/CLAUDE.md](components/chat/CLAUDE.md) · [infra/CLAUDE.md](infra/CLAUDE.md) |
 | 콘텐츠 정책 | [docs/CONTENT_GUIDE.md](docs/CONTENT_GUIDE.md) |
 
 ## 작업 흐름 (한 줄 요약)
