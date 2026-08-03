@@ -51,7 +51,7 @@
   - **노션 schema**: `docs/NOTION_SCHEMA.md`
   - **SEO/OG**: `docs/SEO_POLICY.md`
   - **에러 / 봇 보호 / edge case**: `spec.json` errorPolicies[] / edgeCasePolicies[]
-  - **작업 분할**: `phases/{task}/index.json` + `phases/{task}/step{N}.md`
+  - **작업 분할**: `phases/stories.json` 큐 (ADR-036 — `/loop` 1회 = 스토리 1개, `passes` 갱신은 reviewer 전용)
   - **Agent 정의 / 워크플로우 변경**: `AGENTS.md` 의 Agents 디렉토리 표 + `docs/agents/*.md` (각 agent 의 spec)
   - dev 서버에서 즉답으로 변경하면서 spec/docs 누락한 채 commit/push 금지. 시간 절약 명목으로도.
 - **CRITICAL (사용자 명시): LLM API 연동 변경 시 수동 검증 필수.** 모든 테스트는 `MOCK_LLM=1`에서 실행되므로 실제 API 문제를 감지 못한다. 아래 상황에서 반드시 `MOCK_LLM` 미설정 상태로 로컬에서 multi-turn 직접 확인 후 merge:
@@ -74,7 +74,6 @@
   - `hotfix/{scope}` — 프로덕션 긴급 패치
   - `refactor/{scope}` / `test/{scope}` / `docs/{scope}` — 각각 해당 영역
 - Task 완료 시: `git push -u origin <branch>` → `gh pr create --base main --head <branch>`로 PR 생성 (Conventional Commit 제목, Summary + Test plan 본문).
-- Harness `execute.py`는 기본 `feat-{task}` (하이픈) 브랜치를 만들지만 본 규칙은 슬래시(`feat/{task}`) 형식. task 시작 전 `git checkout -b feat/{task}` 직접 또는 시작 후 `git branch -m` rename.
 - `--no-verify`, `--force` 등 가드 우회는 사용자 명시 승인 시에만.
 
 ## 명령어
