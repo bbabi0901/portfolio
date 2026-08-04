@@ -400,3 +400,51 @@ JSON + MOCK 게이트로 CI 결정성은 유지). 검색 경로에 AWS 왕복 2�
 보유 모델로 한정된다(비용 최소화 우선). OPENROUTER_API_KEY env 는 Phase 5 까지 유지 —
 이 PR revert 만으로 즉시 복귀 가능. 머지 전 실 API 수동 검증(test:smoke) 필수 —
 AWS 자격 증명 + Bedrock model access 활성화가 전제.
+
+## ADR-036: 하네스 2세대 — 커스텀 실행기 폐지, 네이티브 루프 + 생성자·평가자 분리
+
+> ADR-035 는 feat/aws-bedrock-chat (PR #49, Bedrock 챗 전환) 이 사용 — 번호 충돌 회피를 위해 036.
+
+**배경 (1세대 부검)**: `scripts/execute.py`(856줄, 테스트 136개) 기반 1세대 하네스는 실질
+사망했다. 물증: `phases/8-chat-layout-revamp` step0 은 3회 시도 전부 0초 실패(exit 1,
+$0)인데 최종 completed 로 수동 기입 — 루프 붕괴 후 사람이 손으로 복구했고, index.json 만으로는
+성공과 구분 불가. 구조적 원인 두 가지: ① **검증이 자기신고** — Claude 가 쓴 status 를
+실행기가 믿고 커밋 ② 외부 오케스트레이터의 유지비가 우회 유인을 만듦(이후 PR 대부분이
+하네스 미경유). 동일 소유자의 bbang2bbang 프로젝트가 이 부검 위에 2세대 설계(네이티브
+프리미티브 + 평가자 분리)를 검증 중이며, 이를 본 리포 성격에 맞게 이식한다.
+
+**결정**:
+1. **커스텀 실행기 폐지** — execute.py·test_execute.py·harness 명령 3종·관련 agent 스펙
+   삭제(git 이력 보존). 기존 `phases/{task}/` 완료 기록은 보존.
+2. **루프 = `/loop` 슬래시 커맨드** — `phases/stories.json`(큐)에서 `passes:false` 첫
+   스토리 1개만 Plan→Execute(TDD)→Verify(AC 직접 실행)→Commit→Review 로 완주 후 정지.
+   무인 연속 실행 없음.
+3. **생성자–평가자 분리** — `.claude/agents/reviewer.md` 독립 서브에이전트가 AC 재실행·
+   diff 치팅 스캔·SSoT 동기화 검증 후 `passes` 를 갱신하는 **유일한 주체**
+   (`REVIEWER_OK=1` Bash 전용, Edit/Write 는 훅 차단). 반려 3회 → 사람 에스컬레이션.
+4. **완료 조건 = SSoT 동기화** — bbang2bbang 의 "학습 노트" 를 본 프로젝트 성격(학습
+   목적 아님, 채용용 산출물+운영 서비스)에 맞게 치환: spec.json FEAT/TS·ADR·docs·env
+   갱신 누락은 reviewer 반려 사유. 기존 CRITICAL 문서 규칙을 게이트로 승격.
+5. **훅 계층 강화** — 신규 `post-edit-check.sh`(PostToolUse: 편집 파일 즉시 prettier+
+   eslint, exit 2) + `reviewer-gate.sh`(PreToolUse: stories.json 쓰기 권한 분리 + 훅·
+   settings·lint 설정 자기수정 차단). `post-session-check.sh`(Stop)에 치팅 스캔
+   (.only/.skip 추가, 테스트 파일 삭제)과 stop_hook_active 재진입 가드 추가.
+   훅 5종 전부 `scripts/test_settings.py` 계약 테스트로 고정 (103 테스트).
+6. **AC 는 실행 가능 커맨드만** — screenshot 등 자기신고형 AC 타입 금지 (bbang2bbang 의
+   확인된 약점 원천 차단). UI 검증은 Playwright E2E(MOCK_LLM=1) 커맨드로.
+
+**의도적으로 도입하지 않은 것**:
+- 커스텀 실행기 재작성 — 1세대 부검이 근거. 유지비와 우회 유인만 남긴다.
+- 무인 연속 실행(큐 소진까지 자동) — 실 LLM API·AWS 배포·프로덕션이 걸려 있어 스토리
+  경계마다 사람 확인 가치가 큼. 신뢰 축적 후 재검토.
+- 학습 노트 완료 조건 — 프로젝트 성격 불일치 (SSoT 동기화로 치환).
+- 락·비용 상한·exit code 체계 — 무인 실행이 사라지면 보호 대상도 사라짐.
+
+**실증**: 도입 당일 reviewer-gate 가 작성자 자신의 훅 수정 Write 와, 테스트 코드 안의
+공격 문자열이 포함된 Bash heredoc 을 각각 차단 — 자기보호와 오탐 방향(안전측)이 실동작으로
+확인됨. 한계도 자백: 문자열 휴리스틱이라 cp/변수 조립 등으로 우회 가능 — 최종 신뢰 경계는
+reviewer 재실행 + 사람 PR 리뷰다.
+
+**트레이드오프**: 1세대의 무인 다단계 자동화(밤새 N step)를 포기하고 스토리 단위 사람
+게이트를 얻는다. 훅 오탐(히어독 내 문자열 등)은 안전한 방향의 마찰로 수용. spec 테스트
+경로 drift 16건이 발견되어 `--strict-tests` 활성화는 S1 스토리로 이관.

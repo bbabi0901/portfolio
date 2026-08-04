@@ -12,9 +12,11 @@
 
 ## 분류
 
-- **Real (구현 완료)**: [harness](harness.md), [harness-status](harness-status.md), [harness-doctor](harness-doctor.md), [review](review.md)
+- **Real (구현 완료)**: [loop](loop.md), [reviewer](reviewer.md), [review](review.md)
 - **Virtual (예정/로드맵)**: [doc-gardener](doc-gardener.md), [refactor-bot](refactor-bot.md)
-- **Planned (설계 완료 / 구현 가능)**: [qa-runner](qa-runner.md), [spec-keeper](spec-keeper.md), [harness-parallel](harness-parallel.md)
+- **Planned (설계 완료 / 구현 가능)**: [qa-runner](qa-runner.md), [spec-keeper](spec-keeper.md)
+
+> 1세대 하네스(harness/harness-status/harness-doctor/harness-parallel, `scripts/execute.py`)는 **ADR-036으로 폐지** — git 이력에서 열람 가능.
 
 ## 표준 7절 카드 형식
 
@@ -43,15 +45,13 @@
 
 | Agent | 파일 | 상태 | 우선순위 (구현 전) |
 |---|---|---|---|
-| harness | [harness.md](harness.md) | Real | — |
-| harness-status | [harness-status.md](harness-status.md) | Real | — |
-| harness-doctor | [harness-doctor.md](harness-doctor.md) | Real | — |
+| loop | [loop.md](loop.md) | Real | — |
+| reviewer | [reviewer.md](reviewer.md) | Real | — |
 | review | [review.md](review.md) | Real | — |
 | doc-gardener | [doc-gardener.md](doc-gardener.md) | Virtual | 중 |
 | qa-runner | [qa-runner.md](qa-runner.md) | planned (Phase 1 ready) | 상 (Phase 8/9 deployment 전) |
 | spec-keeper | [spec-keeper.md](spec-keeper.md) | planned (check:spec 확장) | 상 (`npm run check:spec` 가 부분 수행 — 자동화만 추가) |
 | refactor-bot | [refactor-bot.md](refactor-bot.md) | Virtual | 하 (본 프로젝트 규모 대비 ROI 낮음) |
-| harness-parallel | [harness-parallel.md](harness-parallel.md) | planned (design complete) | 중 (대형 task 병렬화 준비) |
 
 ## 운영 원칙 (요약 — 자세히는 각 파일)
 
