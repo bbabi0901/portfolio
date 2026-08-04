@@ -15,7 +15,7 @@
           "check": "npx vitest run specs/chat-route.spec.ts"
         }
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "S1",
