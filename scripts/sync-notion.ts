@@ -12,7 +12,7 @@ import {
   saveEmbeddingsCache,
 } from "@/lib/embeddings-cache";
 import { createNotionService } from "@/services/notion";
-import { createEmbeddingsService, VOYAGE_PRESET } from "@/services/openai-embeddings";
+import { createBedrockEmbeddingsService, TITAN_NAMESPACE } from "@/services/bedrock-embeddings";
 import type { NotionPageContent, NotionPageRef } from "@/types/notion";
 import type {
   ChunkCategory,
@@ -52,10 +52,10 @@ const EnvSchema = z
     NOTION_TOKEN: z.string().optional(),
     NOTION_PROJECTS_DB_ID: z.string().optional(),
     NOTION_PROFILE_PAGE_IDS: z.string().optional(),
-    // 임베딩 전용 키 (OpenRouter는 /v1/embeddings 미지원)
-    // VOYAGE_API_KEY 우선, 없으면 OPENAI_API_KEY 폴백
-    VOYAGE_API_KEY: z.string().optional(),
-    OPENAI_API_KEY: z.string().optional(),
+    // 임베딩 — Bedrock Titan v2 (ADR-034 Phase 2, FEAT-036). 로컬 sync 는 AWS 프로필 필요.
+    PORTFOLIO_AWS_REGION: z.string().optional(),
+    PORTFOLIO_AWS_PROFILE: z.string().optional(),
+    PORTFOLIO_AWS_ROLE_ARN: z.string().optional(),
     NOTION_TROUBLESHOOTING_DB_ID: z.string().optional(),
     NOTION_EXTRA_PAGE_IDS: z.string().optional(),
     MOCK_NOTION: z.string().optional(),
@@ -227,10 +227,10 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
       fail("[sync-notion] NOTION_PROJECTS_DB_ID is required when MOCK_NOTION!=1");
     }
   }
-  if (!mockLlm && !env.VOYAGE_API_KEY && !env.OPENAI_API_KEY) {
+  if (!mockLlm && !env.PORTFOLIO_AWS_PROFILE && !env.PORTFOLIO_AWS_ROLE_ARN) {
     fail(
-      "[sync-notion] VOYAGE_API_KEY 또는 OPENAI_API_KEY 가 필요합니다 " +
-        "(OpenRouter는 /v1/embeddings 미지원). MOCK_LLM=1 로 픽스처 사용 가능.",
+      "[sync-notion] Bedrock Titan 임베딩에 AWS 자격 증명이 필요합니다 — " +
+        "PORTFOLIO_AWS_PROFILE(로컬) 또는 PORTFOLIO_AWS_ROLE_ARN 설정. MOCK_LLM=1 로 픽스처 사용 가능.",
     );
   }
 
@@ -247,14 +247,10 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     token: env.NOTION_TOKEN || "fixture",
     mock: mockNotion,
   });
-  const useVoyage = !!env.VOYAGE_API_KEY && !env.OPENAI_API_KEY;
-  const embeddingsApiKey = env.VOYAGE_API_KEY || env.OPENAI_API_KEY || "fixture";
-  const embeddingsPreset = useVoyage ? VOYAGE_PRESET : {};
-  const embeddings = createEmbeddingsService({
-    apiKey: embeddingsApiKey,
-    model: "text-embedding-3-small",
+  const embeddings = createBedrockEmbeddingsService({
     mock: mockLlm,
-    ...embeddingsPreset,
+    region: env.PORTFOLIO_AWS_REGION,
+    profile: env.PORTFOLIO_AWS_PROFILE,
   });
 
   const projectsDbId = env.NOTION_PROJECTS_DB_ID || "fixture-db";
@@ -319,9 +315,7 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
 
   // ── 임베딩 (캐시 우선) ──────────────────────────────────────────────────────
   // provider/model 이 바뀌면 벡터 공간이 달라지므로 네임스페이스에 포함해 캐시를 분리.
-  const embedModel = useVoyage ? (VOYAGE_PRESET.model ?? "voyage") : "text-embedding-3-small";
-  const embedDims = useVoyage ? (VOYAGE_PRESET.dimensions ?? 0) : 1536;
-  const embedNamespace = `${embedModel}@${embedDims}`;
+  const embedNamespace = TITAN_NAMESPACE;
 
   const cache: EmbeddingsCache = loadEmbeddingsCache(cacheFile);
   const keys = chunks.map((c) => embeddingCacheKey(embedNamespace, c.text));

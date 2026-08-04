@@ -120,7 +120,7 @@ export const PortfolioJSON = z.object({
     tags: z.array(z.string()),
     text: z.string(),
     tokens: z.number().int(),
-    embedding: z.array(z.number()).length(1536),
+    embedding: z.array(z.number()).length(1024), // Bedrock Titan v2 (ADR-034 Phase 2)
   })),
   suggestedQuestions: z.array(z.object({
     id: z.string(),                       // Q-001

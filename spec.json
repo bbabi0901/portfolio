@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1212,9 +1212,13 @@
     {
       "id": "FEAT-036",
       "name": "Titan v2 임베딩 전환 — sync 파이프라인 Voyage/OpenAI → Bedrock Titan Text Embeddings v2 (1024차원, 캐시 네임스페이스 갱신, 512차원 불일치 해소) (ADR-034)",
-      "status": "planned",
+      "status": "done",
       "priority": "P1",
-      "tests": [],
+      "tests": [
+        "specs/bedrock-embeddings.spec.ts",
+        "specs/sync-notion.spec.ts",
+        "specs/embeddings-cache.spec.ts"
+      ],
       "dependencies": [
         "FEAT-005"
       ]
@@ -1855,6 +1859,13 @@
       "title": "스트림 개시 실패 → 503 no_models_available 표면화 (NO_RECORD 200 위장 금지, fullStream error 파트 소비)",
       "file": "specs/chat-route.spec.ts",
       "anchor": "TS-89"
+    },
+    {
+      "id": "TS-90",
+      "feature": "FEAT-036",
+      "title": "Titan v2 임베딩 전환 — 1024차원 mock/재시도/동시성 계약 + 캐시 네임스페이스(titan@1024) 자동 무효화",
+      "file": "specs/bedrock-embeddings.spec.ts",
+      "anchor": "TS-90"
     }
   ]
 }

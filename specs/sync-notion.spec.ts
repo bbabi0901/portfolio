@@ -40,7 +40,7 @@ describe("sync-notion script", () => {
     expect(fs.existsSync(path.join(tmpDir, "portfolio.sample.json"))).toBe(false);
   });
 
-  it("writes portfolio.server.json with chunks + 1536d embeddings + KST in mock mode", async () => {
+  it("writes portfolio.server.json with chunks + 1024d embeddings + KST in mock mode", async () => {
     process.env.MOCK_NOTION = "1";
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
@@ -58,7 +58,7 @@ describe("sync-notion script", () => {
     expect(data.generatedAt).toMatch(/\+09:00$/);
     expect(Array.isArray(data.chunks)).toBe(true);
     expect(data.chunks.length).toBeGreaterThan(0);
-    expect(data.chunks[0].embedding).toHaveLength(1536);
+    expect(data.chunks[0].embedding).toHaveLength(1024);
     expect(data.suggestedQuestions.length).toBeGreaterThan(0);
     expect(data.profile.name).toBeTruthy();
     expect(data.profile.contact.email).toBeTruthy();
@@ -114,14 +114,16 @@ describe("sync-notion script", () => {
     await expect(main({ outDir: tmpDir })).rejects.toThrow(/NOTION_TOKEN/);
   });
 
-  it("rejects when neither VOYAGE_API_KEY nor OPENAI_API_KEY is set and not in mock LLM mode", async () => {
+  it("rejects when AWS credential path is missing and not in mock LLM mode (Titan, FEAT-036)", async () => {
     process.env.MOCK_NOTION = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.VOYAGE_API_KEY = "";
-    process.env.OPENAI_API_KEY = "";
+    process.env.PORTFOLIO_AWS_PROFILE = "";
+    process.env.PORTFOLIO_AWS_ROLE_ARN = "";
     process.env.MOCK_LLM = "";
     const { main } = await import(SCRIPT_PATH);
-    await expect(main({ outDir: tmpDir })).rejects.toThrow(/VOYAGE_API_KEY|OPENAI_API_KEY/);
+    await expect(main({ outDir: tmpDir })).rejects.toThrow(
+      /PORTFOLIO_AWS_PROFILE|PORTFOLIO_AWS_ROLE_ARN/,
+    );
   });
 });
