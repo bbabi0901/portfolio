@@ -23,6 +23,12 @@ const ServerEnvSchema = z.object({
   MOCK_NOTION: z.string().optional(),
   UPSTASH_REDIS_REST_URL: z.string().url().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+  // AWS — Bedrock 챗 LLM (ADR-034). Vercel 이 AWS_ prefix 를 예약하므로 커스텀명.
+  PORTFOLIO_AWS_REGION: z.string().default("ap-northeast-2"),
+  // Vercel OIDC federation 으로 assume 할 IAM 역할 (프로덕션 자격 증명)
+  PORTFOLIO_AWS_ROLE_ARN: z.string().optional(),
+  // 로컬 dev/smoke 용 AWS 프로필명 (aws login 결과 재사용)
+  PORTFOLIO_AWS_PROFILE: z.string().optional(),
 });
 
 export type ServerEnv = z.infer<typeof ServerEnvSchema>;

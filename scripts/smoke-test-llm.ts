@@ -1,17 +1,18 @@
 #!/usr/bin/env tsx
 /**
- * LLM 연동 smoke test — 실제 OpenRouter API를 호출해 multi-turn 동작 검증.
+ * LLM 연동 smoke test — 실제 Amazon Bedrock API를 호출해 모델별 multi-turn 동작 검증. (ADR-034)
  *
  * 용도:
  *   - @ai-sdk/* 버전 업그레이드 후
  *   - lib/models.ts LLM 호출 방식 변경 후
+ *   - Bedrock 모델 ID / inference profile 가용성 검증 (서울 리전)
  *   - 배포 전 최종 검증
  *
  * 실행: npm run test:smoke
- * 필요: .env.local 에 OPENROUTER_API_KEY 설정
+ * 필요: .env.local 에 PORTFOLIO_AWS_PROFILE (로컬 AWS 프로필, aws login 결과)
+ *       + Bedrock 콘솔(ap-northeast-2)에서 Nova Lite/Micro, Claude Haiku model access 활성화
  */
 
-import { createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { readFileSync } from "fs";
 import { resolve } from "path";
@@ -31,24 +32,16 @@ try {
   // .env.local 없으면 환경변수 직접 주입 가정
 }
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-
-if (!OPENROUTER_API_KEY) {
-  console.error("❌ OPENROUTER_API_KEY 가 설정되지 않았습니다. .env.local 을 확인하세요.");
+if (!process.env.PORTFOLIO_AWS_PROFILE && !process.env.PORTFOLIO_AWS_ROLE_ARN) {
+  console.error(
+    "❌ PORTFOLIO_AWS_PROFILE 이 설정되지 않았습니다. aws login 후 .env.local 에 프로필명을 추가하세요.",
+  );
   process.exit(1);
 }
-
-const or = createOpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: OPENROUTER_API_KEY,
-  headers: {
-    "HTTP-Referer": "http://localhost:3000",
-    "X-Title": "Yoonsoo Kim Portfolio (smoke test)",
-  },
-});
-
-// or.chat() 이 아닌 or() 를 쓰면 Responses API 로 실패한다 — 이 테스트로 감지
-const model = or.chat("openai/gpt-4o-mini");
+if (process.env.MOCK_LLM === "1") {
+  console.error("❌ MOCK_LLM=1 상태 — smoke test 는 실제 API 검증용입니다. 해제 후 실행하세요.");
+  process.exit(1);
+}
 
 async function readStream(stream: AsyncIterable<string>): Promise<string> {
   let text = "";
@@ -59,59 +52,48 @@ async function readStream(stream: AsyncIterable<string>): Promise<string> {
 }
 
 async function runSmoke() {
+  // lib/models.ts 의 실제 경로를 그대로 사용 — 레지스트리/자격 증명 체인까지 검증
+  const { resolveModel, createModel, listAvailableModels } = await import("../lib/models");
+
+  const available = listAvailableModels();
+  console.log(`  사용 가능 모델: ${available.map((m) => m.id).join(", ")}\n`);
+
   let passed = 0;
   let failed = 0;
 
-  // 테스트 1: 단일 turn
-  process.stdout.write("  Turn 1 (single)... ");
-  try {
-    const r1 = streamText({
-      model,
-      messages: [{ role: "user", content: "Say 'hello' in one word." }],
-      maxOutputTokens: 20,
-    });
-    const t1 = await readStream(r1.textStream);
-    if (t1.trim().length > 0) {
-      console.log(`✓ (${t1.trim().slice(0, 30)})`);
-      passed++;
-    } else {
-      console.log("✗ 빈 응답");
+  for (const spec of available) {
+    // 모델별 2-turn — inference profile ID 오류·리전 미지원을 여기서 감지
+    process.stdout.write(`  ${spec.id} (2-turn)... `);
+    try {
+      const model = createModel(spec);
+      const r = streamText({
+        model,
+        messages: [
+          { role: "user", content: "Say 'hello' in one word." },
+          { role: "assistant", content: "Hello." },
+          { role: "user", content: "Now say 'bye' in one word." },
+        ],
+        maxOutputTokens: 20,
+      });
+      const t = await readStream(r.textStream);
+      if (t.trim().length > 0) {
+        console.log(`✓ (${t.trim().slice(0, 30)})`);
+        passed++;
+      } else {
+        console.log("✗ 빈 응답");
+        failed++;
+      }
+    } catch (e) {
+      console.log(`✗ 에러: ${e instanceof Error ? e.message : String(e)}`);
       failed++;
     }
-  } catch (e) {
-    console.log(`✗ 에러: ${e instanceof Error ? e.message : String(e)}`);
-    failed++;
   }
 
-  // 테스트 2: multi-turn (Turn 2 는 항상 실패했던 케이스)
-  process.stdout.write("  Turn 2 (multi)... ");
+  // 기본 모델 3-turn (스트리밍 파이프라인 회귀 검증)
+  process.stdout.write("  default 3-turn... ");
   try {
-    const r2 = streamText({
-      model,
-      messages: [
-        { role: "user", content: "Say 'hello' in one word." },
-        { role: "assistant", content: "Hello." },
-        { role: "user", content: "Now say 'bye' in one word." },
-      ],
-      maxOutputTokens: 20,
-    });
-    const t2 = await readStream(r2.textStream);
-    if (t2.trim().length > 0) {
-      console.log(`✓ (${t2.trim().slice(0, 30)})`);
-      passed++;
-    } else {
-      console.log("✗ 빈 응답 — multi-turn 버그 재발!");
-      failed++;
-    }
-  } catch (e) {
-    console.log(`✗ 에러: ${e instanceof Error ? e.message : String(e)}`);
-    failed++;
-  }
-
-  // 테스트 3: 3-turn
-  process.stdout.write("  Turn 3 (3-turn)... ");
-  try {
-    const r3 = streamText({
+    const model = createModel(resolveModel(null));
+    const r = streamText({
       model,
       messages: [
         { role: "user", content: "Say 'one'." },
@@ -122,12 +104,12 @@ async function runSmoke() {
       ],
       maxOutputTokens: 20,
     });
-    const t3 = await readStream(r3.textStream);
-    if (t3.trim().length > 0) {
-      console.log(`✓ (${t3.trim().slice(0, 30)})`);
+    const t = await readStream(r.textStream);
+    if (t.trim().length > 0) {
+      console.log(`✓ (${t.trim().slice(0, 30)})`);
       passed++;
     } else {
-      console.log("✗ 빈 응답");
+      console.log("✗ 빈 응답 — multi-turn 버그 재발!");
       failed++;
     }
   } catch (e) {
@@ -137,14 +119,16 @@ async function runSmoke() {
 
   console.log(`\n결과: ${passed}/${passed + failed} 통과`);
   if (failed > 0) {
-    console.error("❌ smoke test 실패 — 배포 전 원인 파악 필요");
+    console.error(
+      "❌ smoke test 실패 — 배포 전 원인 파악 필요 (model access / inference profile 확인)",
+    );
     process.exit(1);
   } else {
     console.log("✅ 모든 smoke test 통과");
   }
 }
 
-console.log("LLM smoke test (실제 OpenRouter API 호출)\n");
+console.log("LLM smoke test (실제 Amazon Bedrock API 호출, ADR-034)\n");
 runSmoke().catch((e) => {
   console.error("smoke test 실행 실패:", e);
   process.exit(1);

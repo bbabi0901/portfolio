@@ -13,15 +13,15 @@ import type { ModelId } from "@/lib/models";
 export type { ModelId };
 
 const MODEL_LABELS_LONG: Record<ModelId, string> = {
-  "gpt-4o-mini": "GPT-4o mini",
-  "claude-3-5-haiku": "Claude 3.5 Haiku",
-  "gemini-2.0-flash": "Gemini 2.0 Flash",
+  "nova-lite": "Amazon Nova Lite",
+  "nova-micro": "Amazon Nova Micro",
+  "claude-haiku": "Claude Haiku",
 };
 
 const MODEL_LABELS_SHORT: Record<ModelId, string> = {
-  "gpt-4o-mini": "GPT-4o",
-  "claude-3-5-haiku": "Haiku",
-  "gemini-2.0-flash": "Gemini",
+  "nova-lite": "Nova Lite",
+  "nova-micro": "Nova Micro",
+  "claude-haiku": "Haiku",
 };
 
 export interface ModelSwitcherProps {

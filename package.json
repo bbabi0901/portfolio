@@ -26,12 +26,15 @@
     "test:smoke": "tsx scripts/smoke-test-llm.ts"
   },
   "dependencies": {
+    "@ai-sdk/amazon-bedrock": "^4.0.143",
     "@ai-sdk/anthropic": "^3.0.91",
     "@ai-sdk/google": "^3.0.87",
     "@ai-sdk/openai": "^3.0.79",
     "@ai-sdk/react": "^3.0.219",
+    "@aws-sdk/credential-providers": "^3.1097.0",
     "@hookform/resolvers": "^5.4.0",
     "@notionhq/client": "^5.22.0",
+    "@vercel/functions": "^3.7.6",
     "ai": "^6.0.175",
     "class-variance-authority": "^0.7.1",
     "embla-carousel-react": "^8.6.0",

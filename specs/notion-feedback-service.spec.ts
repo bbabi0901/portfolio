@@ -30,7 +30,7 @@ const baseInput: FeedbackInput = {
   answer: "MFE 마이그레이션 TF에서 Vite 기반 Module Federation을 도입했습니다.",
   reason: "incomplete",
   reasonDetail: "더 자세히 알고 싶어요",
-  model: "gpt-4o-mini",
+  model: "nova-lite",
   retrievalChunkTitles: ["Micro-Frontend Architecture 마이그레이션 TF", "Bidirectional Federation"],
   uaHash: "abcd1234",
 };
@@ -166,7 +166,7 @@ describe("appendFeedback (실제 호출, msw mock)", () => {
     // ReasonDetail (no space, per NOTION_SCHEMA.md SSoT)
     expect(Array.isArray(props.ReasonDetail!.rich_text)).toBe(true);
     // Model
-    expect(props.Model!.select!.name).toBe("gpt-4o-mini");
+    expect(props.Model!.select!.name).toBe("nova-lite");
     // RetrievalChunks: " | "로 join
     const rcArr = props.RetrievalChunks!.rich_text as Array<{
       text: { content: string };

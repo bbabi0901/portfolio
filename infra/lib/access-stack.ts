@@ -58,6 +58,8 @@ export class PortfolioAccessStack extends cdk.Stack {
           "arn:aws:bedrock:*::foundation-model/amazon.nova-micro-v1:0",
           "arn:aws:bedrock:*::foundation-model/anthropic.claude-*",
           `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/apac.*`,
+          // Haiku 4.5 는 apac 프로필이 없어 global 프로필 사용 (라우팅 리전이 가변이라 리전 와일드카드)
+          `arn:aws:bedrock:*:${this.account}:inference-profile/global.*`,
         ],
       }),
     );

@@ -115,7 +115,7 @@ describe("Feedback handleFeedback integration", () => {
         question: "질문",
         answer: "답변",
         reason: "incomplete",
-        model: "gpt-4o-mini",
+        model: "nova-lite",
         retrievalChunkTitles: [],
       }),
     });

@@ -112,13 +112,13 @@ describe("/api/chat", () => {
       expect(res.status).toBe(503);
     });
 
-    it("정상: 모델 ID 미지정 → DEFAULT (gpt-4o-mini) 사용", async () => {
+    it("정상: 모델 ID 미지정 → DEFAULT (nova-lite) 사용", async () => {
       setMockEnv();
       const res = await postChat({
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("gpt-4o-mini");
+      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
       // 명시되지 않았으므로 substitution 헤더 없음
       expect(res.headers.get("X-Model-Substitution")).toBeNull();
     });
@@ -130,7 +130,7 @@ describe("/api/chat", () => {
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("gpt-4o-mini");
+      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
       expect(res.headers.get("X-Model-Substitution")).toBe("true");
     });
 
@@ -139,11 +139,11 @@ describe("/api/chat", () => {
       process.env.ANTHROPIC_API_KEY = "sk-ant-test";
       clearEnvCache();
       const res = await postChat({
-        modelId: "claude-3-5-haiku",
+        modelId: "claude-haiku",
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("claude-3-5-haiku");
+      expect(res.headers.get("X-Model-Id")).toBe("claude-haiku");
       expect(res.headers.get("X-Model-Substitution")).toBeNull();
     });
   });
@@ -200,7 +200,7 @@ describe("/api/chat", () => {
       const res = await postChat({
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
-      expect(res.headers.get("X-Model-Id")).toBe("gpt-4o-mini");
+      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
     });
   });
 

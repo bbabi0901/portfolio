@@ -24,7 +24,7 @@ export const GreetingSchema = z.object({
 
 export const ModelSchema = z.object({
   id: z.string().min(1),
-  provider: z.enum(["openai", "anthropic", "google"]),
+  provider: z.enum(["amazon", "anthropic", "openai", "google"]),
   default: z.boolean(),
   maxOutputTokens: z.number().int().positive(),
   temperature: z.number().min(0).max(2).optional(),

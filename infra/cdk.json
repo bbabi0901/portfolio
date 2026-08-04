@@ -8,7 +8,7 @@
     "portfolio:region": "ap-northeast-2",
     "portfolio:billingAlarmUsd": 5,
     "portfolio:alertEmail": "bbabi0901@gmail.com",
-    "portfolio:vercelTeamSlug": "REPLACE_WITH_VERCEL_TEAM_SLUG",
+    "portfolio:vercelTeamSlug": "bbabi0901s-projects",
     "portfolio:vercelProjectName": "portfolio",
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/aws-iam:minimizePolicies": true

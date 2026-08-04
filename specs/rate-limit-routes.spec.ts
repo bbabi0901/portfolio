@@ -11,7 +11,7 @@ const validFeedbackBody = {
   answer: "rate limit test answer.",
   reason: "incomplete" as const,
   reasonDetail: "more please",
-  model: "gpt-4o-mini",
+  model: "nova-lite",
   retrievalChunkTitles: [] as string[],
 };
 
