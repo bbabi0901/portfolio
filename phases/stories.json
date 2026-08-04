@@ -55,7 +55,7 @@
           "check": "python3 -c \"import json; d=json.load(open('data/portfolio.server.json')); assert len(d['chunks'][0]['embedding'])==1024, 'dim!=1024'\""
         }
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "S3",
