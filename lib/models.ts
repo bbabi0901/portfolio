@@ -146,9 +146,22 @@ function hasAwsAccess(env: ReturnType<typeof getServerEnv>): boolean {
   return Boolean(env.PORTFOLIO_AWS_ROLE_ARN || env.PORTFOLIO_AWS_PROFILE);
 }
 
+/** MOCK_LLM=error — 스트림 개시가 즉시 실패하는 mock (자격 증명 장애 재현, TS-89 테스트 심) */
+function createErroringMockModel(modelId: ModelId): LanguageModelV3 {
+  return {
+    ...createMockModel(modelId),
+    async doStream(): Promise<LanguageModelV3StreamResult> {
+      throw new Error("mock stream failure (MOCK_LLM=error)");
+    },
+  };
+}
+
 export function createModel(spec: ModelSpec): LanguageModel {
   const env = getServerEnv();
 
+  if (env.MOCK_LLM === "error") {
+    return createErroringMockModel(spec.id) as unknown as LanguageModel;
+  }
   if (env.MOCK_LLM === "1") {
     return createMockModel(spec.id) as unknown as LanguageModel;
   }
