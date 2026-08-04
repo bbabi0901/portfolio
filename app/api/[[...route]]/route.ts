@@ -126,22 +126,59 @@ app.post(
       topP: spec.topP,
     });
 
+    // 스트림 개시 프로브 — 첫 text-delta 전에 error 파트가 오면 503 으로 표면화 (ERR-05/TS-89).
+    // textStream 은 에러를 throw 하지 않고 조용히 종료해 NO_RECORD 200 으로 위장됐으므로
+    // (프로덕션 OIDC 장애가 이렇게 은폐됨) error 파트가 보이는 fullStream 을 소비한다.
+    const iterator = result.fullStream[Symbol.asyncIterator]();
+    let firstText: string | null = null;
+    let startError: unknown = null;
+    while (firstText === null && startError === null) {
+      const r = await iterator.next();
+      if (r.done) break; // 텍스트 없이 정상 종료 — 빈 응답 폴백 경로로
+      if (r.value.type === "error") startError = r.value.error;
+      else if (r.value.type === "text-delta") firstText = r.value.text;
+    }
+    if (startError !== null) {
+      console.error(
+        "[chat] stream start failed:",
+        startError instanceof Error ? startError.message : String(startError),
+      );
+      return c.json({ error: "no_models_available" }, 503);
+    }
+
     const encoder = new TextEncoder();
     const filteredStream = new ReadableStream<Uint8Array>({
       async start(controller) {
         let bytesWritten = 0;
+        let midStreamError = false;
+        const emit = (text: string) => {
+          const filtered = filterOutput({ text, allowedSourceUrls });
+          const encoded = encoder.encode(filtered.text);
+          controller.enqueue(encoded);
+          bytesWritten += encoded.length;
+        };
         try {
-          for await (const chunk of result.textStream) {
-            const filtered = filterOutput({ text: chunk, allowedSourceUrls });
-            const encoded = encoder.encode(filtered.text);
-            controller.enqueue(encoded);
-            bytesWritten += encoded.length;
+          if (firstText !== null) emit(firstText);
+          if (firstText !== null) {
+            for (;;) {
+              const r = await iterator.next();
+              if (r.done) break;
+              if (r.value.type === "error") {
+                // mid-stream 에러 — 이미 200 이 나간 뒤라 상태코드 변경 불가. 로그 후 종료(부분 응답 유지).
+                midStreamError = true;
+                const e = r.value.error;
+                console.error("[chat] stream error:", e instanceof Error ? e.message : String(e));
+                break;
+              }
+              if (r.value.type === "text-delta") emit(r.value.text);
+            }
           }
         } catch (err) {
+          midStreamError = true;
           console.error("[chat] stream error:", err instanceof Error ? err.message : String(err));
         } finally {
-          if (bytesWritten === 0) {
-            // 스트림이 비어있으면 fallback 반환 — 빈 버블 대신 의미있는 응답
+          if (bytesWritten === 0 && !midStreamError) {
+            // 에러 없이 정상 종료된 0바이트 스트림(모델이 진짜 빈 응답)만 fallback — 빈 버블 방지
             const fallback = language === "en" ? NO_RECORD_RESPONSE_EN : NO_RECORD_RESPONSE_KO;
             controller.enqueue(encoder.encode(fallback));
           }

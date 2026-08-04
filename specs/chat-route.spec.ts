@@ -202,6 +202,19 @@ describe("/api/chat", () => {
       });
       expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
     });
+
+    // TS-89: 스트림 개시 실패는 503으로 표면화 — NO_RECORD 위장 금지 (ERR-05, S0-error-surface)
+    it("TS-89: 모델 스트림 개시 실패 → 503 no_models_available (가짜 NO_RECORD 200 금지)", async () => {
+      setMockEnv();
+      process.env.MOCK_LLM = "error"; // doStream 즉시 실패하는 mock (프로덕션 자격 증명 장애 재현)
+      clearEnvCache();
+      const res = await postChat({
+        messages: [{ role: "user", content: "샘플 프로젝트가 뭐예요?" }],
+      });
+      expect(res.status).toBe(503);
+      const body = (await res.json()) as { error: string };
+      expect(body.error).toBe("no_models_available");
+    });
   });
 
   describe("output filter", () => {

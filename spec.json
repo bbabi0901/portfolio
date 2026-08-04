@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1200,7 +1200,7 @@
     {
       "id": "FEAT-035",
       "name": "Bedrock 챗 LLM 전환 — OpenRouter → Bedrock Converse (Nova Lite 기본 / Nova Micro / Claude Haiku), Vercel OIDC → IAM Role 인증 (ADR-034/035)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P1",
       "tests": [
         "specs/models.spec.ts",
@@ -1849,6 +1849,13 @@
       "title": "Bedrock 모델 피커 — Nova Lite(기본)/Nova Micro/Claude Haiku 노출 + 레거시 OpenRouter ID 무보정 흡수(localStorage) + AWS 자격 증명 부재 시 채팅 비활성",
       "file": "specs/models.spec.ts",
       "anchor": "TS-88"
+    },
+    {
+      "id": "TS-89",
+      "feature": "FEAT-035",
+      "title": "스트림 개시 실패 → 503 no_models_available 표면화 (NO_RECORD 200 위장 금지, fullStream error 파트 소비)",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "TS-89"
     }
   ]
 }
