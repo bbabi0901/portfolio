@@ -2,13 +2,38 @@
   "$comment": "작업 큐 (ADR-036). 스키마: {id, title, feat?, ac: [{type: 'cmd', check}], passes}. AC는 실행 가능 커맨드만 — screenshot 등 자기신고형 타입 금지. passes는 reviewer만 갱신(훅 강제). 필드 추가 금지 — 게이트가 강제하지 않는 필드는 썩는다. 제품 명세는 spec.json(SSoT), 여기는 순서 있는 큐일 뿐.",
   "stories": [
     {
+      "id": "S0-error-surface",
+      "title": "스트림 중 모델 에러가 빈 스트림 폴백(NO_RECORD)으로 위장되는 버그 수정 — 503 no_models_available 계약으로 표면화 (프로덕션 OIDC 장애 진단에서 발견)",
+      "feat": null,
+      "ac": [
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "npx vitest run specs/chat-route.spec.ts"
+        }
+      ],
+      "passes": false
+    },
+    {
       "id": "S1",
       "title": "spec.json 테스트 매핑 drift 정리 + check:spec --strict-tests 활성화 (누락 16건 실체 조사·재매핑)",
       "feat": null,
       "ac": [
-        { "type": "cmd", "check": "npx tsx scripts/validate-spec.ts --strict-tests" },
-        { "type": "cmd", "check": "npm run lint && npm run test" },
-        { "type": "cmd", "check": "grep -q 'strict-tests' package.json" }
+        {
+          "type": "cmd",
+          "check": "npx tsx scripts/validate-spec.ts --strict-tests"
+        },
+        {
+          "type": "cmd",
+          "check": "npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "grep -q 'strict-tests' package.json"
+        }
       ],
       "passes": false
     },
@@ -17,9 +42,18 @@
       "title": "Titan v2 임베딩 전환 — sync 파이프라인 Voyage/OpenAI → Bedrock, 1024차원 전량 재임베딩 (AWS Phase 2)",
       "feat": "FEAT-036",
       "ac": [
-        { "type": "cmd", "check": "npm run check:spec && npm run lint && npm run test" },
-        { "type": "cmd", "check": "npx vitest run specs/sync-notion.spec.ts specs/embeddings-cache.spec.ts" },
-        { "type": "cmd", "check": "python3 -c \"import json; d=json.load(open('data/portfolio.server.json')); assert len(d['chunks'][0]['embedding'])==1024, 'dim!=1024'\"" }
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "npx vitest run specs/sync-notion.spec.ts specs/embeddings-cache.spec.ts"
+        },
+        {
+          "type": "cmd",
+          "check": "python3 -c \"import json; d=json.load(open('data/portfolio.server.json')); assert len(d['chunks'][0]['embedding'])==1024, 'dim!=1024'\""
+        }
       ],
       "passes": false
     },
@@ -28,9 +62,18 @@
       "title": "S3 Vectors + 런타임 하이브리드 검색 점등 — DataStack 배포, 쿼리 임베딩 + QueryVectors + keyword-only 폴백 (AWS Phase 3)",
       "feat": "FEAT-037",
       "ac": [
-        { "type": "cmd", "check": "npm run check:spec && npm run lint && npm run test" },
-        { "type": "cmd", "check": "npm run test:smoke" },
-        { "type": "cmd", "check": "cd infra && npm run build && npx cdk synth --quiet" }
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "npm run test:smoke"
+        },
+        {
+          "type": "cmd",
+          "check": "cd infra && npm run build && npx cdk synth --quiet"
+        }
       ],
       "passes": false
     },
@@ -39,8 +82,14 @@
       "title": "Lambda + EventBridge 자동 인제스천 — sync core 분해, corpus.json S3 이전, IngestStack 배포 (AWS Phase 4)",
       "feat": "FEAT-038",
       "ac": [
-        { "type": "cmd", "check": "npm run check:spec && npm run lint && npm run test" },
-        { "type": "cmd", "check": "cd infra && npm run build && npx cdk synth --quiet" }
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "cd infra && npm run build && npx cdk synth --quiet"
+        }
       ],
       "passes": false
     },
@@ -49,8 +98,14 @@
       "title": "AWS 전환 정리 — 구 키(OpenRouter/Voyage/OpenAI) 제거, 커밋 데이터 → fallback.json 슬림화, 문서 최종 갱신 (AWS Phase 5)",
       "feat": "FEAT-039",
       "ac": [
-        { "type": "cmd", "check": "npm run check:spec && npm run lint && npm run test" },
-        { "type": "cmd", "check": "! grep -rq 'OPENROUTER_API_KEY' lib/ app/ services/ scripts/" }
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "! grep -rq 'OPENROUTER_API_KEY' lib/ app/ services/ scripts/"
+        }
       ],
       "passes": false
     }
