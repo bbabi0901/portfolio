@@ -867,7 +867,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/typing-indicator.spec.tsx",
+        "specs/components/typing-dots.test.tsx",
         "specs/chat-route.spec.ts"
       ]
     },
@@ -877,7 +877,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/carousel.spec.tsx"
+        "specs/components/suggestion-carousel.test.tsx"
       ]
     },
     {
@@ -887,7 +887,7 @@
       "priority": "P0",
       "tests": [
         "specs/feedback-route.spec.ts",
-        "specs/feedback-button.spec.tsx"
+        "specs/components/feedback-wiring.spec.tsx"
       ]
     },
     {
@@ -919,7 +919,7 @@
       "tests": [
         "specs/injection-defense.spec.ts",
         "specs/prompts.spec.ts",
-        "specs/output-postprocess.spec.ts"
+        "specs/output-filter.spec.ts"
       ]
     },
     {
@@ -989,7 +989,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/message-list.spec.tsx",
+        "specs/components/messages.spec.tsx",
         "tests/e2e/chat.e2e.ts:stickToBottom"
       ]
     },
@@ -999,7 +999,7 @@
       "status": "planned",
       "priority": "P1",
       "tests": [
-        "specs/message-actions.spec.tsx"
+        "specs/components/messages.spec.tsx"
       ]
     },
     {
@@ -1008,7 +1008,7 @@
       "status": "planned",
       "priority": "P1",
       "tests": [
-        "specs/clear-conversation.spec.tsx"
+        "specs/components/chat-root.spec.tsx"
       ]
     },
     {
@@ -1017,7 +1017,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/responsive.spec.tsx"
+        "specs/components/composer.spec.tsx"
       ]
     },
     {
@@ -1037,7 +1037,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/footer.spec.tsx"
+        "specs/components/layout-shell.spec.tsx"
       ]
     },
     {
@@ -1055,7 +1055,7 @@
       "status": "planned",
       "priority": "P2",
       "tests": [
-        "specs/related-questions.spec.tsx"
+        "specs/generate-suggestions.spec.ts"
       ]
     },
     {
@@ -1064,7 +1064,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/side-sheet.spec.tsx",
+        "specs/components/layout-shell.spec.tsx",
         "tests/e2e/side-menu.e2e.ts"
       ]
     },
@@ -1074,8 +1074,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "tests/e2e/about.e2e.ts",
-        "specs/reading-time.spec.ts",
+        "tests/e2e/pages.e2e.ts",
         "specs/about-data.spec.ts"
       ]
     },
@@ -1098,7 +1097,7 @@
       "tests": [
         "specs/components/contact-form.spec.tsx",
         "specs/contact-route.spec.ts",
-        "tests/e2e/contact.e2e.ts"
+        "tests/e2e/pages.e2e.ts"
       ]
     },
     {
@@ -1117,8 +1116,7 @@
       "status": "planned",
       "priority": "P0",
       "tests": [
-        "specs/responsive.spec.tsx",
-        "tests/visual/breakpoints.spec.ts"
+        "tests/e2e/breakpoints.e2e.ts"
       ]
     },
     {
@@ -1439,7 +1437,8 @@
       "id": "TS-28",
       "feature": "FEAT-028",
       "title": "Mobile fullscreen vs desktop panel",
-      "file": "tests/visual/breakpoints.spec.ts"
+      "file": "tests/e2e/breakpoints.e2e.ts",
+      "anchor": "TS-28"
     },
     {
       "id": "TS-29",
@@ -1500,8 +1499,8 @@
       "id": "TS-37",
       "feature": "FEAT-028",
       "title": "About responsive",
-      "file": "tests/visual/breakpoints.spec.ts",
-      "anchor": "about"
+      "file": "tests/e2e/breakpoints.e2e.ts",
+      "anchor": "TS-37"
     },
     {
       "id": "TS-38",
@@ -1528,8 +1527,8 @@
       "id": "TS-42",
       "feature": "FEAT-028",
       "title": "Experience responsive",
-      "file": "tests/visual/breakpoints.spec.ts",
-      "anchor": "experience"
+      "file": "tests/e2e/breakpoints.e2e.ts",
+      "anchor": "TS-42"
     },
     {
       "id": "TS-43",
