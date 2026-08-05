@@ -1226,7 +1226,7 @@
     {
       "id": "FEAT-037",
       "name": "S3 Vectors 런타임 하이브리드 검색 — 쿼리 임베딩 + QueryVectors 도입으로 프로덕션 hybrid 점등, 장애 시 keyword-only 강등(ERR-14) 유지 (ADR-034/036)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P1",
       "tests": [
         "specs/s3-vectors.spec.ts",
