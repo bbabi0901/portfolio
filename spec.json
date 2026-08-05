@@ -1241,7 +1241,7 @@
     {
       "id": "FEAT-038",
       "name": "Lambda + EventBridge 자동 인제스천 — 24h 주기 freshness 선체크 후 Notion→청킹→임베딩→S3 Vectors/corpus.json 갱신, 재배포 없는 콘텐츠 반영 (ADR-034/037)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P1",
       "tests": [
         "specs/sync-core.spec.ts",

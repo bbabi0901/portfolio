@@ -91,7 +91,7 @@
           "check": "cd infra && npm run build && npx cdk synth --quiet"
         }
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "S5",
