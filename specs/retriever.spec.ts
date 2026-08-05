@@ -140,4 +140,36 @@ describe("retrieve", () => {
     });
     expect(a).toEqual(b);
   });
+
+  // TS-91: 외부 벡터 점수 주입 (S3 Vectors) — ADR-034 Phase 3
+  describe("vectorScores 주입", () => {
+    const data = mkData([
+      mkChunk("c1", "마이크로 프론트엔드 Module Federation 도입", ["아키텍처"]),
+      mkChunk("c2", "웹 푸시 알림 구현", ["알림"]),
+      mkChunk("c3", "완전히 무관한 취미 이야기", ["취미"]),
+    ]);
+
+    it("vectorScores 존재 시 mode=hybrid + 점수 병합(0.4/0.6)", () => {
+      const scores = new Map([["c1", 0.9]]);
+      const r = retrieve("마이크로 프론트엔드", data, { vectorScores: scores });
+      expect(r.mode).toBe("hybrid");
+      const hit = r.results.find((x) => x.chunk.id === "c1");
+      expect(hit).toBeDefined();
+      expect(hit!.scores.vector).toBeCloseTo(0.9);
+      expect(hit!.scores.merged).toBeCloseTo(0.4 * hit!.scores.keyword + 0.6 * 0.9, 5);
+    });
+
+    it("keyword 0 이어도 vector >= 0.3 이면 통과 (minVectorScore 계약 유지)", () => {
+      const scores = new Map([["c3", 0.5]]);
+      const r = retrieve("zzz없는키워드zzz", data, { vectorScores: scores });
+      expect(r.results.map((x) => x.chunk.id)).toContain("c3");
+      expect(r.mode).toBe("hybrid");
+    });
+
+    it("맵에 없는 청크의 vector 점수는 0 (keyword 만으로 경쟁)", () => {
+      const scores = new Map([["nonexistent-id", 0.99]]);
+      const r = retrieve("웹 푸시 알림", data, { vectorScores: scores });
+      for (const x of r.results) expect(x.scores.vector).toBe(0);
+    });
+  });
 });
