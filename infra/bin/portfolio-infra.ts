@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
 import { PortfolioAccessStack } from "../lib/access-stack";
+import { PortfolioDataStack } from "../lib/data-stack";
 import { PortfolioOpsStack } from "../lib/ops-stack";
 
 const app = new cdk.App();
@@ -22,5 +23,9 @@ new PortfolioAccessStack(app, "PortfolioAccessStack", {
   vercelProjectName: app.node.tryGetContext("portfolio:vercelProjectName"),
 });
 
-// Phase 3 에서 추가: PortfolioDataStack (S3 Vectors 버킷/인덱스 + corpus 버킷)
+new PortfolioDataStack(app, "PortfolioDataStack", {
+  env: { account, region },
+  indexName: "portfolio-chunks",
+});
+
 // Phase 4 에서 추가: PortfolioIngestStack (Sync Lambda + EventBridge Scheduler + SSM)

@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1226,9 +1226,13 @@
     {
       "id": "FEAT-037",
       "name": "S3 Vectors 런타임 하이브리드 검색 — 쿼리 임베딩 + QueryVectors 도입으로 프로덕션 hybrid 점등, 장애 시 keyword-only 강등(ERR-14) 유지 (ADR-034/036)",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "P1",
-      "tests": [],
+      "tests": [
+        "specs/s3-vectors.spec.ts",
+        "specs/retriever.spec.ts",
+        "specs/chat-route.spec.ts"
+      ],
       "dependencies": [
         "FEAT-006",
         "FEAT-036"
@@ -1866,6 +1870,13 @@
       "title": "Titan v2 임베딩 전환 — 1024차원 mock/재시도/동시성 계약 + 캐시 네임스페이스(titan@1024) 자동 무효화",
       "file": "specs/bedrock-embeddings.spec.ts",
       "anchor": "TS-90"
+    },
+    {
+      "id": "TS-91",
+      "feature": "FEAT-037",
+      "title": "S3 Vectors 하이브리드 점등 — vectorScores 주입 병합(0.4/0.6)·minVectorScore 계약·장애 시 keyword-only 강등(ERR-14)",
+      "file": "specs/retriever.spec.ts",
+      "anchor": "TS-91"
     }
   ]
 }

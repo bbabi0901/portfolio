@@ -29,6 +29,9 @@ const ServerEnvSchema = z.object({
   PORTFOLIO_AWS_ROLE_ARN: z.string().optional(),
   // 로컬 dev/smoke 용 AWS 프로필명 (aws login 결과 재사용)
   PORTFOLIO_AWS_PROFILE: z.string().optional(),
+  // S3 Vectors (ADR-034 Phase 3) — 미설정 시 벡터 검색 비활성 (keyword-only)
+  S3_VECTORS_BUCKET: z.string().optional(),
+  S3_VECTORS_INDEX: z.string().default("portfolio-chunks"),
 });
 
 export type ServerEnv = z.infer<typeof ServerEnvSchema>;

@@ -22,6 +22,8 @@ import {
 } from "@/lib/prompts";
 import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { retrieve } from "@/lib/retriever";
+import { createBedrockEmbeddingsService } from "@/services/bedrock-embeddings";
+import { createVectorStore, type VectorStore } from "@/services/s3-vectors";
 import { addTokenUsage, checkDailyTokenBudget } from "@/lib/token-budget";
 import type { PortfolioServerData } from "@/types/portfolio";
 
@@ -29,6 +31,60 @@ import type { PortfolioServerData } from "@/types/portfolio";
 export const runtime = "nodejs";
 
 const portfolioData = portfolioJson as unknown as PortfolioServerData;
+
+// 런타임 벡터 검색 (ADR-034 Phase 3) — 함수 인스턴스당 1회 생성 (lazy)
+const VECTOR_TIMEOUT_MS = 800;
+let vectorStoreSingleton: VectorStore | null = null;
+let embedSingleton: ((text: string) => Promise<number[]>) | null = null;
+
+/**
+ * 질문 임베딩(Titan) → S3 Vectors 질의 → chunkId→score 맵.
+ * 실패·타임아웃·미설정은 전부 undefined = keyword-only 강등 (ERR-14, X-Retrieval-Mode 로 노출).
+ */
+async function fetchVectorScores(query: string): Promise<Map<string, number> | undefined> {
+  const env = getServerEnv();
+  if (!env.S3_VECTORS_BUCKET) return undefined;
+  try {
+    vectorStoreSingleton ??= createVectorStore({
+      region: env.PORTFOLIO_AWS_REGION,
+      bucket: env.S3_VECTORS_BUCKET,
+      index: env.S3_VECTORS_INDEX,
+      credentialProvider: (await import("@/services/aws-credentials")).createAwsCredentialProvider({
+        roleArn: env.PORTFOLIO_AWS_ROLE_ARN,
+        profile: env.PORTFOLIO_AWS_PROFILE,
+      }),
+    });
+    embedSingleton ??= (() => {
+      const svc = createBedrockEmbeddingsService({
+        region: env.PORTFOLIO_AWS_REGION,
+        roleArn: env.PORTFOLIO_AWS_ROLE_ARN,
+        profile: env.PORTFOLIO_AWS_PROFILE,
+      });
+      return (text: string) => svc.embed(text);
+    })();
+    const scores = await Promise.race([
+      (async () => {
+        const embedding = await embedSingleton!(query);
+        const matches = await vectorStoreSingleton!.query(embedding, { topK: 16 });
+        return new Map(matches.map((m) => [m.chunkId, m.score]));
+      })(),
+      new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new Error(`vector search timeout ${VECTOR_TIMEOUT_MS}ms`)),
+          VECTOR_TIMEOUT_MS,
+        ),
+      ),
+    ]);
+    return scores;
+  } catch (err) {
+    // ERR-14 — 벡터 경로 장애는 keyword-only 로 강등, 응답은 계속된다
+    console.warn(
+      "[chat] vector search degraded to keyword-only:",
+      err instanceof Error ? err.message : String(err),
+    );
+    return undefined;
+  }
+}
 
 const ChatMessageSchema = z.object({
   role: z.enum(["user", "assistant"]),
@@ -97,8 +153,10 @@ app.post(
     const dim = portfolioData.chunks[0]?.embedding.length;
     const queryEmbedding =
       env.MOCK_LLM === "1" && dim ? fixtureEmbedding(lastUser, dim) : undefined;
+    // 실모드: S3 Vectors 로 하이브리드 점등 (MOCK 은 fixture 로컬 코사인 경로 유지 — CI 결정성)
+    const vectorScores = queryEmbedding ? undefined : await fetchVectorScores(lastUser);
 
-    const retrieval = retrieve(lastUser, portfolioData, { queryEmbedding });
+    const retrieval = retrieve(lastUser, portfolioData, { queryEmbedding, vectorScores });
     const chunks = retrieval.results.map((r) => r.chunk);
     const language = detectLanguage(lastUser);
 

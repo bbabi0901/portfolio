@@ -376,6 +376,33 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     `✓ ${data.chunks.length} chunks, ${pages.length} pages, ` +
       `${data.suggestedQuestions.length} questions, generatedAt ${data.generatedAt}`,
   );
+
+  // --aws: S3 Vectors 업서트 + 고아 벡터 정리 (ADR-034 Phase 3, Phase 4 에서 Lambda 로 이전)
+  if (process.argv.includes("--aws")) {
+    const { createVectorStore } = await import("@/services/s3-vectors");
+    const bucket = process.env.S3_VECTORS_BUCKET;
+    if (!bucket) throw new Error("[sync-notion] --aws 에는 S3_VECTORS_BUCKET 이 필요합니다");
+    const store = createVectorStore({
+      region: process.env.PORTFOLIO_AWS_REGION ?? "ap-northeast-2",
+      bucket,
+      index: process.env.S3_VECTORS_INDEX ?? "portfolio-chunks",
+      credentialProvider: (await import("@/services/aws-credentials")).createAwsCredentialProvider({
+        profile: process.env.PORTFOLIO_AWS_PROFILE,
+      }),
+    });
+    const existing = new Set(await store.listKeys());
+    await store.upsert(
+      data.chunks.map((c) => ({
+        chunkId: c.id,
+        embedding: c.embedding,
+        metadata: { category: c.category, sourcePageId: c.sourcePageId },
+      })),
+    );
+    const current = new Set(data.chunks.map((c) => c.id));
+    const orphans = [...existing].filter((k) => !current.has(k));
+    await store.deleteByIds(orphans);
+    console.log(`✓ S3 Vectors: ${data.chunks.length} upserted, ${orphans.length} orphans deleted`);
+  }
 }
 
 const isDirectRun = (() => {

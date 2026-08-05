@@ -63,8 +63,17 @@ export class PortfolioAccessStack extends cdk.Stack {
         ],
       }),
     );
-    // Phase 3 에서 추가: s3vectors:QueryVectors/GetVectors (DataStack 인덱스 ARN),
-    //                    s3:GetObject (corpus.json/manifest.json)
+    // Phase 3: S3 Vectors 질의 (runtime 은 읽기만 — 업서트는 sync/Lambda 전용)
+    this.runtimeRole.addToPolicy(
+      new iam.PolicyStatement({
+        sid: "S3VectorsQuery",
+        actions: ["s3vectors:QueryVectors", "s3vectors:GetVectors", "s3vectors:GetIndex"],
+        resources: [
+          `arn:aws:s3vectors:${this.region}:${this.account}:bucket/portfolio-vectors-${this.account}/index/*`,
+        ],
+      }),
+    );
+    // Phase 4 에서 추가: s3:GetObject (corpus.json/manifest.json)
 
     new cdk.CfnOutput(this, "RuntimeRoleArn", {
       value: this.runtimeRole.roleArn,

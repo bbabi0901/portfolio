@@ -22,6 +22,8 @@ export interface BedrockEmbeddingsOptions {
   region?: string;
   /** 로컬 sync 용 AWS 프로필 (Lambda 는 실행 역할 = 기본 체인) */
   profile?: string;
+  /** Vercel 런타임 — OIDC 로 assume 할 역할 (쿼리 임베딩용) */
+  roleArn?: string;
   concurrency?: number;
   retryBackoffMs?: number;
   /** 테스트 주입용 — 텍스트 1건을 1024차원 벡터로 (기본: Bedrock InvokeModel) */
@@ -38,7 +40,10 @@ function createBedrockInvoke(opts: BedrockEmbeddingsOptions): (text: string) => 
       ({ BedrockRuntimeClient }) =>
         new BedrockRuntimeClient({
           region: opts.region ?? "ap-northeast-2",
-          credentials: createAwsCredentialProvider({ profile: opts.profile }),
+          credentials: createAwsCredentialProvider({
+            profile: opts.profile,
+            roleArn: opts.roleArn,
+          }),
         }),
     );
     return clientPromise;

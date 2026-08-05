@@ -5,6 +5,8 @@ import { tokenize } from "@/lib/tokenize";
 
 export interface RetrieveOptions {
   queryEmbedding?: number[];
+  /** 외부 벡터 검색(S3 Vectors) 결과 주입 — chunkId → cosine similarity. queryEmbedding 과 양자택일 (ADR-034 Phase 3) */
+  vectorScores?: Map<string, number>;
   keywordWeight?: number;
   vectorWeight?: number;
   topK?: number;
@@ -40,7 +42,11 @@ export function retrieve(
 ): RetrievalSummary {
   const trimmedQuery = query.trim();
   if (trimmedQuery.length === 0 || data.chunks.length === 0) {
-    return { results: [], mode: options.queryEmbedding ? "hybrid" : "keyword-only", empty: true };
+    return {
+      results: [],
+      mode: options.queryEmbedding || options.vectorScores ? "hybrid" : "keyword-only",
+      empty: true,
+    };
   }
 
   const keywordWeight = options.keywordWeight ?? DEFAULTS.keywordWeight;
@@ -50,8 +56,10 @@ export function retrieve(
   const minVectorScore = options.minVectorScore ?? DEFAULTS.minVectorScore;
   const sortBy = options.sortBy ?? DEFAULTS.sortBy;
   const queryEmbedding = options.queryEmbedding;
+  const vectorScores = options.vectorScores;
+  const hasVector = Boolean(queryEmbedding || vectorScores);
 
-  const mode: RetrievalSummary["mode"] = queryEmbedding ? "hybrid" : "keyword-only";
+  const mode: RetrievalSummary["mode"] = hasVector ? "hybrid" : "keyword-only";
 
   if (queryEmbedding) {
     const first = data.chunks[0];
@@ -67,7 +75,9 @@ export function retrieve(
 
   const scored: RetrievalResult[] = data.chunks.map((chunk) => {
     const keyword = scoreKeyword(chunk, queryTokenSet);
-    const vector = queryEmbedding ? cosineSimilarity(chunk.embedding, queryEmbedding) : 0;
+    const vector = queryEmbedding
+      ? cosineSimilarity(chunk.embedding, queryEmbedding)
+      : (vectorScores?.get(chunk.id) ?? 0);
     const merged = mergeScores(keyword, vector, {
       keyword: keywordWeight,
       vector: vectorWeight,
@@ -77,7 +87,7 @@ export function retrieve(
 
   const passes = scored.filter((r) => {
     if (r.scores.keyword > 0) return true;
-    if (queryEmbedding && r.scores.vector >= minVectorScore) return true;
+    if (hasVector && r.scores.vector >= minVectorScore) return true;
     return false;
   });
 
