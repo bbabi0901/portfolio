@@ -3,7 +3,6 @@ import { handle } from "hono/vercel";
 import { streamText } from "ai";
 import { z } from "zod";
 
-import portfolioJson from "@/data/portfolio.server.json";
 import { fixtureEmbedding } from "@/lib/embeddings";
 import { getServerEnv } from "@/lib/env";
 import {
@@ -23,14 +22,12 @@ import {
 import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { retrieve } from "@/lib/retriever";
 import { createBedrockEmbeddingsService } from "@/services/bedrock-embeddings";
+import { loadRuntimeCorpus } from "@/services/corpus-loader";
 import { createVectorStore, type VectorStore } from "@/services/s3-vectors";
 import { addTokenUsage, checkDailyTokenBudget } from "@/lib/token-budget";
-import type { PortfolioServerData } from "@/types/portfolio";
 
 // Edge 1MB 번들 한도로 커밋된 RAG 데이터(server.json)를 담을 수 없어 Node 로 이전 (ADR-031)
 export const runtime = "nodejs";
-
-const portfolioData = portfolioJson as unknown as PortfolioServerData;
 
 // 런타임 벡터 검색 (ADR-034 Phase 3) — 함수 인스턴스당 1회 생성 (lazy)
 const VECTOR_TIMEOUT_MS = 800;
@@ -150,6 +147,8 @@ app.post(
     }
 
     const env = getServerEnv();
+    // S3 corpus(10분 TTL) 또는 커밋 데이터 폴백 (ADR-037) — 노션 수정이 재배포 없이 반영
+    const portfolioData = await loadRuntimeCorpus();
     const dim = portfolioData.chunks[0]?.embedding.length;
     const queryEmbedding =
       env.MOCK_LLM === "1" && dim ? fixtureEmbedding(lastUser, dim) : undefined;

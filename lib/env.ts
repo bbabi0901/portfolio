@@ -32,6 +32,9 @@ const ServerEnvSchema = z.object({
   // S3 Vectors (ADR-034 Phase 3) — 미설정 시 벡터 검색 비활성 (keyword-only)
   S3_VECTORS_BUCKET: z.string().optional(),
   S3_VECTORS_INDEX: z.string().default("portfolio-chunks"),
+  // 런타임 corpus.json 소스 버킷 (ADR-037 Phase 4) — 미설정 시 커밋 데이터 사용
+  CORPUS_S3_BUCKET: z.string().optional(),
+  CORPUS_S3_KEY: z.string().default("corpus.json"),
 });
 
 export type ServerEnv = z.infer<typeof ServerEnvSchema>;

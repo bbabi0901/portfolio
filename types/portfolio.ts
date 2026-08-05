@@ -48,6 +48,17 @@ export interface PortfolioServerData {
   profile: PortfolioProfile;
 }
 
+/** S3 corpus.json — 서버 데이터에서 임베딩만 제거한 형태 (ADR-037, 벡터는 S3 Vectors 가 보유) */
+export type PortfolioCorpusChunk = Omit<PortfolioChunk, "embedding">;
+
+export interface PortfolioCorpusData {
+  version: string;
+  generatedAt: string;
+  chunks: PortfolioCorpusChunk[];
+  suggestedQuestions: SuggestedQuestionMeta[];
+  profile: PortfolioProfile;
+}
+
 export interface PortfolioClientData {
   version: string;
   generatedAt: string;

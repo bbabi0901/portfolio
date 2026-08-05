@@ -10,6 +10,10 @@
     "portfolio:alertEmail": "bbabi0901@gmail.com",
     "portfolio:vercelTeamSlug": "bbabi0901s-projects",
     "portfolio:vercelProjectName": "portfolio",
+    "portfolio:notionProjectsDbId": "45b65a79-1ab6-4ab3-aba8-72a84c3ca655",
+    "portfolio:notionProfilePageIds": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a,363656db-6947-80d0-9c9c-eca1d37c2ba1",
+    "portfolio:notionTroubleshootingDbId": "c4d7c55d-2f87-4d5e-9f12-e4a310623a98",
+    "portfolio:notionExtraPageIds": "318656db-6947-80a9-b0f9-c0bf5acfa89d",
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/aws-iam:minimizePolicies": true
   }

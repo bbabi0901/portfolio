@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1241,9 +1241,13 @@
     {
       "id": "FEAT-038",
       "name": "Lambda + EventBridge 자동 인제스천 — 24h 주기 freshness 선체크 후 Notion→청킹→임베딩→S3 Vectors/corpus.json 갱신, 재배포 없는 콘텐츠 반영 (ADR-034/037)",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "P1",
-      "tests": [],
+      "tests": [
+        "specs/sync-core.spec.ts",
+        "specs/corpus-loader.spec.ts",
+        "specs/chat-route.spec.ts"
+      ],
       "dependencies": [
         "FEAT-033",
         "FEAT-037"
@@ -1877,6 +1881,13 @@
       "title": "S3 Vectors 하이브리드 점등 — vectorScores 주입 병합(0.4/0.6)·minVectorScore 계약·장애 시 keyword-only 강등(ERR-14)",
       "file": "specs/retriever.spec.ts",
       "anchor": "TS-91"
+    },
+    {
+      "id": "TS-92",
+      "feature": "FEAT-038",
+      "title": "Lambda 자동 인제스천 — corpus.json S3 런타임 로딩(10분 TTL 캐시), S3 장애/미설정 시 커밋 데이터 폴백, 임베딩 제거 계약",
+      "file": "specs/corpus-loader.spec.ts",
+      "anchor": "TS-92"
     }
   ]
 }
