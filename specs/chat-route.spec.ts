@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-// 라우트는 커밋된 RAG 데이터를 정적 import 한다 (ADR-031). 로컬(실데이터 272청크)과
+// 라우트는 corpus 로더(폴백=커밋 데이터, ADR-037)로 RAG 데이터를 읽는다. 로컬(실데이터)과
 // CI(fixture 교체) 어디서 돌아도 retrieval 단언이 결정적이도록 sample 데이터로 고정.
-vi.mock("@/data/portfolio.server.json", async () => {
+vi.mock("@/lib/portfolio-data", async (importOriginal) => {
   const fs = await import("node:fs");
   const path = await import("node:path");
   const raw = fs.readFileSync(path.join(process.cwd(), "data", "portfolio.sample.json"), "utf8");
-  return { default: JSON.parse(raw) };
+  const mod = await importOriginal<typeof import("@/lib/portfolio-data")>();
+  return { ...mod, loadPortfolio: () => JSON.parse(raw) };
 });
 
 import { app } from "@/app/api/[[...route]]/route";

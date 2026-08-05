@@ -73,7 +73,14 @@ export class PortfolioAccessStack extends cdk.Stack {
         ],
       }),
     );
-    // Phase 4 에서 추가: s3:GetObject (corpus.json/manifest.json)
+    // Phase 4: 런타임 corpus.json 읽기 (10min TTL 캐시, ADR-037)
+    this.runtimeRole.addToPolicy(
+      new iam.PolicyStatement({
+        sid: "CorpusRead",
+        actions: ["s3:GetObject"],
+        resources: [`arn:aws:s3:::portfolio-corpus-${this.account}/*`],
+      }),
+    );
 
     new cdk.CfnOutput(this, "RuntimeRoleArn", {
       value: this.runtimeRole.roleArn,

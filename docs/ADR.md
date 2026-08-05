@@ -448,3 +448,43 @@ reviewer 재실행 + 사람 PR 리뷰다.
 **트레이드오프**: 1세대의 무인 다단계 자동화(밤새 N step)를 포기하고 스토리 단위 사람
 게이트를 얻는다. 훅 오탐(히어독 내 문자열 등)은 안전한 방향의 마찰로 수용. spec 테스트
 경로 drift 16건이 발견되어 `--strict-tests` 활성화는 S1 스토리로 이관.
+
+## ADR-037: Lambda 자동 인제스천 + 런타임 corpus S3 로딩 (AWS Phase 4)
+
+- 날짜: 2026-08-05 (KST)
+- 상태: 승인
+- 관련: ADR-034(총괄), ADR-030(조건부 sync), FEAT-038, TS-92
+
+**맥락**: Phase 3까지 검색·임베딩·챗은 AWS로 전환됐지만 인제스천은 여전히 수동
+5단계(로컬 sync → 데이터 커밋 → 푸시 → 배포)였다. 노션 수정이 서비스에 반영되려면
+사람 손이 필요했다 — AWS 전환의 원 목표 결함 중 하나.
+
+**결정**:
+1. **sync 코어 분해** — `lib/sync/core.ts` (ref 수집→fetch→청킹→빌드, fs/프로세스
+   의존 없음). `scripts/sync-notion.ts`(로컬)와 `lambda/ingest/handler.ts`(자동)가 공유.
+2. **corpus.json 표준 S3 이전** — 임베딩 제거한 청크+프로필+추천질문(~1.5MB)을
+   `portfolio-corpus-{account}`에 업로드. 벡터는 S3 Vectors 가 단일 소스이므로 런타임에
+   청크 임베딩이 불필요 (vectorScores 주입 경로, ADR-034 결정 3).
+3. **런타임 corpus 로더** — `services/corpus-loader.ts`, 10분 TTL 메모리 캐시.
+   미설정(CORPUS_S3_BUCKET 없음)·장애·형식 불량은 전부 커밋된 portfolio.server.json
+   폴백 + console.warn (ERR 계약: 응답은 계속된다). 장애 응답도 TTL 캐시해 매 요청
+   S3 재시도를 방지.
+4. **IngestStack** — EventBridge Rule rate(24h) → NodejsFunction(portfolio-ingest-sync,
+   Node 22, 1GB, 10min). freshness 선체크(저렴한 ref 조회 vs corpus generatedAt)로
+   변경 없으면 즉시 종료. stale 시 fetch→청킹→Titan 전량 임베딩(캐시 없음 —
+   stale 시에만 실행, 287청크 ~$0.002)→S3 Vectors 업서트+고아 삭제→corpus.json 갱신.
+   NOTION_TOKEN 은 SSM SecureString `/portfolio/notion-token` (CFN 미지원이라 CLI 생성).
+   실패 알람: Lambda Errors ≥1 → 서울 SNS 토픽(빌링 토픽은 us-east-1 이라 별도).
+5. **번들링** — esbuild alias 로 `server-only`(Next 전용 가드, 일반 Node 에서 throw)를
+   빈 스텁으로 치환. spec.json 은 번들에 포함(추천질문은 배포 시점 고정 — 어차피
+   spec 변경은 배포 동반).
+
+**결과**: 노션 수정 → 최대 24h(스케줄) + 10min(런타임 TTL) 내 자동 반영, 재배포 불필요.
+수동 즉시 반영: `aws lambda invoke --function-name portfolio-ingest-sync`.
+커밋된 portfolio.server.json 은 폴백+로컬 dev 용으로 유지 (슬림화는 FEAT-039/S5).
+MOCK/CI 경로 불변 — CORPUS_S3_BUCKET 미설정이면 기존과 동일.
+
+**트레이드오프**: corpus 이중 소스(S3 최신 vs 커밋 폴백)가 일시적으로 공존 — 폴백은
+최대 "마지막 커밋 시점" 콘텐츠로 서빙될 수 있음을 수용(장애 시나리오 한정). 클라이언트
+추천질문(public/data/suggestions.json)은 여전히 빌드 산출물이라 노션 자동 반영 대상이
+아님 — 추천질문 소스는 spec.json 이므로 실질 영향 없음.

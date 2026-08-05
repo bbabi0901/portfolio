@@ -2,6 +2,7 @@
 import * as cdk from "aws-cdk-lib";
 import { PortfolioAccessStack } from "../lib/access-stack";
 import { PortfolioDataStack } from "../lib/data-stack";
+import { PortfolioIngestStack } from "../lib/ingest-stack";
 import { PortfolioOpsStack } from "../lib/ops-stack";
 
 const app = new cdk.App();
@@ -28,4 +29,16 @@ new PortfolioDataStack(app, "PortfolioDataStack", {
   indexName: "portfolio-chunks",
 });
 
-// Phase 4 에서 추가: PortfolioIngestStack (Sync Lambda + EventBridge Scheduler + SSM)
+// Phase 4 (ADR-037): Sync Lambda + EventBridge 24h + corpus 버킷.
+// notion DB/페이지 ID 는 비밀 아님(토큰 없이는 무용) — cdk.json context 로 주입.
+new PortfolioIngestStack(app, "PortfolioIngestStack", {
+  env: { account, region },
+  notionTokenParam: "/portfolio/notion-token",
+  alertEmail: app.node.tryGetContext("portfolio:alertEmail"),
+  notionEnv: {
+    projectsDbId: app.node.tryGetContext("portfolio:notionProjectsDbId") ?? "",
+    profilePageIds: app.node.tryGetContext("portfolio:notionProfilePageIds") ?? "",
+    troubleshootingDbId: app.node.tryGetContext("portfolio:notionTroubleshootingDbId") ?? "",
+    extraPageIds: app.node.tryGetContext("portfolio:notionExtraPageIds") ?? "",
+  },
+});

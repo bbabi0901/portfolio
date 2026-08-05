@@ -4,23 +4,23 @@ import path from "node:path";
 
 import { z } from "zod";
 
-import { chunkPages } from "@/lib/chunking";
 import {
   type EmbeddingsCache,
   embeddingCacheKey,
   loadEmbeddingsCache,
   saveEmbeddingsCache,
 } from "@/lib/embeddings-cache";
+import {
+  buildServerData,
+  collectSourceRefs,
+  fetchChunksFromRefs,
+  nowIsoKst,
+  parseIdList,
+  toCorpus,
+} from "@/lib/sync/core";
 import { createNotionService } from "@/services/notion";
 import { createBedrockEmbeddingsService, TITAN_NAMESPACE } from "@/services/bedrock-embeddings";
-import type { NotionPageContent, NotionPageRef } from "@/types/notion";
-import type {
-  ChunkCategory,
-  PortfolioChunk,
-  PortfolioProfile,
-  PortfolioServerData,
-  SuggestedQuestionMeta,
-} from "@/types/portfolio";
+import type { PortfolioServerData, SuggestedQuestionMeta } from "@/types/portfolio";
 
 export interface SyncOptions {
   outDir?: string;
@@ -36,14 +36,6 @@ const EMBED_GROUP_SIZE = 8; // 캐시 미스 임베딩을 소그룹으로 나눠
 
 const SAMPLE_MAX_CHUNKS = 8;
 const SAMPLE_DIMENSIONS = 16;
-
-const ALLOWED_PROJECT_CATEGORIES = ["자체프로젝트", "업무", "외부활동"] as const;
-const ALLOWED_PROJECT_STATUSES = new Set(["Done", "In progress"]);
-
-const PROFILE_FALLBACK_NAME = "김윤수";
-const PROFILE_FALLBACK_ONELINER = "프론트엔드 + 스마트컨트랙트 개발자";
-const PROFILE_FALLBACK_EMAIL = "bbabi0901@gmail.com";
-const PROFILE_FALLBACK_GITHUB = "https://github.com/YoonsooKim9";
 
 const VERSION_FALLBACK = "0.1.0";
 
@@ -78,45 +70,6 @@ function packageVersion(): string {
   }
 }
 
-function nowIsoKst(d: Date = new Date()): string {
-  const offsetMs = 9 * 60 * 60 * 1000;
-  const local = new Date(d.getTime() + offsetMs);
-  const yyyy = local.getUTCFullYear();
-  const mm = String(local.getUTCMonth() + 1).padStart(2, "0");
-  const dd = String(local.getUTCDate()).padStart(2, "0");
-  const hh = String(local.getUTCHours()).padStart(2, "0");
-  const mi = String(local.getUTCMinutes()).padStart(2, "0");
-  const ss = String(local.getUTCSeconds()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}T${hh}:${mi}:${ss}+09:00`;
-}
-
-function parseProfilePageIds(raw: string | undefined): string[] {
-  if (!raw) return [];
-  return raw
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-function resolveCategory(
-  page: NotionPageContent,
-  profileIds: Set<string>,
-  troubleshootingIds: Set<string>,
-  extraPageIds: Set<string>,
-): ChunkCategory {
-  if (troubleshootingIds.has(page.ref.id)) return "트러블슈팅";
-  if (extraPageIds.has(page.ref.id)) return "subpage";
-  if (profileIds.has(page.ref.id)) {
-    const title = page.ref.title.toLowerCase();
-    if (title.includes("이력서") || title.includes("resume")) return "career";
-    return "personal";
-  }
-  const c = page.ref.category;
-  if (c === "자체프로젝트" || c === "업무" || c === "외부활동") return "project";
-  if (c === "프로필" || c === "성격" || c === "취미") return "personal";
-  return "subpage";
-}
-
 function loadSuggestedQuestions(): SuggestedQuestionMeta[] {
   const specPath = path.join(process.cwd(), "spec.json");
   try {
@@ -138,49 +91,6 @@ function loadSuggestedQuestions(): SuggestedQuestionMeta[] {
   } catch {
     return [];
   }
-}
-
-function extractProfile(pages: NotionPageContent[], profileIds: Set<string>): PortfolioProfile {
-  const profile: PortfolioProfile = {
-    name: PROFILE_FALLBACK_NAME,
-    oneLiner: PROFILE_FALLBACK_ONELINER,
-    contact: {
-      email: PROFILE_FALLBACK_EMAIL,
-      github: PROFILE_FALLBACK_GITHUB,
-    },
-  };
-
-  const resumeCandidates = pages.filter((p) => {
-    if (!profileIds.has(p.ref.id)) return false;
-    const title = p.ref.title.toLowerCase();
-    return title.includes("이력서") || title.includes("resume");
-  });
-  const fallback = pages.find((p) => profileIds.has(p.ref.id));
-  const target = resumeCandidates[0] ?? fallback;
-  if (!target) return profile;
-
-  const lines = target.markdown.split("\n");
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
-    if (trimmed.startsWith("#")) continue;
-    if (trimmed.startsWith("```")) continue;
-    profile.oneLiner = trimmed.replace(/^[-*>]\s*/, "");
-    break;
-  }
-  return profile;
-}
-
-function sortChunks(chunks: PortfolioChunk[]): PortfolioChunk[] {
-  return [...chunks].sort((a, b) => {
-    if (a.sourcePageId !== b.sourcePageId) {
-      return a.sourcePageId < b.sourcePageId ? -1 : 1;
-    }
-    const ah = a.headingPath.join("→");
-    const bh = b.headingPath.join("→");
-    if (ah !== bh) return ah < bh ? -1 : 1;
-    return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
-  });
 }
 
 function makeSampleData(full: PortfolioServerData): PortfolioServerData {
@@ -253,60 +163,15 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     profile: env.PORTFOLIO_AWS_PROFILE,
   });
 
-  const projectsDbId = env.NOTION_PROJECTS_DB_ID || "fixture-db";
-  const projectRefs = await notion.queryDatabase(projectsDbId, {
-    categoryFilter: [...ALLOWED_PROJECT_CATEGORIES],
+  const collected = await collectSourceRefs(notion, {
+    projectsDbId: env.NOTION_PROJECTS_DB_ID || "fixture-db",
+    profilePageIds: parseIdList(env.NOTION_PROFILE_PAGE_IDS),
+    troubleshootingDbId: env.NOTION_TROUBLESHOOTING_DB_ID,
+    extraPageIds: parseIdList(env.NOTION_EXTRA_PAGE_IDS),
+    onWarn: (msg) => console.warn(`[sync-notion] ${msg}`),
   });
-  const filteredProjects = projectRefs.filter(
-    (r) => !r.status || ALLOWED_PROJECT_STATUSES.has(r.status),
-  );
-
-  const profileIds = parseProfilePageIds(env.NOTION_PROFILE_PAGE_IDS);
-  const profileRefs: NotionPageRef[] = [];
-  for (const id of profileIds) {
-    const ref = await notion.getPageRef(id);
-    if (ref) profileRefs.push(ref);
-    else console.warn(`[sync-notion] profile page skipped (not found / no access): ${id}`);
-  }
-
-  // Troubleshooting DB — 완료 only
-  const troubleshootingRefs: NotionPageRef[] = [];
-  if (env.NOTION_TROUBLESHOOTING_DB_ID) {
-    const allTs = await notion.queryDatabase(env.NOTION_TROUBLESHOOTING_DB_ID, {});
-    troubleshootingRefs.push(...allTs.filter((r) => r.status === "완료" || r.status === "Done"));
-  }
-
-  // Extra standalone pages
-  const extraPageIds = parseProfilePageIds(env.NOTION_EXTRA_PAGE_IDS);
-  const extraRefs: NotionPageRef[] = [];
-  for (const id of extraPageIds) {
-    const ref = await notion.getPageRef(id);
-    if (ref) extraRefs.push(ref);
-    else console.warn(`[sync-notion] extra page skipped (not found): ${id}`);
-  }
-
-  const allIds = [
-    ...filteredProjects.map((p) => p.id),
-    ...profileRefs.map((p) => p.id),
-    ...troubleshootingRefs.map((p) => p.id),
-    ...extraRefs.map((p) => p.id),
-  ];
-  const pages = await notion.getPagesContent(allIds, {
-    // 동시성이 높으면 notion-to-md 의 중첩 블록(columns/callout) 자식 fetch 가
-    // Notion rate-limit 로 조용히 부분 수신되어 이력서 등 큰 페이지가 잘리는 사례가 있어 2 로 낮춤.
-    concurrency: 2,
-    onSkip: (id, reason) => console.warn(`[sync-notion] page skipped (${reason}): ${id}`),
-  });
-
-  const profileIdSet = new Set(profileIds);
-  const troubleshootingIdSet = new Set(troubleshootingRefs.map((r) => r.id));
-  const extraPageIdSet = new Set(extraRefs.map((r) => r.id));
-  const chunks = chunkPages(
-    pages,
-    (p) => resolveCategory(p, profileIdSet, troubleshootingIdSet, extraPageIdSet),
-    {
-      onWarn: (msg) => console.warn(`[sync-notion] ${msg}`),
-    },
+  const { pages, chunks } = await fetchChunksFromRefs(notion, collected, (msg) =>
+    console.warn(`[sync-notion] ${msg}`),
   );
 
   if (chunks.length === 0) {
@@ -353,17 +218,14 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     `[sync-notion] embeddings: ${missIdx.length} new (API), ${chunks.length - missIdx.length} from cache`,
   );
 
-  const sortedChunks = sortChunks(chunks);
-  const profile = extractProfile(pages, profileIdSet);
-  const suggestedQuestions = loadSuggestedQuestions();
-
-  const data: PortfolioServerData = {
+  const data = buildServerData({
+    chunks,
+    pages,
+    profileIdSet: collected.profileIdSet,
+    suggestedQuestions: loadSuggestedQuestions(),
     version: packageVersion(),
     generatedAt: nowIsoKst(),
-    chunks: sortedChunks,
-    suggestedQuestions,
-    profile,
-  };
+  });
 
   writeJson(serverFile, data);
   // sample 은 CI/테스트용 결정적 픽스처 — 이미 커밋돼 있으면 덮어쓰지 않는다
@@ -377,18 +239,21 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
       `${data.suggestedQuestions.length} questions, generatedAt ${data.generatedAt}`,
   );
 
-  // --aws: S3 Vectors 업서트 + 고아 벡터 정리 (ADR-034 Phase 3, Phase 4 에서 Lambda 로 이전)
+  // --aws: S3 Vectors 업서트 + 고아 벡터 정리 + corpus.json 업로드 (ADR-034/037)
   if (process.argv.includes("--aws")) {
     const { createVectorStore } = await import("@/services/s3-vectors");
     const bucket = process.env.S3_VECTORS_BUCKET;
     if (!bucket) throw new Error("[sync-notion] --aws 에는 S3_VECTORS_BUCKET 이 필요합니다");
+    const credentialProvider = (
+      await import("@/services/aws-credentials")
+    ).createAwsCredentialProvider({
+      profile: process.env.PORTFOLIO_AWS_PROFILE,
+    });
     const store = createVectorStore({
       region: process.env.PORTFOLIO_AWS_REGION ?? "ap-northeast-2",
       bucket,
       index: process.env.S3_VECTORS_INDEX ?? "portfolio-chunks",
-      credentialProvider: (await import("@/services/aws-credentials")).createAwsCredentialProvider({
-        profile: process.env.PORTFOLIO_AWS_PROFILE,
-      }),
+      credentialProvider,
     });
     const existing = new Set(await store.listKeys());
     await store.upsert(
@@ -402,6 +267,25 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
     const orphans = [...existing].filter((k) => !current.has(k));
     await store.deleteByIds(orphans);
     console.log(`✓ S3 Vectors: ${data.chunks.length} upserted, ${orphans.length} orphans deleted`);
+
+    // corpus.json — 런타임이 10분 TTL 로 읽는 소스 (ADR-037)
+    const corpusBucket = process.env.CORPUS_S3_BUCKET;
+    if (corpusBucket) {
+      const { S3Client, PutObjectCommand } = await import("@aws-sdk/client-s3");
+      const s3 = new S3Client({
+        region: process.env.PORTFOLIO_AWS_REGION ?? "ap-northeast-2",
+        credentials: credentialProvider,
+      });
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: corpusBucket,
+          Key: process.env.CORPUS_S3_KEY ?? "corpus.json",
+          Body: JSON.stringify(toCorpus(data)),
+          ContentType: "application/json",
+        }),
+      );
+      console.log(`✓ corpus.json uploaded to s3://${corpusBucket}`);
+    }
   }
 }
 
