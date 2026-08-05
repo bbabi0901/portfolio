@@ -3,3 +3,5 @@ cdk.out/
 *.js
 *.d.ts
 !vitest.config.ts
+.vercel
+.env*

@@ -7,3 +7,4 @@
 - [2026-08-05] S1 통과 — strict-tests AC 3건 재실행 통과, 재매핑 13건 샘플 8건 실체 확인, breakpoints e2e 18/18, 뮤테이션 체크(유령 파일→exit 1) 통과
 - [2026-08-05] S2 통과 — AC 3종 재실행 green(631 tests), 데이터 실체성 검증(287청크 전부 실 Titan 벡터·fixture 매치 0/287·노름 1.0·전량 유니크), 캐시 titan@1024 키 287/287 정합, mock 경로 AWS 모듈 lazy 로드 확인, 치팅·스코프 크리프 없음, SSoT(spec 0.7.2/TS-90/FEAT-036/NOTION_SCHEMA/env) 완비
 - [2026-08-05] S3 통과 — AC 3종 green(smoke는 직전 상위 플로우에서 실행됨으로 생략), retriever 뮤테이션(?? 0→?? 1) red 확인 후 복원, 프로덕션 X-Retrieval-Mode: hybrid 실증, 캐시/데이터 무손실(287/287 동일), ADR-034에 icn1·800ms 기록 확인
+- [2026-08-05] S4 통과 — AC 2건 재실행 green(645 tests), 폴백 뮤테이션 체크 red 확인, Lambda invoke fresh 재현 + corpus.json 320KB 실증, TS-92/ADR-037/spec 0.7.4 동기화 확인
