@@ -1256,7 +1256,7 @@
     {
       "id": "FEAT-039",
       "name": "AWS 전환 정리 — OpenRouter/Voyage/OpenAI 키·죽은 코드 제거, 문서/ADR 최종 갱신 (ADR-034; 커밋 데이터 슬림화는 FEAT-040 으로 분리)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P2",
       "tests": [
         "specs/models.spec.ts",
