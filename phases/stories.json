@@ -107,7 +107,7 @@
           "check": "! grep -rq 'OPENROUTER_API_KEY' lib/ app/ services/ scripts/"
         }
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "S6",
