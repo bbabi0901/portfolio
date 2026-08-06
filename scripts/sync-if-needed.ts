@@ -32,13 +32,16 @@ export function decideSync(opts: {
     return { action: "sync", reason: "FORCE_NOTION_SYNC=1" };
   }
   if (!opts.dataFileExists) {
-    return { action: "sync", reason: "data/portfolio.server.json 없음 (안전망)" };
+    return { action: "sync", reason: "data/portfolio.server.json·fallback.json 모두 없음 (안전망)" };
   }
   return { action: "skip", reason: "커밋된 데이터 사용" };
 }
 
 async function run(): Promise<void> {
-  const dataFile = path.join(process.cwd(), "data", "portfolio.server.json");
+  // 커밋본은 슬림 폴백(ADR-038) — 로컬 sync 산출물(server.json)이 있으면 그것을 우선
+  const serverFile = path.join(process.cwd(), "data", "portfolio.server.json");
+  const fallbackFile = path.join(process.cwd(), "data", "portfolio.fallback.json");
+  const dataFile = fs.existsSync(serverFile) ? serverFile : fallbackFile;
   const dataFileExists = fs.existsSync(dataFile);
 
   const decision = decideSync({

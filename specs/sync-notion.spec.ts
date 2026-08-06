@@ -59,6 +59,14 @@ describe("sync-notion script", () => {
     expect(data.suggestedQuestions.length).toBeGreaterThan(0);
     expect(data.profile.name).toBeTruthy();
     expect(data.profile.contact.email).toBeTruthy();
+
+    // TS-93 (ADR-038) — 커밋 대상인 슬림 폴백도 함께 산출: 임베딩 없이 동일 청크
+    const fallback = JSON.parse(
+      fs.readFileSync(path.join(tmpDir, "portfolio.fallback.json"), "utf8"),
+    );
+    expect(fallback.chunks.length).toBe(data.chunks.length);
+    expect(fallback.chunks[0].embedding).toBeUndefined();
+    expect(fallback.generatedAt).toBe(data.generatedAt);
   });
 
   it("emits a downsampled portfolio.sample.json alongside the server json", async () => {

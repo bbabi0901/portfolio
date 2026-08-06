@@ -25,8 +25,8 @@
 ## 아키텍처 규칙
 - CRITICAL: 모든 LLM 호출과 Notion API 호출은 Hono 라우트(`app/api/[[...route]]/route.ts`)에서만. 클라이언트는 같은 origin의 `/api/*`만 호출.
 - CRITICAL: 비밀 값(NOTION_TOKEN, RESEND_API_KEY, AWS 자격 증명)은 환경변수/SSM, 클라이언트 번들에 절대 포함 금지.
-- CRITICAL: 답변은 `data/portfolio.server.json`(빌드 산출물) 컨텍스트로만 생성. 외부 지식은 system prompt에서 차단.
-- CRITICAL: `data/portfolio.server.json`(임베딩 포함)은 서버 전용. 클라이언트에는 `public/data/suggestions.json`(slim) 만 노출.
+- CRITICAL: 답변은 포트폴리오 corpus(S3 corpus.json 10분 TTL, 장애 시 커밋 `data/portfolio.fallback.json`) 컨텍스트로만 생성. 외부 지식은 system prompt에서 차단.
+- CRITICAL: corpus/폴백 데이터는 서버 전용. 클라이언트에는 `public/data/suggestions.json`(slim) 만 노출.
 - CRITICAL: spec.json 위반 시 빌드 차단. 신규 기능은 (1) spec.json 등록 → (2) 실패 테스트 작성 → (3) 구현 순서.
 - 컴포넌트는 `components/`, 타입은 `types/`, 도메인 로직은 `lib/`, 외부 API 래퍼는 `services/`, 빌드 스크립트는 `scripts/`.
 - Server Components 기본. 인터랙션이 필요한 곳만 `"use client"`.
@@ -64,7 +64,7 @@
 - 커밋 메시지는 conventional commits (feat:, fix:, docs:, refactor:, test:, chore:).
 - PR은 `npm run check:spec`, `npm run lint`, `npm run test`가 통과해야 머지.
 - **노션 콘텐츠 반영은 기본 자동 (ADR-037)**: Lambda `portfolio-ingest-sync` 가 24h 주기로 stale 감지 시 S3 corpus/벡터를 갱신하고 런타임이 10분 TTL 로 읽는다. 즉시 반영: `aws lambda invoke --function-name portfolio-ingest-sync --region ap-northeast-2 out.json`. 아래 로컬 플로우는 커밋 폴백 데이터 갱신·로컬 dev 용으로 유지.
-- **노션 콘텐츠 반영 플로우 (ADR-030, 조건부 sync — 커밋 폴백 데이터)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.server.json` 을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.server.json` + `data/embeddings-cache.json` 커밋 → 푸시(=배포). prebuild 게이트 우선순위: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
+- **노션 콘텐츠 반영 플로우 (ADR-030, 조건부 sync — 커밋 폴백 데이터)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.fallback.json`(로컬에 server.json 있으면 그것)을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.fallback.json` 커밋 → 푸시(=배포). prebuild 게이트 우선순위: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
 - 문서 변경(plan/PRD/Architecture/spec.json)이 코드 변경과 함께 가야 함.
 
 ## Git Workflow 규칙 (사용자 명시)
@@ -103,7 +103,7 @@ cd infra && npm run deploy  # 배포 (AWS 자격 증명 필요)
 
 ## 파일 절대 규칙
 - `.env.local`은 git에 커밋 금지 (`.gitignore` 포함).
-- `data/portfolio.server.json`은 **git 커밋 (ADR-030)** — 조건부 sync 의 기반 데이터. 사이트가 이미 공개 서빙하는 콘텐츠이며 사용자가 public 리포 노출을 승인함. `data/embeddings-cache.json` 도 커밋. mini sample 은 `data/portfolio.sample.json` 커밋 유지(CI 폴백).
+- 커밋 데이터는 **`data/portfolio.fallback.json`(임베딩 제외 슬림, ADR-038)** — S3 corpus 장애 폴백 + prebuild 입력. `data/portfolio.server.json`(임베딩 포함)·`data/embeddings-cache.json` 은 **git 미커밋**(로컬 sync 산출물). mini sample 은 `data/portfolio.sample.json` 커밋 유지(CI 폴백). 콘텐츠는 사이트가 공개 서빙 중이라 리포 노출 승인됨.
 - `public/data/suggestions.json`은 git 미커밋 — `gen:suggestions` 가 prebuild 마다 커밋된 서버 데이터에서 재생성.
 - `spec.json`, `spec.schema.json`은 커밋.
 - 노션 토큰은 logs에 절대 출력 금지.

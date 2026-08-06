@@ -5,32 +5,43 @@ import path from "node:path";
 
 import type { PortfolioChunk, PortfolioClientData, PortfolioServerData } from "@/types/portfolio";
 
-const SERVER_FILE = "data/portfolio.server.json";
-const SAMPLE_FILE = "data/portfolio.sample.json";
+/**
+ * 커밋 데이터 로더 (ADR-030 → ADR-038 슬림 폴백 개정, FEAT-040).
+ * 우선순위: portfolio.server.json(로컬 sync 산출물·CI fixture, 임베딩 포함, git 미커밋)
+ *   → portfolio.fallback.json(커밋본 — 임베딩 제외 슬림, S3 corpus 장애 시 런타임 폴백)
+ *   → portfolio.sample.json(mini 샘플, CI 안전망).
+ * 임베딩 없는 청크는 embedding=[] 로 채운다 — 벡터 점수는 S3 Vectors(vectorScores)가 공급.
+ */
+
+const SERVER_FILE = "portfolio.server.json";
+const FALLBACK_FILE = "portfolio.fallback.json";
+const SAMPLE_FILE = "portfolio.sample.json";
 
 let cached: PortfolioServerData | null = null;
 
 export function loadPortfolio(): PortfolioServerData {
   if (cached) return cached;
+  cached = loadPortfolioFrom(path.join(process.cwd(), "data"));
+  return cached;
+}
 
-  const cwd = process.cwd();
-  const serverPath = path.join(cwd, SERVER_FILE);
-  const samplePath = path.join(cwd, SAMPLE_FILE);
-
+/** 테스트 주입용 — 캐시 없이 지정 디렉토리에서 로드. */
+export function loadPortfolioFrom(dir: string): PortfolioServerData {
   let source: string | null = null;
   let raw: string | null = null;
 
-  if (fs.existsSync(serverPath)) {
-    source = serverPath;
-    raw = fs.readFileSync(serverPath, "utf8");
-  } else if (fs.existsSync(samplePath)) {
-    source = samplePath;
-    raw = fs.readFileSync(samplePath, "utf8");
+  for (const name of [SERVER_FILE, FALLBACK_FILE, SAMPLE_FILE]) {
+    const p = path.join(dir, name);
+    if (fs.existsSync(p)) {
+      source = p;
+      raw = fs.readFileSync(p, "utf8");
+      break;
+    }
   }
 
   if (raw === null || source === null) {
     throw new Error(
-      `[portfolio-data] neither ${SERVER_FILE} nor ${SAMPLE_FILE} found. Run \`npm run sync:notion\` first.`,
+      `[portfolio-data] ${SERVER_FILE}/${FALLBACK_FILE}/${SAMPLE_FILE} 모두 없음 (${dir}). Run \`npm run sync:notion\` first.`,
     );
   }
 
@@ -41,9 +52,7 @@ export function loadPortfolio(): PortfolioServerData {
     throw new Error(`[portfolio-data] failed to parse ${source}: ${(err as Error).message}`);
   }
 
-  const data = assertPortfolioServerData(parsed, source);
-  cached = data;
-  return data;
+  return assertPortfolioServerData(parsed, source);
 }
 
 export function clearPortfolioCache(): void {
@@ -111,12 +120,15 @@ function assertChunk(value: unknown, index: number, source: string): PortfolioCh
   if (!Array.isArray(value.headingPath)) {
     throw new Error(`[portfolio-data] ${source}: chunks[${index}].headingPath must be array`);
   }
-  if (!Array.isArray(value.embedding) || value.embedding.length === 0) {
-    throw new Error(
-      `[portfolio-data] ${source}: chunks[${index}].embedding must be non-empty array`,
-    );
+  // 슬림 폴백은 임베딩 미보유 (ADR-038) — 있으면 배열이어야 하고, 없으면 [] 로 채운다
+  if (value.embedding !== undefined && !Array.isArray(value.embedding)) {
+    throw new Error(`[portfolio-data] ${source}: chunks[${index}].embedding must be array`);
   }
-  return value as unknown as PortfolioChunk;
+  const chunk = value as unknown as PortfolioChunk;
+  if (value.embedding === undefined) {
+    return { ...chunk, embedding: [] };
+  }
+  return chunk;
 }
 
 function isObject(v: unknown): v is Record<string, unknown> {

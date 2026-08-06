@@ -28,13 +28,15 @@ async function run(): Promise<void> {
     process.exit(2);
   }
 
-  const dataFile = path.join(process.cwd(), "data", "portfolio.server.json");
+  const serverFile = path.join(process.cwd(), "data", "portfolio.server.json");
+  const fallbackFile = path.join(process.cwd(), "data", "portfolio.fallback.json");
+  const dataFile = fs.existsSync(serverFile) ? serverFile : fallbackFile;
   let generatedAt = "";
   try {
     const parsed = JSON.parse(fs.readFileSync(dataFile, "utf8")) as { generatedAt?: string };
     generatedAt = parsed.generatedAt ?? "";
   } catch {
-    console.log("[sync:check] data/portfolio.server.json 없음 → STALE (최초 sync 필요)");
+    console.log("[sync:check] data/portfolio.server.json·fallback.json 없음 → STALE (최초 sync 필요)");
     process.exit(1);
   }
 
