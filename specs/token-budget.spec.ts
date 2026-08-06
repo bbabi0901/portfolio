@@ -23,7 +23,6 @@ const ENV_KEYS = [
   "UPSTASH_REDIS_REST_TOKEN",
   "MOCK_LLM",
   "MOCK_NOTION",
-  "OPENAI_API_KEY",
   "ANTHROPIC_API_KEY",
   "GOOGLE_GENERATIVE_AI_API_KEY",
 ] as const;
@@ -264,8 +263,7 @@ describe("/api/chat 토큰 cap 통합", () => {
     clearAll();
     process.env.MAX_TOKENS_PER_DAY = "100";
     process.env.MOCK_LLM = "1";
-    process.env.OPENAI_API_KEY = "sk-test";
-    clearEnvCache();
+      clearEnvCache();
   });
 
   afterEach(() => {

@@ -95,7 +95,7 @@
     },
     {
       "id": "S5",
-      "title": "AWS 전환 정리 — 구 키(OpenRouter/Voyage/OpenAI) 제거, 커밋 데이터 → fallback.json 슬림화, 문서 최종 갱신 (AWS Phase 5)",
+      "title": "AWS 전환 정리 — 구 키(OpenRouter/Voyage/OpenAI)·죽은 코드 제거, Vercel env 정리, 문서 최종 갱신 (AWS Phase 5, 슬림화 제외)",
       "feat": "FEAT-039",
       "ac": [
         {
@@ -105,6 +105,22 @@
         {
           "type": "cmd",
           "check": "! grep -rq 'OPENROUTER_API_KEY' lib/ app/ services/ scripts/"
+        }
+      ],
+      "passes": false
+    },
+    {
+      "id": "S6",
+      "title": "커밋 데이터 슬림화 — server.json/embeddings-cache → 슬림 폴백, prebuild·로컬 dev·MOCK 소스 재설계 (FEAT-040, ADR-030 개정)",
+      "feat": "FEAT-040",
+      "ac": [
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "npm run build"
         }
       ],
       "passes": false

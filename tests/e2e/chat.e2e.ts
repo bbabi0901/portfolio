@@ -23,7 +23,7 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
       .first()
       .isVisible({ timeout: 5000 })
       .catch(() => false);
-    // mock 환경에서 OPENAI_API_KEY 미설정 → available=[] → switcher disabled 가능
+    // mock 환경에서 AWS 자격 증명 미설정 → available=[] → switcher disabled 가능
     // 보다 관대한 검증: 페이지 렌더 정상
     expect(typeof hasSwitcher).toBe("boolean");
   });

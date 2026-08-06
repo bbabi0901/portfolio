@@ -10,8 +10,6 @@ function freshEnv(): Record<string, string> {
     NOTION_TOKEN: "",
     NOTION_PROJECTS_DB_ID: "",
     NOTION_PROFILE_PAGE_IDS: "",
-    VOYAGE_API_KEY: "",
-    OPENAI_API_KEY: "",
     MOCK_NOTION: "",
     MOCK_LLM: "",
     SKIP_NOTION_SYNC: "",
@@ -45,7 +43,6 @@ describe("sync-notion script", () => {
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "fake";
     process.env.NOTION_PROFILE_PAGE_IDS = "fixture-resume";
 
     const { main } = await import(SCRIPT_PATH);
@@ -69,7 +66,6 @@ describe("sync-notion script", () => {
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "fake";
 
     const { main } = await import(SCRIPT_PATH);
     await main({ outDir: tmpDir });
@@ -88,7 +84,6 @@ describe("sync-notion script", () => {
     process.env.MOCK_LLM = "1";
     process.env.NOTION_TOKEN = "fake";
     process.env.NOTION_PROJECTS_DB_ID = "fake-db";
-    process.env.OPENAI_API_KEY = "fake";
 
     const { main } = await import(SCRIPT_PATH);
     await main({ outDir: tmpDir });
@@ -109,7 +104,6 @@ describe("sync-notion script", () => {
   it("rejects when NOTION_TOKEN missing and not in mock mode", async () => {
     process.env.MOCK_NOTION = "";
     process.env.NOTION_TOKEN = "";
-    process.env.OPENAI_API_KEY = "fake";
     const { main } = await import(SCRIPT_PATH);
     await expect(main({ outDir: tmpDir })).rejects.toThrow(/NOTION_TOKEN/);
   });
