@@ -19,6 +19,7 @@ import {
   NO_RECORD_RESPONSE_EN,
   NO_RECORD_RESPONSE_KO,
 } from "@/lib/prompts";
+import { expandSelfReferentialQuery } from "@/lib/query-expansion";
 import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { retrieve } from "@/lib/retriever";
 import { createBedrockEmbeddingsService } from "@/services/bedrock-embeddings";
@@ -149,13 +150,15 @@ app.post(
     const env = getServerEnv();
     // S3 corpus(10분 TTL) 또는 커밋 데이터 폴백 (ADR-037) — 노션 수정이 재배포 없이 반영
     const portfolioData = await loadRuntimeCorpus();
+    // "이 프로젝트/사이트" 자기지칭 질의는 검색 입력에만 포트폴리오 힌트 확장 (EC-51)
+    const retrievalQuery = expandSelfReferentialQuery(lastUser);
     const dim = portfolioData.chunks[0]?.embedding.length;
     const queryEmbedding =
-      env.MOCK_LLM === "1" && dim ? fixtureEmbedding(lastUser, dim) : undefined;
+      env.MOCK_LLM === "1" && dim ? fixtureEmbedding(retrievalQuery, dim) : undefined;
     // 실모드: S3 Vectors 로 하이브리드 점등 (MOCK 은 fixture 로컬 코사인 경로 유지 — CI 결정성)
-    const vectorScores = queryEmbedding ? undefined : await fetchVectorScores(lastUser);
+    const vectorScores = queryEmbedding ? undefined : await fetchVectorScores(retrievalQuery);
 
-    const retrieval = retrieve(lastUser, portfolioData, { queryEmbedding, vectorScores });
+    const retrieval = retrieve(retrievalQuery, portfolioData, { queryEmbedding, vectorScores });
     const chunks = retrieval.results.map((r) => r.chunk);
     const language = detectLanguage(lastUser);
 
