@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -844,6 +844,11 @@
       "id": "EC-50",
       "scenario": "not-found route",
       "behavior": "404 page + home link"
+    },
+    {
+      "id": "EC-51",
+      "scenario": "자기지칭 질의 (\"이 프로젝트/이 사이트/이 서비스/this site\" 등) — 다른 프로젝트 청크와 검색 충돌",
+      "behavior": "검색 질의에만 \"대화형 포트폴리오\" 힌트를 확장(LLM 에 전달되는 사용자 메시지는 불변) — 포트폴리오 사이트 자체 청크가 우선 매칭"
     }
   ],
   "features": [
@@ -1231,7 +1236,8 @@
       "tests": [
         "specs/s3-vectors.spec.ts",
         "specs/retriever.spec.ts",
-        "specs/chat-route.spec.ts"
+        "specs/chat-route.spec.ts",
+        "specs/query-expansion.spec.ts"
       ],
       "dependencies": [
         "FEAT-006",
@@ -1912,6 +1918,13 @@
       "title": "슬림 폴백 — portfolio.fallback.json(임베딩 제외) 커밋 전환, 로딩 우선순위 server>fallback>sample, 임베딩 없는 청크 수용",
       "file": "specs/portfolio-data.spec.ts",
       "anchor": "TS-93"
+    },
+    {
+      "id": "TS-94",
+      "feature": "FEAT-037",
+      "title": "자기지칭 질의 확장 — \"이 프로젝트/사이트\" 검색 질의에 포트폴리오 힌트 부여 (EC-51), 일반 질의는 불변",
+      "file": "specs/query-expansion.spec.ts",
+      "anchor": "TS-94"
     }
   ]
 }

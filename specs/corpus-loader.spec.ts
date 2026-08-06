@@ -68,12 +68,13 @@ describe("corpus-loader (TS-92)", () => {
     expect(fetchCorpus).toHaveBeenCalledTimes(2);
   });
 
-  it("S3 실패 — 커밋 데이터로 폴백 (응답은 계속, embedding 보존)", async () => {
+  it("S3 실패 — 커밋 데이터로 폴백 (응답은 계속)", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const fetchCorpus = vi.fn().mockRejectedValue(new Error("boom"));
     const d = await loadRuntimeCorpus({ fetchCorpus, now: () => 0 });
+    // 폴백은 슬림(임베딩 없음, ADR-038)일 수 있음 — 청크 텍스트만 보장
     expect(d.chunks.length).toBeGreaterThan(0);
-    expect(d.chunks[0]!.embedding.length).toBeGreaterThan(0);
+    expect(d.chunks[0]!.text.length).toBeGreaterThan(0);
     expect(warn).toHaveBeenCalled();
   });
 
@@ -91,6 +92,6 @@ describe("corpus-loader (TS-92)", () => {
     const fetchCorpus = vi.fn().mockResolvedValue('{"version":"1","chunks":"bad"}');
     const d = await loadRuntimeCorpus({ fetchCorpus, now: () => 0 });
     expect(d.chunks.length).toBeGreaterThan(0);
-    expect(d.chunks[0]!.embedding.length).toBeGreaterThan(0);
+    expect(d.chunks[0]!.text.length).toBeGreaterThan(0);
   });
 });
