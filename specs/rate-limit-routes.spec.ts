@@ -18,7 +18,6 @@ const validFeedbackBody = {
 const ENV_KEYS = [
   "MOCK_LLM",
   "MOCK_NOTION",
-  "OPENAI_API_KEY",
   "RATE_LIMIT_BYPASS",
   "UPSTASH_REDIS_REST_URL",
   "UPSTASH_REDIS_REST_TOKEN",
@@ -29,7 +28,6 @@ const original: Record<string, string | undefined> = {};
 function applyDefaultEnv(): void {
   process.env.MOCK_LLM = "1";
   process.env.MOCK_NOTION = "1";
-  process.env.OPENAI_API_KEY = "sk-test";
   delete process.env.RATE_LIMIT_BYPASS;
   delete process.env.UPSTASH_REDIS_REST_URL;
   delete process.env.UPSTASH_REDIS_REST_TOKEN;

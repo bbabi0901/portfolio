@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1255,13 +1255,27 @@
     },
     {
       "id": "FEAT-039",
-      "name": "AWS 전환 정리 — OpenRouter/Voyage/OpenAI 키 제거, 대형 커밋 데이터 → portfolio.fallback.json 슬림화, 문서/ADR 최종 갱신 (ADR-034)",
+      "name": "AWS 전환 정리 — OpenRouter/Voyage/OpenAI 키·죽은 코드 제거, 문서/ADR 최종 갱신 (ADR-034; 커밋 데이터 슬림화는 FEAT-040 으로 분리)",
+      "status": "in_progress",
+      "priority": "P2",
+      "tests": [
+        "specs/models.spec.ts",
+        "specs/chat-route.spec.ts"
+      ],
+      "dependencies": [
+        "FEAT-035",
+        "FEAT-038"
+      ]
+    },
+    {
+      "id": "FEAT-040",
+      "name": "커밋 데이터 슬림화 — portfolio.server.json(9.2MB)/embeddings-cache.json(6.2MB) → 슬림 폴백(portfolio.fallback.json), prebuild(gen:suggestions)·로컬 dev·MOCK 데이터 소스 재설계 (ADR-030 개정 필요)",
       "status": "planned",
       "priority": "P2",
       "tests": [],
       "dependencies": [
-        "FEAT-035",
-        "FEAT-038"
+        "FEAT-038",
+        "FEAT-039"
       ]
     }
   ],

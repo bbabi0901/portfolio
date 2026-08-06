@@ -1,6 +1,10 @@
 import { fixtureEmbedding } from "@/lib/embeddings";
 import { createAwsCredentialProvider } from "@/services/aws-credentials";
-import type { EmbeddingsService } from "@/services/openai-embeddings";
+
+export interface EmbeddingsService {
+  embed(text: string): Promise<number[]>;
+  embedBatch(texts: string[]): Promise<number[][]>;
+}
 
 // Bedrock Titan Text Embeddings v2 (ADR-034 Phase 2, FEAT-036).
 // 네임스페이스는 ADR-029 캐시 키에 들어간다 — 모델/차원 변경 = 캐시 전량 자동 무효화.

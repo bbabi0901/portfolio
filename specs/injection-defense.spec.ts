@@ -5,7 +5,6 @@ import { clearEnvCache } from "@/lib/env";
 
 const ENV_KEYS = [
   "MOCK_LLM",
-  "OPENAI_API_KEY",
   "ANTHROPIC_API_KEY",
   "GOOGLE_GENERATIVE_AI_API_KEY",
 ] as const;
@@ -16,7 +15,6 @@ beforeEach(() => {
   for (const k of ENV_KEYS) original[k] = process.env[k];
   for (const k of ENV_KEYS) delete process.env[k];
   process.env.MOCK_LLM = "1";
-  process.env.OPENAI_API_KEY = "sk-test";
   clearEnvCache();
 });
 

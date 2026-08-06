@@ -17,7 +17,6 @@ import { clearRateLimitMemory } from "@/lib/rate-limit";
 
 const ENV_KEYS = [
   "MOCK_LLM",
-  "OPENAI_API_KEY",
   "ANTHROPIC_API_KEY",
   "GOOGLE_GENERATIVE_AI_API_KEY",
 ] as const;
@@ -26,7 +25,6 @@ const original: Record<string, string | undefined> = {};
 
 function setMockEnv(): void {
   process.env.MOCK_LLM = "1";
-  process.env.OPENAI_API_KEY = "sk-test";
   clearEnvCache();
 }
 

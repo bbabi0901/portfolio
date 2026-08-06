@@ -10,10 +10,12 @@
 - shadcn/ui (sheet, button, input, select, carousel, popover, scroll-area, toast, form, label, textarea, radio-group)
 - lucide-react 아이콘 (strokeWidth 1.5)
 - Hono on Next.js Route Handler (`app/api/[[...route]]/route.ts`)
-- Vercel AI SDK (`ai`, `@ai-sdk/openai`) + **OpenRouter** 단일 키 라우팅 (ADR-026)
-  - 채팅: `OPENROUTER_API_KEY` → `https://openrouter.ai/api/v1` (gpt-4o-mini / claude-3-5-haiku / gemini-2.0-flash)
-  - 임베딩: `OPENAI_API_KEY` 별도 (OpenRouter 미지원, 빌드 타임 전용)
-- **AWS 전환 진행 중 (ADR-034)**: 챗·임베딩 → Bedrock(Nova Lite 기본/Nova Micro/Claude Haiku, `@ai-sdk/amazon-bedrock` + Titan v2 1024차원), 벡터 → S3 Vectors(서울), 인제스천 → Lambda+EventBridge 24h, 인증 → Vercel OIDC→IAM role. IaC 는 `infra/` CDK TypeScript 워크스페이스. **Phase 0 완료, 런타임 미전환** — 위 OpenRouter/OPENAI 구성이 각 Phase 착륙 전까지 유효 (ADR-026/029/030 유지).
+- Vercel AI SDK (`ai`, `@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환) + **AWS Bedrock** (ADR-034/035, **전환 완료** — 구 OpenRouter/Voyage/OpenAI 키 제거됨 FEAT-039)
+  - 채팅: Nova Lite(기본)/Nova Micro = `apac.` inference profile, Claude Haiku 4.5 = `global.` profile
+  - 임베딩: Titan Text Embeddings v2 1024차원 (sync + 런타임 쿼리)
+  - 벡터 검색: S3 Vectors(서울) 런타임 하이브리드 (FEAT-037, 800ms 타임아웃 시 keyword-only 강등 ERR-14)
+  - 인제스천: Lambda `portfolio-ingest-sync` + EventBridge 24h (ADR-037, FEAT-038) — 노션 수정이 재배포 없이 자동 반영, 런타임은 S3 corpus.json 10분 TTL(장애 시 커밋 데이터 폴백)
+  - 인증: 로컬 = `PORTFOLIO_AWS_PROFILE`(aws login), Vercel = OIDC→IAM role (`PORTFOLIO_AWS_ROLE_ARN`, 토큰은 요청 컨텍스트 — env 검사 금지). Vercel 함수 리전 icn1 고정 (vercel.json). IaC 는 `infra/` CDK TypeScript 워크스페이스
 - `@ai-sdk/react`의 `useChat`
 - @notionhq/client + notion-to-md
 - react-markdown + remark-gfm + rehype-highlight
@@ -22,7 +24,7 @@
 
 ## 아키텍처 규칙
 - CRITICAL: 모든 LLM 호출과 Notion API 호출은 Hono 라우트(`app/api/[[...route]]/route.ts`)에서만. 클라이언트는 같은 origin의 `/api/*`만 호출.
-- CRITICAL: API 키(OPENROUTER_API_KEY, OPENAI_API_KEY, NOTION_TOKEN, RESEND_API_KEY)는 환경변수, 클라이언트 번들에 절대 포함 금지.
+- CRITICAL: 비밀 값(NOTION_TOKEN, RESEND_API_KEY, AWS 자격 증명)은 환경변수/SSM, 클라이언트 번들에 절대 포함 금지.
 - CRITICAL: 답변은 `data/portfolio.server.json`(빌드 산출물) 컨텍스트로만 생성. 외부 지식은 system prompt에서 차단.
 - CRITICAL: `data/portfolio.server.json`(임베딩 포함)은 서버 전용. 클라이언트에는 `public/data/suggestions.json`(slim) 만 노출.
 - CRITICAL: spec.json 위반 시 빌드 차단. 신규 기능은 (1) spec.json 등록 → (2) 실패 테스트 작성 → (3) 구현 순서.
@@ -58,11 +60,11 @@
   - `@ai-sdk/*` 버전 업그레이드
   - `lib/models.ts` LLM 호출 방식 변경
   - 스트리밍 파이프라인(`app/api/[[...route]]/route.ts`) 변경
-  - 수동 검증 방법: `npm run test:smoke` (OPENROUTER_API_KEY 필요) 또는 dev 서버에서 직접 2-turn 대화 확인
-- **`@ai-sdk/openai`에서 OpenRouter 호출 시 반드시 `or.chat(modelId)` 사용.** `or(modelId)` 단독 호출은 Responses API를 사용해 OpenRouter에서 무음 실패한다. (ADR-026 참조)
+  - 수동 검증 방법: `PORTFOLIO_AWS_PROFILE=default npm run test:smoke` (aws login 세션 필요) 또는 dev 서버에서 직접 2-turn 대화 확인
 - 커밋 메시지는 conventional commits (feat:, fix:, docs:, refactor:, test:, chore:).
 - PR은 `npm run check:spec`, `npm run lint`, `npm run test`가 통과해야 머지.
-- **노션 콘텐츠 반영 플로우 (ADR-030, 조건부 sync)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.server.json` 을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.server.json` + `data/embeddings-cache.json` 커밋 → 푸시(=배포). prebuild 게이트 우선순위: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
+- **노션 콘텐츠 반영은 기본 자동 (ADR-037)**: Lambda `portfolio-ingest-sync` 가 24h 주기로 stale 감지 시 S3 corpus/벡터를 갱신하고 런타임이 10분 TTL 로 읽는다. 즉시 반영: `aws lambda invoke --function-name portfolio-ingest-sync --region ap-northeast-2 out.json`. 아래 로컬 플로우는 커밋 폴백 데이터 갱신·로컬 dev 용으로 유지.
+- **노션 콘텐츠 반영 플로우 (ADR-030, 조건부 sync — 커밋 폴백 데이터)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.server.json` 을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.server.json` + `data/embeddings-cache.json` 커밋 → 푸시(=배포). prebuild 게이트 우선순위: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
 - 문서 변경(plan/PRD/Architecture/spec.json)이 코드 변경과 함께 가야 함.
 
 ## Git Workflow 규칙 (사용자 명시)
