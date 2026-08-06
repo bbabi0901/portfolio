@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -854,6 +854,11 @@
       "id": "EC-52",
       "scenario": "자식 페이지가 인라인 포함된 대형 노션 페이지(예: 88청크)가 페이지당 상한(구 30)에 후반 컷 — DM/웹푸시 등 뒷순서 자식 페이지 콘텐츠가 RAG 에서 통째로 소실",
       "behavior": "페이지당 청크 상한 기본값 120 (실측 최대 88 + 여유). 초과 시 기존과 동일하게 후반 컷 + 경고"
+    },
+    {
+      "id": "EC-53",
+      "scenario": "한국어 조사 변형으로 키워드 불일치 — \"취미는 뭔가요?\"(조사 는)가 본문 \"취미가/취미\"와 매칭 실패 → 콘텐츠가 있는데 NO_RECORD (프로덕션 실사례)",
+      "behavior": "토크나이저가 흔한 조사 접미(은/는/이/가/을/를/에서/으로 등)를 제거 — 어간 2자 이상 보존 규칙으로 사과/결과/나이 등 오제거 방지. 쿼리·청크 대칭 적용"
     }
   ],
   "features": [
@@ -1242,7 +1247,8 @@
         "specs/s3-vectors.spec.ts",
         "specs/retriever.spec.ts",
         "specs/chat-route.spec.ts",
-        "specs/query-expansion.spec.ts"
+        "specs/query-expansion.spec.ts",
+        "specs/tokenize.spec.ts"
       ],
       "dependencies": [
         "FEAT-006",
@@ -1937,6 +1943,13 @@
       "title": "청크 상한 상향 — 기본 120, 대형 페이지(자식 인라인 포함)의 후반 자식 콘텐츠 보존 (EC-52)",
       "file": "specs/chunking.spec.ts",
       "anchor": "TS-95"
+    },
+    {
+      "id": "TS-96",
+      "feature": "FEAT-037",
+      "title": "한국어 조사 제거 토큰화 — 조사 변형 질의(\"취미는\")가 본문(\"취미가\")과 매칭 (EC-53), 어간 보존 가드",
+      "file": "specs/tokenize.spec.ts",
+      "anchor": "TS-96"
     }
   ]
 }
