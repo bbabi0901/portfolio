@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1270,9 +1270,12 @@
     {
       "id": "FEAT-040",
       "name": "커밋 데이터 슬림화 — portfolio.server.json(9.2MB)/embeddings-cache.json(6.2MB) → 슬림 폴백(portfolio.fallback.json), prebuild(gen:suggestions)·로컬 dev·MOCK 데이터 소스 재설계 (ADR-030 개정 필요)",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "P2",
-      "tests": [],
+      "tests": [
+        "specs/portfolio-data.spec.ts",
+        "specs/sync-notion.spec.ts"
+      ],
       "dependencies": [
         "FEAT-038",
         "FEAT-039"
@@ -1902,6 +1905,13 @@
       "title": "Lambda 자동 인제스천 — corpus.json S3 런타임 로딩(10분 TTL 캐시), S3 장애/미설정 시 커밋 데이터 폴백, 임베딩 제거 계약",
       "file": "specs/corpus-loader.spec.ts",
       "anchor": "TS-92"
+    },
+    {
+      "id": "TS-93",
+      "feature": "FEAT-040",
+      "title": "슬림 폴백 — portfolio.fallback.json(임베딩 제외) 커밋 전환, 로딩 우선순위 server>fallback>sample, 임베딩 없는 청크 수용",
+      "file": "specs/portfolio-data.spec.ts",
+      "anchor": "TS-93"
     }
   ]
 }

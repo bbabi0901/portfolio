@@ -20,7 +20,7 @@ htmlcov/
 .env.*.local
 
 # build artifacts
-# data/portfolio.server.json 은 ADR-030 이후 커밋 대상 (조건부 sync 의 기반 데이터).
+# 커밋 데이터는 슬림 폴백 data/portfolio.fallback.json (ADR-038) — server.json/캐시는 로컬 산출물.
 # suggestions.json 은 gen:suggestions 가 prebuild 마다 서버 데이터에서 재생성 → 미커밋.
 public/data/suggestions.json
 
@@ -60,3 +60,7 @@ phases/*/run.log
 
 # Vercel CLI 로컬 링크 (vercel link 산출물)
 .vercel
+
+# 대형 로컬 산출물 (ADR-038 — 커밋본은 슬림 portfolio.fallback.json)
+data/portfolio.server.json
+data/embeddings-cache.json

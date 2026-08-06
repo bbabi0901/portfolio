@@ -228,6 +228,8 @@ export async function main(opts: SyncOptions = {}): Promise<void> {
   });
 
   writeJson(serverFile, data);
+  // 커밋 대상은 슬림 폴백(임베딩 제외, ADR-038) — server.json/캐시는 로컬 산출물(git 미커밋)
+  writeJson(path.join(outDir, "portfolio.fallback.json"), toCorpus(data));
   // sample 은 CI/테스트용 결정적 픽스처 — 이미 커밋돼 있으면 덮어쓰지 않는다
   // (실데이터로 갱신되면 sample 기준으로 캘리브레이션된 테스트가 비결정적으로 깨짐).
   if (!fs.existsSync(sampleFile)) {

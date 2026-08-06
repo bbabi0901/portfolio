@@ -488,3 +488,31 @@ MOCK/CI 경로 불변 — CORPUS_S3_BUCKET 미설정이면 기존과 동일.
 최대 "마지막 커밋 시점" 콘텐츠로 서빙될 수 있음을 수용(장애 시나리오 한정). 클라이언트
 추천질문(public/data/suggestions.json)은 여전히 빌드 산출물이라 노션 자동 반영 대상이
 아님 — 추천질문 소스는 spec.json 이므로 실질 영향 없음.
+
+## ADR-038: 커밋 데이터 슬림화 — portfolio.fallback.json (ADR-030 개정)
+
+- 날짜: 2026-08-06 (KST)
+- 상태: 승인
+- 관련: ADR-030(조건부 sync), ADR-037(런타임 corpus), FEAT-040, TS-93
+
+**맥락**: ADR-030 은 재현 가능한 빌드를 위해 임베딩 포함 전체 데이터(9.2MB)와 임베딩
+캐시(6.2MB)를 커밋했다. ADR-037 이후 운영 소스는 S3 corpus + S3 Vectors 가 됐고,
+커밋 데이터의 역할은 "장애 폴백 + 로컬 dev + prebuild(gen:suggestions) 입력"으로
+축소됐다 — 세 역할 모두 임베딩이 필요 없다(벡터 점수는 S3 Vectors 가 공급).
+
+**결정**:
+1. 커밋 대상을 `data/portfolio.fallback.json`(임베딩 제외, ~370KB)으로 교체.
+   `portfolio.server.json`·`embeddings-cache.json` 은 gitignore(로컬 sync 산출물).
+2. 로더(`lib/portfolio-data.ts`) 우선순위: server.json(로컬 산출물·CI fixture)
+   → fallback.json(커밋본) → sample.json(CI 안전망). 임베딩 없는 청크는 embedding=[].
+3. `sync:notion` 은 server.json 과 함께 fallback.json 을 항상 산출 — 노션 반영
+   커밋 플로우는 "fallback.json 커밋"으로 단순화. prebuild 게이트·sync:check 는
+   server||fallback 의 generatedAt 을 읽는다.
+4. CI 는 기존대로 sample→server.json 복사(결정적 fixture), E2E global-setup 불변.
+
+**결과**: 리포에서 ~15MB 제거, 노션 콘텐츠 변경 커밋이 370KB diff 로 축소.
+로컬 dev(MOCK)에서 server.json 이 없으면 검색은 keyword-only 로 동작(질의 fixture
+임베딩과 병합할 청크 임베딩이 없음) — dev 실검증은 어차피 실 AWS 경로로 수행하므로 수용.
+
+**트레이드오프**: "git 이력에 어떤 임베딩이 배포됐는지" 추적은 포기 — 임베딩은 이제
+S3 Vectors 런타임 상태이며 캐시 네임스페이스(ADR-029)가 정합성을 보장한다.
