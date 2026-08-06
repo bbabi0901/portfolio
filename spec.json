@@ -1276,7 +1276,7 @@
     {
       "id": "FEAT-040",
       "name": "커밋 데이터 슬림화 — portfolio.server.json(9.2MB)/embeddings-cache.json(6.2MB) → 슬림 폴백(portfolio.fallback.json), prebuild(gen:suggestions)·로컬 dev·MOCK 데이터 소스 재설계 (ADR-030 개정 필요)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P2",
       "tests": [
         "specs/portfolio-data.spec.ts",

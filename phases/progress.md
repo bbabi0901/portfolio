@@ -9,3 +9,4 @@
 - [2026-08-05] S3 통과 — AC 3종 green(smoke는 직전 상위 플로우에서 실행됨으로 생략), retriever 뮤테이션(?? 0→?? 1) red 확인 후 복원, 프로덕션 X-Retrieval-Mode: hybrid 실증, 캐시/데이터 무손실(287/287 동일), ADR-034에 icn1·800ms 기록 확인
 - [2026-08-05] S4 통과 — AC 2건 재실행 green(645 tests), 폴백 뮤테이션 체크 red 확인, Lambda invoke fresh 재현 + corpus.json 320KB 실증, TS-92/ADR-037/spec 0.7.4 동기화 확인
 - [2026-08-06] S5 통과 — AC 재실행 전건 통과(632 tests·lint·check:spec·grep 0건), 인터페이스 계약 동일 이동, 단언 약화 없음, 프로덕션 200+hybrid 실증
+- [2026-08-06] S6 통과 — AC 재실행(check:spec+lint+test 644건, build fallback-only 성공) + 우선순위 뮤테이션 red 확인 + fallback 287청크 임베딩 無 실측 + 프로덕션 자기지칭 질의 교정 실증
