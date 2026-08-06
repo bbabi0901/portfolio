@@ -3,11 +3,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { app } from "@/app/api/[[...route]]/route";
 import { clearEnvCache } from "@/lib/env";
 
-const ENV_KEYS = [
-  "MOCK_LLM",
-  "ANTHROPIC_API_KEY",
-  "GOOGLE_GENERATIVE_AI_API_KEY",
-] as const;
+const ENV_KEYS = ["MOCK_LLM", "ANTHROPIC_API_KEY", "GOOGLE_GENERATIVE_AI_API_KEY"] as const;
 
 const original: Record<string, string | undefined> = {};
 
