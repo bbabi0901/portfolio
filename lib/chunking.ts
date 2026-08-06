@@ -7,7 +7,7 @@ export interface ChunkOptions {
   targetTokens?: number;
   /** 청크 1개의 상한 토큰 수. 단일 heading이 이를 초과해도 분할하지 않음 (코드블록 보호) (default 1200) */
   maxTokens?: number;
-  /** 페이지당 청크 상한 (default 30). 초과 시 후반 컷 + 경고 콜백 */
+  /** 페이지당 청크 상한 (default 120, EC-52 — 자식 페이지 인라인 포함 대형 페이지 보존). 초과 시 후반 컷 + 경고 콜백 */
   maxChunksPerPage?: number;
   /** 너무 짧은 청크는 직전 청크에 머지 (default 150) */
   mergeBelowTokens?: number;
@@ -19,7 +19,9 @@ export interface ChunkOptions {
 
 const DEFAULT_TARGET_TOKENS = 600;
 const DEFAULT_MAX_TOKENS = 1200;
-const DEFAULT_MAX_CHUNKS_PER_PAGE = 30;
+// EC-52: 자식 페이지가 인라인 포함되는 대형 페이지(실측 88청크)가 30 상한 후반 컷으로
+// DM/웹푸시 등 뒷순서 콘텐츠를 통째로 잃던 문제 — 실측 최대 + 여유로 상향
+const DEFAULT_MAX_CHUNKS_PER_PAGE = 120;
 const DEFAULT_MERGE_BELOW_TOKENS = 150;
 
 const HEADING_REGEX = /^(#{1,6})\s+(.+)$/;

@@ -32,7 +32,10 @@ export function decideSync(opts: {
     return { action: "sync", reason: "FORCE_NOTION_SYNC=1" };
   }
   if (!opts.dataFileExists) {
-    return { action: "sync", reason: "data/portfolio.server.json·fallback.json 모두 없음 (안전망)" };
+    return {
+      action: "sync",
+      reason: "data/portfolio.server.json·fallback.json 모두 없음 (안전망)",
+    };
   }
   return { action: "skip", reason: "커밋된 데이터 사용" };
 }

@@ -36,7 +36,9 @@ async function run(): Promise<void> {
     const parsed = JSON.parse(fs.readFileSync(dataFile, "utf8")) as { generatedAt?: string };
     generatedAt = parsed.generatedAt ?? "";
   } catch {
-    console.log("[sync:check] data/portfolio.server.json·fallback.json 없음 → STALE (최초 sync 필요)");
+    console.log(
+      "[sync:check] data/portfolio.server.json·fallback.json 없음 → STALE (최초 sync 필요)",
+    );
     process.exit(1);
   }
 

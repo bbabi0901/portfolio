@@ -263,7 +263,7 @@ describe("/api/chat 토큰 cap 통합", () => {
     clearAll();
     process.env.MAX_TOKENS_PER_DAY = "100";
     process.env.MOCK_LLM = "1";
-      clearEnvCache();
+    clearEnvCache();
   });
 
   afterEach(() => {

@@ -90,6 +90,19 @@ describe("chunkMarkdown", () => {
     expect(entryChunks.length).toBeGreaterThanOrEqual(5);
   });
 
+  // TS-95 (EC-52) — 기본 상한 120: 자식 페이지 인라인 포함 대형 페이지(실측 88청크)가
+  // 구 기본값 30 에 후반 컷되어 DM/웹푸시 등 뒷순서 콘텐츠가 RAG 에서 소실되던 문제
+  it("default cap keeps large pages intact up to 120 chunks", () => {
+    const sections = Array.from({ length: 90 }, (_, i) => `## S${i}\ncontent ${i}`).join("\n");
+    const warns: string[] = [];
+    const chunks = chunkMarkdown(samplePage(sections), "project", {
+      mergeBelowTokens: 0,
+      onWarn: (m) => warns.push(m),
+    });
+    expect(chunks.length).toBe(90); // 기본값(120) 아래 — 컷 없음
+    expect(warns).toHaveLength(0);
+  });
+
   it("emits warning on > 30 chunks per page", () => {
     const sections = Array.from({ length: 35 }, (_, i) => `## S${i}\ncontent ${i}`).join("\n");
     const warns: string[] = [];
