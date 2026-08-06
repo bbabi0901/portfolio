@@ -137,4 +137,4 @@ RAG 스택 AWS 전환용 IaC 는 `infra/` 의 CDK(TypeScript) 독립 워크스�
 8. Vercel env 설정: `PORTFOLIO_AWS_ROLE_ARN`(AccessStack output), `PORTFOLIO_AWS_REGION`=`ap-northeast-2`.
 9. Bedrock 콘솔(서울) Model access 신청: Nova Lite/Micro, Claude Haiku, Titan Embed v2.
 
-> `PORTFOLIO_AWS_ROLE_ARN` / `PORTFOLIO_AWS_REGION` 은 **Phase 1(FEAT-035)부터 소비**된다. 현재 런타임은 이 변수를 읽지 않으며, 챗은 여전히 OpenRouter 로 동작한다.
+> `PORTFOLIO_AWS_ROLE_ARN` / `PORTFOLIO_AWS_REGION` / `S3_VECTORS_BUCKET` / `CORPUS_S3_BUCKET` 이 프로덕션 런타임에서 소비된다 (Bedrock 챗·Titan 쿼리 임베딩·S3 Vectors·corpus 로딩). 구 OPENROUTER/VOYAGE 키는 제거됨 (FEAT-039).

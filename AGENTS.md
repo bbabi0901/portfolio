@@ -80,7 +80,7 @@ npm run check:spec         # spec.json 유효성 + 모든 FEAT 의 tests 파일 
 
 > reviewer 가 버그를 잡을 때마다 일반화 가능한 교훈 1줄 추가. 형식: `- [영역] 교훈 (근거 ADR/PR)`
 
-- [LLM SDK] OpenRouter 는 Chat Completions 만 지원 — `or(id)` 는 Responses API 로 무음 실패, 반드시 `or.chat(id)` (ADR-026)
+- [LLM SDK] (역사) OpenRouter 시절 `or(id)` 는 Responses API 로 무음 실패했음 — 현재는 Bedrock 단일 (`@ai-sdk/amazon-bedrock` ^4 고정, 5.x 는 ai@6 비호환)
 - [LLM SDK] `@ai-sdk/amazon-bedrock` 5.x 는 provider spec v4 — `ai@6`(v3) 과 타입 비호환, ^4 고정 (ADR-035)
 - [Bedrock] Haiku 4.5 는 apac 교차리전 프로필 부재 — `global.` 프로필 사용, IAM 도 global.* 허용 필요 (PR #49)
 - [훅] 비대화형 셸은 nvm 미적용 → 구버전 Node 가 잡혀 ESLint v9 실패 — .nvmrc 버전을 PATH 앞에 주입
