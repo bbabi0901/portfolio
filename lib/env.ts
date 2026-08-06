@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const ServerEnvSchema = z.object({
-  // 챗·임베딩은 전부 Bedrock (ADR-034 전환 완료 — 구 OpenRouter/Voyage/OpenAI 키는 FEAT-039 에서 제거)
+  // 챗·임베딩은 전부 Bedrock (ADR-034)
   NOTION_TOKEN: z.string().optional(),
   NOTION_FEEDBACK_DB_ID: z.string().optional(),
   NOTION_CONTACT_DB_ID: z.string().optional(),

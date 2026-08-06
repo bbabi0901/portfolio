@@ -10,13 +10,13 @@ import {
 
 describe("embeddings-cache", () => {
   it("key is deterministic for same namespace + text", () => {
-    expect(embeddingCacheKey("voyage-3-lite@512", "hello")).toBe(
-      embeddingCacheKey("voyage-3-lite@512", "hello"),
+    expect(embeddingCacheKey("amazon.titan-embed-text-v2:0@1024", "hello")).toBe(
+      embeddingCacheKey("amazon.titan-embed-text-v2:0@1024", "hello"),
     );
   });
 
   it("key differs by namespace (provider/model/dim → 다른 벡터 공간)", () => {
-    expect(embeddingCacheKey("voyage-3-lite@512", "x")).not.toBe(
+    expect(embeddingCacheKey("amazon.titan-embed-text-v2:0@1024", "x")).not.toBe(
       embeddingCacheKey("text-embedding-3-small@1536", "x"),
     );
   });
