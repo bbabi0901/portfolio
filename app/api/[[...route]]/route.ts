@@ -165,11 +165,15 @@ app.post(
     const headers: Record<string, string> = {
       "Content-Type": "text/plain; charset=utf-8",
       "X-Retrieval-Mode": retrieval.mode,
+      "X-Retrieval-Count": String(retrieval.results.length),
+      "X-Corpus-Generated": portfolioData.generatedAt,
       "X-Model-Id": spec.id,
     };
     if (substitution) headers["X-Model-Substitution"] = "true";
 
     if (chunks.length === 0) {
+      // 프로덕션 빈 검색 진단용 — 어떤 토큰으로 0건이 났는지 로그에 남긴다 (EC-54 조사)
+      console.log("[chat] empty retrieval:", JSON.stringify(retrievalQuery));
       const text = language === "en" ? NO_RECORD_RESPONSE_EN : NO_RECORD_RESPONSE_KO;
       return new Response(text, { headers });
     }
