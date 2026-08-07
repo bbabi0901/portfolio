@@ -58,7 +58,7 @@ describe("resolveModel", () => {
     expect(spec.provider).toBe("anthropic");
     expect(spec.maxOutputTokens).toBe(1024);
     expect(spec.temperature).toBe(0.3);
-    expect(spec.topP).toBe(0.9);
+    expect(spec.topP).toBeUndefined(); // TS-98 — anthropic 은 temperature 단독
     expect(warn).not.toHaveBeenCalled();
   });
 
@@ -160,5 +160,20 @@ describe("createModel", () => {
     });
     expect(result.text).toContain("[mock-llm]");
     expect(result.text).toContain("Hello, world!");
+  });
+});
+
+// TS-98 — Claude Haiku 4.5 는 temperature 와 topP 동시 지정을 거부 (Bedrock ValidationException).
+// 프로덕션 실사례: 모델 전환 시 스트림 개시 400 → 503 no_models_available.
+describe("anthropic sampling params (TS-98)", () => {
+  it("claude-haiku spec 은 topP 를 정의하지 않는다 (temperature 단독)", () => {
+    const spec = resolveModel("claude-haiku");
+    expect(spec.temperature).toBeDefined();
+    expect(spec.topP).toBeUndefined();
+  });
+
+  it("nova 계열은 topP 유지", () => {
+    expect(resolveModel("nova-lite").topP).toBe(0.9);
+    expect(resolveModel("nova-micro").topP).toBe(0.9);
   });
 });

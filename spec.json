@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -40,8 +40,7 @@
       "provider": "anthropic",
       "default": false,
       "maxOutputTokens": 1024,
-      "temperature": 0.3,
-      "topP": 0.9
+      "temperature": 0.3
     }
   ],
   "rateLimits": {
@@ -1962,6 +1961,13 @@
       "title": "검색 리콜 보강 — 키워드 부분일치(복합명사) + Titan 캘리브레이션 문턱 0.25 (EC-54), 무관 질의 차단 유지",
       "file": "specs/retriever.spec.ts",
       "anchor": "TS-97"
+    },
+    {
+      "id": "TS-98",
+      "feature": "FEAT-035",
+      "title": "Claude Haiku 4.5 샘플링 파라미터 — temperature/topP 동시 지정 거부(Bedrock ValidationException)로 모델 전환 503 나던 버그, anthropic 은 temperature 단독",
+      "file": "specs/models.spec.ts",
+      "anchor": "TS-98"
     }
   ]
 }

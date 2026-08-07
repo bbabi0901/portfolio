@@ -19,7 +19,8 @@ export interface ModelSpec {
   provider: Provider;
   maxOutputTokens: number;
   temperature: number;
-  topP: number;
+  /** anthropic(Claude 4.5+)은 temperature 와 동시 지정 불가(Bedrock 거부) — 미정의 시 미전송 (TS-98) */
+  topP?: number;
 }
 
 // 비용 최소화 우선 (ADR-034): Nova Lite $0.06/$0.24 per 1M tok 기본,
@@ -53,7 +54,6 @@ const REGISTRY: Record<ModelId, ModelSpec> = {
     provider: "anthropic",
     maxOutputTokens: 1024,
     temperature: 0.3,
-    topP: 0.9,
   },
 };
 
