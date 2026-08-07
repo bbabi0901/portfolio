@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.7.9",
+  "version": "0.8.0",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -63,7 +63,7 @@
       "keyword": 0.4,
       "vector": 0.6
     },
-    "minVectorScore": 0.3,
+    "minVectorScore": 0.25,
     "minQueryLengthForEmbedding": 5
   },
   "pages": [
@@ -859,6 +859,11 @@
       "id": "EC-53",
       "scenario": "한국어 조사 변형으로 키워드 불일치 — \"취미는 뭔가요?\"(조사 는)가 본문 \"취미가/취미\"와 매칭 실패 → 콘텐츠가 있는데 NO_RECORD (프로덕션 실사례)",
       "behavior": "토크나이저가 흔한 조사 접미(은/는/이/가/을/를/에서/으로 등)를 제거 — 어간 2자 이상 보존 규칙으로 사과/결과/나이 등 오제거 방지. 쿼리·청크 대칭 적용"
+    },
+    {
+      "id": "EC-54",
+      "scenario": "의미 매칭 질의의 낮은 벡터 점수 — Titan v2 짧은 한국어 질의 코사인은 정답이 0.16~0.28 대역(실측), 구 문턱 0.3(Voyage 캘리브레이션)이 정답을 차단. 복합명사(\"대학교\" vs \"고려대학교\")는 토큰 불일치로 키워드도 0",
+      "behavior": "minVectorScore 0.25 로 재캘리브레이션(무관 질의 노이즈 상단 0.216 실측과 분리 유지) + 키워드 부분일치(질의 토큰이 청크 토큰에 포함되면 매칭, 2자 이상). 노이즈 대역과 겹치는 초약 매칭(<0.25)은 콘텐츠 키워드 보강으로 해결"
     }
   ],
   "features": [
@@ -1950,6 +1955,13 @@
       "title": "한국어 조사 제거 토큰화 — 조사 변형 질의(\"취미는\")가 본문(\"취미가\")과 매칭 (EC-53), 어간 보존 가드",
       "file": "specs/tokenize.spec.ts",
       "anchor": "TS-96"
+    },
+    {
+      "id": "TS-97",
+      "feature": "FEAT-037",
+      "title": "검색 리콜 보강 — 키워드 부분일치(복합명사) + Titan 캘리브레이션 문턱 0.25 (EC-54), 무관 질의 차단 유지",
+      "file": "specs/retriever.spec.ts",
+      "anchor": "TS-97"
     }
   ]
 }

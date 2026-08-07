@@ -31,7 +31,9 @@ const DEFAULTS = {
   vectorWeight: 0.6,
   topK: 8,
   maxTokens: 6000,
-  minVectorScore: 0.3,
+  // Titan v2 실측 캘리브레이션 (EC-54): 정답 대역 0.16~0.42, 무관 질의 노이즈 상단 0.216.
+  // 구 0.3 은 Voyage 시절 값 — 테니스(0.277)급 정답을 차단했다. 0.25 = 노이즈와 분리되는 하한.
+  minVectorScore: 0.25,
   sortBy: "merged" as const,
 };
 
@@ -119,7 +121,17 @@ function scoreKeyword(chunk: PortfolioChunk, queryTokens: Set<string>): number {
   const haystack = collectChunkTokens(chunk);
   let matched = 0;
   for (const term of queryTokens) {
-    if (haystack.has(term)) matched += 1;
+    if (haystack.has(term)) {
+      matched += 1;
+      continue;
+    }
+    // 복합명사 부분일치 (EC-54): "대학교" ⊂ "고려대학교", "개발" ⊂ "개발자" — 토큰은 이미 2자 이상
+    for (const tok of haystack) {
+      if (tok.length > term.length && tok.includes(term)) {
+        matched += 1;
+        break;
+      }
+    }
   }
   return matched / queryTokens.size;
 }
