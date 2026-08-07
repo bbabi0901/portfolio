@@ -26,7 +26,8 @@ export interface ModelSpec {
 // 비용 최소화 우선 (ADR-034): Nova Lite $0.06/$0.24 per 1M tok 기본,
 // Claude Haiku 는 품질 옵션. Nova 는 APAC 교차 리전 프로필(apac.),
 // Haiku 4.5 는 apac 프로필이 없어 global 프로필 사용 — test:smoke 로 검증 완료 (2026-08).
-export const DEFAULT_MODEL_ID: ModelId = "nova-lite";
+// TS-99: Nova Lite 는 약한 의미 연결(예: 미드↔TV 프로그램)에서 답변을 포기하는 보수성이 확인돼 Haiku 로 전환
+export const DEFAULT_MODEL_ID: ModelId = "claude-haiku";
 
 const BEDROCK_MODEL_ID: Record<ModelId, string> = {
   "nova-lite": "apac.amazon.nova-lite-v1:0",

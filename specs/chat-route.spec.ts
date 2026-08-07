@@ -107,13 +107,13 @@ describe("/api/chat", () => {
       expect(res.status).toBe(503);
     });
 
-    it("정상: 모델 ID 미지정 → DEFAULT (nova-lite) 사용", async () => {
+    it("TS-99: 모델 ID 미지정 → DEFAULT (claude-haiku) 사용", async () => {
       setMockEnv();
       const res = await postChat({
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
+      expect(res.headers.get("X-Model-Id")).toBe("claude-haiku");
       // 명시되지 않았으므로 substitution 헤더 없음
       expect(res.headers.get("X-Model-Substitution")).toBeNull();
     });
@@ -125,20 +125,18 @@ describe("/api/chat", () => {
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
+      expect(res.headers.get("X-Model-Id")).toBe("claude-haiku");
       expect(res.headers.get("X-Model-Substitution")).toBe("true");
     });
 
     it("정상: 알려진 모델 ID 그대로 사용 + substitution 헤더 없음", async () => {
       setMockEnv();
-      process.env.ANTHROPIC_API_KEY = "sk-ant-test";
-      clearEnvCache();
       const res = await postChat({
-        modelId: "claude-haiku",
+        modelId: "nova-lite",
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
       expect(res.status).toBe(200);
-      expect(res.headers.get("X-Model-Id")).toBe("claude-haiku");
+      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
       expect(res.headers.get("X-Model-Substitution")).toBeNull();
     });
   });
@@ -195,7 +193,7 @@ describe("/api/chat", () => {
       const res = await postChat({
         messages: [{ role: "user", content: "샘플 프로젝트" }],
       });
-      expect(res.headers.get("X-Model-Id")).toBe("nova-lite");
+      expect(res.headers.get("X-Model-Id")).toBe("claude-haiku");
     });
 
     // TS-89: 스트림 개시 실패는 503으로 표면화 — NO_RECORD 위장 금지 (ERR-05, S0-error-surface)

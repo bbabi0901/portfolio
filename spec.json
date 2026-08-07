@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -22,7 +22,7 @@
     {
       "id": "nova-lite",
       "provider": "amazon",
-      "default": true,
+      "default": false,
       "maxOutputTokens": 1024,
       "temperature": 0.3,
       "topP": 0.9
@@ -38,7 +38,7 @@
     {
       "id": "claude-haiku",
       "provider": "anthropic",
-      "default": false,
+      "default": true,
       "maxOutputTokens": 1024,
       "temperature": 0.3
     }
@@ -1968,6 +1968,13 @@
       "title": "Claude Haiku 4.5 샘플링 파라미터 — temperature/topP 동시 지정 거부(Bedrock ValidationException)로 모델 전환 503 나던 버그, anthropic 은 temperature 단독",
       "file": "specs/models.spec.ts",
       "anchor": "TS-98"
+    },
+    {
+      "id": "TS-99",
+      "feature": "FEAT-035",
+      "title": "기본 모델 Claude Haiku 4.5 전환 — Nova Lite 의 보수적 답변(약한 의미 연결 포기) 개선, 스위처로 Nova 선택 가능 유지",
+      "file": "specs/chat-route.spec.ts",
+      "anchor": "TS-99"
     }
   ]
 }

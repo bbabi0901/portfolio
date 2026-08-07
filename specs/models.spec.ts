@@ -62,8 +62,8 @@ describe("resolveModel", () => {
     expect(warn).not.toHaveBeenCalled();
   });
 
-  it("기본 모델은 Nova Lite (비용 최소화, ADR-034)", () => {
-    expect(DEFAULT_MODEL_ID).toBe("nova-lite");
+  it("기본 모델은 Claude Haiku 4.5 (TS-99 — 답변 품질, 스위처로 Nova 선택 가능)", () => {
+    expect(DEFAULT_MODEL_ID).toBe("claude-haiku"); // TS-99 — 기본 모델 Haiku 전환
     expect(resolveModel("nova-lite").provider).toBe("amazon");
   });
 
