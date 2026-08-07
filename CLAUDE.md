@@ -11,7 +11,7 @@
 - lucide-react 아이콘 (strokeWidth 1.5)
 - Hono on Next.js Route Handler (`app/api/[[...route]]/route.ts`)
 - Vercel AI SDK (`ai`, `@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환) + **AWS Bedrock** (ADR-034/035, **전환 완료** — 구 OpenRouter/Voyage/OpenAI 키 제거됨 FEAT-039)
-  - 채팅: Nova Lite(기본)/Nova Micro = `apac.` inference profile, Claude Haiku 4.5 = `global.` profile
+  - 채팅: **Claude Haiku 4.5(기본, `global.` profile — TS-99)** / Nova Lite·Nova Micro = `apac.` profile (스위처 선택)
   - 임베딩: Titan Text Embeddings v2 1024차원 (sync + 런타임 쿼리)
   - 벡터 검색: S3 Vectors(서울) 런타임 하이브리드 (FEAT-037, 800ms 타임아웃 시 keyword-only 강등 ERR-14)
   - 인제스천: Lambda `portfolio-ingest-sync` + EventBridge 24h (ADR-037, FEAT-038) — 노션 수정이 재배포 없이 자동 반영, 런타임은 S3 corpus.json 10분 TTL(장애 시 커밋 데이터 폴백)
