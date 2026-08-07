@@ -173,3 +173,40 @@ describe("retrieve", () => {
     });
   });
 });
+
+// TS-97 (EC-54) — 검색 리콜 보강: 복합명사 부분일치 + Titan 재캘리브레이션 문턱
+describe("recall improvements (TS-97)", () => {
+  it("복합명사 부분일치 — 질의 '대학교'가 본문 '고려대학교' 청크와 키워드 매칭된다", () => {
+    const data = mkData([
+      mkChunk("edu", "고려대학교 신소재공학부 2012-2018"),
+      mkChunk("other", "전혀 무관한 내용의 청크입니다"),
+    ]);
+    const r = retrieve("어느 대학교 나오셨어요?", data, {});
+    expect(r.results.length).toBeGreaterThan(0);
+    expect(r.results[0]!.chunk.id).toBe("edu");
+  });
+
+  it("부분일치는 2자 이상 토큰만 — 무관 청크에 오탐하지 않는다", () => {
+    const data = mkData([mkChunk("a", "리액트 컴포넌트 설계")]);
+    const r = retrieve("파이썬 장고 백엔드", data, {});
+    expect(r.results).toHaveLength(0);
+  });
+
+  it("기본 minVectorScore 0.25 — vector 0.26 단독 매칭이 통과한다 (Titan 캘리브레이션)", () => {
+    const data = mkData([mkChunk("v", "서버 배포 파이프라인 구성 절차")]);
+    const r = retrieve("완전히 새로운 화제의 물음", data, {
+      vectorScores: new Map([["v", 0.26]]),
+    });
+    expect(r.results).toHaveLength(1);
+    expect(r.mode).toBe("hybrid");
+  });
+
+  it("vector 0.2(노이즈 대역)는 여전히 차단 — 무관 질의 NO_RECORD 계약 유지", () => {
+    const data = mkData([mkChunk("v", "서버 배포 파이프라인 구성 절차")]);
+    const r = retrieve("완전히 새로운 화제의 물음", data, {
+      vectorScores: new Map([["v", 0.2]]),
+    });
+    expect(r.results).toHaveLength(0);
+    expect(r.empty).toBe(true);
+  });
+});
