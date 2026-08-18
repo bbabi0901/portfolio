@@ -10,11 +10,15 @@ import {
   useRef,
 } from "react";
 import { useChat } from "@ai-sdk/react";
+import { parseSourcesHeader } from "@/lib/citations";
 import { TextStreamChatTransport, type UIMessage } from "ai";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
-import type { ChatMessage } from "@/types/chat";
+import type { Citation, ChatMessage } from "@/types/chat";
+
+// FEAT-041: fetch 응답 헤더 → onFinish 사이 출처 전달 (이벤트 간 홀더, 렌더에서 미접근)
+let pendingSourcesHolder: Citation[] | null = null;
 import type { SuggestedQuestionMeta } from "@/types/portfolio";
 import { ModelSwitcher, type ModelId } from "./ModelSwitcher";
 import { SuggestionCarousel } from "./SuggestionCarousel";
@@ -105,6 +109,9 @@ export function ChatRoot({
     writeStoredModel(modelId);
   }, [modelId]);
 
+  // 출처 칩 (FEAT-041/TS-100): 응답 헤더의 X-Sources 를 onFinish 시점의 assistant 메시지에 귀속
+  const [citationsById, setCitationsById] = useState<Record<string, Citation[]>>({});
+
   const transport = useMemo(
     () =>
       new TextStreamChatTransport<UIMessage>({
@@ -125,6 +132,8 @@ export function ChatRoot({
         },
         fetch: async (input, init) => {
           const res = await fetch(input as RequestInfo, init);
+          const sources = parseSourcesHeader(res.headers.get("X-Sources"));
+          pendingSourcesHolder = sources.length > 0 ? sources : null;
           if (res.headers.get("X-Model-Substitution") === "true") {
             toast.warning("이 모델은 일시적으로 사용 불가. 기본 모델로 대체했어요.");
           }
@@ -147,7 +156,16 @@ export function ChatRoot({
     status,
     error,
     clearError,
-  } = useChat({ transport });
+  } = useChat({
+    transport,
+    onFinish: ({ message }) => {
+      const pending = pendingSourcesHolder;
+      pendingSourcesHolder = null;
+      if (pending && message.role === "assistant") {
+        setCitationsById((prev) => ({ ...prev, [message.id]: pending }));
+      }
+    },
+  });
 
   const isStreaming = status === "submitted" || status === "streaming";
   const composerDisabled = isStreaming || noModelsAvailable;
@@ -172,6 +190,7 @@ export function ChatRoot({
         role,
         content: uiMessageText(m),
         status: msgStatus,
+        citations: citationsById[m.id],
         createdAt: 0,
       };
     });
@@ -185,7 +204,7 @@ export function ChatRoot({
       });
     }
     return [...head, ...tail];
-  }, [greetingMsg, aiMessages, status]);
+  }, [greetingMsg, aiMessages, status, citationsById]);
 
   // Composer
   const [input, setInput] = useState("");
