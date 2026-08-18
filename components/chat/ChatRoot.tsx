@@ -15,7 +15,7 @@ import { TextStreamChatTransport, type UIMessage } from "ai";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
-import type {Citation, ChatMessage } from "@/types/chat";
+import type { Citation, ChatMessage } from "@/types/chat";
 
 // FEAT-041: fetch 응답 헤더 → onFinish 사이 출처 전달 (이벤트 간 홀더, 렌더에서 미접근)
 let pendingSourcesHolder: Citation[] | null = null;
