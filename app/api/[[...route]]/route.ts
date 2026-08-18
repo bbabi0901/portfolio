@@ -19,6 +19,7 @@ import {
   NO_RECORD_RESPONSE_EN,
   NO_RECORD_RESPONSE_KO,
 } from "@/lib/prompts";
+import { buildSourcesHeader } from "@/lib/citations";
 import { expandSelfReferentialQuery } from "@/lib/query-expansion";
 import { rateLimitMiddleware } from "@/lib/rate-limit-middleware";
 import { retrieve } from "@/lib/retriever";
@@ -170,6 +171,9 @@ app.post(
       "X-Model-Id": spec.id,
     };
     if (substitution) headers["X-Model-Substitution"] = "true";
+    // 출처 칩 (FEAT-041/TS-100) — 검색된 노션 문서 제목, NO_RECORD(0건)면 미설정
+    const sourcesHeader = buildSourcesHeader(chunks);
+    if (sourcesHeader) headers["X-Sources"] = sourcesHeader;
 
     if (chunks.length === 0) {
       // 프로덕션 빈 검색 진단용 — 어떤 토큰으로 0건이 났는지 로그에 남긴다 (EC-54 조사)

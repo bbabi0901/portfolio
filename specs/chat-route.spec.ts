@@ -165,6 +165,27 @@ describe("/api/chat", () => {
       expect(text).toBe(NO_RECORD_RESPONSE_EN);
     });
 
+    // TS-100 — 출처 칩: 검색 문서 제목이 X-Sources 헤더로 전달된다
+    it("TS-100: 검색 성공 시 X-Sources 헤더에 문서 제목 포함", async () => {
+      setMockEnv();
+      const res = await postChat({
+        messages: [{ role: "user", content: "샘플 프로젝트" }],
+      });
+      expect(res.status).toBe(200);
+      const { parseSourcesHeader } = await import("@/lib/citations");
+      const sources = parseSourcesHeader(res.headers.get("X-Sources"));
+      expect(sources.length).toBeGreaterThan(0);
+      expect(typeof sources[0]!.sourceTitle).toBe("string");
+    });
+
+    it("TS-100: NO_RECORD(검색 0건) 응답엔 X-Sources 없음", async () => {
+      setMockEnv();
+      const res = await postChat({
+        messages: [{ role: "user", content: "qqq xxx yyy zzz 파파파" }],
+      });
+      expect(res.headers.get("X-Sources")).toBeNull();
+    });
+
     it("X-Retrieval-Mode 헤더 포함 (hybrid in MOCK_LLM)", async () => {
       setMockEnv();
       const res = await postChat({

@@ -124,6 +124,50 @@
         }
       ],
       "passes": true
+    },
+    {
+      "id": "S7",
+      "title": "답변 출처 칩 배선 (FEAT-041) — 서버가 검색 문서 메타 전달, 기존 SourceCitation 렌더",
+      "feat": "FEAT-041",
+      "ac": [
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "npm run e2e"
+        }
+      ],
+      "passes": false
+    },
+    {
+      "id": "S8",
+      "title": "전환 CTA 묶음 (FEAT-042) — 인라인 연락 CTA·experience 끝 CTA·차별점 질문 고정·그라운딩 카피 (PDF 는 파일 수령 후)",
+      "feat": "FEAT-042",
+      "ac": [
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        },
+        {
+          "type": "cmd",
+          "check": "npm run e2e"
+        }
+      ],
+      "passes": false
+    },
+    {
+      "id": "S9",
+      "title": "미답변 질문 노션 수집 (FEAT-043) — ERR-08 경로에서 비동기 기록, 장애 무해",
+      "feat": "FEAT-043",
+      "ac": [
+        {
+          "type": "cmd",
+          "check": "npm run check:spec && npm run lint && npm run test"
+        }
+      ],
+      "passes": false
     }
   ]
 }

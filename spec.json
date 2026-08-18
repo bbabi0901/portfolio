@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.8.2",
+  "version": "0.9.1",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1301,6 +1301,36 @@
         "FEAT-038",
         "FEAT-039"
       ]
+    },
+    {
+      "id": "FEAT-041",
+      "name": "답변 출처 칩 — 검색에 걸린 노션 문서 제목을 답변 하단에 표시 (SourceCitation 배선, 신뢰·차별화)",
+      "status": "in_progress",
+      "priority": "P1",
+      "tests": [
+        "specs/citations.spec.ts",
+        "specs/chat-route.spec.ts",
+        "tests/e2e/chat.e2e.ts"
+      ],
+      "dependencies": [
+        "FEAT-037"
+      ]
+    },
+    {
+      "id": "FEAT-042",
+      "name": "전환 CTA — 챗 답변 인라인 연락하기 + /experience 타임라인 끝 CTA + 차별점 질문 캐러셀 상단 고정 + 그라운딩 마이크로카피 (이력서 PDF 버튼은 파일 수령 후)",
+      "status": "planned",
+      "priority": "P1",
+      "tests": [],
+      "dependencies": []
+    },
+    {
+      "id": "FEAT-043",
+      "name": "미답변 질문 수집 — 검색 0건 질문을 노션 DB 에 자동 기록, 콘텐츠 갭 개선 루프 (fire-and-forget, 실패 무해)",
+      "status": "planned",
+      "priority": "P2",
+      "tests": [],
+      "dependencies": []
     }
   ],
   "testScenarios": [
@@ -1975,6 +2005,13 @@
       "title": "기본 모델 Claude Haiku 4.5 전환 — Nova Lite 의 보수적 답변(약한 의미 연결 포기) 개선, 스위처로 Nova 선택 가능 유지",
       "file": "specs/chat-route.spec.ts",
       "anchor": "TS-99"
+    },
+    {
+      "id": "TS-100",
+      "feature": "FEAT-041",
+      "title": "답변 출처 칩 — 서버가 X-Sources 헤더로 검색 문서 제목 전달(최대 4, 중복 제거), 클라이언트 파싱·렌더, NO_RECORD 시 미표시",
+      "file": "specs/citations.spec.ts",
+      "anchor": "TS-100"
     }
   ]
 }

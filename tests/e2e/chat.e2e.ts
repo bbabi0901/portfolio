@@ -123,3 +123,15 @@ test.describe("chat injection defense (TS-05)", () => {
     }
   });
 });
+
+test.describe("chat source citations (TS-100)", () => {
+  test("TS-100: 답변 완료 후 출처 칩 노출", async ({ page }) => {
+    await skipGreeting(page);
+    await page.goto("/chat");
+    await sendChatMessage(page, "샘플 프로젝트가 뭐예요?");
+    await page.waitForSelector('[data-role="assistant"][data-status="done"]', { timeout: 15000 });
+    const chips = page.locator('[data-slot="source-citation"]');
+    await chips.first().waitFor({ state: "visible", timeout: 5000 });
+    expect(await chips.count()).toBeGreaterThan(0);
+  });
+});
