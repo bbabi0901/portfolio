@@ -29,6 +29,16 @@ test.describe("/experience (TS-38, TS-39)", () => {
   });
 });
 
+test.describe("/experience conversion (TS-101)", () => {
+  test("TS-101: 타임라인 끝 연락 CTA 노출", async ({ page }) => {
+    await page.goto("/experience");
+    const cta = page.locator('[data-slot="experience-contact-cta"]');
+    await cta.scrollIntoViewIfNeeded();
+    await expect(cta).toBeVisible();
+    await expect(cta.locator('a[href="/contact"]')).toBeVisible();
+  });
+});
+
 test.describe("/contact (TS-43, TS-46, TS-49)", () => {
   test("TS-43: 페이지 직접 진입 + 폼 + 직접 연락 카드", async ({ page }) => {
     await page.goto("/contact");

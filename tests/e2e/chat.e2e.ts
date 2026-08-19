@@ -133,5 +133,15 @@ test.describe("chat source citations (TS-100)", () => {
     const chips = page.locator('[data-slot="source-citation"]');
     await chips.first().waitFor({ state: "visible", timeout: 5000 });
     expect(await chips.count()).toBeGreaterThan(0);
+    // TS-101: 출처 있는 답변엔 인라인 연락 CTA
+    await expect(page.locator('[data-slot="contact-cta"]').first()).toBeVisible();
+  });
+});
+
+test.describe("conversion cues (TS-101)", () => {
+  test("TS-101: 그라운딩 마이크로카피 노출", async ({ page }) => {
+    await skipGreeting(page);
+    await page.goto("/chat");
+    await expect(page.locator('[data-slot="grounding-note"]')).toContainText("기록된 내용만");
   });
 });

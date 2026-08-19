@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1319,9 +1319,13 @@
     {
       "id": "FEAT-042",
       "name": "전환 CTA — 챗 답변 인라인 연락하기 + /experience 타임라인 끝 CTA + 차별점 질문 캐러셀 상단 고정 + 그라운딩 마이크로카피 (이력서 PDF 버튼은 파일 수령 후)",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "P1",
-      "tests": [],
+      "tests": [
+        "specs/suggestions-pin.spec.ts",
+        "tests/e2e/chat.e2e.ts",
+        "tests/e2e/pages.e2e.ts"
+      ],
       "dependencies": []
     },
     {
@@ -2012,6 +2016,13 @@
       "title": "답변 출처 칩 — 서버가 X-Sources 헤더로 검색 문서 제목 전달(최대 4, 중복 제거), 클라이언트 파싱·렌더, NO_RECORD 시 미표시",
       "file": "specs/citations.spec.ts",
       "anchor": "TS-100"
+    },
+    {
+      "id": "TS-101",
+      "feature": "FEAT-042",
+      "title": "전환 CTA 묶음 — 차별점 질문(Q-022) 캐러셀 상단 고정, 챗 답변 인라인 연락 CTA(출처 있는 답변), /experience 끝 연락 CTA, 그라운딩 마이크로카피",
+      "file": "specs/suggestions-pin.spec.ts",
+      "anchor": "TS-101"
     }
   ]
 }

@@ -4,6 +4,9 @@ import { type ComponentPropsWithoutRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+
 import { cn } from "@/lib/utils";
 import type { ChatMessage, Citation } from "@/types/chat";
 import { TypingDots } from "./TypingDots";
@@ -150,6 +153,14 @@ export function MessageBubble({
               onClick={(citation) => onOpenSource?.(citation)}
             />
           ))}
+          <Link
+            href="/contact"
+            data-slot="contact-cta"
+            className="text-brand hover:text-foreground ml-1 inline-flex items-center gap-0.5 text-[11px] transition-colors"
+          >
+            더 궁금하면 연락하기
+            <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} aria-hidden="true" />
+          </Link>
         </div>
       )}
       {showActions && (
