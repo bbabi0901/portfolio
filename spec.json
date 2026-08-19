@@ -1319,7 +1319,7 @@
     {
       "id": "FEAT-042",
       "name": "전환 CTA — 챗 답변 인라인 연락하기 + /experience 타임라인 끝 CTA + 차별점 질문 캐러셀 상단 고정 + 그라운딩 마이크로카피 (이력서 PDF 버튼은 파일 수령 후)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P1",
       "tests": [
         "specs/suggestions-pin.spec.ts",

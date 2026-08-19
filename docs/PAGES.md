@@ -109,6 +109,7 @@
 - 모델 변경 → ModelSwitcher (localStorage 저장)
 - "새 대화" → ClearConversationButton (Cmd+K)
 - 위로 스크롤 → JumpToLatestButton
+- **전환 CTA (FEAT-042, TS-101)**: 출처 칩 있는 완료 답변 끝에 인라인 "더 궁금하면 연락하기" 링크(`data-slot=contact-cta`, /contact). Composer 하단 그라운딩 마이크로카피 "노션에 기록된 내용만 답해요"(`data-slot=grounding-note`). 추천 질문 캐러셀은 차별점 질문 Q-022 상단 고정(`pinSignatureQuestion`).
 
 ### 엣지/에러
 - EC-01~EC-31, ERR-01~ERR-08, ERR-13~ERR-17 적용.
@@ -187,6 +188,7 @@
 3. **자격증** (분리 섹션, `CredentialList`) — 노션 이력서 "자격증 (Certification)" 섹션 소싱.
    현재: AWS Certified AI Practitioner (Amazon Web Services).
 4. **보유 스킬** (SkillsGrid, 기존 유지).
+5. **연락 CTA (FEAT-042, TS-101)** — 페이지 끝 `data-slot=experience-contact-cta` 섹션: "함께 일해보고 싶으시다면, 편하게 연락 주세요." + /contact 연락하기 버튼(`bg-foreground text-background` pill).
 - 구 '프로젝트' 섹션(카테고리 필터+카드)은 제거 — 업무 프로젝트가 커리어 불릿과 중복.
 - 커리어 파서: `lib/career-markdown.ts` (H2 경계 밖 merge 금지 + 흡수 섹션 헤딩 재주입은 청커).
 
