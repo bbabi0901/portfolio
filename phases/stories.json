@@ -139,7 +139,7 @@
           "check": "npm run e2e"
         }
       ],
-      "passes": false
+      "passes": true
     },
     {
       "id": "S8",

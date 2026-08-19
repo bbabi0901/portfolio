@@ -11,3 +11,4 @@
 - [2026-08-06] S5 통과 — AC 재실행 전건 통과(632 tests·lint·check:spec·grep 0건), 인터페이스 계약 동일 이동, 단언 약화 없음, 프로덕션 200+hybrid 실증
 - [2026-08-06] S6 통과 — AC 재실행(check:spec+lint+test 644건, build fallback-only 성공) + 우선순위 뮤테이션 red 확인 + fallback 287청크 임베딩 無 실측 + 프로덕션 자기지칭 질의 교정 실증
 - [2026-08-19] S7 반려 — AC1 lint 실패: ChatRoot.tsx:136 react-hooks/globals (모듈 홀더 pendingSourcesHolder 재할당). check:spec·test 661건은 green
+- [2026-08-19] S7 통과 — AC 재실행 green(lint exit 0·663 tests·e2e 175), dedup 뮤테이션 red 확인, 프로덕션 X-Sources 4건 실증, stash/take 렌더 경로 비호출·TS-100/FEAT-041 SSoT 동기화 확인
