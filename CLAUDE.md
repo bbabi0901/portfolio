@@ -10,17 +10,27 @@
 - shadcn/ui (sheet, button, input, select, carousel, popover, scroll-area, toast, form, label, textarea, radio-group)
 - lucide-react 아이콘 (strokeWidth 1.5)
 - Hono on Next.js Route Handler (`app/api/[[...route]]/route.ts`)
-- Vercel AI SDK (`ai`, `@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환) + **AWS Bedrock** (ADR-034/035, **전환 완료** — 구 OpenRouter/Voyage/OpenAI 키 제거됨 FEAT-039)
+- Vercel AI SDK (`ai`, `@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환) + **AWS Bedrock** (ADR-034/035)
   - 채팅: **Claude Haiku 4.5(기본, `global.` profile — TS-99)** / Nova Lite·Nova Micro = `apac.` profile (스위처 선택)
   - 임베딩: Titan Text Embeddings v2 1024차원 (sync + 런타임 쿼리)
   - 벡터 검색: S3 Vectors(서울) 런타임 하이브리드 (FEAT-037, 800ms 타임아웃 시 keyword-only 강등 ERR-14)
-  - 인제스천: Lambda `portfolio-ingest-sync` + EventBridge 24h (ADR-037, FEAT-038) — 노션 수정이 재배포 없이 자동 반영, 런타임은 S3 corpus.json 10분 TTL(장애 시 커밋 데이터 폴백)
-  - 인증: 로컬 = `PORTFOLIO_AWS_PROFILE`(aws login), Vercel = OIDC→IAM role (`PORTFOLIO_AWS_ROLE_ARN`, 토큰은 요청 컨텍스트 — env 검사 금지). Vercel 함수 리전 icn1 고정 (vercel.json). IaC 는 `infra/` CDK TypeScript 워크스페이스
+  - 인제스천: Lambda `portfolio-ingest-sync` + EventBridge 24h (ADR-037) — 노션 수정이 재배포 없이 자동 반영, 런타임은 S3 corpus.json 10분 TTL(장애 시 커밋 데이터 폴백)
+  - 인증: 로컬 = `PORTFOLIO_AWS_PROFILE`(aws login), Vercel = OIDC→IAM role (`PORTFOLIO_AWS_ROLE_ARN`, 토큰은 요청 컨텍스트 — env 검사 금지). Vercel 함수 리전 icn1 고정. IaC 는 `infra/` CDK 워크스페이스
 - `@ai-sdk/react`의 `useChat`
 - @notionhq/client + notion-to-md
 - react-markdown + remark-gfm + rehype-highlight
 - react-hook-form + zod resolver (Contact 폼)
 - Vitest + Testing Library + msw + Playwright
+
+## 디렉토리 구조
+```
+app/        # Next.js App Router (+ app/api/[[...route]]/route.ts = Hono 단일 진입점)
+components/ # UI 컴포넌트          lib/       # 도메인 로직
+services/   # 외부 API 래퍼        types/     # 타입
+scripts/    # 빌드/sync 스크립트   data/      # corpus 폴백 (일부만 커밋)
+specs/      # unit·integration 테스트 + spec.json   tests/e2e/  # Playwright
+infra/      # CDK (독립 워크스페이스)   lambda/  # ingest-sync   docs/  # SSoT 문서
+```
 
 ## 아키텍처 규칙
 - CRITICAL: 모든 LLM 호출과 Notion API 호출은 Hono 라우트(`app/api/[[...route]]/route.ts`)에서만. 클라이언트는 같은 origin의 `/api/*`만 호출.
@@ -28,18 +38,17 @@
 - CRITICAL: 답변은 포트폴리오 corpus(S3 corpus.json 10분 TTL, 장애 시 커밋 `data/portfolio.fallback.json`) 컨텍스트로만 생성. 외부 지식은 system prompt에서 차단.
 - CRITICAL: corpus/폴백 데이터는 서버 전용. 클라이언트에는 `public/data/suggestions.json`(slim) 만 노출.
 - CRITICAL: spec.json 위반 시 빌드 차단. 신규 기능은 (1) spec.json 등록 → (2) 실패 테스트 작성 → (3) 구현 순서.
-- 컴포넌트는 `components/`, 타입은 `types/`, 도메인 로직은 `lib/`, 외부 API 래퍼는 `services/`, 빌드 스크립트는 `scripts/`.
 - Server Components 기본. 인터랙션이 필요한 곳만 `"use client"`.
 - 모든 API 라우트는 Node runtime (ADR-031 — 커밋된 RAG 데이터가 Edge 1MB 번들 한도 초과. `/api/feedback`·`/api/contact`은 Notion SDK 안정성).
 - 시간 표기는 항상 한국 시간 (Asia/Seoul, KST).
 
 ## 디자인 규칙
-- 라이트/다크 테마 지원. 기본 시스템(`prefers-color-scheme`) 자동, 사이드바(SideSheet) 토글로 시스템/라이트/다크 선택. `next-themes`가 `<html>`에 `.light`/`.dark` 클래스 토글. `theme-color`는 라이트 `#ffffff`/다크 `#0a0a0a` media 쌍.
-- CRITICAL: 색상은 하드코딩 Tailwind 색(`bg-neutral-900`, `text-white` 등) 금지, 반드시 `app/globals.css`의 시맨틱 토큰 유틸 사용. 표면: `bg-background`/`bg-surface`/`bg-elevated`, 텍스트: `text-foreground`/`text-body`/`text-muted`/`text-subtle`/`text-faint`, 경계: `border-line`/`border-line-strong`/`border-line-subtle`, 포인트: `text-brand`/`bg-brand`, 상태: `text-danger`/`text-warning`/`text-success`. 반전(라임/전경 위 텍스트)은 `bg-foreground text-background`. 마크다운 prose는 `prose dark:prose-invert`.
+- 라이트/다크 테마: 기본 시스템 자동 + 사이드바 토글 (`next-themes`). 구현 디테일·색상값은 docs/UI_GUIDE.md.
+- CRITICAL: 색상은 하드코딩 Tailwind 색(`bg-neutral-900`, `text-white` 등) 금지, 반드시 `app/globals.css`의 시맨틱 토큰 유틸 사용 (표면 `bg-surface`, 텍스트 `text-muted`, 경계 `border-line`, 포인트 `text-brand` 계열 등 — 전체 토큰 표는 docs/UI_GUIDE.md). 반전은 `bg-foreground text-background`, 마크다운 prose는 `prose dark:prose-invert`.
 - AI 슬롭 안티패턴 금지: backdrop-filter blur, gradient-text, "Powered by AI" 배지, glow 애니메이션, 보라/네온 브랜드 색, 모든 카드 동일 rounded-2xl, blur-3xl orb. 자세한 정책은 docs/UI_GUIDE.md.
 - 애니메이션 화이트리스트만 사용. 그 외 모두 금지.
 - 한국어 폰트: Pretendard Variable (next/font/local), fallback 시스템.
-- 색상은 무채색(neutral) + 포인트 1색 (brand = lime, 라이트 lime-600 / 다크 lime-300, 절제). 자세한 토큰은 docs/UI_GUIDE.md.
+- 색상은 무채색(neutral) + 포인트 1색 (brand = lime, 절제). 토큰 값은 docs/UI_GUIDE.md.
 
 ## 개발 프로세스
 - CRITICAL: 새 기능 구현 시 반드시 (1) spec.json `features[]`에 FEAT-XXX 등록 → (2) 실패 테스트 작성 → (3) 통과 구현. (TDD + SDD)
@@ -90,7 +99,7 @@ npm run sync:notion        # 노션 → data/portfolio.server.json (무조건 sy
 npm run sync:if-needed     # prebuild 게이트 — 커밋 데이터 있으면 생략, FORCE_NOTION_SYNC=1 강제
 npm run sync:check         # 노션 last_edited_time vs generatedAt 신선도 검사 (STALE 시 exit 1)
 npm run gen:suggestions    # portfolio.server.json → 추천 질문 후보 + 관련 질문 매핑
-npm run check:spec         # spec.json 유효성 + 모든 FEAT의 tests 파일 존재 검증
+npm run check:spec         # spec.json 유효성 + FEAT tests 존재 + CLAUDE.md 명령어 대조
 ```
 
 ```
@@ -108,8 +117,12 @@ cd infra && npm run deploy  # 배포 (AWS 자격 증명 필요)
 - `spec.json`, `spec.schema.json`은 커밋.
 - 노션 토큰은 logs에 절대 출력 금지.
 
+## 실패 지식 (상한 20건 — 넘치면 낡은 것 삭제, 일반화 가능한 것만)
+
+<!-- 형식: - [YYYY-MM-DD] 증상 → 원인 → 교훈. 버그/삽질 해결 시 여기 축적 (다른 절과 중복 금지) -->
+
 ## 현재 워크 컨텍스트
-- 소유자: 김윤수 (YoonsooKim9, bbabi0901@gmail.com)
+- 소유자: 김윤수 (GitHub: bbabi0901, bbabi0901@gmail.com)
 - 컨텐츠 소스: Notion 워크스페이스 (`기록` 페이지 하위 — `기록v2` 는 폐기 예정 트리, 동기화 대상 아님)
 - 배포 대상: Vercel
 - 시간 기준: KST

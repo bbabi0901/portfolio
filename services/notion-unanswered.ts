@@ -5,7 +5,8 @@ import { getServerEnv } from "@/lib/env";
 const NOTION_API = "https://api.notion.com/v1/pages";
 const NOTION_VERSION = "2022-06-28";
 const TITLE_LIMIT = 200;
-const TIMEOUT_MS = 1500;
+// icn1 → Notion API(US) 콜드 왕복이 1.5s 를 넘겨 무음 실패했던 실사례 — 여유 있게
+const TIMEOUT_MS = 5000;
 
 export interface LogUnansweredOptions {
   /** 테스트 주입용 */
@@ -41,8 +42,15 @@ export async function logUnansweredQuestion(
         },
       }),
     });
+    if (!res.ok) {
+      console.warn("[unanswered] notion write failed:", res.status);
+    }
     return res.ok;
-  } catch {
+  } catch (err) {
+    console.warn(
+      "[unanswered] notion write error:",
+      err instanceof Error ? err.message : String(err),
+    );
     return false;
   }
 }
