@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:spec": "tsx scripts/validate-spec.ts --strict-tests",
+    "check:spec": "tsx scripts/validate-spec.ts --strict-tests && tsx scripts/validate-claude-md.ts",
     "sync:notion": "tsx --conditions=react-server scripts/sync-notion.ts",
     "sync:if-needed": "tsx --conditions=react-server scripts/sync-if-needed.ts",
     "sync:check": "tsx --conditions=react-server scripts/check-notion-freshness.ts",
