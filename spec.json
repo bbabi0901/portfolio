@@ -1305,7 +1305,7 @@
     {
       "id": "FEAT-041",
       "name": "답변 출처 칩 — 검색에 걸린 노션 문서 제목을 답변 하단에 표시 (SourceCitation 배선, 신뢰·차별화)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P1",
       "tests": [
         "specs/citations.spec.ts",
