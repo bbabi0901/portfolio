@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1331,9 +1331,12 @@
     {
       "id": "FEAT-043",
       "name": "미답변 질문 수집 — 검색 0건 질문을 노션 DB 에 자동 기록, 콘텐츠 갭 개선 루프 (fire-and-forget, 실패 무해)",
-      "status": "planned",
+      "status": "in_progress",
       "priority": "P2",
-      "tests": [],
+      "tests": [
+        "specs/notion-unanswered.spec.ts",
+        "specs/chat-route.spec.ts"
+      ],
       "dependencies": []
     }
   ],
@@ -2023,6 +2026,13 @@
       "title": "전환 CTA 묶음 — 차별점 질문(Q-022) 캐러셀 상단 고정, 챗 답변 인라인 연락 CTA(출처 있는 답변), /experience 끝 연락 CTA, 그라운딩 마이크로카피",
       "file": "specs/suggestions-pin.spec.ts",
       "anchor": "TS-101"
+    },
+    {
+      "id": "TS-102",
+      "feature": "FEAT-043",
+      "title": "미답변 질문 수집 — 검색 0건 시 노션 DB 기록(제한시간 내), 미설정/실패는 무해(no-op), 정상 답변 경로 미호출",
+      "file": "specs/notion-unanswered.spec.ts",
+      "anchor": "TS-102"
     }
   ]
 }
