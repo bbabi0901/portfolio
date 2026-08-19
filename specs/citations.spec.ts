@@ -51,3 +51,18 @@ describe("citations (TS-100)", () => {
     expect(buildSourcesHeader([])).toBe("");
   });
 });
+
+describe("stash/take 홀더 (TS-100)", () => {
+  it("stash 후 take 는 1회성 — 두 번째 take 는 null", async () => {
+    const { stashSources, takeSources } = await import("@/lib/citations");
+    stashSources([{ sourceTitle: "이력서", sourceUrl: null }]);
+    expect(takeSources()?.[0]?.sourceTitle).toBe("이력서");
+    expect(takeSources()).toBeNull();
+  });
+
+  it("빈 배열 stash 는 null 로 정규화", async () => {
+    const { stashSources, takeSources } = await import("@/lib/citations");
+    stashSources([]);
+    expect(takeSources()).toBeNull();
+  });
+});

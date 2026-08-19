@@ -31,3 +31,18 @@ export function parseSourcesHeader(value: string | null): Citation[] {
     return [];
   }
 }
+
+// fetch 응답(헤더 수신) 시점과 useChat onFinish(메시지 id 확정) 시점 사이의 전달 홀더.
+// React 컴포넌트 밖 모듈 상태 — React Compiler 훅 규칙(렌더 중 ref/전역 접근 금지) 비대상.
+// 채팅 인스턴스는 페이지당 1개, 요청은 순차(스트리밍 중 입력 비활성)라 경합 없음.
+let lastSources: Citation[] | null = null;
+
+export function stashSources(sources: Citation[]): void {
+  lastSources = sources.length > 0 ? sources : null;
+}
+
+export function takeSources(): Citation[] | null {
+  const v = lastSources;
+  lastSources = null;
+  return v;
+}
