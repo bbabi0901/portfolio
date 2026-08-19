@@ -10,7 +10,13 @@ vi.mock("@/lib/portfolio-data", async (importOriginal) => {
   return { ...mod, loadPortfolio: () => JSON.parse(raw) };
 });
 
+// TS-102 — 미답변 수집: 라우트 경로별 호출 여부만 검증 (실 노션 호출 차단)
+vi.mock("@/services/notion-unanswered", () => ({
+  logUnansweredQuestion: vi.fn().mockResolvedValue(true),
+}));
+
 import { app } from "@/app/api/[[...route]]/route";
+import { logUnansweredQuestion } from "@/services/notion-unanswered";
 import { clearEnvCache } from "@/lib/env";
 import { NO_RECORD_RESPONSE_KO, NO_RECORD_RESPONSE_EN } from "@/lib/prompts";
 import { clearRateLimitMemory } from "@/lib/rate-limit";
@@ -163,6 +169,20 @@ describe("/api/chat", () => {
       expect(res.status).toBe(200);
       const text = await res.text();
       expect(text).toBe(NO_RECORD_RESPONSE_EN);
+    });
+
+    it("TS-102: 검색 0건 → 미답변 질문 기록 호출", async () => {
+      setMockEnv();
+      vi.mocked(logUnansweredQuestion).mockClear();
+      await postChat({ messages: [{ role: "user", content: "qqq xxx yyy zzz 파파파" }] });
+      expect(logUnansweredQuestion).toHaveBeenCalledWith("qqq xxx yyy zzz 파파파");
+    });
+
+    it("TS-102: 정상 답변 경로에선 미답변 기록 미호출", async () => {
+      setMockEnv();
+      vi.mocked(logUnansweredQuestion).mockClear();
+      await postChat({ messages: [{ role: "user", content: "샘플 프로젝트" }] });
+      expect(logUnansweredQuestion).not.toHaveBeenCalled();
     });
 
     // TS-100 — 출처 칩: 검색 문서 제목이 X-Sources 헤더로 전달된다

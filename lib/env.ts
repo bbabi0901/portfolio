@@ -6,6 +6,8 @@ const ServerEnvSchema = z.object({
   NOTION_FEEDBACK_DB_ID: z.string().optional(),
   NOTION_CONTACT_DB_ID: z.string().optional(),
   NOTION_TROUBLESHOOTING_DB_ID: z.string().optional(),
+  // 미답변 질문 수집 DB (FEAT-043) — 미설정 시 수집 비활성 (no-op)
+  NOTION_UNANSWERED_DB_ID: z.string().optional(),
   NOTION_EXTRA_PAGE_IDS: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   RESEND_TO_EMAIL: z.string().email().optional(),
