@@ -89,6 +89,7 @@ npm run check:spec         # spec.json 유효성 + 모든 FEAT 의 tests 파일 
 - [노션] 캘아웃은 built-in 아이콘만 — 이모지는 notion-to-md 에서 텍스트로 노출돼 파서 깨짐 (ADR-032)
 - [spec] 테스트 파일 이동 시 spec.json tests[] 경로 동기화 필수 — drift 16건 발견 (S1 스토리)
 - [하네스] 검증 자기신고는 반드시 무너진다 — status 를 쓰는 주체와 검증하는 주체를 분리하라 (ADR-036, 1세대 부검)
+- [lint] 모듈 스코프 변수를 컴포넌트 파일에서 재할당하면 react-hooks/globals 가 이벤트 핸들러 내부라도 차단 — 이벤트 간 전달은 useRef 로 (S7 반려, PR #80)
 
 ## 추가 자료
 
