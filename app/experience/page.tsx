@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import Link from "next/link";
+
 import { CredentialList } from "@/components/experience/CredentialList";
 import { SkillsGrid } from "@/components/experience/SkillsGrid";
 import { UnifiedTimeline } from "@/components/experience/UnifiedTimeline";
@@ -64,6 +66,19 @@ export default function ExperiencePage() {
       )}
 
       {hasSkills && <SkillsGrid skills={data.skills} className="border-line border-t pt-10" />}
+
+      <section
+        data-slot="experience-contact-cta"
+        className="border-line flex flex-col items-start gap-3 border-t pt-10"
+      >
+        <p className="text-body text-[15px]">함께 일해보고 싶으시다면, 편하게 연락 주세요.</p>
+        <Link
+          href="/contact"
+          className="bg-foreground text-background inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-opacity hover:opacity-85"
+        >
+          연락하기
+        </Link>
+      </section>
     </main>
   );
 }

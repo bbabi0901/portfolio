@@ -157,6 +157,9 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
           </Button>
         </div>
       </div>
+      <p data-slot="grounding-note" className="text-faint mt-1.5 px-1 text-[11px]">
+        노션에 기록된 내용만 답해요 — 없는 내용은 없다고 말합니다
+      </p>
     </form>
   );
 });
