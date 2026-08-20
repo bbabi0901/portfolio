@@ -188,6 +188,7 @@
 3. **자격증** (분리 섹션, `CredentialList`) — 노션 이력서 "자격증 (Certification)" 섹션 소싱.
    현재: AWS Certified AI Practitioner (Amazon Web Services).
 4. **보유 스킬** (SkillsGrid, 기존 유지).
+0. **이력서 PDF 다운로드 (FEAT-044, TS-103)** — 헤더 우측 `data-slot=resume-download` pill 버튼(FileDown 아이콘): 커밋된 `public/resume.pdf`(노션 export, 수동 갱신) → `download="김윤수 이력서.pdf"`.
 5. **연락 CTA (FEAT-042, TS-101)** — 페이지 끝 `data-slot=experience-contact-cta` 섹션: "함께 일해보고 싶으시다면, 편하게 연락 주세요." + /contact 연락하기 버튼(`bg-foreground text-background` pill).
 - 구 '프로젝트' 섹션(카테고리 필터+카드)은 제거 — 업무 프로젝트가 커리어 불릿과 중복.
 - 커리어 파서: `lib/career-markdown.ts` (H2 경계 밖 merge 금지 + 흡수 섹션 헤딩 재주입은 청커).

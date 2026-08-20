@@ -29,6 +29,22 @@ test.describe("/experience (TS-38, TS-39)", () => {
   });
 });
 
+test.describe("/experience resume pdf (TS-103)", () => {
+  test("TS-103: 이력서 PDF 다운로드 버튼 — 링크·download 속성·자산 200", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/experience");
+    const btn = page.locator('[data-slot="resume-download"]');
+    await expect(btn).toBeVisible();
+    await expect(btn).toHaveAttribute("href", "/resume.pdf");
+    await expect(btn).toHaveAttribute("download", /이력서/);
+    const res = await request.get("/resume.pdf");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("pdf");
+  });
+});
+
 test.describe("/experience conversion (TS-101)", () => {
   test("TS-101: 타임라인 끝 연락 CTA 노출", async ({ page }) => {
     await page.goto("/experience");
