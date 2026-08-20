@@ -138,3 +138,12 @@ RAG 스택 AWS 전환용 IaC 는 `infra/` 의 CDK(TypeScript) 독립 워크스�
 9. Bedrock 콘솔(서울) Model access 신청: Nova Lite/Micro, Claude Haiku, Titan Embed v2.
 
 > `PORTFOLIO_AWS_ROLE_ARN` / `PORTFOLIO_AWS_REGION` / `S3_VECTORS_BUCKET` / `CORPUS_S3_BUCKET` 이 프로덕션 런타임에서 소비된다 (Bedrock 챗·Titan 쿼리 임베딩·S3 Vectors·corpus 로딩). 구 OPENROUTER/VOYAGE 키는 제거됨 (FEAT-039).
+
+## 11. 노션 콘텐츠 반영
+
+(CLAUDE.md 개발 프로세스 절에서 이관 — 2026-08-20)
+
+- **기본 자동 (ADR-037)**: Lambda `portfolio-ingest-sync` 가 24h 주기(EventBridge)로 stale 감지 시 S3 corpus/벡터를 갱신하고, 런타임이 corpus.json 을 10분 TTL 로 읽는다.
+- **즉시 반영 (수동)**: `aws lambda invoke --function-name portfolio-ingest-sync --region ap-northeast-2 out.json`
+- **로컬 sync 플로우 (ADR-030, 커밋 폴백 데이터 갱신·로컬 dev 용)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.fallback.json`(로컬에 server.json 있으면 그것)을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.fallback.json` 커밋 → 푸시(=배포).
+- **prebuild 게이트 우선순위**: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.

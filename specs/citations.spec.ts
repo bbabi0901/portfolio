@@ -1,13 +1,17 @@
 import { describe, it, expect } from "vitest";
 import { buildSourcesHeader, parseSourcesHeader } from "@/lib/citations";
-import type { PortfolioChunk } from "@/types/portfolio";
+import type { ChunkCategory, PortfolioChunk } from "@/types/portfolio";
 
-const mk = (sourceTitle: string, id = sourceTitle): PortfolioChunk => ({
+const mk = (
+  sourceTitle: string,
+  id = sourceTitle,
+  category: ChunkCategory = "project",
+): PortfolioChunk => ({
   id,
   sourcePageId: "p",
   sourceTitle,
   sourceUrl: "https://notion.so/x",
-  category: "project",
+  category,
   headingPath: [],
   text: "t",
   tokens: 1,
@@ -36,8 +40,19 @@ describe("citations (TS-100)", () => {
     expect(parseSourcesHeader(header)[0]!.sourceTitle).toBe("한국어 · 제목 — 테스트");
   });
 
-  it("노션 비공개 — sourceUrl 은 null (비공개 칩 렌더 계약)", () => {
-    const parsed = parseSourcesHeader(buildSourcesHeader([mk("이력서")]));
+  it("카테고리 → 사이트 내부 경로 매핑 (칩 클릭 시 이동)", () => {
+    const parsed = parseSourcesHeader(
+      buildSourcesHeader([
+        mk("자기소개", "a", "intro"),
+        mk("이력서", "b", "career"),
+        mk("AI 포트폴리오", "c", "project"),
+      ]),
+    );
+    expect(parsed.map((c) => c.sourceUrl)).toEqual(["/about", "/experience", "/experience"]);
+  });
+
+  it("공개 페이지 없는 카테고리(트러블슈팅)는 sourceUrl null — 비공개 칩", () => {
+    const parsed = parseSourcesHeader(buildSourcesHeader([mk("ERR-1", "a", "트러블슈팅")]));
     expect(parsed[0]!.sourceUrl).toBeNull();
   });
 

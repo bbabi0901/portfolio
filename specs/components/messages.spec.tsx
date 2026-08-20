@@ -279,12 +279,11 @@ describe("SourceCitation", () => {
     expect(chip.getAttribute("title")).toMatch(/비공개/);
   });
 
-  it("sourceUrl 정상이면 클릭 시 onClick(citation) 이 호출된다", async () => {
-    const onClick = vi.fn();
-    const user = userEvent.setup();
-    const citation = { sourceTitle: "MFE", sourceUrl: "https://www.notion.so/x" };
-    render(<SourceCitation citation={citation} index={1} onClick={onClick} />);
-    await user.click(screen.getByRole("button"));
-    expect(onClick).toHaveBeenCalledWith(citation);
+  it("sourceUrl 정상이면 내부 경로 링크(<a>) 로 렌더된다", () => {
+    const citation = { sourceTitle: "MFE", sourceUrl: "/experience" };
+    render(<SourceCitation citation={citation} index={1} onClick={vi.fn()} />);
+    const link = screen.getByRole("link", { name: "1. MFE" });
+    expect(link).toHaveAttribute("href", "/experience");
+    expect(link).toHaveAttribute("target", "_blank");
   });
 });

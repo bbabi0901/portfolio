@@ -5,21 +5,10 @@
 > Agent entry point: [AGENTS.md](AGENTS.md) — table of contents · role 매핑. 깊은 spec 은 `docs/agents/` 에.
 
 ## 기술 스택
-- Next.js 16 (App Router) + TypeScript strict
-- Tailwind CSS only (Sass 미사용)
-- shadcn/ui (sheet, button, input, select, carousel, popover, scroll-area, toast, form, label, textarea, radio-group)
-- lucide-react 아이콘 (strokeWidth 1.5)
-- Hono on Next.js Route Handler (`app/api/[[...route]]/route.ts`)
-- Vercel AI SDK (`ai`, `@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환) + **AWS Bedrock** (ADR-034/035)
-  - 채팅: **Claude Haiku 4.5(기본, `global.` profile — TS-99)** / Nova Lite·Nova Micro = `apac.` profile (스위처 선택)
-  - 임베딩: Titan Text Embeddings v2 1024차원 (sync + 런타임 쿼리)
-  - 벡터 검색: S3 Vectors(서울) 런타임 하이브리드 (FEAT-037, 800ms 타임아웃 시 keyword-only 강등 ERR-14)
-  - 인제스천: Lambda `portfolio-ingest-sync` + EventBridge 24h (ADR-037) — 노션 수정이 재배포 없이 자동 반영, 런타임은 S3 corpus.json 10분 TTL(장애 시 커밋 데이터 폴백)
-  - 인증: 로컬 = `PORTFOLIO_AWS_PROFILE`(aws login), Vercel = OIDC→IAM role (`PORTFOLIO_AWS_ROLE_ARN`, 토큰은 요청 컨텍스트 — env 검사 금지). Vercel 함수 리전 icn1 고정. IaC 는 `infra/` CDK 워크스페이스
-- `@ai-sdk/react`의 `useChat`
-- @notionhq/client + notion-to-md
-- react-markdown + remark-gfm + rehype-highlight
-- react-hook-form + zod resolver (Contact 폼)
+- Next.js 16 (App Router) + TypeScript strict, Tailwind CSS only, shadcn/ui + lucide-react (strokeWidth 1.5)
+- Hono on Next.js Route Handler (`app/api/[[...route]]/route.ts`) — API 단일 진입점
+- Vercel AI SDK + **AWS Bedrock** (`@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환, ADR-034/035). 기본 챗 = Claude Haiku 4.5 (`global.` profile). 모델 프로필·임베딩·S3 Vectors·인제스천 Lambda·AWS 인증 체인 상세는 **docs/ARCHITECTURE.md** (데이터 흐름 절)
+- @notionhq/client + notion-to-md, react-markdown, react-hook-form + zod
 - Vitest + Testing Library + msw + Playwright
 
 ## 디렉토리 구조
@@ -72,18 +61,12 @@ infra/      # CDK (독립 워크스페이스)   lambda/  # ingest-sync   docs/  
   - 수동 검증 방법: `PORTFOLIO_AWS_PROFILE=default npm run test:smoke` (aws login 세션 필요) 또는 dev 서버에서 직접 2-turn 대화 확인
 - 커밋 메시지는 conventional commits (feat:, fix:, docs:, refactor:, test:, chore:).
 - PR은 `npm run check:spec`, `npm run lint`, `npm run test`가 통과해야 머지.
-- **노션 콘텐츠 반영은 기본 자동 (ADR-037)**: Lambda `portfolio-ingest-sync` 가 24h 주기로 stale 감지 시 S3 corpus/벡터를 갱신하고 런타임이 10분 TTL 로 읽는다. 즉시 반영: `aws lambda invoke --function-name portfolio-ingest-sync --region ap-northeast-2 out.json`. 아래 로컬 플로우는 커밋 폴백 데이터 갱신·로컬 dev 용으로 유지.
-- **노션 콘텐츠 반영 플로우 (ADR-030, 조건부 sync — 커밋 폴백 데이터)**: 빌드는 기본적으로 sync 를 생략하고 커밋된 `data/portfolio.fallback.json`(로컬에 server.json 있으면 그것)을 사용한다. 노션 변경 반영 절차 = `npm run sync:check`(신선도 판단, STALE 시 exit 1) → `npm run sync:notion` → `data/portfolio.fallback.json` 커밋 → 푸시(=배포). prebuild 게이트 우선순위: `SKIP_NOTION_SYNC=1`(생략) > `FORCE_NOTION_SYNC=1`(강제) > 데이터 부재(안전망 sync) > 생략.
+- 노션 콘텐츠 반영은 기본 자동 (ADR-037, Lambda 24h). 수동 즉시 반영·로컬 sync 플로우·prebuild 게이트 우선순위는 **docs/DEPLOY.md § 노션 콘텐츠 반영**.
 - 문서 변경(plan/PRD/Architecture/spec.json)이 코드 변경과 함께 가야 함.
 
 ## Git Workflow 규칙 (사용자 명시)
 - CRITICAL: 모든 작업은 worktree에서 진행. main 브랜치는 PR 머지로만 갱신.
-- CRITICAL: 새 task 시작 시 main 기준 명시적 type prefix 슬래시 형식 브랜치 생성:
-  - `feat/{scope}` — 새 기능 (예: `feat/2-chat-backend`)
-  - `chore/{scope}` — 빌드/CI/의존성/설정/계획
-  - `fix/{scope}` — 버그 수정
-  - `hotfix/{scope}` — 프로덕션 긴급 패치
-  - `refactor/{scope}` / `test/{scope}` / `docs/{scope}` — 각각 해당 영역
+- CRITICAL: 새 task 시작 시 main 기준 type-prefix 슬래시 브랜치 생성 — `feat|fix|chore|hotfix|refactor|test|docs/{scope}` (예: `feat/2-chat-backend`).
 - Task 완료 시: `git push -u origin <branch>` → `gh pr create --base main --head <branch>`로 PR 생성 (Conventional Commit 제목, Summary + Test plan 본문).
 - `--no-verify`, `--force` 등 가드 우회는 사용자 명시 승인 시에만.
 

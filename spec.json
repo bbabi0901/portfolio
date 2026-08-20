@@ -2026,7 +2026,7 @@
     {
       "id": "TS-100",
       "feature": "FEAT-041",
-      "title": "답변 출처 칩 — 서버가 X-Sources 헤더로 검색 문서 제목 전달(최대 4, 중복 제거), 클라이언트 파싱·렌더, NO_RECORD 시 미표시",
+      "title": "답변 출처 칩 — X-Sources 헤더로 [제목,내부경로] 전달(최대 4, 중복 제거), 공개 페이지 매핑 출처는 링크 칩(/about·/experience), 매핑 없으면 비공개 칩, NO_RECORD 시 미표시",
       "file": "specs/citations.spec.ts",
       "anchor": "TS-100"
     },
