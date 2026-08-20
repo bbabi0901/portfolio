@@ -1331,7 +1331,7 @@
     {
       "id": "FEAT-043",
       "name": "미답변 질문 수집 — 검색 0건 질문을 노션 DB 에 자동 기록, 콘텐츠 갭 개선 루프 (fire-and-forget, 실패 무해)",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P2",
       "tests": [
         "specs/notion-unanswered.spec.ts",

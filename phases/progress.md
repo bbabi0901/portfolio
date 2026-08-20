@@ -14,3 +14,4 @@
 - [2026-08-19] S7 통과 — AC 재실행 green(lint exit 0·663 tests·e2e 175), dedup 뮤테이션 red 확인, 프로덕션 X-Sources 4건 실증, stash/take 렌더 경로 비호출·TS-100/FEAT-041 SSoT 동기화 확인
 - [2026-08-19] S8 통과 — AC 재실행 green(check:spec·lint·666 tests·e2e 187/0 fail), pin 뮤테이션 red 확인, 신규 className 시맨틱 토큰만·치팅 無, PAGES.md 누락 2줄 워킹트리 보완
 - [2026-08-20] S9 반려 — AC/뮤테이션/프로덕션 실증은 통과했으나 SSoT env 누락(.env.local.example 에 NOTION_UNANSWERED_DB_ID 없음) + MOCK_NOTION 가드 부재(notion-unanswered.ts:26) + route.ts:195 stale 주석(1.5s→5s)
+- [2026-08-20] S9 통과 — 반려 3건(MOCK_NOTION 가드+유닛·env example·stale 주석) 재작업(#90) 확인, AC 재실행 green(check:spec·lint·673 tests), 뮤테이션 red·프로덕션 unansweredLogging=true·노션 행 생성 실증, #91 은 순수 prettier

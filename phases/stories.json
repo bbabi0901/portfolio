@@ -167,7 +167,7 @@
           "check": "npm run check:spec && npm run lint && npm run test"
         }
       ],
-      "passes": false
+      "passes": true
     }
   ]
 }
