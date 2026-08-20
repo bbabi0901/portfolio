@@ -114,7 +114,7 @@ cd infra && npm run deploy  # 배포 (AWS 자격 증명 필요)
 - `.env.local`은 git에 커밋 금지 (`.gitignore` 포함).
 - 커밋 데이터는 **`data/portfolio.fallback.json`(임베딩 제외 슬림, ADR-038)** — S3 corpus 장애 폴백 + prebuild 입력. `data/portfolio.server.json`(임베딩 포함)·`data/embeddings-cache.json` 은 **git 미커밋**(로컬 sync 산출물). mini sample 은 `data/portfolio.sample.json` 커밋 유지(CI 폴백). 콘텐츠는 사이트가 공개 서빙 중이라 리포 노출 승인됨.
 - `public/data/suggestions.json`은 git 미커밋 — `gen:suggestions` 가 prebuild 마다 커밋된 서버 데이터에서 재생성.
-- `spec.json`, `spec.schema.json`은 커밋.
+- `spec.json`은 커밋.
 - 노션 토큰은 logs에 절대 출력 금지.
 
 ## 실패 지식 (상한 20건 — 넘치면 낡은 것 삭제, 일반화 가능한 것만)

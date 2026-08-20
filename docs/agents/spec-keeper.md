@@ -20,7 +20,7 @@
 - `testScenarios[]` (TS-NN) 의 `file` 경로가 실재하지 않음 → ERROR
 - `spec.version` 이 코드 변경에 비해 미bump → WARN
 - `features[]` 의 `status` (planned/implemented/deprecated) 가 코드 상태와 불일치 → WARN
-- buyer-facing 한국어 문구가 임의 변경 → ERROR (CLAUDE.md 정책)
+- buyer-facing 한국어 문구가 임의 변경 → ERROR (표준 문구 SSoT: docs/AI_CONTRACT.md)
 
 ## Trigger (구현 시)
 
