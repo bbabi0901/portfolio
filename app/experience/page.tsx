@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Link from "next/link";
+import { FileDown } from "lucide-react";
 
 import { CredentialList } from "@/components/experience/CredentialList";
 import { SkillsGrid } from "@/components/experience/SkillsGrid";
@@ -38,10 +39,19 @@ export default function ExperiencePage() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
-      <header className="flex flex-col gap-3">
+      <header className="flex items-center justify-between gap-3">
         <h1 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">
           커리어
         </h1>
+        <a
+          href="/resume.pdf"
+          download="김윤수 이력서.pdf"
+          data-slot="resume-download"
+          className="border-line-strong text-muted hover:text-foreground hover:border-line-strong inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors"
+        >
+          <FileDown className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden="true" />
+          이력서 PDF
+        </a>
       </header>
 
       {timeline.length > 0 && (

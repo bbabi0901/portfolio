@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1338,6 +1338,16 @@
         "specs/chat-route.spec.ts"
       ],
       "dependencies": []
+    },
+    {
+      "id": "FEAT-044",
+      "name": "이력서 PDF 다운로드 — /experience 헤더에 커밋된 public/resume.pdf 다운로드 버튼 (노션 export 수동 갱신)",
+      "status": "done",
+      "priority": "P2",
+      "tests": [
+        "tests/e2e/pages.e2e.ts"
+      ],
+      "dependencies": []
     }
   ],
   "testScenarios": [
@@ -2033,6 +2043,13 @@
       "title": "미답변 질문 수집 — 검색 0건 시 노션 DB 기록(제한시간 내), 미설정/실패는 무해(no-op), 정상 답변 경로 미호출",
       "file": "specs/notion-unanswered.spec.ts",
       "anchor": "TS-102"
+    },
+    {
+      "id": "TS-103",
+      "feature": "FEAT-044",
+      "title": "이력서 PDF 다운로드 버튼 — /experience 헤더 노출, /resume.pdf 200 + download 속성(한글 파일명)",
+      "file": "tests/e2e/pages.e2e.ts",
+      "anchor": "TS-103"
     }
   ]
 }
