@@ -9,7 +9,7 @@ const scripts = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).scr
 
 // infra/ 워크스페이스 블록은 별도 package.json이므로 제외
 const rootDoc = claudeMd.replace(/```\n# infra\/[\s\S]*?```/g, "");
-const documented = [...rootDoc.matchAll(/npm run ([\w:.-]+)/g)].map((m) => m[1]);
+const documented = [...rootDoc.matchAll(/npm run ([\w:.-]+)/g)].flatMap((m) => (m[1] ? [m[1]] : []));
 const missing = [...new Set(documented)].filter((name) => !(name in scripts));
 
 if (missing.length) {
