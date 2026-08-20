@@ -15,7 +15,7 @@
 `spec.json testScenarios[]` (TS-NN) 를 **자동 일괄 실행**하고 회귀 보고서를 만든다. 현재는 `npm run test`/`e2e` 로 vitest·Playwright 가 부분 수행하지만, TS-NN 단위 매핑 + 보고서 + 회귀 추적이 없음.
 
 예시 동작:
-- TS-01 ~ TS-70 중 변경된 코드와 연관된 항목 자동 식별 (spec.features.tests 매핑)
+- `testScenarios[]` (현재 101건) 중 변경된 코드와 연관된 항목 자동 식별 (spec.features.tests 매핑)
 - 해당 항목만 우선 실행 → 통과 시 전체 실행
 - 실패 항목별 stacktrace + 가능한 fix 제안 (Agent 호출)
 - 회귀 (이전 통과 → 이번 실패) 시 PR 라벨 `regression` 자동 부여
@@ -25,13 +25,13 @@
 - `/qa-run` 슬래시 명령 — 수동 실행
 - on-PR 이벤트 — GitHub Actions
 - on-push (main) — 회귀 즉시 감지
-- harness 의 step 완료 hook — 자동 호출 (옵션)
+- /loop 의 Verify 단계에서 호출 (옵션, ADR-036)
 
 ## Inputs (구현 시)
 
 - `spec.json` — testScenarios[] 전체, features[].tests 매핑
 - `docs/TEST_SCENARIOS.md` — TS-NN 의 사람-가독 설명
-- `tests/**`, `e2e/**` — vitest/Playwright 파일
+- `specs/**` (vitest unit·integration), `tests/e2e/**` (Playwright)
 - `git diff main..HEAD` — 변경 파일 식별 → 영향받는 TS 추출
 
 ## Outputs (구현 시)
@@ -62,7 +62,7 @@
 ## Guardrails (구현 시)
 
 - **자동 fix 금지**. 실패 발견 시 보고만. 수정은 사용자 또는 harness agent.
-- **노션 토큰 의존 회피**. `npm run build` 의 prebuild=`sync:notion` 은 토큰 필요 — qa-runner 는 `data/portfolio.sample.json` 만 사용.
+- **노션 토큰 의존 회피**. prebuild 는 `sync:if-needed` 게이트라 커밋 데이터가 있으면 토큰 불필요 (ADR-030) — qa-runner 는 커밋된 `data/portfolio.fallback.json` 또는 `data/portfolio.sample.json` 만 사용, sync 를 트리거하지 않는다.
 - **flaky test 자동 재실행 ≤ 2회**. 무한 retry 금지 (CI 비용).
 - **회귀 라벨 신중**. 첫 통과 이력이 없는 신규 테스트의 실패는 회귀 아님. main 의 마지막 통과 commit 과 비교.
 - **시크릿/.env 본문 출력 금지**. 실패 stacktrace 에 환경변수 값이 들어가면 마스킹.

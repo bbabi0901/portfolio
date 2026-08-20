@@ -75,7 +75,7 @@
 |---|---|
 | CRITICAL | API 키/토큰 클라이언트 노출 (`process.env.*` in `app/(client)/...`) |
 | CRITICAL | LLM·Notion 호출이 Hono 라우트 밖에서 실행 |
-| CRITICAL | 답변 컨텍스트가 `data/portfolio.server.json` 외 외부 지식 차단 누락 |
+| CRITICAL | 답변 컨텍스트가 corpus (S3 corpus.json / 폴백 `data/portfolio.fallback.json`) 외 외부 지식 차단 누락 (ADR-038) |
 | CRITICAL | `spec.json` 위반 (등록 안 된 FEAT 의 코드/테스트) |
 | MAJOR | 사용자에게 보이는 변경에 TS-XX 매핑 누락 |
 | MAJOR | SDD+TDD 순서 위반 (테스트 없이 구현만) |
@@ -88,27 +88,14 @@
 
 ## AC
 
-```bash
-# 1. 출력에 등급 4종이 등장 (해당 항목 있을 때만)
-/review 2>&1 | grep -qE "(CRITICAL|MAJOR|MINOR|NOTE)"
+/review 는 슬래시 명령(셸 아님)이므로 AC 는 출력물 육안/에이전트 검증 기준:
 
-# 2. 코드 수정 0
-before=$(git status --porcelain | wc -l)
-/review >/dev/null
-after=$(git status --porcelain | wc -l)
-[ "$before" -eq "$after" ]
-
-# 3. 시크릿 마스킹
-echo 'OPENAI_API_KEY=sk-test123' > /tmp/x  # 가상
-/review 2>&1 | grep -qE "sk-test123" && echo "FAIL: secret leak" || echo "OK"
-rm /tmp/x
-
-# 4. CRITICAL 코멘트가 있으면 PR 머지 차단 안내
-/review 2>&1 | grep "CRITICAL" && /review 2>&1 | grep -qi "머지 차단\|block\|do not merge"
-```
+1. 발견 항목이 있을 때 등급 4종(CRITICAL/MAJOR/MINOR/NOTE) 섹션 구조로 출력된다.
+2. 실행 전후 `git status --porcelain` 결과가 동일하다 (파일 변경 0).
+3. 시크릿 값이 코멘트에 원문 노출되지 않는다 (`sk-***` 마스킹 확인).
+4. CRITICAL 항목이 존재하면 "머지 차단" 안내 문구가 함께 출력된다.
 
 ## 관련
 
-- review 직전: `/harness-doctor` 로 환경 확인
-- review 후 fix 필요: `/harness` 로 fix phase 시작
+- review 후 fix 필요: 사용자가 fix 를 요청하면 별도 작업으로 진행 (자동 수정 금지 가드레일 유지)
 - PR 게이트 (CI): `npm run check:spec && npm run lint && npm run test`

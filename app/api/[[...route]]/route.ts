@@ -98,7 +98,20 @@ const ChatRequestSchema = z.object({
 
 export const app = new Hono().basePath("/api");
 
-app.get("/health", (c) => c.json({ ok: true, runtime: "nodejs", ts: new Date().toISOString() }));
+app.get("/health", (c) => {
+  const env = getServerEnv();
+  return c.json({
+    ok: true,
+    runtime: "nodejs",
+    ts: new Date().toISOString(),
+    // 값이 아닌 존재 여부만 — 배포 env 스냅샷 진단용 (미답변 수집 무음 실패 사건)
+    features: {
+      unansweredLogging: Boolean(env.NOTION_TOKEN && env.NOTION_UNANSWERED_DB_ID),
+      corpusS3: Boolean(env.CORPUS_S3_BUCKET),
+      vectors: Boolean(env.S3_VECTORS_BUCKET),
+    },
+  });
+});
 
 app.post(
   "/chat",

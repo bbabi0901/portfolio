@@ -51,19 +51,9 @@
 3. **큐 작업** → `phases/stories.json` 에 스토리 등록(AC는 실행 가능 커맨드만) → `/loop` 1회 = 스토리 1개 완주 → reviewer 승인으로만 `passes:true`. (ADR-036)
 4. **PR 게이트**: `npm run check:spec && npm run lint && npm run test`.
 
-## 명령어 (Exact)
+## 명령어
 
-```bash
-npm run dev                # 개발 서버 (localhost:3000)
-npm run build              # prebuild(sync:notion + gen:suggestions) → next build
-npm run lint
-npm run test               # vitest 단발
-npm run test:watch
-npm run e2e                # Playwright
-npm run sync:notion        # 노션 → data/portfolio.server.json + public/data/suggestions.json
-npm run gen:suggestions    # portfolio.server.json → 추천 질문 후보 + 관련 질문 매핑
-npm run check:spec         # spec.json 유효성 + 모든 FEAT 의 tests 파일 존재 검증
-```
+명령어 SSoT 는 [CLAUDE.md](CLAUDE.md#명령어) 의 명령어 절 — `check:spec` 이 CLAUDE.md 문서와 package.json 의 일치를 자동 검증하므로 여기 복제하지 않는다.
 
 ## 변경 추적 (필수)
 
