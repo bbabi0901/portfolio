@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-08-20T17:36:55+09:00",
+  "generatedAt": "2026-08-20T18:08:36+09:00",
   "chunks": [
     {
       "id": "1ebd2ac5",
@@ -4566,8 +4566,8 @@
       "headingPath": [
         "✅ 전환 완료 (2026-08-06)"
       ],
-      "text": "Phase 0~5 전부 완료 — 프로덕션이 풀 AWS 스택으로 가동 중이다. 이하 문서들은 설계 시점 기준 학습 노트로 보존.\n\n\n| Phase | 내용                                                              | 결과                                                                |\n| ----- | --------------------------------------------------------------- | ----------------------------------------------------------------- |\n| 1     | 챗 LLM → Bedrock (Nova Lite/Micro apac, Claude Haiku 4.5 global) | ✅ PR #49·#54·#55 — OIDC keyless + 스트림 에러 503 표면화                  |\n| 2     | 임베딩 → Titan v2 1024차원                                           | ✅ PR #59 — 캐시 네임스페이스 자동 무효화 실증                                    |\n| 3     | S3 Vectors 런타임 하이브리드                                            | ✅ PR #61·#62 — 프로덕션 `X-Retrieval-Mode: hybrid`, Vercel 함수 icn1 고정 |\n| 4     | Lambda + EventBridge 24h 자동 인제스천                                | ✅ PR #64 — corpus.json S3 런타임 로딩(10분 TTL, 커밋 폴백)                  |\n| 5     | 구 키(OpenRouter/Voyage/OpenAI)·죽은 코드 제거                          | ✅ PR #66 — LLM 의존성은 `@ai-sdk/amazon-bedrock` 단일                   |\n\n- 배포 스택 4종(CDK): PortfolioOpsStack(us-east-1, $5 빌링 알람) · PortfolioAccessStack(OIDC 역할) · PortfolioDataStack(벡터 버킷/인덱스) · PortfolioIngestStack(Lambda·스케줄·corpus 버킷·실패 알람)\n- 수동 즉시 반영: `aws lambda invoke --function-name portfolio-ingest-sync --region ap-northeast-2 out.json`\n- 남은 백로그: 커밋 데이터 슬림화(FEAT-040)\n\n---\n\n> RAG 스택을 SaaS 조합(OpenRouter + Voyage/OpenAI + 커밋형 JSON)에서 **AWS 네이티브 파이프라인**(Bedrock + S3 Vectors + Lambda)으로 전환하는 개선 트랙. 코드베이스의 **ADR-034** 가 총괄 결정 문서다.",
-      "tokens": 473,
+      "text": "Phase 0~5 전부 완료 — 프로덕션이 풀 AWS 스택으로 가동 중이다. 이하 문서들은 설계 시점 기준 학습 노트로 보존 (본문 안의 \"Nova Lite 기본\" 서술은 설계 당시 기준 — 기본 챗 모델은 2026-08 이후 **Claude Haiku 4.5**).\n\n\n| Phase | 내용                                                              | 결과                                                                |\n| ----- | --------------------------------------------------------------- | ----------------------------------------------------------------- |\n| 1     | 챗 LLM → Bedrock (Nova Lite/Micro apac, Claude Haiku 4.5 global) | ✅ PR #49·#54·#55 — OIDC keyless + 스트림 에러 503 표면화                  |\n| 2     | 임베딩 → Titan v2 1024차원                                           | ✅ PR #59 — 캐시 네임스페이스 자동 무효화 실증                                    |\n| 3     | S3 Vectors 런타임 하이브리드                                            | ✅ PR #61·#62 — 프로덕션 `X-Retrieval-Mode: hybrid`, Vercel 함수 icn1 고정 |\n| 4     | Lambda + EventBridge 24h 자동 인제스천                                | ✅ PR #64 — corpus.json S3 런타임 로딩(10분 TTL, 커밋 폴백)                  |\n| 5     | 구 키(OpenRouter/Voyage/OpenAI)·죽은 코드 제거                          | ✅ PR #66 — LLM 의존성은 `@ai-sdk/amazon-bedrock` 단일                   |\n\n- 배포 스택 4종(CDK): PortfolioOpsStack(us-east-1, $5 빌링 알람) · PortfolioAccessStack(OIDC 역할) · PortfolioDataStack(벡터 버킷/인덱스) · PortfolioIngestStack(Lambda·스케줄·corpus 버킷·실패 알람)\n- 수동 즉시 반영: `aws lambda invoke --function-name portfolio-ingest-sync --region ap-northeast-2 out.json`\n- 남은 백로그: 커밋 데이터 슬림화(FEAT-040)\n\n---\n\n> RAG 스택을 SaaS 조합(OpenRouter + Voyage/OpenAI + 커밋형 JSON)에서 **AWS 네이티브 파이프라인**(Bedrock + S3 Vectors + Lambda)으로 전환하는 개선 트랙. 코드베이스의 **ADR-034** 가 총괄 결정 문서다.",
+      "tokens": 502,
       "tags": [
         "lambda",
         "aws",
@@ -5301,14 +5301,14 @@
       "headingPath": [
         "왜 이 프로젝트에서 쓰나"
       ],
-      "text": "현재 챗은 OpenRouter, 임베딩은 Voyage/OpenAI — 키 3종류가 흘어져 있다. Bedrock으로 통합하면 **챗 + 임베딩을 AWS 자격 증명 하나**로 호출하고, OpenRouter가 임베딩 API를 지원하지 않아 키를 분리했던 제약(ADR-026)도 사라진다.",
-      "tokens": 66,
+      "text": "전환 전에는 챗은 OpenRouter, 임베딩은 Voyage/OpenAI — 키 3종류가 흩어져 있었다. Bedrock 통합으로 **챗 + 임베딩을 AWS 자격 증명 하나**로 호출하고, OpenRouter가 임베딩 API를 지원하지 않아 키를 분리했던 제약(ADR-026)도 사라졌다. **전환 완료(2026-08-06) — 현행 스택은 Bedrock 단일이고 OpenRouter/Voyage/OpenAI 는 더 이상 쓰지 않는다.**",
+      "tokens": 98,
       "tags": [
-        "임베딩",
         "openrouter",
-        "현재",
-        "챗은",
-        "voyage"
+        "임베딩",
+        "전환",
+        "voyage",
+        "openai"
       ],
       "order": 43,
       "projectMeta": {
@@ -5401,22 +5401,22 @@
       }
     },
     {
-      "id": "63fba000",
+      "id": "83a0d9e9",
       "sourcePageId": "359656db-6947-81b7-9476-d88ffb922126",
       "sourceTitle": "AI 포트폴리오 (대화형 포트폴리오)",
       "sourceUrl": "https://app.notion.com/p/AI-359656db694781b79476d88ffb922126",
       "category": "project",
       "headingPath": [
-        "왜 전환하나"
+        "왜 전환했나 (전환 전 상황)"
       ],
-      "text": "- 현재 실서비스 검색은 **keyword-only** (쿼리 임베딩 미계산) — 벡터 검색이 사실상 미사용\n- 노션 수정 반영이 수동 5단계 (sync → 커밋 → 푸시 → 재배포)\n- AWS 실무 역량 축적 (Bedrock, S3 Vectors, Lambda, IAM, CDK)",
-      "tokens": 61,
+      "text": "- 당시 실서비스 검색은 **keyword-only** (쿼리 임베딩 미계산) — 벡터 검색이 사실상 미사용이었다 (현재는 하이브리드 가동 중)\n- 노션 수정 반영이 수동 5단계였다 (sync → 커밋 → 푸시 → 재배포) — 현재는 24h 자동 동기화\n- AWS 실무 역량 축적 (Bedrock, S3 Vectors, Lambda, IAM, CDK)",
+      "tokens": 81,
       "tags": [
         "검색",
         "현재",
+        "당시",
         "실서비스",
-        "keyword",
-        "only"
+        "keyword"
       ],
       "order": 23,
       "projectMeta": {
@@ -5463,14 +5463,14 @@
       "headingPath": [
         "우리 구성"
       ],
-      "text": "- 챗: **Nova Lite 기본** ($0.06/$0.24 per 1M 토큰 — 비용 최소화), 옵션 Nova Micro·Claude Haiku.\n- 임베딩: Titan v2 1024차원. 캐시 네임스페이스 `amazon.titan-embed-text-v2:0@1024`.\n- 모델 장애 시 기존 `X-Model-Substitution` 대체 계약 유지.",
-      "tokens": 66,
+      "text": "- 챗: **Claude Haiku 4.5 기본** (`global.` inference profile — Nova Lite 의 보수적 \"기록 없음\" 답변 문제로 2026-08 전환), 옵션 Nova Lite·Nova Micro.\n- 임베딩: Titan v2 1024차원. 캐시 네임스페이스 `amazon.titan-embed-text-v2:0@1024`.\n- 모델 장애 시 기존 `X-Model-Substitution` 대체 계약 유지.",
+      "tokens": 81,
       "tags": [
         "nova",
+        "lite",
         "titan",
         "1024",
-        "lite",
-        "기본"
+        "claude"
       ],
       "order": 45,
       "projectMeta": {
@@ -5617,18 +5617,18 @@
       }
     },
     {
-      "id": "fc4bcb17",
+      "id": "913bc27e",
       "sourcePageId": "359656db-6947-81b7-9476-d88ffb922126",
       "sourceTitle": "AI 포트폴리오 (대화형 포트폴리오)",
       "sourceUrl": "https://app.notion.com/p/AI-359656db694781b79476d88ffb922126",
       "category": "project",
       "headingPath": [
-        "전환 단계 (독립 PR)"
+        "전환 단계 (독립 PR — 설계 시점 계획표, 실제 결과는 최상단 ✅ 표 참조)"
       ],
-      "text": "| Phase | 내용                                                 | 상태 |\n| ----- | -------------------------------------------------- | -- |\n| 0     | ADR-034 + spec 등록(FEAT-035~039) + CDK 부트스트랩 + 본 문서 | 🚧 |\n| 1     | 챗 LLM Bedrock 전환 (Nova Lite 기본)                    | 예정 |\n| 2     | Titan v2 임베딩 전환 (512차원 불일치 해소)                     | 예정 |\n| 3     | S3 Vectors + 런타임 하이브리드 검색 점등                       | 예정 |\n| 4     | Lambda + EventBridge 자동 수집                         | 예정 |\n| 5     | 구 키(OpenRouter/Voyage/OpenAI)·대형 커밋 데이터 제거         | 예정 |",
-      "tokens": 165,
+      "text": "| Phase | 내용                                                 | 상태   |\n| ----- | -------------------------------------------------- | ---- |\n| 0     | ADR-034 + spec 등록(FEAT-035~039) + CDK 부트스트랩 + 본 문서 | ✅ 완료 |\n| 1     | 챗 LLM Bedrock 전환 (Nova Lite 기본)                    | ✅ 완료 |\n| 2     | Titan v2 임베딩 전환 (512차원 불일치 해소)                     | ✅ 완료 |\n| 3     | S3 Vectors + 런타임 하이브리드 검색 점등                       | ✅ 완료 |\n| 4     | Lambda + EventBridge 자동 수집                         | ✅ 완료 |\n| 5     | 구 키(OpenRouter/Voyage/OpenAI)·대형 커밋 데이터 제거         | ✅ 완료 |",
+      "tokens": 169,
       "tags": [
-        "예정",
+        "완료",
         "전환",
         "phase",
         "내용",
