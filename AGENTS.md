@@ -57,14 +57,9 @@
 
 ## 변경 추적 (필수)
 
-기능/디자인/규칙/UX/SDD step/하네스 변경 시 **즉시** 아래 SSoT 동기화:
-- `spec.json` — `features[]` (FEAT-XXX), `testScenarios[]` (TS-NN), `errorPolicies[]`/`edgeCasePolicies[]`, version bump
-- `docs/*` — 해당 영역 파일
-- `phases/{task}/index.json` — 진행 중인 경우 step 의 summary/status
-- `CLAUDE.md` — 규칙/스택 변경 시
-- **AGENTS.md** — agent 정의/워크플로우 추가 시 본 표 갱신
-
-매 코드 변경 응답 끝에 `─── Change tracking ───` 한 줄 보고 의무. 자세한 형식·매핑은 user memory `feedback_change_tracking.md`.
+변경 유형별 기록 매핑의 SSoT 는 [CLAUDE.md](CLAUDE.md) 개발 프로세스 절의 "기록 매핑" — 여기 복제하지 않는다. AGENTS.md 고유 의무만 남긴다:
+- agent 정의/워크플로우 추가 시 본 파일의 Agents 디렉토리 표 갱신
+- 매 코드 변경 응답 끝에 `─── Change tracking ───` 한 줄 보고 의무. 자세한 형식은 user memory `feedback_change_tracking.md`.
 
 ## 실패 지식 (상한 20건 — 초과 시 가장 오래된 항목 삭제)
 
