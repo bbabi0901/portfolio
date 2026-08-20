@@ -140,6 +140,7 @@ inline-flex items-center gap-1 rounded-md
 border border-neutral-800 bg-neutral-900 px-2 py-0.5
 text-[11px] text-neutral-400 hover:text-white hover:border-neutral-600
 ```
+- 상태 2종: 링크 칩(`<a>`, 내부 경로 매핑 시 — 새 탭, no-underline) / 비공개 칩(`<button disabled>`, opacity-50 + cursor-not-allowed)
 
 ### 사이드 메뉴 항목
 ```

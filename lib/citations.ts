@@ -2,21 +2,37 @@ import type { Citation } from "@/types/chat";
 import type { PortfolioChunk } from "@/types/portfolio";
 
 /**
- * 답변 출처 칩 (FEAT-041, TS-100) — 검색에 걸린 노션 문서 제목을 X-Sources 헤더로
+ * 답변 출처 칩 (FEAT-041, TS-100) — 검색에 걸린 노션 문서를 X-Sources 헤더로
  * 서버→클라이언트 전달한다. HTTP 헤더는 ASCII 만 안전하므로 encodeURIComponent 로 감싼다.
- * 노션 페이지는 비공개라 sourceUrl 은 null — SourceCitation 이 "비공개" 칩으로 렌더.
+ * 노션 원본은 비공개지만 콘텐츠가 사이트에 재게시되므로, 카테고리→내부 경로 매핑으로
+ * 칩 클릭 시 해당 페이지로 이동한다. 매핑 없는 카테고리는 sourceUrl null = "비공개" 칩.
  */
 
 const MAX_SOURCES = 4;
 
+// [제목, 내부 경로|null] 튜플 배열로 인코딩
+type SourceEntry = [string, string | null];
+
+const CATEGORY_PATH: Partial<Record<PortfolioChunk["category"], string>> = {
+  intro: "/about",
+  personal: "/about",
+  subpage: "/about",
+  career: "/experience",
+  skill: "/experience",
+  project: "/experience",
+  // 트러블슈팅: 공개 페이지 없음 → 비공개 칩
+};
+
 export function buildSourcesHeader(chunks: PortfolioChunk[]): string {
-  const titles: string[] = [];
+  const entries: SourceEntry[] = [];
   for (const c of chunks) {
-    if (!titles.includes(c.sourceTitle)) titles.push(c.sourceTitle);
-    if (titles.length >= MAX_SOURCES) break;
+    if (!entries.some(([t]) => t === c.sourceTitle)) {
+      entries.push([c.sourceTitle, CATEGORY_PATH[c.category] ?? null]);
+    }
+    if (entries.length >= MAX_SOURCES) break;
   }
-  if (titles.length === 0) return "";
-  return encodeURIComponent(JSON.stringify(titles));
+  if (entries.length === 0) return "";
+  return encodeURIComponent(JSON.stringify(entries));
 }
 
 export function parseSourcesHeader(value: string | null): Citation[] {
@@ -25,8 +41,13 @@ export function parseSourcesHeader(value: string | null): Citation[] {
     const parsed: unknown = JSON.parse(decodeURIComponent(value));
     if (!Array.isArray(parsed)) return [];
     return parsed
-      .filter((t): t is string => typeof t === "string" && t.length > 0)
-      .map((sourceTitle) => ({ sourceTitle, sourceUrl: null }));
+      .filter(
+        (e): e is SourceEntry => Array.isArray(e) && typeof e[0] === "string" && e[0].length > 0,
+      )
+      .map(([sourceTitle, url]) => ({
+        sourceTitle,
+        sourceUrl: typeof url === "string" && url.startsWith("/") ? url : null,
+      }));
   } catch {
     return [];
   }
