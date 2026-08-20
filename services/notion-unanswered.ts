@@ -23,6 +23,7 @@ export async function logUnansweredQuestion(
   opts: LogUnansweredOptions = {},
 ): Promise<boolean> {
   const env = getServerEnv();
+  if (env.MOCK_NOTION === "1") return false; // 테스트/CI 에서 실 노션 오염 방지 (타 노션 서비스와 동일 가드)
   if (!env.NOTION_TOKEN || !env.NOTION_UNANSWERED_DB_ID) return false;
   const fetchFn = opts.fetchFn ?? fetch;
   try {

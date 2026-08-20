@@ -80,6 +80,8 @@
 - [spec] 테스트 파일 이동 시 spec.json tests[] 경로 동기화 필수 — drift 16건 발견 (S1 스토리)
 - [하네스] 검증 자기신고는 반드시 무너진다 — status 를 쓰는 주체와 검증하는 주체를 분리하라 (ADR-036, 1세대 부검)
 - [lint] React Compiler lint 는 컴포넌트 파일 내 모듈 변수 재할당(react-hooks/globals)과 useMemo 클로저 내 ref 접근(refs-during-render)을 이벤트 핸들러 안이라도 차단 — 이벤트 간 전달 상태는 컴포넌트 밖 lib 모듈의 stash/take 함수로 (S7 반려→재작업, PR #80/#81)
+- [git] 타 작업의 미추적 파일이 `git add -A` 에 쓸려 무관 PR 로 유입 → Vercel strict 타입체크만 실패해 프로덕션 빌드 하루 무음 차단 — 커밋 전 `git status` 로 staged 목록을 스토리 스코프와 대조 (PR #86/#89)
+- [mock] 외부 쓰기(노션 등) 서비스 신설 시 `MOCK_NOTION` no-op 가드 필수 — 기존 서비스(contact/feedback/resend) 패턴과 대조하라, 누락 시 e2e 가 실 DB 를 오염시키는 잠복 경로가 된다 (S9 반려)
 
 ## 추가 자료
 

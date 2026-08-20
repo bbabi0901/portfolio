@@ -2,13 +2,14 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { logUnansweredQuestion } from "@/services/notion-unanswered";
 import { clearEnvCache } from "@/lib/env";
 
-const KEYS = ["NOTION_TOKEN", "NOTION_UNANSWERED_DB_ID"] as const;
+const KEYS = ["NOTION_TOKEN", "NOTION_UNANSWERED_DB_ID", "MOCK_NOTION"] as const;
 const original: Record<string, string | undefined> = {};
 
 beforeEach(() => {
   for (const k of KEYS) original[k] = process.env[k];
   process.env.NOTION_TOKEN = "secret_test";
   process.env.NOTION_UNANSWERED_DB_ID = "db-123";
+  delete process.env.MOCK_NOTION;
   clearEnvCache();
 });
 
@@ -45,6 +46,14 @@ describe("logUnansweredQuestion (TS-102)", () => {
   it("fetch 실패/네트워크 예외 — throw 하지 않고 false (응답 무해)", async () => {
     const fetchFn = vi.fn().mockRejectedValue(new Error("boom"));
     expect(await logUnansweredQuestion("q", { fetchFn })).toBe(false);
+  });
+
+  it("MOCK_NOTION=1 — fetch 없이 false (실 노션 오염 방지)", async () => {
+    process.env.MOCK_NOTION = "1";
+    clearEnvCache();
+    const fetchFn = vi.fn();
+    expect(await logUnansweredQuestion("q", { fetchFn })).toBe(false);
+    expect(fetchFn).not.toHaveBeenCalled();
   });
 
   it("200자 초과 질문은 절단해 기록", async () => {

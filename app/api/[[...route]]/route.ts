@@ -192,7 +192,7 @@ app.post(
     if (chunks.length === 0) {
       // 프로덕션 빈 검색 진단용 — 어떤 토큰으로 0건이 났는지 로그에 남긴다 (EC-54 조사)
       console.log("[chat] empty retrieval:", JSON.stringify(retrievalQuery));
-      // 미답변 질문 수집 (FEAT-043) — 콘텐츠 갭 루프. 서비스가 1.5s 바운드 + 실패 무해
+      // 미답변 질문 수집 (FEAT-043) — 콘텐츠 갭 루프. 서비스가 5s 바운드 + 실패 무해
       await logUnansweredQuestion(lastUser);
       const text = language === "en" ? NO_RECORD_RESPONSE_EN : NO_RECORD_RESPONSE_KO;
       return new Response(text, { headers });
