@@ -279,6 +279,32 @@ describe("SourceCitation", () => {
     expect(chip.getAttribute("title")).toMatch(/비공개/);
   });
 
+  it("웹뷰 등 새 탭 차단 환경 — window.open 이 null 이면 같은 탭 이동 폴백", async () => {
+    const user = userEvent.setup();
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(null);
+    const assignSpy = vi.fn();
+    const original = window.location;
+    Object.defineProperty(window, "location", {
+      value: { ...original, assign: assignSpy },
+      writable: true,
+    });
+    try {
+      render(
+        <SourceCitation
+          citation={{ sourceTitle: "MFE", sourceUrl: "/experience" }}
+          index={1}
+          onClick={vi.fn()}
+        />,
+      );
+      await user.click(screen.getByRole("link", { name: "1. MFE" }));
+      expect(openSpy).toHaveBeenCalledWith("/experience", "_blank", "noopener,noreferrer");
+      expect(assignSpy).toHaveBeenCalledWith("/experience");
+    } finally {
+      Object.defineProperty(window, "location", { value: original, writable: true });
+      openSpy.mockRestore();
+    }
+  });
+
   it("sourceUrl 정상이면 내부 경로 링크(<a>) 로 렌더된다", () => {
     const citation = { sourceTitle: "MFE", sourceUrl: "/experience" };
     render(<SourceCitation citation={citation} index={1} onClick={vi.fn()} />);
