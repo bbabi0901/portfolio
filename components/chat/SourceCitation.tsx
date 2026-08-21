@@ -40,7 +40,15 @@ export function SourceCitation({ citation, index, onClick, className }: SourceCi
         data-private="false"
         title={citation.sourceTitle}
         aria-label={label}
-        onClick={() => onClick(citation)}
+        onClick={(e) => {
+          onClick(citation);
+          // cmd/ctrl/shift 클릭은 브라우저 기본 동작(백그라운드 탭 등)에 맡긴다
+          if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+          // 웹뷰·미리보기 패널 등 새 탭 차단 환경 폴백: open 이 막히면 같은 탭 이동
+          e.preventDefault();
+          const w = window.open(citation.sourceUrl!, "_blank", "noopener,noreferrer");
+          if (!w) window.location.assign(citation.sourceUrl!);
+        }}
         className={cn(chipClass, "no-underline")}
       >
         {inner}

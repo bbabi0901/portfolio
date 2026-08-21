@@ -109,7 +109,7 @@
 - 모델 변경 → ModelSwitcher (localStorage 저장)
 - "새 대화" → ClearConversationButton (Cmd+K)
 - 위로 스크롤 → JumpToLatestButton
-- **출처 칩 (FEAT-041, TS-100)**: 공개 페이지로 재게시된 출처(intro·personal·subpage→/about, career·skill·project→/experience)는 링크 칩 — 새 탭으로 열어 대화 보존. 매핑 없는 카테고리(트러블슈팅)는 비공개 disabled 칩.
+- **출처 칩 (FEAT-041, TS-100)**: 공개 페이지로 재게시된 출처(intro·personal·subpage→/about, career·skill·project→/experience)는 링크 칩 — 새 탭으로 열어 대화 보존, 새 탭 차단 환경(웹뷰·인앱 브라우저)은 같은 탭 이동 폴백(window.open null 감지). 매핑 없는 카테고리(트러블슈팅)는 비공개 disabled 칩.
 - **전환 CTA (FEAT-042, TS-101)**: 출처 칩 있는 완료 답변 끝에 인라인 "더 궁금하면 연락하기" 링크(`data-slot=contact-cta`, /contact). Composer 하단 그라운딩 마이크로카피 "노션에 기록된 내용만 답해요"(`data-slot=grounding-note`). 추천 질문 캐러셀은 차별점 질문 Q-022 상단 고정(`pinSignatureQuestion`).
 
 ### 엣지/에러
