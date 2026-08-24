@@ -279,37 +279,63 @@ describe("SourceCitation", () => {
     expect(chip.getAttribute("title")).toMatch(/비공개/);
   });
 
-  it("웹뷰 등 새 탭 차단 환경 — window.open 이 null 이면 같은 탭 이동 폴백", async () => {
-    const user = userEvent.setup();
-    const openSpy = vi.spyOn(window, "open").mockReturnValue(null);
+  const NOTION_URL = "https://www.notion.so/fixture-page-1";
+
+  function withPatchedLocation(fn: (assignSpy: ReturnType<typeof vi.fn>) => Promise<void>) {
     const assignSpy = vi.fn();
     const original = window.location;
     Object.defineProperty(window, "location", {
       value: { ...original, assign: assignSpy },
       writable: true,
     });
-    try {
+    return fn(assignSpy).finally(() => {
+      Object.defineProperty(window, "location", { value: original, writable: true });
+    });
+  }
+
+  it("웹뷰 등 새 탭 차단 환경 — window.open 이 null 이면 같은 탭 이동 폴백", async () => {
+    const user = userEvent.setup();
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(null);
+    await withPatchedLocation(async (assignSpy) => {
       render(
         <SourceCitation
-          citation={{ sourceTitle: "MFE", sourceUrl: "/experience" }}
+          citation={{ sourceTitle: "MFE", sourceUrl: NOTION_URL }}
           index={1}
           onClick={vi.fn()}
         />,
       );
       await user.click(screen.getByRole("link", { name: "1. MFE" }));
-      expect(openSpy).toHaveBeenCalledWith("/experience", "_blank", "noopener,noreferrer");
-      expect(assignSpy).toHaveBeenCalledWith("/experience");
-    } finally {
-      Object.defineProperty(window, "location", { value: original, writable: true });
-      openSpy.mockRestore();
-    }
+      // noopener 를 features 로 주면 성공해도 null 이 와서 이중 이동이 난다 — 2번째 인자까지만
+      expect(openSpy).toHaveBeenCalledWith(NOTION_URL, "_blank");
+      expect(assignSpy).toHaveBeenCalledWith(NOTION_URL);
+    });
+    openSpy.mockRestore();
+  });
+
+  it("새 탭이 정상으로 열리면(open 이 window 반환) 같은 탭 이동은 없다 — 이중 이동 회귀 방지", async () => {
+    const user = userEvent.setup();
+    const fakeWin = { opener: {} } as unknown as Window;
+    const openSpy = vi.spyOn(window, "open").mockReturnValue(fakeWin);
+    await withPatchedLocation(async (assignSpy) => {
+      render(
+        <SourceCitation
+          citation={{ sourceTitle: "MFE", sourceUrl: NOTION_URL }}
+          index={1}
+          onClick={vi.fn()}
+        />,
+      );
+      await user.click(screen.getByRole("link", { name: "1. MFE" }));
+      expect(assignSpy).not.toHaveBeenCalled();
+      expect(fakeWin.opener).toBeNull();
+    });
+    openSpy.mockRestore();
   });
 
   it("sourceUrl 정상이면 내부 경로 링크(<a>) 로 렌더된다", () => {
-    const citation = { sourceTitle: "MFE", sourceUrl: "/experience" };
+    const citation = { sourceTitle: "MFE", sourceUrl: "https://www.notion.so/fixture-page-1" };
     render(<SourceCitation citation={citation} index={1} onClick={vi.fn()} />);
     const link = screen.getByRole("link", { name: "1. MFE" });
-    expect(link).toHaveAttribute("href", "/experience");
+    expect(link).toHaveAttribute("href", "https://www.notion.so/fixture-page-1");
     expect(link).toHaveAttribute("target", "_blank");
   });
 });

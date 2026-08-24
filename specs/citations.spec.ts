@@ -40,20 +40,20 @@ describe("citations (TS-100)", () => {
     expect(parseSourcesHeader(header)[0]!.sourceTitle).toBe("한국어 · 제목 — 테스트");
   });
 
-  it("카테고리 → 사이트 내부 경로 매핑 (칩 클릭 시 이동)", () => {
-    const parsed = parseSourcesHeader(
-      buildSourcesHeader([
-        mk("자기소개", "a", "intro"),
-        mk("이력서", "b", "career"),
-        mk("AI 포트폴리오", "c", "project"),
-      ]),
-    );
-    expect(parsed.map((c) => c.sourceUrl)).toEqual(["/about", "/experience", "/experience"]);
+  it("청크의 노션 원본 URL 이 칩 링크로 전달된다 (공개 워크스페이스)", () => {
+    const chunk = mk("밈코인 통합 소셜 플랫폼", "a");
+    chunk.sourceUrl = "https://app.notion.com/p/325656db69478180ac1fcc4b79a7639b";
+    const parsed = parseSourcesHeader(buildSourcesHeader([chunk]));
+    expect(parsed[0]!.sourceUrl).toBe("https://app.notion.com/p/325656db69478180ac1fcc4b79a7639b");
   });
 
-  it("공개 페이지 없는 카테고리(트러블슈팅)는 sourceUrl null — 비공개 칩", () => {
-    const parsed = parseSourcesHeader(buildSourcesHeader([mk("ERR-1", "a", "트러블슈팅")]));
-    expect(parsed[0]!.sourceUrl).toBeNull();
+  it("sourceUrl 이 비었거나 https 가 아니면 null — 비공개 칩 폴백", () => {
+    const a = mk("이상 청크", "a");
+    a.sourceUrl = "";
+    const b = mk("스킴 오염", "b");
+    b.sourceUrl = "javascript:alert(1)";
+    const parsed = parseSourcesHeader(buildSourcesHeader([a, b]));
+    expect(parsed.map((c) => c.sourceUrl)).toEqual([null, null]);
   });
 
   it("parseSourcesHeader — null·빈 값·불량 JSON 은 빈 배열 (렌더 생략)", () => {
