@@ -44,10 +44,13 @@ export function SourceCitation({ citation, index, onClick, className }: SourceCi
           onClick(citation);
           // cmd/ctrl/shift 클릭은 브라우저 기본 동작(백그라운드 탭 등)에 맡긴다
           if (e.metaKey || e.ctrlKey || e.shiftKey) return;
-          // 웹뷰·미리보기 패널 등 새 탭 차단 환경 폴백: open 이 막히면 같은 탭 이동
+          // 웹뷰·미리보기 패널 등 새 탭 차단 환경 폴백: open 이 막히면 같은 탭 이동.
+          // 주의: "noopener" 를 features 로 주면 성공해도 null 이 반환돼(스펙) 새 탭과
+          // 같은 탭이 동시에 이동하는 이중 이동이 난다 — features 없이 열고 opener 만 끊는다.
           e.preventDefault();
-          const w = window.open(citation.sourceUrl!, "_blank", "noopener,noreferrer");
-          if (!w) window.location.assign(citation.sourceUrl!);
+          const w = window.open(citation.sourceUrl!, "_blank");
+          if (w) w.opener = null;
+          else window.location.assign(citation.sourceUrl!);
         }}
         className={cn(chipClass, "no-underline")}
       >

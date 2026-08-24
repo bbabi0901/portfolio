@@ -133,10 +133,10 @@ test.describe("chat source citations (TS-100)", () => {
     const chips = page.locator('[data-slot="source-citation"]');
     await chips.first().waitFor({ state: "visible", timeout: 5000 });
     expect(await chips.count()).toBeGreaterThan(0);
-    // 공개 페이지로 재게시된 출처 칩은 내부 경로 링크 (레퍼런스 이동 버그 픽스)
+    // 출처 칩은 노션 원본 페이지 링크 (공개 워크스페이스)
     const linked = page.locator('a[data-slot="source-citation"][data-private="false"]');
     expect(await linked.count()).toBeGreaterThan(0);
-    expect(await linked.first().getAttribute("href")).toMatch(/^\/(about|experience)/);
+    expect(await linked.first().getAttribute("href")).toMatch(/^https:\/\/(www\.notion\.so|app\.notion\.com)\//);
     // TS-101: 출처 있는 답변엔 인라인 연락 CTA
     await expect(page.locator('[data-slot="contact-cta"]').first()).toBeVisible();
   });

@@ -4,30 +4,20 @@ import type { PortfolioChunk } from "@/types/portfolio";
 /**
  * 답변 출처 칩 (FEAT-041, TS-100) — 검색에 걸린 노션 문서를 X-Sources 헤더로
  * 서버→클라이언트 전달한다. HTTP 헤더는 ASCII 만 안전하므로 encodeURIComponent 로 감싼다.
- * 노션 원본은 비공개지만 콘텐츠가 사이트에 재게시되므로, 카테고리→내부 경로 매핑으로
- * 칩 클릭 시 해당 페이지로 이동한다. 매핑 없는 카테고리는 sourceUrl null = "비공개" 칩.
+ * 기록 워크스페이스가 공개 열람이라 칩은 청크의 노션 원본 URL 로 바로 연결한다.
+ * URL 이 비었거나 https 가 아니면 sourceUrl null = "비공개" 칩.
  */
 
 const MAX_SOURCES = 4;
 
-// [제목, 내부 경로|null] 튜플 배열로 인코딩
+// [제목, 노션 URL|null] 튜플 배열로 인코딩
 type SourceEntry = [string, string | null];
-
-const CATEGORY_PATH: Partial<Record<PortfolioChunk["category"], string>> = {
-  intro: "/about",
-  personal: "/about",
-  subpage: "/about",
-  career: "/experience",
-  skill: "/experience",
-  project: "/experience",
-  // 트러블슈팅: 공개 페이지 없음 → 비공개 칩
-};
 
 export function buildSourcesHeader(chunks: PortfolioChunk[]): string {
   const entries: SourceEntry[] = [];
   for (const c of chunks) {
     if (!entries.some(([t]) => t === c.sourceTitle)) {
-      entries.push([c.sourceTitle, CATEGORY_PATH[c.category] ?? null]);
+      entries.push([c.sourceTitle, c.sourceUrl || null]);
     }
     if (entries.length >= MAX_SOURCES) break;
   }
@@ -46,7 +36,8 @@ export function parseSourcesHeader(value: string | null): Citation[] {
       )
       .map(([sourceTitle, url]) => ({
         sourceTitle,
-        sourceUrl: typeof url === "string" && url.startsWith("/") ? url : null,
+        // https 만 허용 — javascript: 등 스킴 오염 차단
+        sourceUrl: typeof url === "string" && url.startsWith("https://") ? url : null,
       }));
   } catch {
     return [];
