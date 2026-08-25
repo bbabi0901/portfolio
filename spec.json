@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -418,6 +418,14 @@
       "expectedSourceTitles": [
         "AI 포트폴리오 (대화형 포트폴리오)",
         "하네스 엔지니어링 (Harness Engineering)"
+      ]
+    },
+    {
+      "id": "Q-023",
+      "category": "recent",
+      "text": "요즘 무엇에 관심 있어요?",
+      "expectedSourceTitles": [
+        "자기소개"
       ]
     }
   ],
