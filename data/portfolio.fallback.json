@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-08-20T18:08:36+09:00",
+  "generatedAt": "2026-08-25T22:23:31+09:00",
   "chunks": [
     {
       "id": "1ebd2ac5",
@@ -21,7 +21,7 @@
       "order": 0
     },
     {
-      "id": "38348266",
+      "id": "393483f9",
       "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
       "sourceTitle": "이력서",
       "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
@@ -38,10 +38,10 @@
         "코어",
         "typescript"
       ],
-      "order": 14
+      "order": 15
     },
     {
-      "id": "3c5c6bbc",
+      "id": "3f5c7075",
       "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
       "sourceTitle": "이력서",
       "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
@@ -57,10 +57,10 @@
         "hardhat",
         "foundry"
       ],
-      "order": 15
+      "order": 16
     },
     {
-      "id": "13122054",
+      "id": "0a121229",
       "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
       "sourceTitle": "이력서",
       "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
@@ -75,10 +75,10 @@
         "2012",
         "2018"
       ],
-      "order": 17
+      "order": 18
     },
     {
-      "id": "8bb8c1a4",
+      "id": "8cb8c337",
       "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
       "sourceTitle": "이력서",
       "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
@@ -96,7 +96,7 @@
         "blockchain",
         "engineering"
       ],
-      "order": 16
+      "order": 17
     },
     {
       "id": "6beccdcc",
@@ -119,7 +119,7 @@
       "order": 1
     },
     {
-      "id": "8627c99d",
+      "id": "8527c80a",
       "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
       "sourceTitle": "이력서",
       "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
@@ -137,7 +137,7 @@
         "2026",
         "취득"
       ],
-      "order": 18
+      "order": 19
     },
     {
       "id": "324208ef",
@@ -179,7 +179,7 @@
       "order": 12
     },
     {
-      "id": "96b83286",
+      "id": "99b8373f",
       "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
       "sourceTitle": "이력서",
       "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
@@ -196,6 +196,27 @@
         "aws",
         "검색",
         "노션"
+      ],
+      "order": 14
+    },
+    {
+      "id": "f73c5dde",
+      "sourcePageId": "0d23b37e-f6bb-42a2-acf8-5b33be3ea98a",
+      "sourceTitle": "이력서",
+      "sourceUrl": "https://app.notion.com/p/0d23b37ef6bb42a2acf85b33be3ea98a",
+      "category": "career",
+      "headingPath": [
+        "자체 프로젝트 (Personal Project)",
+        "풀로그 (반려식물 케어 iOS 앱)"
+      ],
+      "text": "- 커플·가족이 초대 코드로 하나의 식물 컬렉션을 공유하고, 사진 한 장과 스티커로 3초 만에 상태를 기록하는 반려식물 케어 앱 (노션 수동 관리를 대체하는 실사용 앱)\n- 기획 → 디자인(Figma 토큰) → 프론트 → 백엔드 → 인프라 전 과정을 AI 에이전트 하네스로 개발 — [CLAUDE.md](http://claude.md/) 규칙 문서와 스토리 큐 기반 루프 워크플로우로 작업을 쪼개 진행\n- 검증을 사람의 눈이 아닌 구조에 맡긴 3층 검증 체계 운영 — 기계 게이트 → 별도 컨텍스트의 AI judge O/X 판정 → 사람 에스컬레이션 (judge가 실제 결함을 적발한 사례 확보)\n- 물주기 D-day·캘린더·리마인더(한 명이 물을 주면 상대 리마인더 자동 해소), 식물별 기록 이력을 컨텍스트로 쓰는 AI 진단 기능\n- Expo(React Native) + TypeScript, Supabase(Auth·Postgres RLS 가구 격리·Storage), AWS Bedrock 비전 모델\n- EAS Build로 TestFlight 업로드 완료, 내부 테스팅 진행 중",
+      "tokens": 240,
+      "tags": [
+        "claude",
+        "진행",
+        "검증",
+        "사람",
+        "컨텍스트"
       ],
       "order": 13
     },
@@ -5989,22 +6010,22 @@
       "order": 0
     },
     {
-      "id": "bac036ab",
+      "id": "0991d093",
       "sourcePageId": "363656db-6947-80d0-9c9c-eca1d37c2ba1",
       "sourceTitle": "자기소개",
       "sourceUrl": "https://app.notion.com/p/363656db694780d09c9ceca1d37c2ba1",
       "category": "personal",
       "headingPath": [
-        "요즘 빠져있는 거"
+        "요즘 관심사 (a.k.a. 빠져있는 거)"
       ],
-      "text": "**1. AI에게 일 시키는 법**\n\n\n요즘 시간을 가장 많이 쓰는 건 AI 에이전트로 코드 굴리는 방식이에요. Claude Code·Cursor에 MCP 서버를 직접 붙여보면서 'AI한테 어떻게 일을 시키면 잘 굴러갈까'를 시행착오로 익히는 중입니다. 결국 사람에게 일 부탁할 때처럼 컨텍스트를 얼마나 잘 정리해 주느냐가 핵심이라는 걸 알아가는 중이에요.\n\n\n**2. 테니스에 발 담그는 중**\n\n\n원래는 스쿼시·배드민턴을 즐기는 편이었는데, 이제는 흥미가 테니스로 넘어가고 있어요! 지금은 배울 만한 곳을 찾아보고 있는 단계예요. 언젠가 코트에 나가서 멋진 솜씨를 뽐내는 게 목표입니다.\n\n\n**3. 프렌즈가 요즘 밥친구**\n\n\n요즘 밥 먹을 때 항상 틀어두는 미드가 프렌즈예요. 최근에 처음 보기 시작했는데, 한 화가 식사 한 끼와 길이가 비슷해서 자연스럽게 매일의 식습관이 됐어요. 가끔 너무 웃겨서 젓가락 멈춰버리는 게 단점이라면 단점입니다.",
-      "tokens": 244,
+      "text": "**1. AI로 전 영역 굴리는 개발**\n\n\n요즘 가장 관심이 많은 건 AI를 활용해 기획부터 디자인·프론트·백엔드·인프라까지 전 영역을 직접 다뤄보는 개발이에요. 이 포트폴리오 사이트도 AI 에이전트 워크플로우로 기획부터 배포까지 만들었고, 반려식물 케어 iOS 앱 '풀로그'는 Figma 디자인부터 Supabase 백엔드, AWS 인프라까지 AI 에이전트 하네스와 루프로 개발해서 지금 TestFlight 내부 테스팅 중입니다. Claude Code·Cursor에 MCP 서버를 직접 붙여보며 느끼는 건, 결국 사람에게 일 부탁할 때처럼 컨텍스트를 얼마나 잘 정리해 주느냐가 핵심이라는 거예요.\n\n\n**2. 그중에서도 요즘은 인프라**\n\n\n전 영역 중 지금 특히 파고 있는 건 인프라예요. 포트폴리오의 RAG 스택을 Bedrock + S3 Vectors + Lambda의 풀 AWS 구조로 직접 전환해 운영해 보니 재미가 붙었어요. 지난 7월에 AWS Certified AI Practitioner를 딴고, 다음 단계로 Solutions Architect Associate를 준비하고 있습니다.\n\n\n**3. 테니스에 발 담그는 중**\n\n\n원래는 스쿼시·배드민턴을 즐기는 편이었는데, 이제는 흥미가 테니스로 넘어가고 있어요! 지금은 배울 만한 곳을 찾아보고 있는 단계예요. 언젠가 코트에 나가서 멋진 솜씨를 뽐내는 게 목표입니다.\n\n\n**4. 프렌즈가 요즘 밥친구**\n\n\n요즘 밥 먹을 때 항상 틀어두는 미드가 프렌즈예요. 최근에 처음 보기 시작했는데, 한 화가 식사 한 끼와 길이가 비슷해서 자연스럽게 매일의 식습관이 됐어요. 가끔 너무 웃겨서 젓가락 멈춰버리는 게 단점이라면 단점입니다.",
+      "tokens": 398,
       "tags": [
         "요즘",
-        "테니스",
-        "에게",
-        "시키",
-        "시간"
+        "영역",
+        "인프라",
+        "직접",
+        "aws"
       ],
       "order": 4
     },
@@ -8077,6 +8098,145 @@
       }
     },
     {
+      "id": "3e4a98b8",
+      "sourcePageId": "3c4656db-6947-81ee-a5ce-d337924c73fd",
+      "sourceTitle": "풀로그 — 반려식물 케어 앱",
+      "sourceUrl": "https://app.notion.com/p/3c4656db694781eea5ced337924c73fd",
+      "category": "project",
+      "headingPath": [
+        "소개",
+        "개발 방식 (AI 에이전트 하네스)"
+      ],
+      "text": "- [CLAUDE.md](http://claude.md/) 헌법 + specs/stories.json 스토리 큐 + Given/When/Then 시나리오\n- judge gate 3층 검증: L1 기계 게이트(tsc·vitest·E2E) → L2 fresh-context judge가 ac 계약만으로 O/X 판정(승인 산출물 없는 passes 갱신은 훅이 차단) → L3 5회 거부 시 사람 에스컬레이션\n- 루프 실적: 스토리 8개 중 6개 judge 승인 완주, 거부 1회(폰트 우회 결함을 judge가 적발) 포함. 잔여 S6(OAuth 실기기 검증)·S7(TestFlight 실기기 체크포인트)은 사용자 게이트\n- 배포 현황: TestFlight 빌드 5 업로드 완료(2026-08-23), 내부 테스팅 그룹 구성. Expo web 전 플로우 QA 통과(로그인→가구 생성→종 검색→식물 등록→기록→D-day·캘린더)\n\n---",
+      "tokens": 178,
+      "tags": [
+        "judge",
+        "claude",
+        "스토리",
+        "검증",
+        "게이트"
+      ],
+      "order": 3,
+      "projectMeta": {
+        "notionCategory": "자체프로젝트",
+        "period": {
+          "start": "2026-08-19",
+          "ongoing": true
+        }
+      }
+    },
+    {
+      "id": "55969066",
+      "sourcePageId": "3c4656db-6947-81ee-a5ce-d337924c73fd",
+      "sourceTitle": "풀로그 — 반려식물 케어 앱",
+      "sourceUrl": "https://app.notion.com/p/3c4656db694781eea5ced337924c73fd",
+      "category": "project",
+      "headingPath": [
+        "소개",
+        "기술 스택"
+      ],
+      "text": "- **Core**: Expo SDK 57 (React Native 0.86), React 19, TypeScript strict, expo-router\n- **스타일**: NativeWind 4 (시맨틱 토큰 SSoT — tailwind.config.js), Pretendard, react-native-reanimated\n- **백엔드**: Supabase — Postgres(RLS 가구 격리), Auth(구글/애플 소셜 + 익명 linkIdentity), Storage(private 버킷 + signed URL), Edge Functions(Deno)\n- **AI**: AWS Bedrock Claude Haiku 4.5 (비전) — Edge Function에서 aws4fetch SigV4 호출, 구조화 JSON 응답, 유저당 월 상한\n- **알림**: expo-notifications + Expo Push API, pg_cron(발송 시점 조회 방식) + Vault 시크릿\n- **테스트/CI**: vitest(순수 함수), Playwright E2E 스모크, GitHub Actions (tsc + vitest + 훅 가드 테스트)\n- **빌드/배포**: EAS Build → TestFlight → App Store (진행 중)",
+      "tokens": 193,
+      "tags": [
+        "expo",
+        "react",
+        "native",
+        "edge",
+        "테스트"
+      ],
+      "order": 1,
+      "projectMeta": {
+        "notionCategory": "자체프로젝트",
+        "period": {
+          "start": "2026-08-19",
+          "ongoing": true
+        }
+      }
+    },
+    {
+      "id": "73a6d8d7",
+      "sourcePageId": "3c4656db-6947-81ee-a5ce-d337924c73fd",
+      "sourceTitle": "풀로그 — 반려식물 케어 앱",
+      "sourceUrl": "https://app.notion.com/p/3c4656db694781eea5ced337924c73fd",
+      "category": "project",
+      "headingPath": [
+        "소개",
+        "주요 기능"
+      ],
+      "text": "- 가구(household) 공유 — 초대 코드 6자리, 컬렉션은 가구 소속, 기록에 행위자 표시, 네이티브 공유 시트로 초대 코드 메신저 전달\n- 식물 등록 — 종 검색(한국 관엽 50종 시드 + LLM 캐시 미스 생성 설계)\n- 3초 기록 — 사진 1장 + 상태 스티커 7종(물줬어요/새싹/새잎/꽃/아파요/분갈이/우리집에왔어요) + 한 줄 메모\n- 물주기 스케줄 — 종별 주기(계절 보정)·D-day 히어로 카드·캘린더·\"내일 줄래요\" 미루기(죄책감 없는 톤)\n- 푸시 리마인더 — 매일 KST 9시, 한 명이 물 주면 상대 리마인더 자동 해소(발송 시점 조회 설계)\n- AI 진단 — 사진+증상+식물 이력(종·최근 물주기) 컨텍스트 주입 → 진단 카드(원인/처방), 월 30회 상한\n- 소셜 로그인 — Google/Apple, 익명 계정 → 소셜 전환 시 데이터 무손실(linkIdentity). 실기기 QA에서 브라우저 OAuth의 [localhost](http://localhost/) 폴백 발견 → 네이티브 구글 로그인(signInWithIdToken) 전환 진행 중",
+      "tokens": 243,
+      "tags": [
+        "가구",
+        "공유",
+        "초대",
+        "코드",
+        "기록"
+      ],
+      "order": 2,
+      "projectMeta": {
+        "notionCategory": "자체프로젝트",
+        "period": {
+          "start": "2026-08-19",
+          "ongoing": true
+        }
+      }
+    },
+    {
+      "id": "1aa479fd",
+      "sourcePageId": "3c4656db-6947-81ee-a5ce-d337924c73fd",
+      "sourceTitle": "풀로그 — 반려식물 케어 앱",
+      "sourceUrl": "https://app.notion.com/p/3c4656db694781eea5ced337924c73fd",
+      "category": "project",
+      "headingPath": [
+        "소개",
+        "프로젝트 개요"
+      ],
+      "text": "가족(가구)이 함께 쓰는 반려식물 케어 기록 iOS 앱. 노션으로 수동 관리하던 식물 기록(종·물주기·사진)을 대체하는 실사용 앱이자 이직 포트폴리오. 커플/가족이 하나의 식물 컬렉션을 공유하고(초대 코드), 3초 기록 UX와 \"내 식물의 이력을 아는 AI 진단\"을 차별점으로 설계. 경쟁 리서치 결과 종 식별은 커모디티로 판단해 배제하고, 기록 UX(펫 다이어리 앱 벤치마크)와 이력 기반 진단에 집중. 전 과정을 AI 에이전트 하네스(judge gate 3층 검증 + 스토리 큐 루프)로 개발한 점이 특징.\n\n- GitHub: [bbabi0901/pullog](https://github.com/bbabi0901/pullog)\n- 디자인: Figma 토큰 → NativeWind 미러, Recraft 생성 에셋 + 팔레트 강제 리컬러 파이프라인",
+      "tokens": 187,
+      "tags": [
+        "기록",
+        "식물",
+        "가족",
+        "이력",
+        "진단"
+      ],
+      "order": 0,
+      "projectMeta": {
+        "notionCategory": "자체프로젝트",
+        "period": {
+          "start": "2026-08-19",
+          "ongoing": true
+        }
+      }
+    },
+    {
+      "id": "98028599",
+      "sourcePageId": "3c4656db-6947-81ee-a5ce-d337924c73fd",
+      "sourceTitle": "풀로그 — 반려식물 케어 앱",
+      "sourceUrl": "https://app.notion.com/p/3c4656db694781eea5ced337924c73fd",
+      "category": "project",
+      "headingPath": [
+        "🛠️ 트러블슈팅"
+      ],
+      "text": "주요 이슈 기록 (상세는 리포 [CLAUDE.md](http://claude.md/) 실패 지식 · specs/verdicts 참조)\n\n- 가구 생성 403 — INSERT의 RETURNING이 RLS SELECT 정책에 걸림 → security definer RPC로 해결 (자기 참조형 리소스 생성 패턴)\n- NativeWind + reanimated — Animated.Text가 interop을 우회해 폰트 클래스 미적용 → judge gate가 적발, Animated.View 래핑으로 해결\n- Deno Edge Function에서 aws-sdk 사용 불가(node:http2 미구현) → aws4fetch(SigV4)로 교체\n- Bedrock Haiku 4.5는 apac 추론 프로필 미제공 → global 프로필로 전환\n- Apple Developer 앱 내 구독 결제 후 멤버십 미활성화(처리 최대 48h) — 재결제 유도 화면 주의\n- Figma 무료 플랜 MCP 호출 하드캡(읽기 포함) → 디자인 토큰을 코드로 덤프 후 코드 직행 전략으로 전환\n- TestFlight 빌드 실행 즉시 크래시 — EAS production 환경변수 미등록으로 Supabase URL이 번들에 없음 → eas env:create 등록 후 재빌드로 해결\n- 실기기 구글 로그인이 [localhost](http://localhost/)로 이동 — 앱 복귀 주소(pullog://)가 Supabase Redirect URLs와 미매칭 시 Site URL(기본 [localhost:3000](http://localhost:3000/))로 폴백하는 동작 → Site URL/Redirect URLs 수정 + 네이티브 로그인 전환으로 근본 해결 예정",
+      "tokens": 315,
+      "tags": [
+        "해결",
+        "localhost",
+        "http",
+        "전환",
+        "url"
+      ],
+      "order": 4,
+      "projectMeta": {
+        "notionCategory": "자체프로젝트",
+        "period": {
+          "start": "2026-08-19",
+          "ongoing": true
+        }
+      }
+    },
+    {
       "id": "63d6469a",
       "sourcePageId": "a1e0d226-3193-424c-b190-612f86d5383e",
       "sourceTitle": "화장품 판매 서비스 어드민 페이지",
@@ -9353,6 +9513,14 @@
       "expectedSourceTitles": [
         "AI 포트폴리오 (대화형 포트폴리오)",
         "하네스 엔지니어링 (Harness Engineering)"
+      ]
+    },
+    {
+      "id": "Q-023",
+      "category": "recent",
+      "text": "요즘 무엇에 관심 있어요?",
+      "expectedSourceTitles": [
+        "자기소개"
       ]
     }
   ],
