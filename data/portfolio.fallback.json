@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-08-25T22:23:31+09:00",
+  "generatedAt": "2026-09-01T01:17:57+09:00",
   "chunks": [
     {
       "id": "1ebd2ac5",
@@ -209,13 +209,13 @@
         "자체 프로젝트 (Personal Project)",
         "풀로그 (반려식물 케어 iOS 앱)"
       ],
-      "text": "- 커플·가족이 초대 코드로 하나의 식물 컬렉션을 공유하고, 사진 한 장과 스티커로 3초 만에 상태를 기록하는 반려식물 케어 앱 (노션 수동 관리를 대체하는 실사용 앱)\n- 기획 → 디자인(Figma 토큰) → 프론트 → 백엔드 → 인프라 전 과정을 AI 에이전트 하네스로 개발 — [CLAUDE.md](http://claude.md/) 규칙 문서와 스토리 큐 기반 루프 워크플로우로 작업을 쪼개 진행\n- 검증을 사람의 눈이 아닌 구조에 맡긴 3층 검증 체계 운영 — 기계 게이트 → 별도 컨텍스트의 AI judge O/X 판정 → 사람 에스컬레이션 (judge가 실제 결함을 적발한 사례 확보)\n- 물주기 D-day·캘린더·리마인더(한 명이 물을 주면 상대 리마인더 자동 해소), 식물별 기록 이력을 컨텍스트로 쓰는 AI 진단 기능\n- Expo(React Native) + TypeScript, Supabase(Auth·Postgres RLS 가구 격리·Storage), AWS Bedrock 비전 모델\n- EAS Build로 TestFlight 업로드 완료, 내부 테스팅 진행 중",
-      "tokens": 240,
+      "text": "- 커플·가족이 초대 코드로 하나의 식물 컬렉션을 공유하고, 사진 한 장과 스티커로 3초 만에 상태를 기록하는 반려식물 케어 앱 (노션 수동 관리를 대체하는 실사용 앱)\n- 기획 → 디자인(Figma 토큰) → 프론트 → 백엔드 → 인프라 전 과정을 AI 에이전트 하네스로 개발 — [CLAUDE.md](http://claude.md/) 규칙 문서와 스토리 큐 기반 루프 워크플로우로 작업을 쪼개 진행\n- 검증을 사람의 눈이 아닌 구조에 맡긴 3층 검증 체계 운영 — 기계 게이트 → 별도 컨텍스트의 AI judge O/X 판정 → 사람 에스컬레이션 (judge가 실제 결함을 적발한 사례 확보)\n- 물주기 D-day·캘린더·리마인더(한 명이 물을 주면 상대 리마인더 자동 해소), 식물별 기록 이력을 컨텍스트로 쓰는 AI 진단 — 월 3회 무료 + 크레딧 인앱결제(App Store Server API 서버 검증) 과금 설계\n- Expo(React Native) + TypeScript, Supabase(Auth·Postgres RLS 가구 격리·Storage), AWS Bedrock 비전 모델 + 운영 어드민 웹(Next.js) 모노레포\n- EAS Build → TestFlight 내부 테스팅을 거쳐 App Store 심사 제출 (iOS 1.0, 인앱결제 포함, 2026-09)",
+      "tokens": 281,
       "tags": [
-        "claude",
-        "진행",
         "검증",
+        "claude",
         "사람",
+        "운영",
         "컨텍스트"
       ],
       "order": 13
@@ -8107,14 +8107,14 @@
         "소개",
         "개발 방식 (AI 에이전트 하네스)"
       ],
-      "text": "- [CLAUDE.md](http://claude.md/) 헌법 + specs/stories.json 스토리 큐 + Given/When/Then 시나리오\n- judge gate 3층 검증: L1 기계 게이트(tsc·vitest·E2E) → L2 fresh-context judge가 ac 계약만으로 O/X 판정(승인 산출물 없는 passes 갱신은 훅이 차단) → L3 5회 거부 시 사람 에스컬레이션\n- 루프 실적: 스토리 8개 중 6개 judge 승인 완주, 거부 1회(폰트 우회 결함을 judge가 적발) 포함. 잔여 S6(OAuth 실기기 검증)·S7(TestFlight 실기기 체크포인트)은 사용자 게이트\n- 배포 현황: TestFlight 빌드 5 업로드 완료(2026-08-23), 내부 테스팅 그룹 구성. Expo web 전 플로우 QA 통과(로그인→가구 생성→종 검색→식물 등록→기록→D-day·캘린더)\n\n---",
-      "tokens": 178,
+      "text": "- [CLAUDE.md](http://claude.md/) 헌법 + specs/stories.json 스토리 큐 + Given/When/Then 시나리오\n- judge gate 3층 검증: L1 기계 게이트(tsc·vitest·E2E) → L2 fresh-context judge가 ac 계약만으로 O/X 판정(승인 산출물 없는 passes 갱신은 훅이 차단) → L3 5회 거부 시 사람 에스컬레이션\n- 루프 실적: 스토리 36개 중 34개 passes, 거부 누적 2회(폰트 우회 결함 등 judge 적발). S6(OAuth 실기기 검증)·S7(TestFlight 체크포인트) 사람 게이트는 8/31 통과. 잔여 S33(식물 보내주기/아카이브, 심사 후 착수)·S36(IAP 실구매 확인, 사용자 게이트)\n- 배포 현황: App Store 심사 제출 완료(2026-09-01, iOS 1.0 build 14 + IAP 아이템). 심사용 데모 가구(초대 코드 REVIEW)·영문 심사 노트·6.9\" 스크린샷·개인정보 처리방침([pullog-privacy.vercel.app](http://pullog-privacy.vercel.app/)) 준비 완료\n\n---",
+      "tokens": 219,
       "tags": [
         "judge",
-        "claude",
-        "스토리",
-        "검증",
-        "게이트"
+        "게이트",
+        "심사",
+        "app",
+        "claude"
       ],
       "order": 3,
       "projectMeta": {
@@ -8135,14 +8135,14 @@
         "소개",
         "기술 스택"
       ],
-      "text": "- **Core**: Expo SDK 57 (React Native 0.86), React 19, TypeScript strict, expo-router\n- **스타일**: NativeWind 4 (시맨틱 토큰 SSoT — tailwind.config.js), Pretendard, react-native-reanimated\n- **백엔드**: Supabase — Postgres(RLS 가구 격리), Auth(구글/애플 소셜 + 익명 linkIdentity), Storage(private 버킷 + signed URL), Edge Functions(Deno)\n- **AI**: AWS Bedrock Claude Haiku 4.5 (비전) — Edge Function에서 aws4fetch SigV4 호출, 구조화 JSON 응답, 유저당 월 상한\n- **알림**: expo-notifications + Expo Push API, pg_cron(발송 시점 조회 방식) + Vault 시크릿\n- **테스트/CI**: vitest(순수 함수), Playwright E2E 스모크, GitHub Actions (tsc + vitest + 훅 가드 테스트)\n- **빌드/배포**: EAS Build → TestFlight → App Store (진행 중)",
-      "tokens": 193,
+      "text": "- **Core**: Expo SDK 57 (React Native 0.86), React 19, TypeScript strict, expo-router — npm workspaces 모노레포(apps/mobile·admin·privacy + packages/shared)\n- **스타일**: NativeWind 4 (시맨틱 토큰 SSoT — tailwind.config.js), Pretendard, react-native-reanimated\n- **백엔드**: Supabase — Postgres(RLS 가구 격리), Auth(구글/애플 소셜 + 익명 linkIdentity), Storage(private 버킷 + signed URL), Edge Functions(Deno)\n- **AI**: AWS Bedrock Claude Haiku 4.5 (비전) — Edge Function에서 aws4fetch SigV4 호출, 구조화 JSON 응답, 유저당 월 상한\n- **알림**: expo-notifications + Expo Push API, pg_cron(발송 시점 조회 방식) + Vault 시크릿\n- **테스트/CI**: vitest(순수 함수), Playwright E2E 스모크, GitHub Actions (tsc + vitest + 훅 가드 테스트)\n- **빌드/배포**: EAS Build → TestFlight → App Store 심사 제출(2026-09-01, iOS 1.0 build 14 + IAP 아이템)\n- **과금**: expo-iap — App Store IAP(진단 30회 ₩1,100), App Store Server API 서버 검증(멱등)",
+      "tokens": 248,
       "tags": [
         "expo",
         "react",
-        "native",
-        "edge",
-        "테스트"
+        "app",
+        "store",
+        "iap"
       ],
       "order": 1,
       "projectMeta": {
@@ -8163,14 +8163,14 @@
         "소개",
         "주요 기능"
       ],
-      "text": "- 가구(household) 공유 — 초대 코드 6자리, 컬렉션은 가구 소속, 기록에 행위자 표시, 네이티브 공유 시트로 초대 코드 메신저 전달\n- 식물 등록 — 종 검색(한국 관엽 50종 시드 + LLM 캐시 미스 생성 설계)\n- 3초 기록 — 사진 1장 + 상태 스티커 7종(물줬어요/새싹/새잎/꽃/아파요/분갈이/우리집에왔어요) + 한 줄 메모\n- 물주기 스케줄 — 종별 주기(계절 보정)·D-day 히어로 카드·캘린더·\"내일 줄래요\" 미루기(죄책감 없는 톤)\n- 푸시 리마인더 — 매일 KST 9시, 한 명이 물 주면 상대 리마인더 자동 해소(발송 시점 조회 설계)\n- AI 진단 — 사진+증상+식물 이력(종·최근 물주기) 컨텍스트 주입 → 진단 카드(원인/처방), 월 30회 상한\n- 소셜 로그인 — Google/Apple, 익명 계정 → 소셜 전환 시 데이터 무손실(linkIdentity). 실기기 QA에서 브라우저 OAuth의 [localhost](http://localhost/) 폴백 발견 → 네이티브 구글 로그인(signInWithIdToken) 전환 진행 중",
-      "tokens": 243,
+      "text": "- 가구(household) 공유 — 초대 코드 6자리, 컬렉션은 가구 소속, 기록에 행위자 표시, 네이티브 공유 시트로 초대 코드 메신저 전달\n- 식물 등록 — 종 검색(종 데이터 425종 — 배치 4회로 133→425 확장, sanity 게이트 하한 400. 토큰-AND 검색 + 별칭 표시, LLM 캐시 미스 생성 설계)\n- 3초 기록 — 사진 1장 + 상태 스티커 7종(물줬어요/새싹/새잎/꽃/아파요/분갈이/우리집에왔어요) + 한 줄 메모\n- 물주기 스케줄 — 종별 주기(계절 보정)·D-day 히어로 카드·캘린더·\"내일 줄래요\" 미루기(죄책감 없는 톤)\n- 푸시 리마인더 — 매일 KST 9시, 한 명이 물 주면 상대 리마인더 자동 해소(발송 시점 조회 설계)\n- AI 진단 — 사진+증상+식물 이력(종·최근 물주기) 컨텍스트 주입 → 진단 카드(원인/처방). 과금(ADR-020): 가구당 월 3회 무료 → 크레딧 차감(소진 시 402) → IAP 진단 30회 ₩1,100(App Store Server API 서버 검증·멱등, Small Business Program), 글로벌 무료 상한 429. 실DB 검증 스크립트 7케이스\n- 소셜 로그인 — Google/Apple, 익명 계정 → 소셜 전환 시 데이터 무손실(linkIdentity). 실기기 QA에서 발견한 브라우저 OAuth의 [localhost](http://localhost/) 폴백은 네이티브 로그인(구글 signInWithIdToken + Apple)으로 전환해 근본 해결, 실기기 검증 완료\n- 운영 어드민 웹(apps/admin) — Next.js, 구글 인증 허용목록, 유저·가구·종 관리(LLM 종 초안 생성), 디바이스 등록 쿠키 게이트\n- 디자인 업그레이드 — Recraft 커스텀 스타일 일러스트 21종(webp 170KB), 마스코트 '화분이', 온보딩 카드, 로딩·모션\n- 알림 신뢰성 — 리마인더 on/off 설정+서버 필터, 푸시 딥링크 콜드스타트 처리, 원탭 물주기, 캘린더 일 상세+과거 기록",
+      "tokens": 434,
       "tags": [
         "가구",
-        "공유",
-        "초대",
-        "코드",
-        "기록"
+        "기록",
+        "물주기",
+        "카드",
+        "리마인더"
       ],
       "order": 2,
       "projectMeta": {
@@ -8191,14 +8191,14 @@
         "소개",
         "프로젝트 개요"
       ],
-      "text": "가족(가구)이 함께 쓰는 반려식물 케어 기록 iOS 앱. 노션으로 수동 관리하던 식물 기록(종·물주기·사진)을 대체하는 실사용 앱이자 이직 포트폴리오. 커플/가족이 하나의 식물 컬렉션을 공유하고(초대 코드), 3초 기록 UX와 \"내 식물의 이력을 아는 AI 진단\"을 차별점으로 설계. 경쟁 리서치 결과 종 식별은 커모디티로 판단해 배제하고, 기록 UX(펫 다이어리 앱 벤치마크)와 이력 기반 진단에 집중. 전 과정을 AI 에이전트 하네스(judge gate 3층 검증 + 스토리 큐 루프)로 개발한 점이 특징.\n\n- GitHub: [bbabi0901/pullog](https://github.com/bbabi0901/pullog)\n- 디자인: Figma 토큰 → NativeWind 미러, Recraft 생성 에셋 + 팔레트 강제 리컬러 파이프라인",
-      "tokens": 187,
+      "text": "가족(가구)이 함께 쓰는 반려식물 케어 기록 iOS 앱. 노션으로 수동 관리하던 식물 기록(종·물주기·사진)을 대체하는 실사용 앱이자 이직 포트폴리오. 커플/가족이 하나의 식물 컬렉션을 공유하고(초대 코드), 3초 기록 UX와 \"내 식물의 이력을 아는 AI 진단\"을 차별점으로 설계. 경쟁 리서치 결과 종 식별은 커모디티로 판단해 배제하고, 기록 UX(펫 다이어리 앱 벤치마크)와 이력 기반 진단에 집중. 전 과정을 AI 에이전트 하네스(judge gate 3층 검증 + 스토리 큐 루프)로 개발한 점이 특징. 2026-09-01 App Store 심사 제출(iOS 1.0, build 14 + IAP).\n\n- GitHub: [bbabi0901/pullog](https://github.com/bbabi0901/pullog)\n- 디자인: Figma 토큰 → NativeWind 미러, Recraft 생성 에셋 + 팔레트 강제 리컬러 파이프라인",
+      "tokens": 202,
       "tags": [
         "기록",
         "식물",
         "가족",
-        "이력",
-        "진단"
+        "ios",
+        "이력"
       ],
       "order": 0,
       "projectMeta": {
@@ -8218,13 +8218,13 @@
       "headingPath": [
         "🛠️ 트러블슈팅"
       ],
-      "text": "주요 이슈 기록 (상세는 리포 [CLAUDE.md](http://claude.md/) 실패 지식 · specs/verdicts 참조)\n\n- 가구 생성 403 — INSERT의 RETURNING이 RLS SELECT 정책에 걸림 → security definer RPC로 해결 (자기 참조형 리소스 생성 패턴)\n- NativeWind + reanimated — Animated.Text가 interop을 우회해 폰트 클래스 미적용 → judge gate가 적발, Animated.View 래핑으로 해결\n- Deno Edge Function에서 aws-sdk 사용 불가(node:http2 미구현) → aws4fetch(SigV4)로 교체\n- Bedrock Haiku 4.5는 apac 추론 프로필 미제공 → global 프로필로 전환\n- Apple Developer 앱 내 구독 결제 후 멤버십 미활성화(처리 최대 48h) — 재결제 유도 화면 주의\n- Figma 무료 플랜 MCP 호출 하드캡(읽기 포함) → 디자인 토큰을 코드로 덤프 후 코드 직행 전략으로 전환\n- TestFlight 빌드 실행 즉시 크래시 — EAS production 환경변수 미등록으로 Supabase URL이 번들에 없음 → eas env:create 등록 후 재빌드로 해결\n- 실기기 구글 로그인이 [localhost](http://localhost/)로 이동 — 앱 복귀 주소(pullog://)가 Supabase Redirect URLs와 미매칭 시 Site URL(기본 [localhost:3000](http://localhost:3000/))로 폴백하는 동작 → Site URL/Redirect URLs 수정 + 네이티브 로그인 전환으로 근본 해결 예정",
-      "tokens": 315,
+      "text": "주요 이슈 기록 (상세는 리포 [CLAUDE.md](http://claude.md/) 실패 지식 · specs/verdicts 참조)\n\n- 가구 생성 403 — INSERT의 RETURNING이 RLS SELECT 정책에 걸림 → security definer RPC로 해결 (자기 참조형 리소스 생성 패턴)\n- NativeWind + reanimated — Animated.Text가 interop을 우회해 폰트 클래스 미적용 → judge gate가 적발, Animated.View 래핑으로 해결\n- Deno Edge Function에서 aws-sdk 사용 불가(node:http2 미구현) → aws4fetch(SigV4)로 교체\n- Bedrock Haiku 4.5는 apac 추론 프로필 미제공 → global 프로필로 전환\n- Apple Developer 앱 내 구독 결제 후 멤버십 미활성화(처리 최대 48h) — 재결제 유도 화면 주의\n- Figma 무료 플랜 MCP 호출 하드캡(읽기 포함) → 디자인 토큰을 코드로 덤프 후 코드 직행 전략으로 전환\n- TestFlight 빌드 실행 즉시 크래시 — EAS production 환경변수 미등록으로 Supabase URL이 번들에 없음 → eas env:create 등록 후 재빌드로 해결\n- 실기기 구글 로그인이 [localhost](http://localhost/)로 이동 — 앱 복귀 주소(pullog://)가 Supabase Redirect URLs와 미매칭 시 Site URL(기본 [localhost:3000](http://localhost:3000/))로 폴백하는 동작 → Site URL/Redirect URLs 수정 + 네이티브 로그인(signInWithIdToken) 전환으로 근본 해결 완료\n- Vercel 자동 git-link가 프로덕션 알리아스를 하이재킹 — 배포 6초 뒤 200→404 전환. verify-prod.mjs 라이브 게이트 신설로 재발 차단\n- verify-purchase가 미출시 앱에서 404가 아닌 401 반환 — 특정 상태코드 가정 대신 non-ok 전체 폴백 처리로 수정\n- CocoaPods+Ruby 인코딩 문제로 expo run:ios 실패 — LC_ALL 지정으로 해결, 스크린샷 촬영은 xcodebuild 직행",
+      "tokens": 420,
       "tags": [
         "해결",
+        "전환",
         "localhost",
         "http",
-        "전환",
         "url"
       ],
       "order": 4,
