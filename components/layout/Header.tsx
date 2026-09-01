@@ -18,7 +18,10 @@ export function Header({ onMenuOpen, menuOpen, className }: HeaderProps) {
         className,
       )}
     >
-      <div className="mx-auto flex h-full max-w-3xl items-center justify-between px-4 md:px-6 lg:px-8">
+      <nav
+        aria-label="주 메뉴"
+        className="mx-auto flex h-full max-w-3xl items-center justify-between px-4 md:px-6 lg:px-8"
+      >
         <Link
           href="/"
           className="text-body hover:text-foreground text-sm font-medium transition-colors md:text-base"
@@ -34,7 +37,7 @@ export function Header({ onMenuOpen, menuOpen, className }: HeaderProps) {
         >
           <Menu size={18} strokeWidth={1.5} aria-hidden="true" />
         </button>
-      </div>
+      </nav>
     </header>
   );
 }

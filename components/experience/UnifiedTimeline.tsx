@@ -27,7 +27,7 @@ function LeftColumn({
     <div className="hidden w-[116px] shrink-0 pt-0.5 pr-5 pb-8 text-right sm:block">
       <p className="text-foreground text-[12px] leading-snug font-medium">{title}</p>
       {subtitle && <p className="text-subtle mt-0.5 text-[11px] leading-snug">{subtitle}</p>}
-      {period && <p className="text-faint mt-2 text-[11px]">{period}</p>}
+      {period && <p className="text-subtle mt-2 text-[11px]">{period}</p>}
     </div>
   );
 }
@@ -62,7 +62,7 @@ function MobileHeader({
           <p className="text-foreground text-[13px] leading-snug font-medium">{title}</p>
           {subtitle && <p className="text-subtle mt-0.5 text-[11px]">{subtitle}</p>}
         </div>
-        {period && <p className="text-faint mt-0.5 shrink-0 text-[11px]">{period}</p>}
+        {period && <p className="text-subtle mt-0.5 shrink-0 text-[11px]">{period}</p>}
       </div>
     </div>
   );

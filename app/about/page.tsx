@@ -21,7 +21,7 @@ export default function AboutPage() {
 
   if (!profile) {
     return (
-      <main className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
+      <main id="main-content" className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
         <p className="text-muted">자기소개 페이지가 준비 중입니다.</p>
       </main>
     );
@@ -30,7 +30,7 @@ export default function AboutPage() {
   const sections = profile.sections.filter((s) => s.heading !== CAREER_HEADING);
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
+    <main id="main-content" className="mx-auto max-w-2xl px-4 py-12 md:px-6 lg:px-8">
       <AboutHero imageUrl={profile.imageUrl} contact={profile.contact} />
       {sections.map((section) => (
         <AboutSection

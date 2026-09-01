@@ -31,14 +31,17 @@ export default function ExperiencePage() {
 
   if (isEmpty) {
     return (
-      <main className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
         <p className="text-muted">커리어가 준비 중입니다.</p>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8">
+    <main
+      id="main-content"
+      className="mx-auto max-w-3xl space-y-10 px-4 py-12 md:px-6 lg:max-w-4xl lg:px-8"
+    >
       <header className="flex items-center justify-between gap-3">
         <h1 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">
           커리어

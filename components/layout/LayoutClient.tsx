@@ -39,6 +39,12 @@ export function LayoutClient({ children, lastUpdated, socials }: LayoutClientPro
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="bg-foreground text-background focus:ring-muted sr-only rounded-md focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-2 focus:text-sm focus:ring-2 focus:outline-none"
+      >
+        본문으로 건너뛰기
+      </a>
       <ScrollToTopOnRouteChange />
       <Header onMenuOpen={handleMenuOpen} menuOpen={open} />
       <SideSheet

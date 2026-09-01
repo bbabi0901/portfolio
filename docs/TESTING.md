@@ -121,9 +121,10 @@ http.post('https://api.openai.com/v1/embeddings', ...)
 
 ## a11y 자동 검사
 
-- 각 페이지 e2e 끝에 `axe.run()` (axe-playwright) 호출 → 위반 0건이어야 통과.
-- 키보드만 시나리오: TS-61.
-- 색 대비: TS-62 (axe).
+- `tests/e2e/a11y.e2e.ts` — `@axe-core/playwright` 로 주요 5페이지 WCAG 2.0/2.1 A+AA 스캔, 위반 0건이어야 통과 (TS-62).
+- 키보드 스킵 링크 시나리오: TS-61 (`a11y.e2e.ts:keyboardNav`).
+- CI: `.github/workflows/ci.yml` 의 `a11y` job (chromium, MacBook 13 프로젝트만 — 경량).
+- lint 계층: `eslint-plugin-jsx-a11y` recommended (error) — `eslint.config.mjs`.
 
 ## 시각 회귀 (Playwright Visual Comparison)
 

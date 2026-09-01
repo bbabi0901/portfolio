@@ -10,6 +10,7 @@
 - Vercel AI SDK + **AWS Bedrock** (`@ai-sdk/amazon-bedrock` ^4 고정 — 5.x 는 ai@6 비호환, ADR-034/035). 기본 챗 = Claude Haiku 4.5 (`global.` profile). 모델 프로필·임베딩·S3 Vectors·인제스천 Lambda·AWS 인증 체인 상세는 **docs/ARCHITECTURE.md** (데이터 흐름 절)
 - @notionhq/client + notion-to-md, react-markdown, react-hook-form + zod
 - Vitest + Testing Library + msw + Playwright
+- 접근성 CI 강제 3계층 (ADR-039): eslint-plugin-jsx-a11y(recommended, error) + @axe-core/playwright(`tests/e2e/a11y.e2e.ts`, WCAG AA 위반 0건) + Lighthouse CI(a11y ≥0.95 등 gate). `text-faint` 는 텍스트 금지(장식 전용) — docs/UI_GUIDE.md
 
 ## 디렉토리 구조
 ```

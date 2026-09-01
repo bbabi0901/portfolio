@@ -2,7 +2,14 @@
   "ci": {
     "collect": {
       "numberOfRuns": 1,
-      "url": ["/", "/about", "/experience", "/contact"]
+      "startServerCommand": "npm run start",
+      "startServerReadyPattern": "Ready",
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/about",
+        "http://localhost:3000/experience",
+        "http://localhost:3000/contact"
+      ]
     },
     "assert": {
       "assertions": {

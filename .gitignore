@@ -64,3 +64,4 @@ phases/*/run.log
 # 대형 로컬 산출물 (ADR-038 — 커밋본은 슬림 portfolio.fallback.json)
 data/portfolio.server.json
 data/embeddings-cache.json
+.lighthouseci

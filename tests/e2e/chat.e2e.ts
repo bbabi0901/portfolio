@@ -136,7 +136,9 @@ test.describe("chat source citations (TS-100)", () => {
     // 출처 칩은 노션 원본 페이지 링크 (공개 워크스페이스)
     const linked = page.locator('a[data-slot="source-citation"][data-private="false"]');
     expect(await linked.count()).toBeGreaterThan(0);
-    expect(await linked.first().getAttribute("href")).toMatch(/^https:\/\/(www\.notion\.so|app\.notion\.com)\//);
+    expect(await linked.first().getAttribute("href")).toMatch(
+      /^https:\/\/(www\.notion\.so|app\.notion\.com)\//,
+    );
     // TS-101: 출처 있는 답변엔 인라인 연락 CTA
     await expect(page.locator('[data-slot="contact-cta"]').first()).toBeVisible();
   });

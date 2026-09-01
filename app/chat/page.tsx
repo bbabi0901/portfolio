@@ -22,7 +22,7 @@ export default function ChatPage() {
   // 랜딩에서 넘어온 ?q= 질문은 ChatRoot 가 클라이언트에서 읽어 자동 전송 (FEAT-034).
   // (서버 searchParams 를 쓰면 페이지가 동적 렌더링으로 바뀌므로 정적 유지를 위해 클라이언트 처리)
   return (
-    <main className="mx-auto h-[100dvh] max-w-3xl px-4 md:px-6 lg:px-8">
+    <main id="main-content" className="mx-auto h-[100dvh] max-w-3xl px-4 md:px-6 lg:px-8">
       <ChatRoot
         greeting={spec.greeting}
         suggestions={suggestions}
