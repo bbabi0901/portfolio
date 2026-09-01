@@ -544,3 +544,7 @@ lhci.yml 이 `if: false`, axe 테스트는 docs 에만 언급되고 미구현. �
 
 **한계**: 자동 도구는 접근성 문제의 30~50%만 감지 — 포커스 순서·alt 품질 등은
 수동(키보드·VoiceOver) 검증 병행이 전제.
+
+**후속 (PR #105 CI 실측)**: GitHub 공유 러너(2코어)의 모바일 스로틀 측정에서 performance 가
+0.59 까지 출렁임(로컬 96) — LHCI 의 알려진 러너 변동성. performance 만 warn 으로 강등
+(리포트는 유지, 머지 차단 없음), a11y/bp/seo 0.95 error gate 는 유지.
