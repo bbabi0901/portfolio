@@ -35,7 +35,10 @@ export default function LandingPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-[calc(100dvh-3.5rem)] max-w-3xl items-center px-4 py-12 md:min-h-[calc(100dvh-4rem)] md:px-6 lg:px-8">
+    <main
+      id="main-content"
+      className="mx-auto flex min-h-[calc(100dvh-3.5rem)] max-w-3xl items-center px-4 py-12 md:min-h-[calc(100dvh-4rem)] md:px-6 lg:px-8"
+    >
       <LandingHero
         headline={HEADLINE}
         subline={SUBLINE}

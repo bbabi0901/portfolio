@@ -67,7 +67,7 @@ export function ContactClient({ email, github, linkedin }: ContactClientProps) {
   }
 
   return (
-    <main className="mx-auto max-w-2xl space-y-8 px-4 py-12 md:px-6 lg:px-8">
+    <main id="main-content" className="mx-auto max-w-2xl space-y-8 px-4 py-12 md:px-6 lg:px-8">
       <header className="flex flex-col gap-2">
         <h1 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">
           연락하기

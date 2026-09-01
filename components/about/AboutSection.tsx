@@ -125,7 +125,7 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
               {entry.role && (
                 <p className="text-subtle mt-0.5 text-[11px] leading-snug">{entry.role}</p>
               )}
-              <p className="text-faint mt-2 text-[11px]">{entry.period}</p>
+              <p className="text-subtle mt-2 text-[11px]">{entry.period}</p>
             </div>
 
             {/* Dot + line column */}
@@ -150,7 +150,7 @@ function CareerTimeline({ intro, entries }: { intro: string; entries: CareerEntr
                     </p>
                     {entry.role && <p className="text-subtle mt-0.5 text-[11px]">{entry.role}</p>}
                   </div>
-                  <p className="text-faint mt-0.5 shrink-0 text-[11px]">{entry.period}</p>
+                  <p className="text-subtle mt-0.5 shrink-0 text-[11px]">{entry.period}</p>
                 </div>
               </div>
 

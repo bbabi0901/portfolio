@@ -26,7 +26,7 @@ export function CredentialList({ items, className }: CredentialListProps): JSX.E
               <p className="text-subtle mt-0.5 text-[11px] leading-snug">{item.subtitle}</p>
             )}
           </div>
-          {item.period && <p className="text-faint shrink-0 text-[11px]">{item.period}</p>}
+          {item.period && <p className="text-subtle shrink-0 text-[11px]">{item.period}</p>}
         </li>
       ))}
     </ul>

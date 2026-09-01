@@ -401,13 +401,15 @@
 
 ## 횡단 (전 페이지 공통)
 
-### TS-61 키보드만으로 모든 페이지 인터랙션
-- **Given**: A 페르소나
-- **Then**: Tab 순서 자연스러움, focus visible, 모든 액션 도달 가능
-- **파일**: `tests/e2e/cross-cutting.e2e.ts:keyboardNav`
+### TS-61 키보드 내비게이션 — 스킵 링크
+- **Given**: 키보드만 쓰는 사용자
+- **Then**: Tab 첫 포커스 = "본문으로 건너뛰기" 스킵 링크, Enter 로 `#main-content` 이동 (WebKit 은 브라우저 기본 동작상 skip)
+- **파일**: `tests/e2e/a11y.e2e.ts:keyboardNav`
 
-### TS-62 색 대비 WCAG AA (axe-core)
-- **파일**: `tests/e2e/cross-cutting.e2e.ts:axe`
+### TS-62 axe WCAG 2.0/2.1 AA 위반 0건 (색 대비 포함)
+- **Given**: `/`, `/about`, `/experience`, `/contact`, `/chat`
+- **Then**: `@axe-core/playwright` `withTags(wcag2a·wcag2aa·wcag21a·wcag21aa)` violations 0건
+- **파일**: `tests/e2e/a11y.e2e.ts:axe`
 
 ### TS-63 SEO meta + JSON-LD
 - **Given**: 각 페이지
@@ -436,7 +438,7 @@
 
 ### TS-68 Lighthouse Performance/A11y/Best Practices/SEO
 - **Threshold**: 90/95/95/95
-- **파일**: `lhci.config.js` (CI)
+- **파일**: `.lighthouserc.json` (gate 값은 `specs/lhci-config.spec.ts` 로 고정) + `.github/workflows/lhci.yml` (PR 마다 실행)
 
 ### TS-69 Critical bundle audit
 - **Given**: `npm run build`

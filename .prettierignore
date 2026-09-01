@@ -17,3 +17,5 @@ package-lock.json
 *.md
 infra/cdk.out
 infra/package-lock.json
+.lighthouseci
+data/portfolio.fallback.json

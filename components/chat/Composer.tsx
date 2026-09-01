@@ -25,7 +25,6 @@ export interface ComposerProps {
   placeholder?: string;
   maxLength?: number;
   className?: string;
-  autoFocus?: boolean;
   /** Composer 하단 액션 row 좌측에 인라인 렌더되는 children (예: ModelSwitcher). FEAT-030. */
   leftAction?: ReactNode;
 }
@@ -39,7 +38,6 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
     placeholder = "메시지를 입력하세요 — 김윤수에게 직접 물어보세요",
     maxLength = 500,
     className,
-    autoFocus,
     leftAction,
   },
   ref,
@@ -111,7 +109,6 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
         data-slot="composer-textarea"
         value={value}
         placeholder={placeholder}
-        autoFocus={autoFocus}
         rows={1}
         aria-label="채팅 메시지 입력"
         onChange={handleChange}
@@ -157,7 +154,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
           </Button>
         </div>
       </div>
-      <p data-slot="grounding-note" className="text-faint mt-1.5 px-1 text-[11px]">
+      <p data-slot="grounding-note" className="text-subtle mt-1.5 px-1 text-[11px]">
         노션에 기록된 내용만 답해요 — 없는 내용은 없다고 말합니다
       </p>
     </form>

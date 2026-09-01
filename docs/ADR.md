@@ -516,3 +516,35 @@ MOCK/CI 경로 불변 — CORPUS_S3_BUCKET 미설정이면 기존과 동일.
 
 **트레이드오프**: "git 이력에 어떤 임베딩이 배포됐는지" 추적은 포기 — 임베딩은 이제
 S3 Vectors 런타임 상태이며 캐시 네임스페이스(ADR-029)가 정합성을 보장한다.
+
+## ADR-039: 웹 표준·접근성 CI 강제 — jsx-a11y + axe E2E + Lighthouse gate 3계층
+
+**배경**: FEAT-013(접근성)이 planned 로만 존재 — `.lighthouserc.json` 은 있으나
+lhci.yml 이 `if: false`, axe 테스트는 docs 에만 언급되고 미구현. 접근성은 사람의
+기억이 아니라 CI 가 강제해야 퇴행이 막힌다.
+
+**결정**: 검사 시점이 다른 3계층을 겹쳐 강제.
+1. **정적 lint** — `eslint-plugin-jsx-a11y` recommended(error)를 `eslint.config.mjs` 에
+   추가 (next 기본 6개 warn 에서 승격). PR lint 단계에서 즉시 차단.
+2. **런타임 DOM 검사** — `tests/e2e/a11y.e2e.ts`: `@axe-core/playwright` 로 주요
+   5페이지를 WCAG 2.0/2.1 A+AA 태그 스캔(위반 0건, TS-62) + 스킵 링크 키보드
+   시나리오(TS-61). CI 는 `a11y` 경량 job(chromium 1개) — 전체 e2e job(post-mvp
+   보류)과 독립.
+3. **점수 gate** — lhci.yml 활성화(`@lhci/cli` devDep 고정). 기존
+   `.lighthouserc.json` gate(perf 0.90 / a11y 0.95 / bp 0.95 / seo 0.95)에
+   `startServerCommand` 를 보완해 실제 실행 가능하게 함. PR 마다 4페이지 측정.
+
+**대안 기각**: pa11y(axe CLI 래퍼 — Playwright 보유 시 중복), html-validate(W3C
+문서 유효성 — axe+Lighthouse best-practices 가 실질 위반 대부분을 커버, 도구 1개 절약).
+
+**적용 수반 수정**: 스킵 링크 신설(LayoutClient), 헤더 `<nav aria-label="주 메뉴">`,
+전 라우트 `<main id="main-content">`, `text-faint` 텍스트 사용 6곳을 `text-subtle` 로
+교체(faint 는 대비 AA 미달 — 장식 전용으로 강등, UI_GUIDE 반영), Composer 의 미사용
+`autoFocus` prop 제거(jsx-a11y/no-autofocus).
+
+**한계**: 자동 도구는 접근성 문제의 30~50%만 감지 — 포커스 순서·alt 품질 등은
+수동(키보드·VoiceOver) 검증 병행이 전제.
+
+**후속 (PR #105 CI 실측)**: GitHub 공유 러너(2코어)의 모바일 스로틀 측정에서 performance 가
+0.59 까지 출렁임(로컬 96) — LHCI 의 알려진 러너 변동성. performance 만 warn 으로 강등
+(리포트는 유지, 머지 차단 없음), a11y/bp/seo 0.95 error gate 는 유지.

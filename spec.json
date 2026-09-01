@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -993,11 +993,12 @@
     {
       "id": "FEAT-013",
       "name": "Accessibility / i18n basics",
-      "status": "planned",
+      "status": "done",
       "priority": "P0",
       "tests": [
-        "tests/e2e/cross-cutting.e2e.ts:axe",
-        "tests/e2e/cross-cutting.e2e.ts:keyboardNav"
+        "tests/e2e/a11y.e2e.ts:axe",
+        "tests/e2e/a11y.e2e.ts:keyboardNav",
+        "specs/lhci-config.spec.ts"
       ]
     },
     {
@@ -1764,15 +1765,15 @@
     {
       "id": "TS-61",
       "feature": "FEAT-013",
-      "title": "Keyboard-only nav",
-      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "title": "Keyboard-only nav — 스킵 링크 Tab 첫 포커스 + Enter 본문 이동",
+      "file": "tests/e2e/a11y.e2e.ts",
       "anchor": "keyboardNav"
     },
     {
       "id": "TS-62",
       "feature": "FEAT-013",
-      "title": "Color contrast WCAG AA",
-      "file": "tests/e2e/cross-cutting.e2e.ts",
+      "title": "axe WCAG 2.0/2.1 AA 위반 0건 — 주요 5페이지 (색 대비 포함)",
+      "file": "tests/e2e/a11y.e2e.ts",
       "anchor": "axe"
     },
     {
@@ -1812,8 +1813,8 @@
     {
       "id": "TS-68",
       "feature": "FEAT-013",
-      "title": "Lighthouse 90/95/95/95",
-      "file": "lhci.config.js"
+      "title": "Lighthouse 90/95/95/95 — .lighthouserc.json gate + lhci.yml 워크플로",
+      "file": "specs/lhci-config.spec.ts"
     },
     {
       "id": "TS-69",

@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <main className="mx-auto max-w-md px-4 py-24 text-center md:px-6 lg:px-8">
+    <main id="main-content" className="mx-auto max-w-md px-4 py-24 text-center md:px-6 lg:px-8">
       <p className="text-subtle font-mono text-sm">404</p>
       <h1 className="text-foreground mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
         페이지를 찾을 수 없어요

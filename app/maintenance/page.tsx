@@ -8,7 +8,10 @@ export const metadata: Metadata = {
 
 export default function MaintenancePage() {
   return (
-    <main className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 text-center">
+    <main
+      id="main-content"
+      className="flex min-h-[60vh] flex-col items-center justify-center gap-6 px-4 text-center"
+    >
       <p className="text-4xl">🌙</p>
       <h1 className="text-foreground text-2xl font-semibold">오늘의 대화 한도에 도달했어요</h1>
       <p className="text-muted">내일 KST 00:00에 초기화됩니다.</p>
