@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generatedAt": "2026-09-01T01:17:57+09:00",
+  "generatedAt": "2026-09-01T16:04:06+09:00",
   "chunks": [
     {
       "id": "1ebd2ac5",
@@ -188,8 +188,8 @@
         "자체 프로젝트 (Personal Project)",
         "AI 포트폴리오 (대화형 포트폴리오)"
       ],
-      "text": "- 노션에 기록해 온 글을 지식 베이스로 삼아, 방문자가 저에 대해 질문하면 AI가 답변하는 대화형 포트폴리오 사이트 (RAG)\n- 코드를 직접 작성하지 않고 AI 에이전트(Claude Code)에 기획 → 설계 → 구현 → 테스트 → 배포 전 과정을 맡긴 no-code 개발 실험\n- Next.js 16 + Vercel AI SDK로 개발, AI 인프라는 AWS(Bedrock, Lambda, S3 Vectors)로 구성하고 AWS CDK로 코드화(IaC)\n- 질문 성격에 따라 Bedrock의 세 모델(Nova Lite / Nova Micro / Claude Haiku 4.5)을 골라 쓰고, 답변은 SSE 스트리밍으로 실시간 출력\n- 키워드 검색(0.4)과 벡터 임베딩 검색(0.6)을 섞은 하이브리드 검색으로 질문과 관련된 글을 찾아 답변 정확도 향상\n- 노션 글을 수정하면 하루 한 번 자동 동기화(Lambda + EventBridge)되어 재배포 없이 사이트에 반영\n- API 키를 발급하지 않는 keyless 인증(Vercel OIDC → AWS IAM) 적용으로 키 유출 위험 원천 차단\n- spec.json 스펙 문서 기반 개발(SDD) + 단위/통합/E2E 테스트 580개 이상, 프롬프트 인젝션 방어 · rate limit 등 운영 가드",
-      "tokens": 268,
+      "text": "- 노션에 기록해 온 글을 지식 베이스로 삼아, 방문자가 저에 대해 질문하면 AI가 답변하는 대화형 포트폴리오 사이트 (RAG)\n- 기획 → 설계 → 구현 → 테스트 → 배포 전 과정을 맡긴 no-code 개발 실험\n- Next.js 16 + Vercel AI SDK로 개발, AI 인프라는 AWS(Bedrock, Lambda, S3 Vectors)로 구성하고 AWS CDK로 코드화(IaC)\n- 질문 성격에 따라 Bedrock의 세 모델(Nova Lite / Nova Micro / Claude Haiku 4.5)을 골라 쓰고, 답변은 SSE 스트리밍으로 실시간 출력\n- 키워드 검색(0.4)과 벡터 임베딩 검색(0.6)을 섞은 하이브리드 검색으로 질문과 관련된 글을 찾아 답변 정확도 향상\n- 노션 글을 수정하면 하루 한 번 자동 동기화(Lambda + EventBridge)되어 재배포 없이 사이트에 반영\n- API 키를 발급하지 않는 keyless 인증(Vercel OIDC → AWS IAM) 적용으로 키 유출 위험 원천 차단\n- spec.json 스펙 문서 기반 개발(SDD) + 단위/통합/E2E 테스트 580개 이상, 프롬프트 인젝션 방어 · rate limit 등 운영 가드",
+      "tokens": 253,
       "tags": [
         "글을",
         "개발",
@@ -209,14 +209,14 @@
         "자체 프로젝트 (Personal Project)",
         "풀로그 (반려식물 케어 iOS 앱)"
       ],
-      "text": "- 커플·가족이 초대 코드로 하나의 식물 컬렉션을 공유하고, 사진 한 장과 스티커로 3초 만에 상태를 기록하는 반려식물 케어 앱 (노션 수동 관리를 대체하는 실사용 앱)\n- 기획 → 디자인(Figma 토큰) → 프론트 → 백엔드 → 인프라 전 과정을 AI 에이전트 하네스로 개발 — [CLAUDE.md](http://claude.md/) 규칙 문서와 스토리 큐 기반 루프 워크플로우로 작업을 쪼개 진행\n- 검증을 사람의 눈이 아닌 구조에 맡긴 3층 검증 체계 운영 — 기계 게이트 → 별도 컨텍스트의 AI judge O/X 판정 → 사람 에스컬레이션 (judge가 실제 결함을 적발한 사례 확보)\n- 물주기 D-day·캘린더·리마인더(한 명이 물을 주면 상대 리마인더 자동 해소), 식물별 기록 이력을 컨텍스트로 쓰는 AI 진단 — 월 3회 무료 + 크레딧 인앱결제(App Store Server API 서버 검증) 과금 설계\n- Expo(React Native) + TypeScript, Supabase(Auth·Postgres RLS 가구 격리·Storage), AWS Bedrock 비전 모델 + 운영 어드민 웹(Next.js) 모노레포\n- EAS Build → TestFlight 내부 테스팅을 거쳐 App Store 심사 제출 (iOS 1.0, 인앱결제 포함, 2026-09)",
-      "tokens": 281,
+      "text": "- 커플·가족이 초대 코드로 하나의 식물 컬렉션을 공유하고, 상태를 기록하는 반려식물 케어 앱\n- Expo(React Native) + TypeScript, Supabase(Auth·Postgres RLS 가구 격리·Storage), AWS Bedrock 비전 모델 + 운영 어드민 웹(Next.js) 모노레포\n- 기획 → 디자인(Figma 토큰) → 프론트 → 백엔드 → 인프라 전 과정을 AI 에이전트 하네스로 개발 — [CLAUDE.md](http://claude.md/) 규칙 문서와 스토리 큐 기반 루프 엔지니어링으로 진행\n- AI + 사람의 3층 검증 체계 운영 — 기계 테스트 게이트 → 별도 세션의 AI judge 판정 → 사람 에스컬레이션 (judge가 실제 결함을 적발한 사례 확보)\n- AI 식물 건강 진단 — 인앱결제(App Store Server API 서버 검증) 과금 설계\n- EAS Build → TestFlight 내부 테스팅을 거쳐 App Store 심사 제출 (iOS 1.0, 인앱결제 포함, 2026-09)",
+      "tokens": 211,
       "tags": [
-        "검증",
+        "식물",
+        "운영",
         "claude",
         "사람",
-        "운영",
-        "컨텍스트"
+        "검증"
       ],
       "order": 13
     },
