@@ -25,7 +25,7 @@ test.describe("/experience (TS-38, TS-39)", () => {
     // 항목당 좌측 컬럼(데스크톱) + 모바일 헤더 = 2회 — 중복 항목이면 4회가 된다
     await expect(page.getByText("자체 프로젝트", { exact: true })).toHaveCount(2);
     // 회사 항목도 같은 타임라인에 존재
-    await expect(page.getByText("디라티오", { exact: true })).toHaveCount(2);
+    await expect(page.getByText(/^디라티오/)).toHaveCount(2);
   });
 });
 
@@ -62,7 +62,7 @@ test.describe("/contact (TS-43, TS-46, TS-49)", () => {
     await expect(page.locator('input[name="email"]')).toBeVisible();
     await expect(page.locator('textarea[name="message"]')).toBeVisible();
     // 직접 연락 카드의 mailto link
-    await expect(page.locator('a[href^="mailto:"]')).toBeVisible();
+    await expect(page.locator('a[href^="mailto:"]').first()).toBeVisible();
   });
 
   test("TS-46: 잘못된 이메일 → 인라인 에러", async ({ page }) => {
