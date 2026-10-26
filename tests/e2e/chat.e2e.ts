@@ -1,5 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { skipGreeting, sendChatMessage, getLastAssistantText } from "./utils/test-helpers";
+import {
+  skipGreeting,
+  sendChatMessage,
+  getLastAssistantText,
+  waitForHydration,
+} from "./utils/test-helpers";
 
 test.describe("chat (TS-01,03,04,12,13,14)", () => {
   test("TS-03: 추천 질문 carousel 렌더 (mock fixture)", async ({ page }) => {
@@ -40,6 +45,7 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
     await page.goto("/chat");
     const ta = page.locator("textarea").first();
     await ta.waitFor({ state: "visible", timeout: 5000 });
+    await waitForHydration(page, "textarea");
     await ta.focus();
 
     // composition 상태 시뮬레이션

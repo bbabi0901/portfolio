@@ -11,6 +11,14 @@ export async function skipGreeting(page: Page): Promise<void> {
   });
 }
 
+/** React hydration 완료 대기 — hydration 전 DOM 직접 조작은 controlled 값으로 덮어써진다. */
+export async function waitForHydration(page: Page, selector: string): Promise<void> {
+  await page.waitForFunction((sel) => {
+    const el = document.querySelector(sel);
+    return !!el && Object.keys(el).some((k) => k.startsWith("__reactProps$"));
+  }, selector);
+}
+
 /** 사용자 메시지 전송. textarea fill + Enter. */
 export async function sendChatMessage(page: Page, text: string): Promise<void> {
   const ta = page.locator("textarea").first();
