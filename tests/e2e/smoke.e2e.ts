@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("smoke", () => {
+  // 테마는 시스템 자동 — dark 클래스 검증을 위해 다크 스킴 고정
+  test.use({ colorScheme: "dark" });
+
   test("home renders", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/김윤수/);

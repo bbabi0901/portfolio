@@ -32,7 +32,7 @@ test.describe("chat (TS-01,03,04,12,13,14)", () => {
     await skipGreeting(page);
     await page.goto("/chat");
     // 헤더 또는 menu 어딘가 clear conversation 트리거
-    await expect(page.locator("header, [role='banner']")).toBeVisible();
+    await expect(page.locator("header, [role='banner']").first()).toBeVisible();
   });
 
   test("TS-13: IME composing 중 Enter → 전송 미발생", async ({ page }) => {

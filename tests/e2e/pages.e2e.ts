@@ -62,7 +62,7 @@ test.describe("/contact (TS-43, TS-46, TS-49)", () => {
     await expect(page.locator('input[name="email"]')).toBeVisible();
     await expect(page.locator('textarea[name="message"]')).toBeVisible();
     // 직접 연락 카드의 mailto link
-    await expect(page.locator('a[href^="mailto:"]')).toBeVisible();
+    await expect(page.locator('a[href^="mailto:"]').first()).toBeVisible();
   });
 
   test("TS-46: 잘못된 이메일 → 인라인 에러", async ({ page }) => {
