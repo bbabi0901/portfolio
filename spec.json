@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -2059,6 +2059,13 @@
       "title": "이력서 PDF 다운로드 버튼 — /experience 헤더 노출, /resume.pdf 200 + download 속성(한글 파일명)",
       "file": "tests/e2e/pages.e2e.ts",
       "anchor": "TS-103"
+    },
+    {
+      "id": "TS-104",
+      "feature": "FEAT-025",
+      "title": "오픈소스 기여 (Open Source) 섹션도 커리어 타임라인에 포함 — 이력서 단일 소스, 회사 경력 뒤 문서 순서 유지",
+      "file": "specs/about-data.spec.ts",
+      "anchor": "TS-104"
     }
   ]
 }

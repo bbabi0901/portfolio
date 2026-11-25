@@ -45,6 +45,11 @@
 3. `divider`
 4. `heading_3` — 프로젝트명 + `bulleted_list_item` 성과/특징 불릿
 
+### 이력서 "오픈소스 기여 (Open Source)" 섹션 포맷 (TS-104)
+자체 프로젝트와 같은 4블록 구조(callout `| 오픈소스 기여` built-in 아이콘 → quote 기간 → divider → `heading_3` 레포명 + 불릿).
+heading 에 "오픈소스" 또는 "Open Source" 가 있어야 커리어 타임라인에 포함된다 (`CAREER_TIMELINE_HEADING_RE`).
+머지된 PR 불릿은 OSS 기여 에이전트(`bbabi0901/oss-contrib`)가 머지 시 추가한다.
+
 ## 블랙리스트 (절대 동기화 안 함)
 - 학습 노트 DB (개인 메모, 인용 시 부정확)
 - 기획 DB (의사결정 과정, 외부 노출 부적절)

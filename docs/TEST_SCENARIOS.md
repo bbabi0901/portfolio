@@ -292,6 +292,12 @@
 - **Then**: 시작일 내림차순 정렬, 기간 없는 항목 마지막, 자체 프로젝트 role="" (폴백 없음)
 - **파일**: `specs/experience-timeline.spec.ts:merge`
 
+### TS-104 오픈소스 기여 섹션 — 커리어 타임라인 포함
+- **Given**: 이력서에 "오픈소스 기여 (Open Source)" 섹션 (callout `| 오픈소스 기여` + quote 기간, 자체 프로젝트와 같은 포맷)
+- **When**: `loadProfileData()` 가 career 섹션 구성
+- **Then**: 오픈소스 기여 항목이 career 타임라인 본문에 포함, 회사 경력 뒤 문서 순서 유지
+- **파일**: `specs/about-data.spec.ts:TS-104`
+
 ### ~~TS-41 외부 링크 → 노션 새 탭~~ (폐기 — 2026-07 이력서 단일 소스 개편으로 타임라인의 노션 링크 제거)
 
 ### TS-42 모바일 horizontal / 데스크톱 vertical sticky

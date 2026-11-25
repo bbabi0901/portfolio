@@ -355,6 +355,37 @@ describe("loadProfileData — career 타임라인 (ADR-028 career 청크 재구�
     expect(body.indexOf("| 디라티오")).toBeLessThan(body.indexOf("| 자체 프로젝트"));
   });
 
+  it("TS-104: 오픈소스 기여 (Open Source) 청크도 career 섹션에 포함 (이력서 단일 소스)", () => {
+    mockedLoadPortfolio.mockReturnValue(
+      makeData([
+        personal,
+        careerChunk(
+          "c1",
+          ["직무 및 이력 (Experience)"],
+          "> **소프트웨어 엔지니어  \n> | 디라티오**\n\n> 2025.01 - 현재\n\n---",
+          2,
+        ),
+        careerChunk(
+          "o1",
+          ["오픈소스 기여 (Open Source)"],
+          "> **| 오픈소스 기여**\n\n> 2026.11 - 현재\n\n---",
+          20,
+        ),
+        careerChunk(
+          "o2",
+          ["오픈소스 기여 (Open Source)", "Orca (stablyai/orca · Electron 기반 AI 에이전트 IDE)"],
+          "- Windows 코드 블록 복사 CRLF 수정 (#48122, 2026.11 머지)",
+          21,
+        ),
+      ]),
+    );
+    const result = loadProfileData();
+    const body = result!.career!.subSections.map((s) => s.body).join("\n");
+    expect(body).toContain("| 오픈소스 기여");
+    expect(body).toContain("### Orca (stablyai/orca · Electron 기반 AI 에이전트 IDE)");
+    expect(body.indexOf("| 디라티오")).toBeLessThan(body.indexOf("| 오픈소스 기여"));
+  });
+
   it("교육/이름 career 청크는 career 섹션에서 제외", () => {
     mockedLoadPortfolio.mockReturnValue(
       makeData([
