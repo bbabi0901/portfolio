@@ -298,6 +298,12 @@
 - **Then**: 오픈소스 기여 항목이 career 타임라인 본문에 포함, 회사 경력 뒤 문서 순서 유지
 - **파일**: `specs/about-data.spec.ts:TS-104`
 
+### TS-105 채팅 이력 보존 — 메뉴 이동 후 뒤로가기
+- **Given**: `/chat` 에서 1턴 이상 대화
+- **When**: 다른 메뉴(예: `/experience`) 이동 후 브라우저 뒤로가기
+- **Then**: 이전 질문·답변(출처 포함)이 그대로 복원. 탭 단위(sessionStorage) 보관, "새 대화" 시 삭제
+- **파일**: `tests/e2e/chat.e2e.ts:TS-105`, `specs/chat-history.spec.ts`, `specs/components/chat-root.spec.tsx:TS-105`
+
 ### ~~TS-41 외부 링크 → 노션 새 탭~~ (폐기 — 2026-07 이력서 단일 소스 개편으로 타임라인의 노션 링크 제거)
 
 ### TS-42 모바일 horizontal / 데스크톱 vertical sticky

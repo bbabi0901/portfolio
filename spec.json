@@ -1,6 +1,6 @@
 {
   "$schema": "./spec.schema.json",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "service": {
     "name": "ai-portfolio",
     "owner": "yoonsoo",
@@ -1357,6 +1357,18 @@
         "tests/e2e/pages.e2e.ts"
       ],
       "dependencies": []
+    },
+    {
+      "id": "FEAT-045",
+      "name": "채팅 이력 탭 단위 보존 — 다른 메뉴 이동 후 뒤로가기/재진입 시 대화·출처 복원 (sessionStorage, 새 대화 시 삭제)",
+      "status": "done",
+      "priority": "P1",
+      "tests": [
+        "specs/chat-history.spec.ts",
+        "specs/components/chat-root.spec.tsx",
+        "tests/e2e/chat.e2e.ts"
+      ],
+      "dependencies": []
     }
   ],
   "testScenarios": [
@@ -2066,6 +2078,13 @@
       "title": "오픈소스 기여 (Open Source) 섹션도 커리어 타임라인에 포함 — 이력서 단일 소스, 회사 경력 뒤 문서 순서 유지",
       "file": "specs/about-data.spec.ts",
       "anchor": "TS-104"
+    },
+    {
+      "id": "TS-105",
+      "feature": "FEAT-045",
+      "title": "대화 후 다른 메뉴 이동 → 뒤로가기 시 채팅 이력 유지",
+      "file": "tests/e2e/chat.e2e.ts",
+      "anchor": "TS-105"
     }
   ]
 }

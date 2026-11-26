@@ -157,3 +157,21 @@ test.describe("conversion cues (TS-101)", () => {
     await expect(page.locator('[data-slot="grounding-note"]')).toContainText("기록된 내용만");
   });
 });
+
+test.describe("chat history persistence (TS-105)", () => {
+  test("TS-105: 대화 후 다른 메뉴 이동 → 뒤로가기 시 이력 유지", async ({ page }) => {
+    await skipGreeting(page);
+    await page.goto("/chat");
+    await sendChatMessage(page, "안녕하세요");
+    await page.waitForSelector('[data-role="assistant"][data-status="done"]', { timeout: 15000 });
+    const before = await getLastAssistantText(page);
+
+    await page.goto("/experience");
+    await page.goBack();
+
+    await expect(page.locator('[data-role="user"]').first()).toContainText("안녕하세요");
+    await expect(page.locator('[data-role="assistant"][data-status="done"]').last()).toHaveText(
+      before,
+    );
+  });
+});

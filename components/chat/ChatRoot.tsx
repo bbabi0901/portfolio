@@ -11,6 +11,7 @@ import {
 } from "react";
 import { useChat } from "@ai-sdk/react";
 import { parseSourcesHeader, stashSources, takeSources } from "@/lib/citations";
+import { loadChatHistory, saveChatHistory } from "@/lib/chat-history";
 import { TextStreamChatTransport, type UIMessage } from "ai";
 import { toast } from "sonner";
 
@@ -108,7 +109,9 @@ export function ChatRoot({
   }, [modelId]);
 
   // 출처 칩 (FEAT-041/TS-100) — 전달 홀더는 lib/citations 의 stash/take (훅 규칙 비대상)
-  const [citationsById, setCitationsById] = useState<Record<string, Citation[]>>({});
+  const [citationsById, setCitationsById] = useState<Record<string, Citation[]>>(() =>
+    typeof window === "undefined" ? {} : (loadChatHistory()?.citationsById ?? {}),
+  );
 
   const transport = useMemo(
     () =>
@@ -162,6 +165,18 @@ export function ChatRoot({
       }
     },
   });
+
+  // FEAT-045: 메뉴 이동 후 뒤로가기로 재마운트돼도 이전 대화 복원 (?q 자동 전송보다 먼저 실행)
+  useEffect(() => {
+    const saved = loadChatHistory();
+    if (saved) setMessages(saved.messages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 마운트 1회만
+  }, []);
+
+  useEffect(() => {
+    if (status === "streaming") return;
+    saveChatHistory({ messages: aiMessages, citationsById });
+  }, [aiMessages, citationsById, status]);
 
   const isStreaming = status === "submitted" || status === "streaming";
   const composerDisabled = isStreaming || noModelsAvailable;
