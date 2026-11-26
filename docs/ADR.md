@@ -410,8 +410,8 @@ AWS 자격 증명 + Bedrock model access 활성화가 전제.
 $0)인데 최종 completed 로 수동 기입 — 루프 붕괴 후 사람이 손으로 복구했고, index.json 만으로는
 성공과 구분 불가. 구조적 원인 두 가지: ① **검증이 자기신고** — Claude 가 쓴 status 를
 실행기가 믿고 커밋 ② 외부 오케스트레이터의 유지비가 우회 유인을 만듦(이후 PR 대부분이
-하네스 미경유). 동일 소유자의 bbang2bbang 프로젝트가 이 부검 위에 2세대 설계(네이티브
-프리미티브 + 평가자 분리)를 검증 중이며, 이를 본 리포 성격에 맞게 이식한다.
+하네스 미경유). 이 부검 위에 2세대 설계(네이티브 프리미티브 + 평가자 분리)를 세워
+본 리포 성격에 맞게 적용한다.
 
 **결정**:
 1. **커스텀 실행기 폐지** — execute.py·test_execute.py·harness 명령 3종·관련 agent 스펙
@@ -422,16 +422,16 @@ $0)인데 최종 completed 로 수동 기입 — 루프 붕괴 후 사람이 손
 3. **생성자–평가자 분리** — `.claude/agents/reviewer.md` 독립 서브에이전트가 AC 재실행·
    diff 치팅 스캔·SSoT 동기화 검증 후 `passes` 를 갱신하는 **유일한 주체**
    (`REVIEWER_OK=1` Bash 전용, Edit/Write 는 훅 차단). 반려 3회 → 사람 에스컬레이션.
-4. **완료 조건 = SSoT 동기화** — bbang2bbang 의 "학습 노트" 를 본 프로젝트 성격(학습
-   목적 아님, 채용용 산출물+운영 서비스)에 맞게 치환: spec.json FEAT/TS·ADR·docs·env
+4. **완료 조건 = SSoT 동기화** — 본 프로젝트 성격(채용용 산출물+운영 서비스)에 맞게:
+   spec.json FEAT/TS·ADR·docs·env
    갱신 누락은 reviewer 반려 사유. 기존 CRITICAL 문서 규칙을 게이트로 승격.
 5. **훅 계층 강화** — 신규 `post-edit-check.sh`(PostToolUse: 편집 파일 즉시 prettier+
    eslint, exit 2) + `reviewer-gate.sh`(PreToolUse: stories.json 쓰기 권한 분리 + 훅·
    settings·lint 설정 자기수정 차단). `post-session-check.sh`(Stop)에 치팅 스캔
    (.only/.skip 추가, 테스트 파일 삭제)과 stop_hook_active 재진입 가드 추가.
    훅 5종 전부 `scripts/test_settings.py` 계약 테스트로 고정 (103 테스트).
-6. **AC 는 실행 가능 커맨드만** — screenshot 등 자기신고형 AC 타입 금지 (bbang2bbang 의
-   확인된 약점 원천 차단). UI 검증은 Playwright E2E(MOCK_LLM=1) 커맨드로.
+6. **AC 는 실행 가능 커맨드만** — screenshot 등 자기신고형 AC 타입 금지 (자기신고 검증
+   약점 원천 차단). UI 검증은 Playwright E2E(MOCK_LLM=1) 커맨드로.
 
 **의도적으로 도입하지 않은 것**:
 - 커스텀 실행기 재작성 — 1세대 부검이 근거. 유지비와 우회 유인만 남긴다.
