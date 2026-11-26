@@ -220,6 +220,21 @@ describe("ChatRoot", () => {
     rerender(<div />);
   });
 
+  it("TS-105: sessionStorage 에 저장된 이력이 있으면 마운트 시 setMessages 로 복원", () => {
+    const saved = [{ id: "u1", role: "user", parts: [{ type: "text", text: "이전 질문" }] }];
+    sessionStorage.setItem("portfolio.chat", JSON.stringify({ messages: saved, citationsById: {} }));
+    renderChat();
+    expect(mockState.setMessages).toHaveBeenCalledWith(saved);
+    sessionStorage.clear();
+  });
+
+  it("TS-105: messages 변경 시 sessionStorage 에 저장", () => {
+    mockState.messages = [{ id: "u1", role: "user", parts: [{ type: "text", text: "질문" }] }];
+    renderChat();
+    expect(JSON.parse(sessionStorage.getItem("portfolio.chat")!).messages).toEqual(mockState.messages);
+    sessionStorage.clear();
+  });
+
   it("새 대화 버튼 클릭 → confirm popover 표시 + 확인 시 setMessages([])", async () => {
     const user = userEvent.setup();
     renderChat();
