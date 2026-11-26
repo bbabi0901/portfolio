@@ -25,13 +25,13 @@ describe("citations (TS-100)", () => {
       mk("이력서", "a"),
       mk("이력서", "b"),
       mk("Web3 소셜", "c"),
-      mk("빵대빵", "d"),
+      mk("풀로그", "d"),
       mk("텔레그램", "e"),
       mk("AI 포트폴리오", "f"),
     ];
     const header = buildSourcesHeader(chunks);
     const parsed = parseSourcesHeader(header);
-    expect(parsed.map((c) => c.sourceTitle)).toEqual(["이력서", "Web3 소셜", "빵대빵", "텔레그램"]);
+    expect(parsed.map((c) => c.sourceTitle)).toEqual(["이력서", "Web3 소셜", "풀로그", "텔레그램"]);
   });
 
   it("한국어 제목이 헤더 안전(ASCII) 인코딩으로 왕복 보존된다", () => {
